@@ -27,3 +27,4 @@ public class MuscovyGame extends ApplicationAdapter {
 }
 
 /* Hello */
+/* Another comment */
