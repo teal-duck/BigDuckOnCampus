@@ -10,6 +10,6 @@ public class DesktopLauncher {
 		new LwjglApplication(new MuscovyGame(), config);
 		config.width = 1280;
 		config.height = 720;
-		config.resizable = false;
+		//config.resizable = false;
 	}
 }

@@ -21,16 +21,24 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	Enemy enemy1, enemy2;
 	PlayerCharacter playerCharacter;
 	Sprite roomSprite, testSprite1, testSprite2;
+	GUI dungeonGUI, overworldGUI, pauseGUI;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS;
     private BitmapFont xVal, yVal;
 	float w = 1280;
 	float h = 720;
+	int gameState; // 0 = Main Menu, 1 = Overworld, 2 = Dungeon, 3 = Pause
 
 	@Override
 	public void create () {
+		gameState = 0;
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);
+        createTestingSprites();
+        Gdx.input.setInputProcessor(this);
+	}
+	private void createTestingSprites(){
+        gameState = 2;
 		roomSprite = new Sprite();
 		roomSprite.setTexture(new Texture("core/assets/Untitled.jpg"));
 		roomSprite.setX(0);
@@ -38,27 +46,34 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		drawRoom = new Room();
 		drawRoom.setSprite(roomSprite);
 		playerCharacter = new PlayerCharacter();
+        testSprite1 = new Sprite();
+        testSprite1.setTexture(new Texture("core/assets/thing.gif"));
+        enemy1 = new Enemy();
+        enemy1.setSprite(testSprite1);
+        enemy1.setX(150);
+        enemy1.setY(150);
 		testSprite2 = new Sprite();
-		testSprite2.setTexture(new Texture("core/assets/thing2.jpg"));
+		testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
 		enemy2 = new Enemy();
 		enemy2.setSprite(testSprite2);
 		enemy2.setX(100);
 		enemy2.setY(100);
-		testSprite1 = new Sprite();
-		testSprite1.setTexture(new Texture("core/assets/thing.jpg"));
-		enemy1 = new Enemy();
-		enemy1.setSprite(testSprite2);
-		enemy1.setX(150);
-		enemy1.setY(150);
+        dungeonGUI = new GUI();
+        Sprite guiSprite = new Sprite();
+        guiSprite.setTexture(new Texture("core/assets/guiFrame.png"));
+        guiSprite.setX(0);
+        guiSprite.setY(0);
+        dungeonGUI.addElement(guiSprite);
         xVal = new BitmapFont();
-        xVal.setColor(Color.RED);
+        xVal.setColor(Color.BLACK);
         yVal = new BitmapFont();
-        yVal.setColor(Color.GREEN);
+        yVal.setColor(Color.BLACK);
+        dungeonGUI.addData("xVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 500, 700);
+        dungeonGUI.addData("yVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 700);
 		room = new RoomRenderer(drawRoom);
 		room.addNewDrawable(enemy1);
-        room.addNewDrawable(enemy2);
-        room.addNewDrawable(playerCharacter);
-        Gdx.input.setInputProcessor(this);
+		room.addNewDrawable(enemy2);
+		room.addNewDrawable(playerCharacter);
 	}
 
 	@Override
@@ -66,15 +81,25 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        //tiledMapRenderer.setView(camera);
-        //tiledMapRenderer.render();
-        batch.setProjectionMatrix(camera.combined);
-		room.render(batch);
-        batch.begin();
-        xVal.draw(batch, "X Velocity: " + String.valueOf(playerCharacter.getXVelocity()), Gdx.graphics.getWidth()/2-60, 300);
-        yVal.draw(batch, "Y Velocity: " + String.valueOf(playerCharacter.getYVelocity()), Gdx.graphics.getWidth()/2-60, 200);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		switch (gameState){
+			case 0:
+				//thing;
+				break;
+            case 1:
+				break;
+            case 2:
+                room.render(batch);
+                dungeonGUI.editData("xVal","X Position: " + String.valueOf(playerCharacter.getX()));
+                dungeonGUI.editData("yVal","Y Position: " + String.valueOf(playerCharacter.getY()));
+                dungeonGUI.render(batch);
+                playerMovement();
+                break;
+            case 3:
+                break;
+		}
         batch.end();
-        playerMovement();
 	}
 
 	public void playerMovement(){

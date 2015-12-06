@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class PlayerCharacter extends OnscreenDrawable{
     private float xVelocity, yVelocity;
-    private float maxVelocity = 500, accel = 3000, decel = 2000;
-    float w = 1280, h = 720;
-    float width, height;
+    private float maxVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
+    float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
+            // the upper and lower X and Y bounds correlate to the size of the frame used by the gui
     public PlayerCharacter(){
         xVelocity = 0;
         yVelocity = 0;
@@ -20,10 +20,12 @@ public class PlayerCharacter extends OnscreenDrawable{
         setY(0);
         Sprite tempSprite;
         tempSprite = new Sprite();
-        tempSprite.setRegion(new Texture(Gdx.files.internal("core/assets/duckplaceholder.jpg")));
-        width = tempSprite.getRegionWidth();
-        height = tempSprite.getRegionHeight();
-        tempSprite.setBounds(w / 2 - width / 2,20,width,height);
+        tempSprite.setRegion(new Texture(Gdx.files.internal("core/assets/duckplaceholder.gif")));
+        spriteWidth = tempSprite.getRegionWidth();
+        spriteHeight = tempSprite.getRegionHeight();
+        upperXBounds = upperXBounds-spriteWidth;
+        upperYBounds = upperYBounds-spriteHeight;
+        tempSprite.setBounds(upperXBounds / 2 - spriteWidth / 2,20,spriteWidth,spriteHeight);
         setSprite(tempSprite);
     }
     public float getXVelocity(){
@@ -77,16 +79,6 @@ public class PlayerCharacter extends OnscreenDrawable{
         changeYVelocity((-accel) * Gdx.graphics.getDeltaTime());
         checkEdgeCollision();
     }
-    public void movement(){
-        setX(getX() + xVelocity*Gdx.graphics.getDeltaTime());
-        setY(getY() + yVelocity*Gdx.graphics.getDeltaTime());
-    }
-    private void checkEdgeCollision(){
-        if(getX() < 0) {setX(0); setXVelocity(0);}
-        if(getX() > w - width) {setX(w-width); setXVelocity(0);}
-        if(getY() < 0) {setY(0); setYVelocity(0);}
-        if(getY() > h - height) {setY(h-height); setYVelocity(0);}
-    }
     public void decelXToStop(){
         if (getXVelocity() > 0){
             if (getXVelocity() - decel*Gdx.graphics.getDeltaTime() < 0){
@@ -120,6 +112,17 @@ public class PlayerCharacter extends OnscreenDrawable{
             }
         }
         checkEdgeCollision();
+    }
+    public void movement(){
+        setX(getX() + xVelocity*Gdx.graphics.getDeltaTime());
+        setY(getY() + yVelocity*Gdx.graphics.getDeltaTime());
+    }
+
+    private void checkEdgeCollision(){
+        if(getX() < lowerXBounds) {setX(lowerXBounds); setXVelocity(0);}
+        if(getX() > upperXBounds) {setX(upperXBounds); setXVelocity(0);}
+        if(getY() < lowerYBounds) {setY(lowerYBounds); setYVelocity(0);}
+        if(getY() > upperYBounds) {setY(upperYBounds); setYVelocity(0);}
     }
 
     @Override
