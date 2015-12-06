@@ -79,15 +79,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 	public void playerMovement(){
 		if(keyflagW) playerCharacter.Up();
-		if(keyflagA) playerCharacter.Right();
-		if(keyflagD) playerCharacter.Left();
-		if(keyflagS) playerCharacter.Down();
-		if(!keyflagD && !keyflagA){
-			playerCharacter.decelXToStop();
-		}
-		if(!keyflagW && !keyflagS){
-			playerCharacter.decelYToStop();
-		}
+        if(!keyflagW && keyflagS) playerCharacter.Down();
+        if(keyflagD) playerCharacter.Left();
+		if(!keyflagD && keyflagA) playerCharacter.Right();
+		if(!keyflagD && !keyflagA) playerCharacter.decelXToStop();
+		if(!keyflagW && !keyflagS) playerCharacter.decelYToStop();
 		playerCharacter.movement();
 	}
 
