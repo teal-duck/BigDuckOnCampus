@@ -28,7 +28,7 @@ public class RoomRenderer {
         batch.begin();
         batch.draw(room.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
-            batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+            batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }
         list.draw(batch,"size = " + renderList.size(),(float)256,(float)256);
         batch.end();
