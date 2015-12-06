@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class PlayerCharacter extends OnscreenDrawable{
     private float xVelocity, yVelocity;
     private float maxVelocity = 500, accel = 3000, decel = 2000;
-    float w = 1280;
-    float h = 720;
+    float w = 1280, h = 720;
+    float width, height;
     public PlayerCharacter(){
         xVelocity = 0;
         yVelocity = 0;
@@ -20,8 +20,10 @@ public class PlayerCharacter extends OnscreenDrawable{
         setY(0);
         Sprite tempSprite;
         tempSprite = new Sprite();
-        tempSprite.setBounds(800 / 2 - 64 / 2,20,64,64);
-        tempSprite.setTexture(new Texture(Gdx.files.internal("core/assets/duckplaceholder.jpg")));
+        tempSprite.setRegion(new Texture(Gdx.files.internal("core/assets/duckplaceholder.jpg")));
+        width = tempSprite.getRegionWidth();
+        height = tempSprite.getRegionHeight();
+        tempSprite.setBounds(w / 2 - width / 2,20,width,height);
         setSprite(tempSprite);
     }
     public float getXVelocity(){
@@ -81,9 +83,9 @@ public class PlayerCharacter extends OnscreenDrawable{
     }
     private void checkEdgeCollision(){
         if(getX() < 0) {setX(0); setXVelocity(0);}
-        if(getX() > w - 64) {setX(w-64); setXVelocity(0);}
+        if(getX() > w - width) {setX(w-width); setXVelocity(0);}
         if(getY() < 0) {setY(0); setYVelocity(0);}
-        if(getY() > h - 64) {setY(h-64); setYVelocity(0);}
+        if(getY() > h - height) {setY(h-height); setYVelocity(0);}
     }
     public void decelXToStop(){
         if (getXVelocity() > 0){
@@ -100,6 +102,7 @@ public class PlayerCharacter extends OnscreenDrawable{
                 changeXVelocity(decel*Gdx.graphics.getDeltaTime());
             }
         }
+        checkEdgeCollision();
     }
     public void decelYToStop(){
         if (getYVelocity() > 0){
@@ -116,6 +119,7 @@ public class PlayerCharacter extends OnscreenDrawable{
                 changeYVelocity(decel*Gdx.graphics.getDeltaTime());
             }
         }
+        checkEdgeCollision();
     }
 
     @Override
