@@ -10,10 +10,10 @@ import java.util.ArrayList;
  */
 public class RoomRenderer {
     private ArrayList<OnscreenDrawable> renderList ;
-    private OnscreenDrawable room;
+    private Room room;
     private BitmapFont list;
 
-    public RoomRenderer(OnscreenDrawable newRoom) {
+    public RoomRenderer(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.room = newRoom;
         list = new BitmapFont();
@@ -80,5 +80,8 @@ public class RoomRenderer {
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
         sortDrawables();
+    }
+    public void changeRoom(Room room){
+        this.room = room;
     }
 }
