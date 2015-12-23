@@ -14,7 +14,7 @@ public class PlayerCharacter extends OnscreenDrawable{
     private float xVelocity, yVelocity;
     private float maxVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
     private ArrayList<Sprite> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
-    public int animationCycle, animationCounter;
+    private int animationCycle, animationCounter;
     int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
     float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
             // the upper and lower X and Y bounds correlate to the size of the frame used by the gui
@@ -85,6 +85,18 @@ public class PlayerCharacter extends OnscreenDrawable{
         if (yVelocity > maxVelocity) yVelocity = maxVelocity;
         if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
     }
+    public int getDirection() {
+        return direction;
+    }
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+    public int getAnimationCounter() {
+        return animationCounter;
+    }
+    public int getAnimationCycle() {
+        return animationCycle;
+    }
     /**
     * Animation methods
     */
@@ -138,7 +150,6 @@ public class PlayerCharacter extends OnscreenDrawable{
      * If opposite directions are pressed, velocity decelerated to 0
      */
     public void Right() {
-        direction = 1;
         if(animationCycle > 10) animationCycle = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.A)) {
             decelXToStop();
@@ -148,13 +159,11 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void Left(){
-        direction = 3;
         if(animationCycle>10) animationCycle = 0;
         changeXVelocity((-accel)*Gdx.graphics.getDeltaTime());
         checkEdgeCollision();
     }
     public void Up() {
-        direction = 0;
         if(animationCycle > 6) animationCycle = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.S)) {
             decelYToStop();
@@ -164,7 +173,6 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void Down() {
-        direction = 2;
         if(animationCycle > 6) animationCycle = 0;
         changeYVelocity((-accel) * Gdx.graphics.getDeltaTime());
         checkEdgeCollision();
