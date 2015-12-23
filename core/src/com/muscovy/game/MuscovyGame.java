@@ -91,8 +91,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				break;
             case 2:
                 room.render(batch);
-                dungeonGUI.editData("xVal","X Position: " + String.valueOf(playerCharacter.getX()));
-                dungeonGUI.editData("yVal","Y Position: " + String.valueOf(playerCharacter.getY()));
+                dungeonGUI.editData("xVal","animationCounter: " + String.valueOf(playerCharacter.animationCounter));
+                dungeonGUI.editData("yVal","animationCycle: " + String.valueOf(playerCharacter.animationCycle));
                 dungeonGUI.render(batch);
                 playerMovement();
                 break;
@@ -103,10 +103,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	}
 
 	public void playerMovement(){
-		if(keyflagW) playerCharacter.Up();
-        if(!keyflagW && keyflagS) playerCharacter.Down();
-        if(keyflagD) playerCharacter.Left();
-		if(!keyflagD && keyflagA) playerCharacter.Right();
+		if(keyflagW) {playerCharacter.Up(); playerCharacter.movementAnimation();}
+        if(!keyflagW && keyflagS) {playerCharacter.Down(); playerCharacter.movementAnimation();}
+        if(keyflagD) {playerCharacter.Right(); playerCharacter.movementAnimation();}
+		if(!keyflagD && keyflagA) {playerCharacter.Left(); playerCharacter.movementAnimation();}
 		if(!keyflagD && !keyflagA) playerCharacter.decelXToStop();
 		if(!keyflagW && !keyflagS) playerCharacter.decelYToStop();
 		playerCharacter.movement();
