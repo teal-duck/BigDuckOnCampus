@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public abstract class OnscreenDrawable {
     private Sprite sprite;
-    private int x, y, layer;
+    private float x, y;
 
     public Sprite getSprite() {
         return sprite;
@@ -17,28 +17,21 @@ public abstract class OnscreenDrawable {
         this.sprite = sprite;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public int getLayer() {
-        return layer;
-    }
-
-    public void setLayer(int layer) {
-        this.layer = layer;
-    }
 
 }
