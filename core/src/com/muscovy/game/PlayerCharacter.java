@@ -159,7 +159,7 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void Left(){
-        if(animationCycle>10) animationCycle = 0;
+        if(animationCycle > 10) animationCycle = 0;
         changeXVelocity((-accel)*Gdx.graphics.getDeltaTime());
         checkEdgeCollision();
     }

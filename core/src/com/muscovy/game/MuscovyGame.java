@@ -122,19 +122,39 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Input.Keys.W) keyflagW = true;
-		if(keycode == Input.Keys.S) keyflagS = true;
-		if(keycode == Input.Keys.D) keyflagD = true;
-		if(keycode == Input.Keys.A) keyflagA = true;
+		switch (gameState){
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				if(keycode == Input.Keys.W) keyflagW = true;
+				if(keycode == Input.Keys.S) keyflagS = true;
+				if(keycode == Input.Keys.D) keyflagD = true;
+				if(keycode == Input.Keys.A) keyflagA = true;
+				break;
+			case 3:
+				break;
+		}
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Input.Keys.W) keyflagW = false;
-		if(keycode == Input.Keys.S) keyflagS = false;
-		if(keycode == Input.Keys.D) keyflagD = false;
-		if(keycode == Input.Keys.A) keyflagA = false;
+		switch (gameState){
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				if(keycode == Input.Keys.W) keyflagW = false;
+				if(keycode == Input.Keys.S) keyflagS = false;
+				if(keycode == Input.Keys.D) keyflagD = false;
+				if(keycode == Input.Keys.A) keyflagA = false;
+				break;
+			case 3:
+				break;
+		}
 		return true;
 	}
 
