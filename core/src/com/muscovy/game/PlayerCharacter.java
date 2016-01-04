@@ -137,7 +137,12 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void movementAnimation(){
-        if (animationCounter == 5){animationCounter = 0; walkCycleNext();}else{animationCounter++;}
+        if (animationCounter == 5){
+            animationCounter = 0;
+            walkCycleNext();
+        }else{
+            animationCounter++;
+        }
     }
     public void idleAnimation(){
         if ((xVelocity == 0) && (yVelocity == 0)) {
