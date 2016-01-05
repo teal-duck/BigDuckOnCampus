@@ -44,9 +44,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         Sprite guiSprite = new Sprite();
         gameState = 1;
 		roomSprite = new Sprite();
-		roomSprite.setTexture(new Texture("core/assets/Untitled.jpg"));
-		roomSprite.setX(0);
-		roomSprite.setY(0);
+		roomSprite.setTexture(new Texture("core/assets/testMap.png"));
+		roomSprite.setX(32);
+		roomSprite.setY(32);
 		drawRoom = new Room();
 		drawRoom.setSprite(roomSprite);
 		playerCharacter = new PlayerCharacter();

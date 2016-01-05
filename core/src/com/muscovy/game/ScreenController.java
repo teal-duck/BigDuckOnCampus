@@ -27,7 +27,7 @@ public class ScreenController {
          * Renders sprites in the room so those further back are rendered first, giving a perspective illusion
          */
         sortDrawables();
-        batch.draw(screen.getSprite().getTexture(),0,0);
+        batch.draw(screen.getSprite().getTexture(),33,33);
         for (OnscreenDrawable drawable:renderList){
             batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }

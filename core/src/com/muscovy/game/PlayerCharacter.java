@@ -17,7 +17,7 @@ public class PlayerCharacter extends Collidable{
     private int animationCycle, animationCounter;
     private int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
     private float currentHealth = 100, maxHealth = 100;
-    private float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
+    private float upperXBounds = 1280-32, upperYBounds = 720-128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
             // the upper and lower X and Y bounds correlate to the size of the frame used by the gui (32 px border on
             // left right and bottom, and 96 px on top)
     public PlayerCharacter() {
