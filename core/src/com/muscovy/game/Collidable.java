@@ -11,13 +11,14 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class Collidable extends OnscreenDrawable{
     private Rectangle[] collisionBoxes;
     private float rectangleBorder = 10;
+    private float bufferBorder = 0;
 
     public void setUpBoxes(float x, float y, float width, float height){
         collisionBoxes = new Rectangle[4];
-        collisionBoxes[0] = new Rectangle(x, y, width, rectangleBorder);//bottom rectangle
-        collisionBoxes[1] = new Rectangle(x, y, rectangleBorder, height - 32); //left rectangle
-        collisionBoxes[2] = new Rectangle(x + width - rectangleBorder, y, rectangleBorder, height - 32); //right rectangle
-        collisionBoxes[3] = new Rectangle(x, y + height - rectangleBorder - 32 , width, rectangleBorder); //top rectangle
+        collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2,     rectangleBorder);//bottom rectangle
+        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorder*2,               height - 32 - 2 - bufferBorder*2); //left rectangle
+        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorder,  y + bufferBorder + 1,                                rectangleBorder,                 height - 32 - 2 - bufferBorder*2); //right rectangle
+        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorder - 32,    width - 2,                       rectangleBorder); //top rectangle
     }
 
     public void updateBoxesPosition(){
@@ -41,6 +42,9 @@ public abstract class Collidable extends OnscreenDrawable{
     }
     public Rectangle getTopRectangle(){
         return collisionBoxes[3];
+    }
+    public float getBufferBorder() {
+        return bufferBorder;
     }
     @Override
     public Sprite getSprite() {
