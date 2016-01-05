@@ -54,7 +54,6 @@ public class PlayerCharacter extends Collidable{
         upperYBounds = upperYBounds - spriteHeight;
         playerSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
         this.setSprite(playerSprite);
-        this.setUpBoxes();
         setX(0);
         setY(0);
     }
@@ -240,6 +239,7 @@ public class PlayerCharacter extends Collidable{
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
+        super.setUpBoxes(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override

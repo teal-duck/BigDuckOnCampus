@@ -10,23 +10,25 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public abstract class Collidable extends OnscreenDrawable{
     private Rectangle[] collisionBoxes;
+    private float rectangleBorder = 10;
 
-    public void setUpBoxes(){
+    public void setUpBoxes(float x, float y, float width, float height){
         collisionBoxes = new Rectangle[4];
-        collisionBoxes[0] = new Rectangle(this.getX(), this.getY(), this.getSprite().getHeight(),1);//bottom rectangle
-        collisionBoxes[1] = new Rectangle(this.getX(), this.getY(), 1, this.getSprite().getHeight() - 30); //left rectangle
-        collisionBoxes[2] = new Rectangle(this.getX()+ this.getSprite().getWidth() - 1, this.getY(), 1, this.getSprite().getHeight() - 30); //right rectangle
-        collisionBoxes[3] = new Rectangle(this.getX(), this.getY() + this.getSprite().getHeight() - 31 , this.getSprite().getWidth(), 1); //top rectangle
+        collisionBoxes[0] = new Rectangle(x, y, width, rectangleBorder);//bottom rectangle
+        collisionBoxes[1] = new Rectangle(x, y, rectangleBorder, height - 32); //left rectangle
+        collisionBoxes[2] = new Rectangle(x + width - rectangleBorder, y, rectangleBorder, height - 32); //right rectangle
+        collisionBoxes[3] = new Rectangle(x, y + height - rectangleBorder - 32 , width, rectangleBorder); //top rectangle
     }
+
     public void updateBoxesPosition(){
         collisionBoxes[0].setX(this.getX());
         collisionBoxes[0].setY(this.getY());
         collisionBoxes[1].setX(this.getX());
         collisionBoxes[1].setY(this.getY());
-        collisionBoxes[2].setX(this.getX()+ this.getSprite().getWidth() - 1);
+        collisionBoxes[2].setX(this.getX() + this.getWidth() - rectangleBorder);
         collisionBoxes[2].setY(this.getY());
         collisionBoxes[3].setX(this.getX());
-        collisionBoxes[3].setY(this.getY() + this.getSprite().getHeight() - 31);
+        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorder-32);
     }
     public Rectangle getBottomRectangle(){
         return collisionBoxes[0];

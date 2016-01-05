@@ -10,7 +10,6 @@ public class Enemy extends Collidable {
 
     public Enemy(Sprite sprite) {
         this.setSprite(sprite);
-        this.setUpBoxes();
     }
 
     @Override
@@ -21,6 +20,7 @@ public class Enemy extends Collidable {
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
+        super.setUpBoxes(this.getX(),this.getY(),this.getWidth(),this.getHeight());
     }
 
     @Override

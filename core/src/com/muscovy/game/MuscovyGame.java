@@ -12,6 +12,8 @@ package com.muscovy.game;
 		import com.badlogic.gdx.graphics.g2d.Sprite;
 		import com.badlogic.gdx.graphics.g2d.SpriteBatch;
         import com.badlogic.gdx.graphics.g2d.BitmapFont;
+		import com.badlogic.gdx.math.Intersector;
+		import java.util.ArrayList;
 
 public class MuscovyGame extends ApplicationAdapter implements ApplicationListener, InputProcessor {
 	private OrthographicCamera camera;
@@ -52,8 +54,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         testSprite1 = new Sprite();
         testSprite1.setTexture(new Texture("core/assets/thing.gif"));
         enemy1 = new Enemy(testSprite1);
-        enemy1.setX(150);
-        enemy1.setY(150);
+        enemy1.setX(350);
+        enemy1.setY(350);
 		testSprite2 = new Sprite();
 		testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
 		enemy2 = new Enemy(testSprite2);
@@ -70,8 +72,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         yVal = new BitmapFont();
         yVal.setColor(Color.BLACK);
         overworldGUI = new GUI();
-        dungeonGUI.addData("xVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 500, 700);
-        dungeonGUI.addData("yVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 700);
+        dungeonGUI.addData("PlayerXVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 700);
+        dungeonGUI.addData("EnemyXVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 700);
+		dungeonGUI.addData("PlayerYVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 650);
+		dungeonGUI.addData("EnemyYVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 650);
+		dungeonGUI.addData("Collision", "Collision?: False", yVal, 850, 700);
         guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
         guiMapSprite.setX(0);
         guiMapSprite.setY(0);
@@ -96,22 +101,44 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				overworldGUI.render(batch);
 				break;
             case 2:
+				playerMovement();
+				playerCollision();
                 room.render(batch);
-                dungeonGUI.editData("xVal","animationCounter: " + String.valueOf(playerCharacter.getAnimationCounter()));
-                dungeonGUI.editData("yVal","animationCycle: " + String.valueOf(playerCharacter.getAnimationCycle()));
+                dungeonGUI.editData("EnemyXVal","enemyrectangleX: " + String.valueOf(enemy1.getSprite().getHeight()));
+				dungeonGUI.editData("EnemyYVal","enemyrectangleY: " + String.valueOf(enemy1.getSprite().getHeight()));
+				dungeonGUI.editData("PlayerXVal","playerrectangleX: " + String.valueOf(playerCharacter.getBottomRectangle().getX()));
+				dungeonGUI.editData("PlayerYVal","playerrectangleY: " + String.valueOf(playerCharacter.getBottomRectangle().getY()));
                 dungeonGUI.render(batch);
-                playerMovement();
-                collision();
                 break;
             case 3:
                 break;
 		}
         batch.end();
 	}
-    
-    public void collision(){
-
-    }
+    public void playerCollision(){
+		 ArrayList<Collidable> collidableList = new ArrayList<Collidable>(room.getCollidableList());
+		 for (Collidable collidable:collidableList) {
+			if (Intersector.overlaps(playerCharacter.getBottomRectangle(),collidable.getTopRectangle())) {
+				playerCharacter.setYVelocity(0);
+				playerCharacter.setY(collidable.getTopRectangle().getY() + collidable.getTopRectangle().getHeight());
+				dungeonGUI.editData("Collision","collision?: True");
+			}else {
+				dungeonGUI.editData("Collision","collision?: False");
+			}
+			if (Intersector.overlaps(playerCharacter.getLeftRectangle(),collidable.getRightRectangle())){
+				playerCharacter.setXVelocity(0);
+				playerCharacter.setX(collidable.getRightRectangle().getX() + collidable.getRightRectangle().getWidth());
+			}
+			if (Intersector.overlaps(playerCharacter.getRightRectangle(),collidable.getLeftRectangle())){
+				playerCharacter.setXVelocity(0);
+				playerCharacter.setX(collidable.getLeftRectangle().getX() - playerCharacter.getSprite().getWidth());
+			}
+			if (Intersector.overlaps(playerCharacter.getTopRectangle(),collidable.getBottomRectangle())){
+				playerCharacter.setYVelocity(0);
+				playerCharacter.setY(collidable.getY() - (playerCharacter.getSprite().getWidth()+32));
+			}
+		}
+	}
     
 	public void playerMovement(){
 		if(keyflagW) {playerCharacter.Up(); playerCharacter.movementAnimation();}

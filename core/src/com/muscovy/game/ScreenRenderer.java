@@ -89,6 +89,9 @@ public class ScreenRenderer {
         renderList.addAll(collidables);
         collidableList.addAll(collidables);
     }
+    public ArrayList<Collidable> getCollidableList(){
+        return collidableList;
+    }
     public void changeScreen(OnscreenDrawable screen){
         this.screen = screen;
     }
