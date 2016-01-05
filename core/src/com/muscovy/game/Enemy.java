@@ -1,11 +1,17 @@
 package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-public class Enemy extends OnscreenDrawable {
+public class Enemy extends Collidable {
+
+    public Enemy(Sprite sprite) {
+        this.setSprite(sprite);
+    }
+
     @Override
     public Sprite getSprite() {
         return super.getSprite();
@@ -14,6 +20,7 @@ public class Enemy extends OnscreenDrawable {
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
+        super.setUpBoxes(this.getX(),this.getY(),this.getWidth(),this.getHeight());
     }
 
     @Override

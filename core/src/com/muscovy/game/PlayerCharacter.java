@@ -4,60 +4,58 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
 
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class PlayerCharacter extends OnscreenDrawable{
+public class PlayerCharacter extends Collidable{
     private float xVelocity, yVelocity;
     private float maxVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
-    private ArrayList<Sprite> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
+    private ArrayList<Texture> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
     private int animationCycle, animationCounter;
-    int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
-    float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
-            // the upper and lower X and Y bounds correlate to the size of the frame used by the gui
+    private int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
+    private float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
+            // the upper and lower X and Y bounds correlate to the size of the frame used by the gui (32 px border on
+            // left right and bottom, and 96 px on top)
     public PlayerCharacter() {
         animationCycle = 0;
         xVelocity = 0;
         yVelocity = 0;
-        setX(0);
-        setY(0);
-        Sprite tempSprite;
-        downWalkCycle = new ArrayList<Sprite>();
-        upWalkCycle = new ArrayList<Sprite>();
-        rightWalkCycle = new ArrayList<Sprite>();
-        leftWalkCycle = new ArrayList<Sprite>();
+        Sprite playerSprite;
+        Texture tempTexture;
+        downWalkCycle = new ArrayList<Texture>();
+        upWalkCycle = new ArrayList<Texture>();
+        rightWalkCycle = new ArrayList<Texture>();
+        leftWalkCycle = new ArrayList<Texture>();
         for (int i = 1; i < 8; i++) {
-            tempSprite = new Sprite();
-            tempSprite.setRegion(new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/downduck%d.png", i))));
-            tempSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
-            downWalkCycle.add(tempSprite);
+            tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/downduck%d.png", i)));
+            downWalkCycle.add(tempTexture);
         }
         for (int i = 1; i < 8; i++) {
-            tempSprite = new Sprite();
-            tempSprite.setRegion(new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/upduck%d.png", i))));
-            tempSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
-            upWalkCycle.add(tempSprite);
+            tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/upduck%d.png", i)));
+            upWalkCycle.add(tempTexture);
         }
         for (int i = 1; i < 12; i++) {
-            tempSprite = new Sprite();
-            tempSprite.setRegion(new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/leftduck%d.png", i))));
-            tempSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
-            leftWalkCycle.add(tempSprite);
+            tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/leftduck%d.png", i)));
+            leftWalkCycle.add(tempTexture);
         }
         for (int i = 1; i < 12; i++) {
-            tempSprite = new Sprite();
-            tempSprite.setRegion(new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/rightduck%d.png", i))));
-            tempSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
-            rightWalkCycle.add(tempSprite);
+            tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/rightduck%d.png", i)));
+            rightWalkCycle.add(tempTexture);
         }
-        setSprite(downWalkCycle.get(0));
-        spriteWidth = downWalkCycle.get(0).getRegionWidth();
-        spriteHeight = downWalkCycle.get(0).getRegionHeight();
+        playerSprite = new Sprite();
+        playerSprite.setRegion(downWalkCycle.get(0));
+        spriteWidth = playerSprite.getRegionWidth();
+        spriteHeight = playerSprite.getRegionHeight();
         upperXBounds = upperXBounds - spriteWidth;
         upperYBounds = upperYBounds - spriteHeight;
+        playerSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
+        this.setSprite(playerSprite);
+        setX(0);
+        setY(0);
     }
     public float getXVelocity(){
         return xVelocity;
@@ -103,7 +101,7 @@ public class PlayerCharacter extends OnscreenDrawable{
     public void walkCycleNext(){
         switch (direction){
             case 0:
-                this.setSprite(upWalkCycle.get(animationCycle));
+                this.setTexture(upWalkCycle.get(animationCycle));
                 if(animationCycle == 6){
                     animationCycle = 0;
                 }else{
@@ -111,7 +109,7 @@ public class PlayerCharacter extends OnscreenDrawable{
                 }
                 break;
             case 1:
-                this.setSprite(rightWalkCycle.get(animationCycle));
+                this.setTexture(rightWalkCycle.get(animationCycle));
                 if(animationCycle == 10){
                     animationCycle = 2;
                 }else{
@@ -119,7 +117,7 @@ public class PlayerCharacter extends OnscreenDrawable{
                 }
                 break;
             case 2:
-                this.setSprite(downWalkCycle.get(animationCycle));
+                this.setTexture(downWalkCycle.get(animationCycle));
                 if(animationCycle == 6){
                     animationCycle = 0;
                 }else{
@@ -127,7 +125,7 @@ public class PlayerCharacter extends OnscreenDrawable{
                 }
                 break;
             case 3:
-                this.setSprite(leftWalkCycle.get(animationCycle));
+                this.setTexture(leftWalkCycle.get(animationCycle));
                 if(animationCycle == 10){
                     animationCycle = 2;
                 }else{
@@ -137,11 +135,16 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void movementAnimation(){
-        if (animationCounter == 5){animationCounter = 0; walkCycleNext();}else{animationCounter++;}
+        if (animationCounter == 5){
+            animationCounter = 0;
+            walkCycleNext();
+        }else{
+            animationCounter++;
+        }
     }
     public void idleAnimation(){
         if ((xVelocity == 0) && (yVelocity == 0)) {
-            this.setSprite(downWalkCycle.get(0));
+            this.setTexture(downWalkCycle.get(0));
             animationCycle = 0;
         }
     }
@@ -159,7 +162,7 @@ public class PlayerCharacter extends OnscreenDrawable{
         }
     }
     public void Left(){
-        if(animationCycle>10) animationCycle = 0;
+        if(animationCycle > 10) animationCycle = 0;
         changeXVelocity((-accel)*Gdx.graphics.getDeltaTime());
         checkEdgeCollision();
     }
@@ -236,6 +239,12 @@ public class PlayerCharacter extends OnscreenDrawable{
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
+        super.setUpBoxes(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+
+    @Override
+    public void setTexture(Texture texture) {
+        super.setTexture(texture);
     }
 
     @Override

@@ -8,30 +8,29 @@ import java.util.ArrayList;
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class RoomRenderer {
+public class ScreenRenderer {
     private ArrayList<OnscreenDrawable> renderList ;
-    private Room room;
-    private BitmapFont list;
-
-    public RoomRenderer(Room newRoom) {
+    private ArrayList<Collidable> collidableList;
+    private OnscreenDrawable screen;
+    private BitmapFont list;//Testing purposes
+    public ScreenRenderer(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
-        this.room = newRoom;
+        this.collidableList = new ArrayList<Collidable>();
+        this.screen = newRoom;
         list = new BitmapFont();
-        list.setColor(Color.WHITE);
+        list.setColor(Color.WHITE);//Testing purposes
     }
-
     public void render(SpriteBatch batch){
         /**
-         *
+         * Renders sprites in the room so those further back are rendered first, giving a perspective illusion
          */
         sortDrawables();
-        batch.draw(room.getSprite().getTexture(),0,0);
+        batch.draw(screen.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
             batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }
-        list.draw(batch,"size = " + renderList.size(),(float)256,(float)256);
+        list.draw(batch,"no of sprites in room = " + renderList.size(),(float)250,(float)450);//Testing purposes
     }
-
     private void sortDrawables(){
         /**
         * Quicksorts the list of drawable objects in the room by Y coordinate so
@@ -42,7 +41,7 @@ public class RoomRenderer {
         renderList.clear();
         renderList.addAll(newList);
     }
-
+    /**Quicksort Helper Methods*/
     private ArrayList<OnscreenDrawable> quicksort(ArrayList<OnscreenDrawable> input){
         if(input.size() <= 1){
             return input;
@@ -64,7 +63,6 @@ public class RoomRenderer {
         }
         return concatenate(quicksort(less), pivot, quicksort(greater));
     }
-
     private ArrayList<OnscreenDrawable> concatenate(ArrayList<OnscreenDrawable> less, OnscreenDrawable pivot, ArrayList<OnscreenDrawable> greater){
         ArrayList<OnscreenDrawable> list = new ArrayList<OnscreenDrawable>();
         for (int i = 0; i < less.size(); i++) {
@@ -76,12 +74,25 @@ public class RoomRenderer {
         }
         return list;
     }
-
+    /**end Quicksort Helper Methods*/
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
-        sortDrawables();
     }
-    public void changeRoom(Room room){
-        this.room = room;
+    public void addNewDrawables(ArrayList<OnscreenDrawable> drawables){
+        renderList.addAll(drawables);
+    }
+    public void addNewCollidable(Collidable collidable){
+        renderList.add(collidable);
+        collidableList.add(collidable);
+    }
+    public void addNewCollidables(ArrayList<Collidable> collidables){
+        renderList.addAll(collidables);
+        collidableList.addAll(collidables);
+    }
+    public ArrayList<Collidable> getCollidableList(){
+        return collidableList;
+    }
+    public void changeScreen(OnscreenDrawable screen){
+        this.screen = screen;
     }
 }
