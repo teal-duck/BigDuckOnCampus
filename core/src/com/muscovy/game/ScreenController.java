@@ -8,14 +8,16 @@ import java.util.ArrayList;
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class ScreenRenderer {
+public class ScreenController {
     private ArrayList<OnscreenDrawable> renderList ;
-    private ArrayList<Collidable> collidableList;
+    private ArrayList<Obstacle> obstacleList;
+    private ArrayList<Enemy> enemyList;
     private OnscreenDrawable screen;
     private BitmapFont list;//Testing purposes
-    public ScreenRenderer(Room newRoom) {
+    public ScreenController(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
-        this.collidableList = new ArrayList<Collidable>();
+        this.obstacleList = new ArrayList<Obstacle>();
+        this.enemyList = new ArrayList<Enemy>();
         this.screen = newRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
@@ -81,16 +83,27 @@ public class ScreenRenderer {
     public void addNewDrawables(ArrayList<OnscreenDrawable> drawables){
         renderList.addAll(drawables);
     }
-    public void addNewCollidable(Collidable collidable){
-        renderList.add(collidable);
-        collidableList.add(collidable);
+    public void addNewObstacle(Obstacle obstacle){
+        renderList.add(obstacle);
+        obstacleList.add(obstacle);
     }
-    public void addNewCollidables(ArrayList<Collidable> collidables){
-        renderList.addAll(collidables);
-        collidableList.addAll(collidables);
+    public void addNewObstacles(ArrayList<Obstacle> obstacles){
+        renderList.addAll(obstacles);
+        obstacleList.addAll(obstacles);
     }
-    public ArrayList<Collidable> getCollidableList(){
-        return collidableList;
+    public void addNewEnemy(Enemy enemy){
+        renderList.add(enemy);
+        enemyList.add(enemy);
+    }
+    public void addNewEnemies(ArrayList<Enemy> enemies){
+        renderList.addAll(enemies);
+        enemyList.addAll(enemies);
+    }
+    public ArrayList<Obstacle> getObstacles(){
+        return obstacleList;
+    }
+    public ArrayList<Enemy> getEnemies(){
+        return enemyList;
     }
     public void changeScreen(OnscreenDrawable screen){
         this.screen = screen;

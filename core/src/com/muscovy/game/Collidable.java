@@ -3,6 +3,7 @@ package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -10,15 +11,18 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public abstract class Collidable extends OnscreenDrawable{
     private Rectangle[] collisionBoxes;
+    private Rectangle boundingBox;
     private float rectangleBorder = 10;
     private float bufferBorder = 0;
+    private float heightOffset = 60;
 
     public void setUpBoxes(float x, float y, float width, float height){
+        boundingBox = new Rectangle(x,y,width,height);
         collisionBoxes = new Rectangle[4];
         collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2,     rectangleBorder);//bottom rectangle
-        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorder*2,               height - 32 - 2 - bufferBorder*2); //left rectangle
-        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorder,  y + bufferBorder + 1,                                rectangleBorder,                 height - 32 - 2 - bufferBorder*2); //right rectangle
-        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorder - 32,    width - 2,                       rectangleBorder); //top rectangle
+        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorder*2,               height - heightOffset - 2 - bufferBorder*2); //left rectangle
+        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorder,  y + bufferBorder + 1,                                rectangleBorder,                 height - heightOffset - 2 - bufferBorder*2); //right rectangle
+        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorder - heightOffset,    width - 2,                       rectangleBorder); //top rectangle
     }
 
     public void updateBoxesPosition(){
@@ -29,7 +33,16 @@ public abstract class Collidable extends OnscreenDrawable{
         collisionBoxes[2].setX(this.getX() + this.getWidth() - rectangleBorder);
         collisionBoxes[2].setY(this.getY());
         collisionBoxes[3].setX(this.getX());
-        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorder-32);
+        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorder-heightOffset);
+        boundingBox.setX(this.getX());
+        boundingBox.setY(this.getY());
+    }
+
+    public float getHeightOffset() {
+        return heightOffset;
+    }
+    public void setHeightOffset(float heightOffset) {
+        this.heightOffset = heightOffset;
     }
     public Rectangle getBottomRectangle(){
         return collisionBoxes[0];
@@ -45,6 +58,12 @@ public abstract class Collidable extends OnscreenDrawable{
     }
     public float getBufferBorder() {
         return bufferBorder;
+    }
+    public float getRectangleBorder() {
+        return rectangleBorder;
+    }
+    public boolean collides(Rectangle rectangle){
+        return Intersector.overlaps(rectangle,this.getSprite().getBoundingRectangle());
     }
     @Override
     public Sprite getSprite() {

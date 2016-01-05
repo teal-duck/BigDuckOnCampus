@@ -18,9 +18,9 @@ package com.muscovy.game;
 public class MuscovyGame extends ApplicationAdapter implements ApplicationListener, InputProcessor {
 	private OrthographicCamera camera;
 	SpriteBatch batch;
-	ScreenRenderer room;
+	ScreenController room;
 	Room drawRoom;
-	Enemy enemy1, enemy2;
+	Obstacle obstacle1, obstacle2;
 	PlayerCharacter playerCharacter;
 	Sprite roomSprite, testSprite1, testSprite2;
 	GUI dungeonGUI, overworldGUI, pauseGUI;
@@ -53,14 +53,14 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         //test enemies
         testSprite1 = new Sprite();
         testSprite1.setTexture(new Texture("core/assets/thing.gif"));
-        enemy1 = new Enemy(testSprite1);
-        enemy1.setX(350);
-        enemy1.setY(350);
+        obstacle1 = new Obstacle(testSprite1);
+        obstacle1.setX(350);
+        obstacle1.setY(350);
 		testSprite2 = new Sprite();
 		testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
-		enemy2 = new Enemy(testSprite2);
-		enemy2.setX(100);
-		enemy2.setY(100);
+		obstacle2 = new Obstacle(testSprite2);
+		obstacle2.setX(500);
+		obstacle2.setY(100);
         //Dungeon GUI
         dungeonGUI = new GUI();
         guiSprite.setTexture(new Texture("core/assets/guiFrame.png"));
@@ -81,10 +81,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         guiMapSprite.setX(0);
         guiMapSprite.setY(0);
         overworldGUI.addElement(guiMapSprite);
-		room = new ScreenRenderer(drawRoom);
-		room.addNewCollidable(enemy1);
-		room.addNewCollidable(enemy2);
-		room.addNewCollidable(playerCharacter);
+		room = new ScreenController(drawRoom);
+		room.addNewObstacle(obstacle1);
+		room.addNewObstacle(obstacle2);
+		room.addNewDrawable(playerCharacter);
 	}
 
 	@Override
@@ -104,8 +104,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerMovement();
 				playerCollision();
                 room.render(batch);
-                dungeonGUI.editData("EnemyXVal","enemyrectangleX: " + String.valueOf(enemy1.getSprite().getHeight()));
-				dungeonGUI.editData("EnemyYVal","enemyrectangleY: " + String.valueOf(enemy1.getSprite().getHeight()));
+                dungeonGUI.editData("EnemyXVal","obstaclerectangleX: " + String.valueOf(obstacle1.getSprite().getHeight()));
+				dungeonGUI.editData("EnemyYVal","obstaclerectangleY: " + String.valueOf(obstacle1.getSprite().getHeight()));
 				dungeonGUI.editData("PlayerXVal","playerrectangleX: " + String.valueOf(playerCharacter.getBottomRectangle().getX()));
 				dungeonGUI.editData("PlayerYVal","playerrectangleY: " + String.valueOf(playerCharacter.getBottomRectangle().getY()));
                 dungeonGUI.render(batch);
@@ -116,27 +116,35 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         batch.end();
 	}
     public void playerCollision(){
-		 ArrayList<Collidable> collidableList = new ArrayList<Collidable>(room.getCollidableList());
-		 for (Collidable collidable:collidableList) {
+		 ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(room.getObstacles());
+		 playerCharacter.resetMaxVelocity();
+		 for (Collidable collidable:obstacleList) {
 			if (Intersector.overlaps(playerCharacter.getBottomRectangle(),collidable.getTopRectangle())) {
 				playerCharacter.setYVelocity(0);
+				playerCharacter.setMaxVelocity(200);
 				playerCharacter.setY(collidable.getTopRectangle().getY() + collidable.getTopRectangle().getHeight());
-				dungeonGUI.editData("Collision","collision?: True");
-			}else {
-				dungeonGUI.editData("Collision","collision?: False");
 			}
 			if (Intersector.overlaps(playerCharacter.getLeftRectangle(),collidable.getRightRectangle())){
 				playerCharacter.setXVelocity(0);
+				playerCharacter.setMaxVelocity(200);
 				playerCharacter.setX(collidable.getRightRectangle().getX() + collidable.getRightRectangle().getWidth());
 			}
 			if (Intersector.overlaps(playerCharacter.getRightRectangle(),collidable.getLeftRectangle())){
 				playerCharacter.setXVelocity(0);
+				playerCharacter.setMaxVelocity(200);
 				playerCharacter.setX(collidable.getLeftRectangle().getX() - playerCharacter.getSprite().getWidth());
 			}
 			if (Intersector.overlaps(playerCharacter.getTopRectangle(),collidable.getBottomRectangle())){
 				playerCharacter.setYVelocity(0);
-				playerCharacter.setY(collidable.getY() - (playerCharacter.getSprite().getWidth()+32));
+				playerCharacter.setMaxVelocity(200);
+				playerCharacter.setY(collidable.getY() - (playerCharacter.getHeightOffset()+playerCharacter.getRectangleBorder()-2));//not sure why I need this 2 here. It's wonky.
 			}
+			 if (playerCharacter.collides(collidable.getSprite().getBoundingRectangle())) {
+				 dungeonGUI.editData("Collision","collision?: True");
+			 }else {
+				 dungeonGUI.editData("Collision","collision?: False");
+			 }
+
 		}
 	}
     

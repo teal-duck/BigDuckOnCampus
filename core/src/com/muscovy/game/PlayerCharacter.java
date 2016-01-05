@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
 
@@ -13,10 +12,11 @@ import java.util.ArrayList;
  */
 public class PlayerCharacter extends Collidable{
     private float xVelocity, yVelocity;
-    private float maxVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
+    private float maxVelocity = 500, defaultVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
     private ArrayList<Texture> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
     private int animationCycle, animationCounter;
     private int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
+    private float currentHealth = 100, maxHealth = 100;
     private float upperXBounds = 1280-32, upperYBounds = 720-96, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
             // the upper and lower X and Y bounds correlate to the size of the frame used by the gui (32 px border on
             // left right and bottom, and 96 px on top)
@@ -82,6 +82,12 @@ public class PlayerCharacter extends Collidable{
         yVelocity = velocity;
         if (yVelocity > maxVelocity) yVelocity = maxVelocity;
         if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    }
+    public void setMaxVelocity(float maxVelocity) {
+        this.maxVelocity = maxVelocity;
+    }
+    public void resetMaxVelocity() {
+        this.maxVelocity = defaultVelocity;
     }
     public int getDirection() {
         return direction;

@@ -1,14 +1,13 @@
 package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-public class Enemy extends Collidable {
-    private Float touchDamage;
-    public Enemy(Sprite sprite) {
+public class Obstacle extends Collidable {
+
+    public Obstacle(Sprite sprite) {
         this.setSprite(sprite);
     }
 
