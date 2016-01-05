@@ -13,6 +13,8 @@ public class Room extends OnscreenDrawable{
     }
     @Override
     public void setSprite(Sprite sprite) {
+        sprite.setX(32);
+        sprite.setY(32);
         super.setSprite(sprite);
     }
     @Override

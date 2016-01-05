@@ -8,13 +8,15 @@ import java.util.ArrayList;
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class RoomRenderer {
+public class ScreenRenderer {
     private ArrayList<OnscreenDrawable> renderList ;
-    private Room room;
+    private ArrayList<Collidable> collidableList;
+    private OnscreenDrawable screen;
     private BitmapFont list;//Testing purposes
-    public RoomRenderer(Room newRoom) {
+    public ScreenRenderer(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
-        this.room = newRoom;
+        this.collidableList = new ArrayList<Collidable>();
+        this.screen = newRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
     }
@@ -23,11 +25,11 @@ public class RoomRenderer {
          * Renders sprites in the room so those further back are rendered first, giving a perspective illusion
          */
         sortDrawables();
-        batch.draw(room.getSprite().getTexture(),0,0);
+        batch.draw(screen.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
             batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }
-        list.draw(batch,"no of sprites in room = " + renderList.size(),(float)256,(float)256);//Testing purposes
+        list.draw(batch,"no of sprites in room = " + renderList.size(),(float)250,(float)450);//Testing purposes
     }
     private void sortDrawables(){
         /**
@@ -76,7 +78,18 @@ public class RoomRenderer {
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
     }
-    public void changeRoom(Room room){
-        this.room = room;
+    public void addNewDrawables(ArrayList<OnscreenDrawable> drawables){
+        renderList.addAll(drawables);
+    }
+    public void addNewCollidable(Collidable collidable){
+        renderList.add(collidable);
+        collidableList.add(collidable);
+    }
+    public void addNewCollidables(ArrayList<Collidable> collidables){
+        renderList.addAll(collidables);
+        collidableList.addAll(collidables);
+    }
+    public void changeScreen(OnscreenDrawable screen){
+        this.screen = screen;
     }
 }

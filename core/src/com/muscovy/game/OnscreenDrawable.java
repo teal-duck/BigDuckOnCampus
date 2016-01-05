@@ -1,5 +1,6 @@
 package com.muscovy.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
@@ -17,6 +18,10 @@ public abstract class OnscreenDrawable {
         this.sprite = sprite;
     }
 
+    public void setTexture(Texture texture){
+        this.sprite.setTexture(texture);
+    }
+
     public float getX() {
         return x;
     }
@@ -32,6 +37,4 @@ public abstract class OnscreenDrawable {
     public void setY(float y) {
         this.y = y;
     }
-
-
 }

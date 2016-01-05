@@ -16,7 +16,7 @@ package com.muscovy.game;
 public class MuscovyGame extends ApplicationAdapter implements ApplicationListener, InputProcessor {
 	private OrthographicCamera camera;
 	SpriteBatch batch;
-	RoomRenderer room;
+	ScreenRenderer room;
 	Room drawRoom;
 	Enemy enemy1, enemy2;
 	PlayerCharacter playerCharacter;
@@ -26,7 +26,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     private BitmapFont xVal, yVal;
 	float w = 1280;
 	float h = 720;
-	int gameState; // 0 = Main Menu, 1 = Overworld, 2 = Dungeon, 3 = Pause
+	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/Building, 3 = Pause
 
 	@Override
 	public void create () {
@@ -38,7 +38,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         Gdx.input.setInputProcessor(this);
 	}
 	private void createTestingSprites(){
-        gameState = 2;
+        Sprite guiMapSprite = new Sprite();
+        Sprite guiSprite = new Sprite();
+        gameState = 1;
 		roomSprite = new Sprite();
 		roomSprite.setTexture(new Texture("core/assets/Untitled.jpg"));
 		roomSprite.setX(0);
@@ -46,20 +48,19 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		drawRoom = new Room();
 		drawRoom.setSprite(roomSprite);
 		playerCharacter = new PlayerCharacter();
+        //test enemies
         testSprite1 = new Sprite();
         testSprite1.setTexture(new Texture("core/assets/thing.gif"));
-        enemy1 = new Enemy();
-        enemy1.setSprite(testSprite1);
+        enemy1 = new Enemy(testSprite1);
         enemy1.setX(150);
         enemy1.setY(150);
 		testSprite2 = new Sprite();
 		testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
-		enemy2 = new Enemy();
-		enemy2.setSprite(testSprite2);
+		enemy2 = new Enemy(testSprite2);
 		enemy2.setX(100);
 		enemy2.setY(100);
+        //Dungeon GUI
         dungeonGUI = new GUI();
-        Sprite guiSprite = new Sprite();
         guiSprite.setTexture(new Texture("core/assets/guiFrame.png"));
         guiSprite.setX(0);
         guiSprite.setY(0);
@@ -68,12 +69,17 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         xVal.setColor(Color.BLACK);
         yVal = new BitmapFont();
         yVal.setColor(Color.BLACK);
+        overworldGUI = new GUI();
         dungeonGUI.addData("xVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 500, 700);
         dungeonGUI.addData("yVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 700);
-		room = new RoomRenderer(drawRoom);
-		room.addNewDrawable(enemy1);
-		room.addNewDrawable(enemy2);
-		room.addNewDrawable(playerCharacter);
+        guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
+        guiMapSprite.setX(0);
+        guiMapSprite.setY(0);
+        overworldGUI.addElement(guiMapSprite);
+		room = new ScreenRenderer(drawRoom);
+		room.addNewCollidable(enemy1);
+		room.addNewCollidable(enemy2);
+		room.addNewCollidable(playerCharacter);
 	}
 
 	@Override
@@ -85,9 +91,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		batch.begin();
 		switch (gameState){
 			case 0:
-				//thing;
 				break;
             case 1:
+				overworldGUI.render(batch);
 				break;
             case 2:
                 room.render(batch);
@@ -95,13 +101,18 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 dungeonGUI.editData("yVal","animationCycle: " + String.valueOf(playerCharacter.getAnimationCycle()));
                 dungeonGUI.render(batch);
                 playerMovement();
+                collision();
                 break;
             case 3:
                 break;
 		}
         batch.end();
 	}
+    
+    public void collision(){
 
+    }
+    
 	public void playerMovement(){
 		if(keyflagW) {playerCharacter.Up(); playerCharacter.movementAnimation();}
         if(!keyflagW && keyflagS) {playerCharacter.Down(); playerCharacter.movementAnimation();}
@@ -126,6 +137,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			case 0:
 				break;
 			case 1:
+                if(keycode == Input.Keys.ENTER) gameState = 2;
 				break;
 			case 2:
 				if(keycode == Input.Keys.W) keyflagW = true;
