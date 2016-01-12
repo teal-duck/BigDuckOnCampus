@@ -62,4 +62,12 @@ build/
 
 ## OS Specific
 .DS_Store
+<<<<<<< HEAD
 *.db
+=======
+core/assets/Thumbs.db
+core/assets/MuscovyDuckWalkCycle/Thumbs.db
+core/assets/BasicDuckWalkCycle/Thumbs.db
+core/assets/Ducks/Thumbs.db
+core/assets/BasicDuckWalkCycle/Thumbs.db
+>>>>>>> refs/remotes/origin/enemies

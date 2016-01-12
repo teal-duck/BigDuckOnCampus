@@ -16,8 +16,12 @@ public abstract class Collidable extends OnscreenDrawable{
     private float bufferBorder = 0;
     private float heightOffset = 60;
 
-    public void setUpBoxes(float x, float y, float width, float height){
-        boundingBox = new Rectangle(x,y,width,height);
+    public void setUpBoxes(){
+        float x = this.getX();
+        float y = this.getY();
+        float width = this.getWidth();
+        float height = this.getHeight();
+        boundingBox = new Rectangle(x-1,y-1,width+2,height+2-heightOffset);
         collisionBoxes = new Rectangle[4];
         collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2,     rectangleBorder);//bottom rectangle
         collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorder*2,               height - heightOffset - 2 - bufferBorder*2); //left rectangle
@@ -38,6 +42,9 @@ public abstract class Collidable extends OnscreenDrawable{
         boundingBox.setY(this.getY());
     }
 
+    public Rectangle getBoundingBox() {
+        return boundingBox;
+    }
     public float getHeightOffset() {
         return heightOffset;
     }
@@ -63,28 +70,30 @@ public abstract class Collidable extends OnscreenDrawable{
         return rectangleBorder;
     }
     public boolean collides(Rectangle rectangle){
-        return Intersector.overlaps(rectangle,this.getSprite().getBoundingRectangle());
+        return Intersector.overlaps(rectangle, this.getBoundingBox());
     }
     @Override
     public Sprite getSprite() {
         return super.getSprite();
     }
-
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
     }
-
     @Override
     public void setTexture(Texture texture) {
         super.setTexture(texture);
     }
-
     @Override
     public float getX() {
         return super.getX();
     }
-
+    public void initialiseX(float x){
+        super.setX(x);
+    }
+    public void initialiseY(float y){
+        super.setY(y);
+    }
     @Override
     public void setX(float x) {
         super.setX(x);
