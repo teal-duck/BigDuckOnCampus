@@ -51,6 +51,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		drawRoom = new Room();
 		drawRoom.setSprite(roomSprite);
 		playerCharacter = new PlayerCharacter();
+		playerCharacter.setY(300);
+		playerCharacter.setX(0);
         //test enemies
         testSprite1 = new Sprite();
         testSprite1.setTexture(new Texture("core/assets/thing.gif"));
@@ -110,12 +112,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 break;
             case 2:
                 playerMovement();
-                playerCollision();
                 playerCharacter.update();
-                if (playerCharacter.getHealth() <= 0){
-                    this.gameState = 4;
-                }
                 enemy1.update(playerCharacter);
+				if (playerCharacter.getHealth() <= 0){this.gameState = 4;}
+				collision();
                 break;
             case 3:
                 break;
@@ -154,9 +154,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		}
         batch.end();
 	}
-    public void playerCollision(){
+    public void collision(){
 		 ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(controller.getObstacles());
-        ArrayList<Enemy> enemyList = new ArrayList<Enemy>(controller.getEnemies());
+         ArrayList<Enemy> enemyList = new ArrayList<Enemy>(controller.getEnemies());
 		 playerCharacter.resetMaxVelocity();
 		 for (Obstacle collidable:obstacleList) {
             if (Intersector.overlaps(playerCharacter.getBottomRectangle(),collidable.getTopRectangle())) {
@@ -186,6 +186,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             }
 		}
         for (Enemy enemy:enemyList) {
+			enemy.resetMaxVelocity();
             if (Intersector.overlaps(playerCharacter.getBottomRectangle(),enemy.getTopRectangle())) {
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setMaxVelocity(200);
@@ -211,6 +212,28 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                     playerCharacter.damage(enemy.getTouchDamage());
                 }
             }
+			for (Obstacle obstacle:obstacleList){
+				if (Intersector.overlaps(enemy.getBottomRectangle(), obstacle.getTopRectangle())) {
+					enemy.setYVelocity(0);
+					enemy.setCurrentMaxVelocity(50);
+					enemy.setY(obstacle.getTopRectangle().getY() + obstacle.getTopRectangle().getHeight());
+				}
+				if (Intersector.overlaps(enemy.getLeftRectangle(),obstacle.getRightRectangle())){
+					enemy.setXVelocity(0);
+					enemy.setCurrentMaxVelocity(200);
+					enemy.setX(obstacle.getRightRectangle().getX() + obstacle.getRightRectangle().getWidth());
+				}
+				if (Intersector.overlaps(enemy.getRightRectangle(), obstacle.getLeftRectangle())){
+					enemy.setXVelocity(0);
+					enemy.setCurrentMaxVelocity(200);
+					enemy.setX(obstacle.getLeftRectangle().getX() - enemy.getSprite().getWidth());
+				}
+				if (Intersector.overlaps(enemy.getTopRectangle(),obstacle.getBottomRectangle())){
+					enemy.setYVelocity(0);
+					enemy.setCurrentMaxVelocity(200);
+					enemy.setY(enemy.getY() - (enemy.getHeightOffset()+enemy.getRectangleBorder()-2));//not sure why I need this 2 here. It's wonky.
+				}
+			}
         }
 	}
 	public void playerMovement(){

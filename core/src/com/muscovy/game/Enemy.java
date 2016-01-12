@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Enemy extends Collidable {
     private Float touchDamage;
     private Projectile bullet;
-    private float xVelocity = 0, yVelocity = 0, maxVelocity = 300;
+    private float xVelocity = 0, yVelocity = 0, maxVelocity = 150, currentMaxVelocity = 150;
     public float direction;    //-pi/2 to pi/2
     private float detectionDistance = 480;
     private int movementType;   //0 = static, 1 = following, 2 = random movement
@@ -33,6 +33,63 @@ public class Enemy extends Collidable {
     public void update(PlayerCharacter player){
         movement(player);
     }
+
+
+    /**
+     * Attack & damage methods
+     */
+    public float getTouchDamage() {
+        return touchDamage;
+    }
+    public void setTouchDamage(Float touchDamage) {
+        this.touchDamage = touchDamage;
+    }
+    public Projectile getBullet() {
+        return bullet;
+    }
+    public void setBullet(Projectile bullet) {
+        this.bullet = bullet;
+    }
+    public int getAttackType() {
+        return attackType;
+    }
+    public void setAttackType(int attackType) {
+        this.attackType = attackType;
+    }
+
+    /**
+     * Movement methods
+     */
+    public float getXVelocity() {
+        return xVelocity;
+    }
+    public void setXVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+    public float getYVelocity() {
+        return yVelocity;
+    }
+    public void setYVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+    public float getMaxVelocity() {
+        return maxVelocity;
+    }
+    public void setMaxVelocity(float maxVelocity) {
+        this.maxVelocity = maxVelocity;
+    }
+    public void setMovementType(int movementType) {
+        this.movementType = movementType;
+    }
+    public int getMovementType() {
+        return movementType;
+    }
+    public void setCurrentMaxVelocity(float currentMaxVelocity) {
+        this.currentMaxVelocity = currentMaxVelocity;
+    }
+    public void resetMaxVelocity(){
+        this.currentMaxVelocity = maxVelocity;
+    }
     public void movement(PlayerCharacter player){
         switch (movementType){
             case 0:
@@ -40,10 +97,10 @@ public class Enemy extends Collidable {
             case 1:
                 if (getDistanceTo(player) < detectionDistance){
                     pointTo(player);
-                    //updateVelocities();
+                    updateVelocities();
                 }else{
-                    setxVelocity(0);
-                    setyVelocity(0);
+                    setXVelocity(0);
+                    setYVelocity(0);
                 }
                 break;
             case 2:
@@ -53,65 +110,32 @@ public class Enemy extends Collidable {
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
     private void checkEdgeCollision(){
-        if(getX() < lowerXBounds) {setX(lowerXBounds); setxVelocity(0);}
-        if(getX() > upperXBounds) {setX(upperXBounds); setxVelocity(0);}
-        if(getY() < lowerYBounds) {setY(lowerYBounds); setyVelocity(0);}
-        if(getY() > upperYBounds) {setY(upperYBounds); setyVelocity(0);}
+        if(getX() < lowerXBounds) {setX(lowerXBounds); setXVelocity(0);}
+        if(getX() > upperXBounds) {setX(upperXBounds); setXVelocity(0);}
+        if(getY() < lowerYBounds) {setY(lowerYBounds); setYVelocity(0);}
+        if(getY() > upperYBounds) {setY(upperYBounds); setYVelocity(0);}
     }
-    public Float getTouchDamage() {
-        return touchDamage;
-    }
-
-    public void setTouchDamage(Float touchDamage) {
-        this.touchDamage = touchDamage;
-    }
-
-    public Projectile getBullet() {
-        return bullet;
-    }
-
-    public void setBullet(Projectile bullet) {
-        this.bullet = bullet;
-    }
-
-    public int getMovementType() {
-        return movementType;
-    }
-
-    public void setMovementType(int movementType) {
-        this.movementType = movementType;
-    }
-
-    public int getAttackType() {
-        return attackType;
-    }
-
-    public void setAttackType(int attackType) {
-        this.attackType = attackType;
-    }
-
     public float getAngleTo(Collidable collidable){
         return (float) Math.atan((collidable.getX()-this.getX())/(collidable.getY()-this.getY()));
     }
     public void pointTo(Collidable collidable){
-        float x = getDistanceTo(collidable);
-        float y = getDistanceTo(collidable);
+        float x = (collidable.getX()-this.getX());
+        float y = (collidable.getY()-this.getY());
         float angle = getAngleTo(collidable);
-        if(x > 0){
-            if (y > 0){
+        if(x >= 0){
+            if (y >= 0){
                 direction = angle;
-            }else{
+            }else if (y < 0){
                 direction = (float)(Math.PI + angle);
             }
-        }else{
-            if (y > 0){
+        }else if (x < 0){
+            if (y >= 0){
                 direction = (float)(2*Math.PI + angle);
-            }else{
+            }else if (y < 0){
                 direction = (float)(Math.PI + angle);
             }
         }
     }
-
     public float getDistanceTo(Collidable collidable){
         float xdist = (collidable.getX()-this.getX());
         float ydist = (collidable.getY()-this.getY());
@@ -122,58 +146,29 @@ public class Enemy extends Collidable {
         this.yVelocity = (float)(maxVelocity*Math.cos(direction));
     }
 
-    public float getxVelocity() {
-        return xVelocity;
-    }
-
-    public void setxVelocity(float xVelocity) {
-        this.xVelocity = xVelocity;
-    }
-
-    public float getyVelocity() {
-        return yVelocity;
-    }
-
-    public void setyVelocity(float yVelocity) {
-        this.yVelocity = yVelocity;
-    }
-
-    public float getMaxVelocity() {
-        return maxVelocity;
-    }
-
-    public void setMaxVelocity(float maxVelocity) {
-        this.maxVelocity = maxVelocity;
-    }
 
     @Override
     public Sprite getSprite() {
         return super.getSprite();
     }
-
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
     }
-
     @Override
     public float getX() {
         return super.getX();
     }
-
     @Override
     public void setX(float x) {
         super.setX(x);
     }
-
     @Override
     public float getY() {
         return super.getY();
     }
-
     @Override
     public void setY(float y) {
         super.setY(y);
     }
-
 }
