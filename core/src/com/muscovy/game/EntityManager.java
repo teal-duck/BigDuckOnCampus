@@ -8,16 +8,18 @@ import java.util.ArrayList;
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class ScreenController {
+public class EntityManager {
     private ArrayList<OnscreenDrawable> renderList ;
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
+    private ArrayList<Projectile> projectileList;
     private OnscreenDrawable screen;
     private BitmapFont list;//Testing purposes
-    public ScreenController(Room newRoom) {
+    public EntityManager(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
         this.enemyList = new ArrayList<Enemy>();
+        this.projectileList = new ArrayList<Projectile>();
         this.screen = newRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
@@ -31,7 +33,7 @@ public class ScreenController {
         for (OnscreenDrawable drawable:renderList){
             batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }
-        list.draw(batch,"no of sprites in controller = " + renderList.size(),(float)250,(float)450);//Testing purposes
+        list.draw(batch, "no of sprites in controller = " + renderList.size(), (float) 250, (float) 450);//Testing purposes
     }
     private void sortDrawables(){
         /**
@@ -99,11 +101,22 @@ public class ScreenController {
         renderList.addAll(enemies);
         enemyList.addAll(enemies);
     }
+    public void addNewProjectile(Projectile projectile){
+        renderList.add(projectile);
+        projectileList.add(projectile);
+    }
+    public void addNewProjectiles(ArrayList<Projectile> projectiles){
+        renderList.addAll(projectiles);
+        projectileList.addAll(projectiles);
+    }
     public ArrayList<Obstacle> getObstacles(){
         return obstacleList;
     }
     public ArrayList<Enemy> getEnemies(){
         return enemyList;
+    }
+    public ArrayList<Projectile> getProjectiles(){
+        return projectileList;
     }
     public void changeScreen(OnscreenDrawable screen){
         this.screen = screen;

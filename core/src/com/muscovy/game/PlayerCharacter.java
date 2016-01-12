@@ -272,39 +272,4 @@ public class PlayerCharacter extends Collidable{
         return direction;
     }
 
-    @Override
-    public Sprite getSprite() {
-        return super.getSprite();
-    }
-
-    @Override
-    public void setSprite(Sprite sprite) {
-        super.setSprite(sprite);
-    }
-
-    @Override
-    public void setTexture(Texture texture) {
-        super.setTexture(texture);
-    }
-
-    @Override
-    public float getX() {
-        return super.getX();
-    }
-
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-    }
-
-    @Override
-    public float getY() {
-        return super.getY();
-    }
-
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-    }
-
 }

@@ -18,7 +18,7 @@ package com.muscovy.game;
 public class MuscovyGame extends ApplicationAdapter implements ApplicationListener, InputProcessor {
 	private OrthographicCamera camera;
 	SpriteBatch batch;
-	ScreenController controller;
+	EntityManager controller;
 	Room drawRoom;
 	Obstacle obstacle1, obstacle2;
     Enemy enemy1;
@@ -71,8 +71,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         enemy1.setX(1024);
         enemy1.setY(300);
         enemy1.setAttackType(0);
-		enemy1.setMovementType(1);
-        enemy1.setTouchDamage(30.0f);
+		enemy1.setMovementType(2);
+        enemy1.setTouchDamage(30);
         //Dungeon GUI
         dungeonGUI = new GUI();
         guiSprite.setTexture(new Texture("core/assets/guiFrame.png"));
@@ -98,7 +98,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         gameOverFont.setColor(Color.RED);
         gameOverGUI = new GUI();
         gameOverGUI.addData("Gameover", "Game Over",gameOverFont,640,150);
-		controller = new ScreenController(drawRoom);
+		controller = new EntityManager(drawRoom);
 		controller.addNewObstacle(obstacle1);
 		controller.addNewObstacle(obstacle2);
         controller.addNewEnemy(enemy1);
@@ -113,12 +113,26 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             case 2:
                 playerMovement();
                 playerCharacter.update();
-                enemy1.update(playerCharacter);
+                enemiesUpdate();
+                projectilesUpdate();
 				if (playerCharacter.getHealth() <= 0){this.gameState = 4;}
 				collision();
                 break;
             case 3:
                 break;
+        }
+    }
+    public void enemiesUpdate(){
+        for (Enemy enemy:controller.getEnemies()){
+            enemy.update(playerCharacter);
+            if (enemy.checkAttack()){
+                controller.addNewProjectiles(enemy.rangedAttack());
+            }
+        }
+    }
+    public void projectilesUpdate(){
+        for (Projectile projectile:controller.getProjectiles()){
+            projectile.update();
         }
     }
 	@Override

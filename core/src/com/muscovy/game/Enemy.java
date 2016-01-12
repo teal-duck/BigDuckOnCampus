@@ -1,24 +1,38 @@
 package com.muscovy.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
 public class Enemy extends Collidable {
-    private Float touchDamage;
+    private float touchDamage;
     private Projectile bullet;
+    private ArrayList<Projectile> rangedAttack;
+    private int shotType = 0;   //0 = single shot, 1 = double shot, 2 = triple shot, 4 = random shot direction
+    private float attackTimer, attackInterval = 2; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
+    private Random random;
     private float xVelocity = 0, yVelocity = 0, maxVelocity = 150, currentMaxVelocity = 150;
     public float direction;    //-pi/2 to pi/2
     private float detectionDistance = 480;
+    float directionCounter = 0;
     private int movementType;   //0 = static, 1 = following, 2 = random movement
     private int attackType;     //0 = touch damage, 1 = ranged attack, 2 = both
     private float upperXBounds = 1280-32, upperYBounds = 720-128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
+    private Sprite bulletSprite;
     public Enemy(Sprite sprite) {
+        random = new Random();
         spriteWidth = sprite.getRegionWidth();
         spriteHeight = sprite.getRegionHeight();
+        bullet = new Projectile();
+        rangedAttack = new ArrayList<Projectile>();
+        bulletSprite = new Sprite();
+        bulletSprite.setTexture(new Texture("core/assets/breadBullet.png"));
         this.setSprite(sprite);
         this.setHeightOffset(this.getHeight()/3);
         this.touchDamage = 10.0f;
@@ -32,8 +46,8 @@ public class Enemy extends Collidable {
     }
     public void update(PlayerCharacter player){
         movement(player);
+        attackTimer += Gdx.graphics.getDeltaTime();
     }
-
 
     /**
      * Attack & damage methods
@@ -41,7 +55,7 @@ public class Enemy extends Collidable {
     public float getTouchDamage() {
         return touchDamage;
     }
-    public void setTouchDamage(Float touchDamage) {
+    public void setTouchDamage(float touchDamage) {
         this.touchDamage = touchDamage;
     }
     public Projectile getBullet() {
@@ -56,7 +70,69 @@ public class Enemy extends Collidable {
     public void setAttackType(int attackType) {
         this.attackType = attackType;
     }
-
+    public ArrayList<Projectile> rangedAttack(){
+        switch (shotType){
+            case 0:
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(this.getX());
+                bullet.setY(this.getY());
+                bullet.setDirection(this.direction);
+                rangedAttack.add(bullet);
+                break;
+            case 1:
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection((float)(this.direction-(Math.PI/6)));
+                rangedAttack.add(bullet);
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection((float)(this.direction+(Math.PI/6)));
+                rangedAttack.add(bullet);
+                break;
+            case 2:
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection((float) (this.direction - (Math.PI / 4)));
+                rangedAttack.add(bullet);
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection((float) (this.direction + (Math.PI / 4)));
+                rangedAttack.add(bullet);
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection(this.direction);
+                rangedAttack.add(bullet);
+                break;
+            case 3:
+                bullet = new Projectile();
+                bullet.setSprite(bulletSprite);
+                bullet.setX(0);
+                bullet.setY(0);
+                bullet.setDirection((float)(random.nextFloat()*Math.PI*2));
+                rangedAttack.add(bullet);
+                break;
+        }
+        return rangedAttack;
+    }
+    public boolean checkAttack(){
+        if (attackTimer > attackInterval){
+            attackTimer = 0;
+            return true;
+        }else {
+            return false;
+        }
+    }
     /**
      * Movement methods
      */
@@ -93,6 +169,8 @@ public class Enemy extends Collidable {
     public void movement(PlayerCharacter player){
         switch (movementType){
             case 0:
+                setXVelocity(0);
+                setYVelocity(0);
                 break;
             case 1:
                 if (getDistanceTo(player) < detectionDistance){
@@ -104,10 +182,20 @@ public class Enemy extends Collidable {
                 }
                 break;
             case 2:
+                if (directionCounter > 0.3){
+                    directionCounter = 0;
+                    if(random.nextBoolean()){
+                        direction = (float)((direction + random.nextFloat()) % Math.PI*2);
+                    }else{
+                        direction = (float)((direction - random.nextFloat()) % Math.PI*2);
+                    }
+                }else{directionCounter += Gdx.graphics.getDeltaTime();}
+                updateVelocities();
                 break;
         }
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
+        checkEdgeCollision();
     }
     private void checkEdgeCollision(){
         if(getX() < lowerXBounds) {setX(lowerXBounds); setXVelocity(0);}
