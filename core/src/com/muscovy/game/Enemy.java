@@ -54,6 +54,10 @@ public class Enemy extends Collidable {
         this.attackType = attackType;
     }
 
+   /** public float getAngleTo(Collidable collidable){
+        return Math.atan( (float)(collidable.getX()-this.getX())/(collidable.getY()-this.getY()) );
+    }*/
+
     @Override
     public Sprite getSprite() {
         return super.getSprite();
