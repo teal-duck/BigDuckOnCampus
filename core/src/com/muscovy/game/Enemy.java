@@ -8,8 +8,50 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Enemy extends Collidable {
     private Float touchDamage;
+    private Projectile bullet;
+    private int movementType;   //0 = static, 1 = following, 2 = random movement
+    private int attackType;     //0 = touch damage, 1 = ranged attack, 2 = both
     public Enemy(Sprite sprite) {
         this.setSprite(sprite);
+        this.setHeightOffset(this.getHeight()/3);
+        this.touchDamage = 10.0f;
+        this.movementType = 0;
+        this.attackType = 0;
+        this.initialiseX(0);
+        this.initialiseY(0);
+        this.setUpBoxes();
+    }
+
+    public Float getTouchDamage() {
+        return touchDamage;
+    }
+
+    public void setTouchDamage(Float touchDamage) {
+        this.touchDamage = touchDamage;
+    }
+
+    public Projectile getBullet() {
+        return bullet;
+    }
+
+    public void setBullet(Projectile bullet) {
+        this.bullet = bullet;
+    }
+
+    public int getMovementType() {
+        return movementType;
+    }
+
+    public void setMovementType(int movementType) {
+        this.movementType = movementType;
+    }
+
+    public int getAttackType() {
+        return attackType;
+    }
+
+    public void setAttackType(int attackType) {
+        this.attackType = attackType;
     }
 
     @Override
@@ -20,7 +62,6 @@ public class Enemy extends Collidable {
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
-        super.setUpBoxes(this.getX(),this.getY(),this.getWidth(),this.getHeight());
     }
 
     @Override

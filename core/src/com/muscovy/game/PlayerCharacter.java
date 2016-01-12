@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,8 @@ public class PlayerCharacter extends Collidable{
     private int animationCycle, animationCounter;
     private int direction = 0; // 0 = up, 1 = right, 2 = down, 3 = left
     private float currentHealth = 100, maxHealth = 100;
+    private boolean invincible = false;
+    public float invincibilityCounter = 0;
     private float upperXBounds = 1280-32, upperYBounds = 720-128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
             // the upper and lower X and Y bounds correlate to the size of the frame used by the gui (32 px border on
             // left right and bottom, and 96 px on top)
@@ -54,56 +57,51 @@ public class PlayerCharacter extends Collidable{
         upperYBounds = upperYBounds - spriteHeight;
         playerSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
         this.setSprite(playerSprite);
-        setX(0);
-        setY(0);
+        this.initialiseX(0);
+        this.initialiseY(0);
+        this.setUpBoxes();
     }
-    public float getXVelocity(){
-        return xVelocity;
+    public void update(){
+        movement();
+        if (invincible){
+            invincibilityUpdate();
+        }
     }
-    public void changeXVelocity(float velocity){
-        xVelocity += velocity;
-        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
-        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
+
+    /**
+     * Health methods
+     */
+    public float getHealth() {
+        return currentHealth;
     }
-    public void setXVelocity(float velocity){
-        xVelocity = velocity;
-        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
-        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
+    public void setHealth(float currentHealth) {
+        this.currentHealth = currentHealth;
     }
-    public float getYVelocity(){
-        return yVelocity;
+    public void damage(float damage){
+        if (!invincible) {
+            this.currentHealth -= damage;
+            this.invincible = true;
+        }
     }
-    public void changeYVelocity(float velocity){
-        yVelocity += velocity;
-        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
-        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    private void invincibilityUpdate(){
+        invincibilityCounter += Gdx.graphics.getDeltaTime();
+        if (invincibilityCounter > 2.0f){
+            invincible = false;
+            invincibilityCounter = 0;
+        }
     }
-    public void setYVelocity(float velocity){
-        yVelocity = velocity;
-        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
-        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    public boolean isInvincible(){
+        return this.invincible;
     }
-    public void setMaxVelocity(float maxVelocity) {
-        this.maxVelocity = maxVelocity;
-    }
-    public void resetMaxVelocity() {
-        this.maxVelocity = defaultVelocity;
-    }
-    public int getDirection() {
-        return direction;
-    }
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
+    /**
+    * Animation methods
+    */
     public int getAnimationCounter() {
         return animationCounter;
     }
     public int getAnimationCycle() {
         return animationCycle;
     }
-    /**
-    * Animation methods
-    */
     public void walkCycleNext(){
         switch (direction){
             case 0:
@@ -163,7 +161,7 @@ public class PlayerCharacter extends Collidable{
         if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.A)) {
             decelXToStop();
         } else {
-            changeXVelocity(accel*Gdx.graphics.getDeltaTime());
+            changeXVelocity(accel * Gdx.graphics.getDeltaTime());
             checkEdgeCollision();
         }
     }
@@ -191,14 +189,14 @@ public class PlayerCharacter extends Collidable{
             if (getXVelocity() - decel*Gdx.graphics.getDeltaTime() < 0){
                 setXVelocity(0);
             }else{
-                changeXVelocity(-decel*Gdx.graphics.getDeltaTime());
+                changeXVelocity(-decel * Gdx.graphics.getDeltaTime());
             }
         }
         if (getXVelocity() < 0){
             if (getXVelocity() + decel*Gdx.graphics.getDeltaTime() > 0){
                 setXVelocity(0);
             }else{
-                changeXVelocity(decel*Gdx.graphics.getDeltaTime());
+                changeXVelocity(decel * Gdx.graphics.getDeltaTime());
             }
         }
         checkEdgeCollision();
@@ -209,14 +207,14 @@ public class PlayerCharacter extends Collidable{
             if (getYVelocity() - decel*Gdx.graphics.getDeltaTime() < 0){
                 setYVelocity(0);
             }else{
-                changeYVelocity(-decel*Gdx.graphics.getDeltaTime());
+                changeYVelocity(-decel * Gdx.graphics.getDeltaTime());
             }
         }
         if (getYVelocity() < 0){
             if (getYVelocity() + decel*Gdx.graphics.getDeltaTime() > 0){
                 setYVelocity(0);
             }else{
-                changeYVelocity(decel*Gdx.graphics.getDeltaTime());
+                changeYVelocity(decel * Gdx.graphics.getDeltaTime());
             }
         }
         checkEdgeCollision();
@@ -229,12 +227,49 @@ public class PlayerCharacter extends Collidable{
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
-
     private void checkEdgeCollision(){
         if(getX() < lowerXBounds) {setX(lowerXBounds); setXVelocity(0);}
         if(getX() > upperXBounds) {setX(upperXBounds); setXVelocity(0);}
         if(getY() < lowerYBounds) {setY(lowerYBounds); setYVelocity(0);}
         if(getY() > upperYBounds) {setY(upperYBounds); setYVelocity(0);}
+    }
+    public float getXVelocity(){
+        return xVelocity;
+    }
+    public void changeXVelocity(float velocity){
+        xVelocity += velocity;
+        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
+        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
+    }
+    public void setXVelocity(float velocity){
+        xVelocity = velocity;
+        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
+        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
+    }
+    public float getYVelocity(){
+        return yVelocity;
+    }
+    public void changeYVelocity(float velocity){
+        yVelocity += velocity;
+        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
+        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    }
+    public void setYVelocity(float velocity){
+        yVelocity = velocity;
+        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
+        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    }
+    public void setMaxVelocity(float maxVelocity) {
+        this.maxVelocity = maxVelocity;
+    }
+    public void resetMaxVelocity() {
+        this.maxVelocity = defaultVelocity;
+    }
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+    public int getDirection() {
+        return direction;
     }
 
     @Override
@@ -245,7 +280,6 @@ public class PlayerCharacter extends Collidable{
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
-        super.setUpBoxes(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override

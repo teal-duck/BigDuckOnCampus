@@ -24,18 +24,18 @@ public class ScreenController {
     }
     public void render(SpriteBatch batch){
         /**
-         * Renders sprites in the room so those further back are rendered first, giving a perspective illusion
+         * Renders sprites in the controller so those further back are rendered first, giving a perspective illusion
          */
         sortDrawables();
         batch.draw(screen.getSprite().getTexture(),33,33);
         for (OnscreenDrawable drawable:renderList){
             batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
         }
-        list.draw(batch,"no of sprites in room = " + renderList.size(),(float)250,(float)450);//Testing purposes
+        list.draw(batch,"no of sprites in controller = " + renderList.size(),(float)250,(float)450);//Testing purposes
     }
     private void sortDrawables(){
         /**
-        * Quicksorts the list of drawable objects in the room by Y coordinate so
+        * Quicksorts the list of drawable objects in the controller by Y coordinate so
         * it renders the things in the background first.
         */
         ArrayList<OnscreenDrawable> newList = new ArrayList<OnscreenDrawable>();

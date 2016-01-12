@@ -62,3 +62,7 @@ build/
 
 ## OS Specific
 .DS_Store
+core/assets/Thumbs.db
+core/assets/MuscovyDuckWalkCycle/Thumbs.db
+core/assets/BasicDuckWalkCycle/Thumbs.db
+core/assets/Ducks/Thumbs.db

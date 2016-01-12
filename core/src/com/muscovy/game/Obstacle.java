@@ -6,9 +6,28 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Created by SeldomBucket on 05-Dec-15.
  */
 public class Obstacle extends Collidable {
+    private boolean damaging;
+    private float touchDamage;
 
     public Obstacle(Sprite sprite) {
         this.setSprite(sprite);
+        this.setHeightOffset(this.getHeight()/3);
+        this.initialiseX(0);
+        this.initialiseY(0);
+        this.setUpBoxes();
+    }
+
+    public boolean isDamaging() {
+        return damaging;
+    }
+    public void setDamaging(boolean damaging) {
+        this.damaging = damaging;
+    }
+    public float getTouchDamage() {
+        return touchDamage;
+    }
+    public void setTouchDamage(float touchDamage) {
+        this.touchDamage = touchDamage;
     }
 
     @Override
@@ -19,7 +38,6 @@ public class Obstacle extends Collidable {
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
-        super.setUpBoxes(this.getX(),this.getY(),this.getWidth(),this.getHeight());
     }
 
     @Override
