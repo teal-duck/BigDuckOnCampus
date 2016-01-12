@@ -93,7 +93,7 @@ public class GUI {
             }
         }
     }
-    /**end GUI Text Methods*/
+
     public void addElement(Sprite sprite){
         guiElements.add(sprite);
     }

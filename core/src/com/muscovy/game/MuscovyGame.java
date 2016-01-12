@@ -69,6 +69,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         enemy1.setX(1024);
         enemy1.setY(300);
         enemy1.setAttackType(0);
+		enemy1.setMovementType(1);
         enemy1.setTouchDamage(30.0f);
         //Dungeon GUI
         dungeonGUI = new GUI();
@@ -114,6 +115,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if (playerCharacter.getHealth() <= 0){
                     this.gameState = 4;
                 }
+                enemy1.update(playerCharacter);
                 break;
             case 3:
                 break;
@@ -135,12 +137,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				break;
             case 2:
                 controller.render(batch);
-                dungeonGUI.editData("EnemyXVal", "obstaclerectangleX: " + String.valueOf(obstacle1.getSprite().getHeight()));
-				dungeonGUI.editData("EnemyYVal","obstaclerectangleY: " + String.valueOf(obstacle1.getSprite().getHeight()));
-				dungeonGUI.editData("PlayerXVal","playerrectangleX: " + String.valueOf(playerCharacter.getBottomRectangle().getX()));
-				dungeonGUI.editData("PlayerYVal","playerrectangleY: " + String.valueOf(playerCharacter.getBottomRectangle().getY()));
+                dungeonGUI.editData("EnemyXVal", "enemy X: " + String.valueOf(enemy1.getX()));
+				dungeonGUI.editData("EnemyYVal", "enemy Y: " + String.valueOf(enemy1.getY()));
+				dungeonGUI.editData("PlayerXVal","xdist player to enemy: " + String.valueOf(playerCharacter.getX() - enemy1.getX()));
+				dungeonGUI.editData("PlayerYVal","ydist player to enemy: " + String.valueOf(playerCharacter.getY() - enemy1.getY()));
                 dungeonGUI.editData("Collision","Player health: " + String.valueOf(playerCharacter.getHealth()));
-                dungeonGUI.editData("Invincible","Invincibility: " + String.valueOf(playerCharacter.invincibilityCounter));
+                dungeonGUI.editData("Invincible","Angle to Player : " + String.valueOf(enemy1.direction));
                 dungeonGUI.render(batch);
                 break;
             case 3:
