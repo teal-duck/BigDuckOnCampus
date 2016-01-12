@@ -7,6 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Room extends OnscreenDrawable{
 
+    /* variables indicate if there is a door on that wall */
+    Boolean upDoor = false;
+    Boolean rightDoor = false;
+    Boolean downDoor = false;
+    Boolean leftDoor = false;
+    /* roomType indicates the type of room
+     * options: "" (default), "start", "boss", "item", "shop" */
+    String roomType = "";
+
     @Override
     public Sprite getSprite() {
         return super.getSprite();
