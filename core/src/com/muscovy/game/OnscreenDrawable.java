@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public abstract class OnscreenDrawable {
     private Sprite sprite;
     private float x, y;
+
     public float getHeight(){
         return this.sprite.getTexture().getHeight();
     }
@@ -42,4 +43,5 @@ public abstract class OnscreenDrawable {
     public void setY(float y) {
         this.y = y;
     }
+
 }

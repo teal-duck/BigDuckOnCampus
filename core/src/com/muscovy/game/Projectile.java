@@ -10,12 +10,13 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Projectile extends OnscreenDrawable{
     private float damage = 15;
+    private int damagesWho = 1; //0 = damages player, 1 = damages enemy, 3 = damages both
     private float xVelocity = 0, yVelocity = 0, maxVelocity = 150;
     private float direction = 0;
-    private float lifeTimer = 0, life = 1.5f;
+    private float lifeCounter = 0, life = 1.5f;
     private Rectangle collisionBox;
 
-    public Projectile(float x, float y, float direction, float life, float xVelocity, float yVelocity, float maxVelocity) {
+    public Projectile(float x, float y, float direction, float life, float maxVelocity, float xVelocity, float yVelocity, int damagesWho) {
         this.setSprite(new Sprite(new Texture("core/assets/breadBullet.png")));
         this.setX(x);
         this.setY(y);
@@ -25,16 +26,17 @@ public class Projectile extends OnscreenDrawable{
         updateVelocities();
         this.xVelocity += xVelocity;
         this.yVelocity += yVelocity;
+        this.damagesWho = damagesWho;
     }
 
     public void update(){
-        lifeTimer += Gdx.graphics.getDeltaTime();
         movement();
         lifeOver();
     }
     public void movement(){
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
+        lifeCounter += Gdx.graphics.getDeltaTime();
     }
     public void updateVelocities(){
         this.xVelocity = (float)(maxVelocity*Math.sin(direction));
@@ -44,14 +46,31 @@ public class Projectile extends OnscreenDrawable{
         life = 0;
     }
     public boolean lifeOver(){
-        return (lifeTimer > life);
+        return (lifeCounter > life);
     }
+
     public float getDamage() {
         return damage;
     }
 
     public void setDamage(float damage) {
         this.damage = damage;
+    }
+
+    public int getDamagesWho() {
+        return damagesWho;
+    }
+
+    public void setDamagesWho(int damagesWho) {
+        this.damagesWho = damagesWho;
+    }
+
+    public float getLife() {
+        return life;
+    }
+
+    public void setLife(float life) {
+        this.life = life;
     }
 
     public float getxVelocity() {

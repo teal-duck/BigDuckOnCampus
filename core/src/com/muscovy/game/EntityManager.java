@@ -48,6 +48,9 @@ public class EntityManager {
                 batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
             }
         }
+        for (Projectile projectile:projectileList){
+            batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
+        }
         list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes
     }
     private void sortDrawables(){
@@ -101,7 +104,6 @@ public class EntityManager {
             }
         }
         for (Projectile projectile:deadProjectiles){
-            renderList.remove(projectile);
             projectileList.remove(projectile);
         }
     }
@@ -128,11 +130,9 @@ public class EntityManager {
         enemyList.addAll(enemies);
     }
     public void addNewProjectile(Projectile projectile){
-        renderList.add(projectile);
         projectileList.add(projectile);
     }
     public void addNewProjectiles(ArrayList<Projectile> projectiles){
-        renderList.addAll(projectiles);
         projectileList.addAll(projectiles);
     }
     public ArrayList<Obstacle> getObstacles(){

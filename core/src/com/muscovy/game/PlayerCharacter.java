@@ -5,23 +5,30 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by ewh502 on 04/12/2015.
  */
 public class PlayerCharacter extends Collidable{
+    private Random random;
+
     private float xVelocity, yVelocity;
-    private float maxVelocity = 500, defaultVelocity = 500, accel = maxVelocity*6, decel = maxVelocity*5;
+    private float maxVelocity = 350, defaultVelocity = 350, accel = maxVelocity*6, decel = maxVelocity*5.5f;
+    private float direction = 0, shotDirection = 0; // 0 - 2*PI
     private ArrayList<Texture> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
     private int animationCycle, animationCounter;
-    private float direction = 0; // 0 - 2*PI
+
+    private int shotType = 0;   //0 = single shot, 1 = double shot, 2 = triple shot
+    private float attackInterval = 0.25f, timeSinceLastAttack = attackInterval; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
+    private float projectileVelocity = 450, projectileRange = 800, projectileLife = projectileRange/projectileVelocity;
+
     private float currentHealth = 100000, maxHealth = 100000;
     private boolean invincible = false;
     private float invincibilityCounter = 0;
-    private float upperXBounds = 1280-32, upperYBounds = 720-128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
-            // the upper and lower X and Y bounds correlate to the size of the frame used by the gui (32 px border on
-            // left right and bottom, and 96 px on top)
+
     public PlayerCharacter() {
+        random = new Random();
         animationCycle = 0;
         xVelocity = 0;
         yVelocity = 0;
@@ -49,11 +56,6 @@ public class PlayerCharacter extends Collidable{
         }
         playerSprite = new Sprite();
         playerSprite.setRegion(downWalkCycle.get(0));
-        spriteWidth = playerSprite.getRegionWidth();
-        spriteHeight = playerSprite.getRegionHeight();
-        upperXBounds = upperXBounds - spriteWidth;
-        upperYBounds = upperYBounds - spriteHeight;
-        playerSprite.setBounds(upperXBounds / 2 - spriteWidth / 2, 20, spriteWidth, spriteHeight);
         this.setSprite(playerSprite);
         this.initialiseX(0);
         this.initialiseY(0);
@@ -271,5 +273,83 @@ public class PlayerCharacter extends Collidable{
     public float getDirection() {
         return direction;
     }
+    /**
+     * Attack methods
+     */
+    public boolean checkRangedAttack(){
+        if (timeSinceLastAttack > attackInterval){
+            timeSinceLastAttack = 0;
+            return true;
+        }else{
+            incrementTimeSinceLastAttack();
+            return false;
+        }
+    }
+    public void incrementTimeSinceLastAttack(){
+        timeSinceLastAttack += Gdx.graphics.getDeltaTime();
+    }
+    public void resetAttackTimer(){
+        timeSinceLastAttack = attackInterval;
+    }
+    public float getTimeSinceLastAttack() {
+        return timeSinceLastAttack;
+    }
 
+    public void setTimeSinceLastAttack(float timeSinceLastAttack) {
+        this.timeSinceLastAttack = timeSinceLastAttack;
+    }
+
+    public ArrayList<Projectile> rangedAttack(){
+        ArrayList<Projectile> rangedAttack = new ArrayList<Projectile>();
+        float x = (this.getX()+this.getWidth()/2-8);
+        float y = (this.getY()+this.getHeight()-32);
+        switch (shotType){
+            case 0:
+                rangedAttack.add(new Projectile(x, y, this.shotDirection, this.projectileLife, this.projectileVelocity, this.xVelocity/4, this.yVelocity/4, 1));
+                break;
+            case 1:
+                rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 24)), projectileLife, this.projectileVelocity, this.xVelocity, this.yVelocity, 1));
+                rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 24)), projectileLife, this.projectileVelocity, this.xVelocity, this.yVelocity, 1));
+                break;
+            case 2:
+                rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 12)), projectileLife, this.projectileVelocity, this.xVelocity, this.yVelocity, 1));
+                rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 12)), projectileLife, this.projectileVelocity, this.xVelocity, this.yVelocity, 1));
+                rangedAttack.add(new Projectile(x, y, shotDirection, projectileLife, this.projectileVelocity, this.xVelocity, this.yVelocity, 1));
+                break;
+        }
+        return rangedAttack;
+    }
+    public float getShotDirection() {
+        return shotDirection;
+    }
+    public void setShotDirection(float shotDirection) {
+        this.shotDirection = shotDirection;
+    }
+
+    public float getProjectileRange() {
+        return projectileRange;
+    }
+
+    public void setProjectileRange(float projectileRange) {
+        this.projectileRange = projectileRange;
+        this.projectileLife = projectileRange/projectileVelocity;
+    }
+
+    public float getProjectileLife() {
+        return projectileLife;
+    }
+
+    public void setProjectileLife(float projectileLife) {
+        this.projectileLife = projectileLife;
+        this.projectileRange = projectileVelocity*projectileLife;
+    }
+
+    public float getProjectileVelocity() {
+        return projectileVelocity;
+    }
+
+    public void setProjectileVelocity(float projectileVelocity) {
+        this.projectileVelocity = projectileVelocity;
+        this.projectileLife = projectileRange/projectileVelocity;
+    }
 }

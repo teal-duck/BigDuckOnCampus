@@ -14,14 +14,20 @@ public abstract class Collidable extends OnscreenDrawable{
     private Rectangle boundingBox;
     private float rectangleBorderSize = 10;
     private float bufferBorder = 0;
-    private float heightOffset = 60;
+    private float heightOffset = 64;
+    private int heightOffsetTiles = 2;
+    private int XTiles, YTiles;
+    private int widthTiles, heightTiles;
 
     public void setUpBoxes(){
         float x = this.getX();
         float y = this.getY();
         float width = this.getWidth();
         float height = this.getHeight();
+        this.widthTiles = (int)Math.floorDiv((long)width,(long)32)+1;
+        this.heightTiles = (int)Math.floorDiv((long)height,(long)32)+1;
         this.heightOffset = this.getHeight()/3;
+        this.heightOffsetTiles = (int)Math.floorDiv((long)heightOffset,(long)32);
         boundingBox = new Rectangle(x-1,y-1,width+2,height+2-heightOffset);
         collisionBoxes = new Rectangle[4];
         collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2, rectangleBorderSize);//bottom rectangle
@@ -51,6 +57,7 @@ public abstract class Collidable extends OnscreenDrawable{
     }
     public void setHeightOffset(float heightOffset) {
         this.heightOffset = heightOffset;
+        this.heightOffsetTiles = (int)Math.floorDiv((long)heightOffset,(long)32);
     }
     public Rectangle getBottomRectangle(){
         return collisionBoxes[0];
@@ -89,22 +96,6 @@ public abstract class Collidable extends OnscreenDrawable{
     public boolean collides(Rectangle rectangle){
         return Intersector.overlaps(rectangle, this.getBoundingBox());
     }
-    @Override
-    public Sprite getSprite() {
-        return super.getSprite();
-    }
-    @Override
-    public void setSprite(Sprite sprite) {
-        super.setSprite(sprite);
-    }
-    @Override
-    public void setTexture(Texture texture) {
-        super.setTexture(texture);
-    }
-    @Override
-    public float getX() {
-        return super.getX();
-    }
     public void initialiseX(float x){
         super.setX(x);
     }
@@ -116,16 +107,33 @@ public abstract class Collidable extends OnscreenDrawable{
         super.setX(x);
         updateBoxesPosition();
     }
-
-    @Override
-    public float getY() {
-        return super.getY();
-    }
-
     @Override
     public void setY(float y) {
         super.setY(y);
         updateBoxesPosition();
+    }
+    public int getXTiles() {
+        return XTiles;
+    }
+    public void setXTiles(int XTiles) {
+        /**
+         * Use this when setting something in the playable space to make sure it is on the grid.
+         */
+        if (XTiles > 37-widthTiles){
+            XTiles = 37-widthTiles;}
+        this.XTiles = XTiles;
+        setX(XTiles *32+64);
+    }
+    public int getYTiles() {
+        return YTiles;
+    }
+    public void setYTiles(int YTiles) {
+        /**
+         * Use this when setting something in the playable space to make sure it is on the grid.
+         */
+        if (YTiles > 15-heightTiles+heightOffsetTiles){YTiles = 15-heightTiles+heightOffsetTiles;}
+        this.YTiles = YTiles;
+        setY(YTiles *32+64);
     }
 }
 

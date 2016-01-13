@@ -20,9 +20,8 @@ public class Enemy extends Collidable {
 
     private ArrayList<Projectile> rangedAttack;
     private int shotType = 3;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
-    private float attackTimer, attackInterval = 1; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
-    private float projectileLife = 1.7f;
-    private float projectileVelocity = 150;
+    private float attackTimer, attackInterval = 0.5f; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
+    private float projectileRange = 400, projectileVelocity = 150, projectileLife = projectileRange/projectileVelocity;
     private float attackRange = 480;
 
     private int movementType;   //0 = static, 1 = following, 2 = random movement
@@ -85,28 +84,28 @@ public class Enemy extends Collidable {
         float dist = getDistanceTo(playerCharacter);
         switch (shotType){
             case 0:
-                rangedAttack.add(new Projectile(x, y,this.direction,projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
+                rangedAttack.add(new Projectile(x, y,this.direction, projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
                 break;
             case 1:
                 if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
+                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
                 }
                 break;
             case 2:
                 if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 24)), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 24)), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
                 }
                 break;
             case 3:
                 if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 12)), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 12)), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
-                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
                 }
                 break;
             case 4:
-                rangedAttack.add(new Projectile(x, y,(float)(random.nextFloat()*Math.PI*2),projectileLife, this.xVelocity, this.yVelocity, this.projectileVelocity));
+                rangedAttack.add(new Projectile(x, y,(float)(random.nextFloat()*Math.PI*2), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
                 break;
         }
         return rangedAttack;
@@ -128,18 +127,33 @@ public class Enemy extends Collidable {
     public void setAttackRange(float attackRange) {
         this.attackRange = attackRange;
     }
+    public float getProjectileRange() {
+        return projectileRange;
+    }
+
+    public void setProjectileRange(float projectileRange) {
+        this.projectileRange = projectileRange;
+        this.projectileLife = projectileRange/projectileVelocity;
+    }
+
     public float getProjectileLife() {
         return projectileLife;
     }
+
     public void setProjectileLife(float projectileLife) {
         this.projectileLife = projectileLife;
+        this.projectileRange = projectileVelocity*projectileLife;
     }
+
     public float getProjectileVelocity() {
         return projectileVelocity;
     }
+
     public void setProjectileVelocity(float projectileVelocity) {
         this.projectileVelocity = projectileVelocity;
+        this.projectileLife = projectileRange/projectileVelocity;
     }
+
 
     /**
      * Movement methods
