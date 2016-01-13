@@ -13,14 +13,14 @@ public class EntityManager {
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
     private ArrayList<Projectile> projectileList;
-    private OnscreenDrawable screen;
+    private Room room;
     private BitmapFont list;//Testing purposes
     public EntityManager(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
         this.enemyList = new ArrayList<Enemy>();
         this.projectileList = new ArrayList<Projectile>();
-        this.screen = newRoom;
+        this.room = newRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
     }
@@ -28,12 +28,26 @@ public class EntityManager {
         /**
          * Renders sprites in the controller so those further back are rendered first, giving a perspective illusion
          */
+        renderList.trimToSize();
+        obstacleList.trimToSize();
+        enemyList.trimToSize();
+        projectileList.trimToSize();
         sortDrawables();
-        batch.draw(screen.getSprite().getTexture(),33,33);
+        batch.draw(room.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
-            batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
+            if (drawable instanceof PlayerCharacter){
+                if (((PlayerCharacter) drawable).isInvincible()){
+                    if (!(((PlayerCharacter) drawable).getInvincibilityCounter()*10 % 2 < 0.75)){
+                        batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+                    }
+                }else{
+                    batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+                }
+            }else {
+                batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+            }
         }
-        list.draw(batch, "no of sprites in controller = " + renderList.size(), (float) 250, (float) 450);//Testing purposes
+        list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes
     }
     private void sortDrawables(){
         /**
@@ -78,7 +92,18 @@ public class EntityManager {
         }
         return list;
     }
-    /**end Quicksort Helper Methods*/
+    public void killProjectiles(){
+        ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
+        for (Projectile projectile:projectileList){
+            if (projectile.lifeOver()){
+                deadProjectiles.add(projectile);
+            }
+        }
+        for (Projectile projectile:deadProjectiles){
+            renderList.remove(projectile);
+            projectileList.remove(projectile);
+        }
+    }
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
     }
@@ -118,7 +143,10 @@ public class EntityManager {
     public ArrayList<Projectile> getProjectiles(){
         return projectileList;
     }
-    public void changeScreen(OnscreenDrawable screen){
-        this.screen = screen;
+    public void setRoom(Room screen){
+        this.room = screen;
+    }
+    public Room getRoom(){
+        return this.room;
     }
 }

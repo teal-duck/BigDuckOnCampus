@@ -64,9 +64,17 @@ public class GUI {
         guiData = new ArrayList<guiData>();
     }
     /**GUI Text Methods*/
+
+    /**
+     * @param ID the ID you will use to refer to this particular piece of text when editing using editData, moveData, changeDataFont
+     * @param data the String you want to be displayed
+     * @param font the font you want the string displayed in
+     * @param x X location
+     * @param y Y location
+     */
     public void addData(String ID, String data, BitmapFont font, int x, int y){
         /**
-         * ID is used to identify the text you want to chance using editData, so use something memorable
+         * ID is used to identify the text you want to change using editData, so use something memorable
          * (works like a variable name)
          */
         guiData.add(new guiData(ID, font,data,x,y));

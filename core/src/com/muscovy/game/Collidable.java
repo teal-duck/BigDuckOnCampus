@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class Collidable extends OnscreenDrawable{
     private Rectangle[] collisionBoxes;
     private Rectangle boundingBox;
-    private float rectangleBorder = 10;
+    private float rectangleBorderSize = 10;
     private float bufferBorder = 0;
     private float heightOffset = 60;
 
@@ -21,12 +21,13 @@ public abstract class Collidable extends OnscreenDrawable{
         float y = this.getY();
         float width = this.getWidth();
         float height = this.getHeight();
+        this.heightOffset = this.getHeight()/3;
         boundingBox = new Rectangle(x-1,y-1,width+2,height+2-heightOffset);
         collisionBoxes = new Rectangle[4];
-        collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2,     rectangleBorder);//bottom rectangle
-        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorder*2,               height - heightOffset - 2 - bufferBorder*2); //left rectangle
-        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorder,  y + bufferBorder + 1,                                rectangleBorder,                 height - heightOffset - 2 - bufferBorder*2); //right rectangle
-        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorder - heightOffset,    width - 2,                       rectangleBorder); //top rectangle
+        collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2, rectangleBorderSize);//bottom rectangle
+        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorderSize *2,               height - heightOffset - 2 - bufferBorder*2); //left rectangle
+        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorderSize,  y + bufferBorder + 1, rectangleBorderSize,                 height - heightOffset - 2 - bufferBorder*2); //right rectangle
+        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorderSize - heightOffset,    width - 2, rectangleBorderSize); //top rectangle
     }
 
     public void updateBoxesPosition(){
@@ -34,10 +35,10 @@ public abstract class Collidable extends OnscreenDrawable{
         collisionBoxes[0].setY(this.getY());
         collisionBoxes[1].setX(this.getX());
         collisionBoxes[1].setY(this.getY());
-        collisionBoxes[2].setX(this.getX() + this.getWidth() - rectangleBorder);
+        collisionBoxes[2].setX(this.getX() + this.getWidth() - rectangleBorderSize);
         collisionBoxes[2].setY(this.getY());
         collisionBoxes[3].setX(this.getX());
-        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorder-heightOffset);
+        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorderSize -heightOffset);
         boundingBox.setX(this.getX());
         boundingBox.setY(this.getY());
     }
@@ -63,11 +64,27 @@ public abstract class Collidable extends OnscreenDrawable{
     public Rectangle getTopRectangle(){
         return collisionBoxes[3];
     }
+    public void setBottomRectangle(float x, float y){
+        collisionBoxes[0].setX(x);
+        collisionBoxes[0].setY(y);
+    }
+    public void setLeftRectangle(float x, float y){
+        collisionBoxes[1].setX(x);
+        collisionBoxes[1].setY(y);
+    }
+    public void setRightRectangle(float x, float y){
+        collisionBoxes[2].setX(x);
+        collisionBoxes[2].setY(y);
+    }
+    public void setTopRectangle(float x, float y){
+        collisionBoxes[3].setX(x);
+        collisionBoxes[3].setY(y);
+    }
     public float getBufferBorder() {
         return bufferBorder;
     }
-    public float getRectangleBorder() {
-        return rectangleBorder;
+    public float getRectangleBorderSize() {
+        return rectangleBorderSize;
     }
     public boolean collides(Rectangle rectangle){
         return Intersector.overlaps(rectangle, this.getBoundingBox());
