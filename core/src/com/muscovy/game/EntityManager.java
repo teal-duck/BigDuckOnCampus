@@ -13,14 +13,15 @@ public class EntityManager {
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
     private ArrayList<Projectile> projectileList;
-    private Room room;
+    private Room currentRoom;
+    private Room[][] levelArray;
     private BitmapFont list;//Testing purposes
     public EntityManager(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
         this.enemyList = new ArrayList<Enemy>();
         this.projectileList = new ArrayList<Projectile>();
-        this.room = newRoom;
+        this.currentRoom = newRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
     }
@@ -33,7 +34,7 @@ public class EntityManager {
         enemyList.trimToSize();
         projectileList.trimToSize();
         sortDrawables();
-        batch.draw(room.getSprite().getTexture(),0,0);
+        batch.draw(currentRoom.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
             if (drawable instanceof PlayerCharacter){
                 if (((PlayerCharacter) drawable).isInvincible()){
@@ -143,10 +144,10 @@ public class EntityManager {
     public ArrayList<Projectile> getProjectiles(){
         return projectileList;
     }
-    public void setRoom(Room screen){
-        this.room = screen;
+    public void setCurrentRoom(Room screen){
+        this.currentRoom = screen;
     }
-    public Room getRoom(){
-        return this.room;
+    public Room getCurrentRoom(){
+        return this.currentRoom;
     }
 }

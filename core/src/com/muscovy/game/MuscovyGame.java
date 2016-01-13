@@ -280,25 +280,25 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void enemyWallCollision(Enemy enemy){
-        if (Intersector.overlaps(levels[level].getRoom().getTopRectangle(),enemy.getTopRectangle())) {
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getTopRectangle(),enemy.getTopRectangle())) {
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setY(levels[level].getRoom().getTopRectangle().getY() - enemy.getBoundingBox().getHeight());
+            enemy.setY(levels[level].getCurrentRoom().getTopRectangle().getY() - enemy.getBoundingBox().getHeight());
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getRoom().getRightRectangle(),enemy.getRightRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getRightRectangle(),enemy.getRightRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(levels[level].getRoom().getRightRectangle().getX()-enemy.getWidth());
+            enemy.setX(levels[level].getCurrentRoom().getRightRectangle().getX()-enemy.getWidth());
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getRoom().getLeftRectangle(),enemy.getLeftRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getLeftRectangle(),enemy.getLeftRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(levels[level].getRoom().getX()+64);
+            enemy.setX(levels[level].getCurrentRoom().getX()+64);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getRoom().getBottomRectangle(),enemy.getBottomRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getBottomRectangle(),enemy.getBottomRectangle())){
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
             enemy.setY(64);
@@ -361,22 +361,22 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void playerWallCollision(){
-        if (Intersector.overlaps(levels[level].getRoom().getTopRectangle(),playerCharacter.getTopRectangle())) {
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getTopRectangle(),playerCharacter.getTopRectangle())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setY(levels[level].getRoom().getTopRectangle().getY() - playerCharacter.getBoundingBox().getHeight());
+            playerCharacter.setY(levels[level].getCurrentRoom().getTopRectangle().getY() - playerCharacter.getBoundingBox().getHeight());
         }
-        if (Intersector.overlaps(levels[level].getRoom().getRightRectangle(),playerCharacter.getRightRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getRightRectangle(),playerCharacter.getRightRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setX(levels[level].getRoom().getRightRectangle().getX()-playerCharacter.getWidth());
+            playerCharacter.setX(levels[level].getCurrentRoom().getRightRectangle().getX()-playerCharacter.getWidth());
         }
-        if (Intersector.overlaps(levels[level].getRoom().getLeftRectangle(),playerCharacter.getLeftRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getLeftRectangle(),playerCharacter.getLeftRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setX(levels[level].getRoom().getX()+64);
+            playerCharacter.setX(levels[level].getCurrentRoom().getX()+64);
         }
-        if (Intersector.overlaps(levels[level].getRoom().getBottomRectangle(),playerCharacter.getBottomRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getBottomRectangle(),playerCharacter.getBottomRectangle())){
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
             playerCharacter.setY(64);//not sure why I need this 2 here. It's wonky.
