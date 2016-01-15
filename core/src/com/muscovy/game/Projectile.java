@@ -3,6 +3,7 @@ package com.muscovy.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -14,7 +15,7 @@ public class Projectile extends OnscreenDrawable{
     private float xVelocity = 0, yVelocity = 0, maxVelocity = 150;
     private float direction = 0;
     private float lifeCounter = 0, life = 1.5f;
-    private Rectangle collisionBox;
+    private Circle collisionBox;
 
     public Projectile(float x, float y, float direction, float life, float maxVelocity, float xVelocity, float yVelocity, int damagesWho) {
         this.setSprite(new Sprite(new Texture("core/assets/breadBullet.png")));
@@ -105,18 +106,18 @@ public class Projectile extends OnscreenDrawable{
         this.direction = direction;
     }
 
-    public Rectangle getCollisionBox() {
+    public Circle getCollisionBox() {
         return collisionBox;
     }
 
-    public void setCollisionBox(Rectangle collisionBox) {
+    public void setCollisionBox(Circle collisionBox) {
         this.collisionBox = collisionBox;
     }
 
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
-        collisionBox = new Rectangle((int)this.getX(),(int)this.getY(),this.getSprite().getRegionWidth(), this.getSprite().getRegionHeight());
+        collisionBox = new Circle((int)this.getX(),(int)this.getY(),this.getSprite().getRegionWidth()/2);
     }
 
     @Override

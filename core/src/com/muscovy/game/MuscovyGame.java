@@ -275,110 +275,26 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         if (Intersector.overlaps(projectile.getCollisionBox(),levels[level].getCurrentRoom().getProjectileWallLeft())){
             projectile.kill();
         }
-        if (Intersector.overlaps(projectile.getCollisionBox(),levels[level].getCurrentRoom().getProjectileWallRight())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), levels[level].getCurrentRoom().getProjectileWallRight())){
             projectile.kill();
         }
     }
     public void playerObstacleCollision(Obstacle obstacle){
         if (Intersector.overlaps(playerCharacter.getCircleHitbox(), obstacle.getRectangleHitbox())) {
-            //playerCharacter.moveToNearestEdgeRectangle(obstacle);
-            dungeonGUI.editData("Collides","Collided");
-        }
-
-        /*if (Intersector.overlaps(playerCharacter.getCircleHitbox(),obstacle.getRectangleHitbox())) {
-            /*if(playerCharacter.getCircleHitbox().x>(obstacle.getX()-playerCharacter.getCircleHitbox().radius)-1){
-                playerCharacter.setYVelocity(0);
-                //playerCharacter.setXVelocity(0);
-                playerCharacter.setMaxVelocity(200);
-                playerCharacter.backOneStep();
-                if (obstacle.isDamaging()){
-                    playerCharacter.damage(obstacle.getTouchDamage());
-
-            }
-        }
-        /*if (Intersector.overlaps(playerCharacter.getCircleHitbox(),obstacle.getRightRectangle())){
-            /*playerCharacter.setXVelocity(0);
-            playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(obstacle.getRightRectangle().getX() + obstacle.getRightRectangle().getWidth()+playerCharacter.getCircleHitbox().radius,playerCharacter.getCircleHitbox().y);
-            if (obstacle.isDamaging()){
-                playerCharacter.damage(obstacle.getTouchDamage());
-            }
-            if(playerCharacter.getCircleHitbox().x>(obstacle.getX()-playerCharacter.getCircleHitbox().radius)-1){
-                playerCharacter.setYVelocity(0);
-                playerCharacter.setMaxVelocity(200);
-                playerCharacter.backOneStep();
-                if (obstacle.isDamaging()){
-                    playerCharacter.damage(obstacle.getTouchDamage());
-                }
-            }
-        }
-       if (Intersector.overlaps(playerCharacter.getCircleHitbox(),obstacle.getLeftRectangle())){
-           /* playerCharacter.setXVelocity(0);
-            playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(obstacle.getLeftRectangle().getX()-playerCharacter.getCircleHitbox().radius,playerCharacter.getCircleHitbox().y);
-            if (obstacle.isDamaging()){
-                playerCharacter.damage(obstacle.getTouchDamage());
-            }
-           if(playerCharacter.getCircleHitbox().x>(obstacle.getX()-playerCharacter.getCircleHitbox().radius)-1){
-               playerCharacter.setYVelocity(0);
-               playerCharacter.setMaxVelocity(200);
-               playerCharacter.backOneStep();
-               if (obstacle.isDamaging()){
-                   playerCharacter.damage(obstacle.getTouchDamage());
-               }
-           }
-        }
-        /*if (Intersector.overlaps(playerCharacter.getCircleHitbox(),obstacle.getBottomRectangle())){
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setMaxVelocity(200);
-            playerCharacter.setY(obstacle.getY()-playerCharacter.getHeight()+playerCharacter.getHeightOffset());
+            playerCharacter.moveToNearestEdgeRectangle(obstacle);
+            playerCharacter.setMaxVelocity(100);
+            dungeonGUI.editData("Collides", "Collided");
             if (obstacle.isDamaging()){
                 playerCharacter.damage(obstacle.getTouchDamage());
             }
         }
-        /*if (playerCharacter.collides(obstacle)) {
-            if(playerCharacter.getCircleHitbox().x >= obstacle.getCircleHitbox().x){
-                if(playerCharacter.getCircleHitbox().y >= obstacle.getCircleHitbox().y){
-                    playerCharacter.backOneStepY();
-                }else{
-
-                }
-            }else if(playerCharacter.getCircleHitbox().x < obstacle.getCircleHitbox().x) {
-                if (playerCharacter.getCircleHitbox().y >= obstacle.getCircleHitbox().y) {
-
-                } else {
-
-                }
-            }
-        }*/
     }
     public void enemyObstacleCollision(Enemy enemy, Obstacle obstacle){
-        /*if (Intersector.overlaps(enemy.getBottomRectangle(), obstacle.getTopRectangle())) {
-            enemy.setYVelocity(0);
-            enemy.setMaxVelocity(50);
-            enemy.setY(obstacle.getTopRectangle().getY() + obstacle.getTopRectangle().getHeight());
-            enemy.setCollidingWithSomething(true);
-        }
-        if (Intersector.overlaps(enemy.getLeftRectangle(),obstacle.getRightRectangle())){
-            enemy.setXVelocity(0);
-            enemy.setMaxVelocity(50);
-            enemy.setX(obstacle.getRightRectangle().getX() + obstacle.getRightRectangle().getWidth());
-            enemy.setCollidingWithSomething(true);
-        }
-        if (Intersector.overlaps(enemy.getRightRectangle(), obstacle.getLeftRectangle())){
-            enemy.setXVelocity(0);
-            enemy.setMaxVelocity(50);
-            enemy.setX(obstacle.getLeftRectangle().getX() - enemy.getWidth());
-            enemy.setCollidingWithSomething(true);
-        }
-        if (Intersector.overlaps(enemy.getTopRectangle(),obstacle.getBottomRectangle())){
-            enemy.setYVelocity(0);
-            enemy.setMaxVelocity(50);
-            enemy.setY(obstacle.getY() -enemy.getHeight() + enemy.getHeightOffset());
-            enemy.setCollidingWithSomething(true);
-        }*/
         if (enemy.collides(obstacle)){
-            enemy.moveToNearestEdgeCircle(obstacle);
+            enemy.moveToNearestEdgeRectangle(obstacle);
+            if (obstacle.isDamaging()){
+                enemy.damage(obstacle.getTouchDamage());
+            }
         }
     }
     public void enemyWallCollision(Enemy enemy){
@@ -400,7 +316,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             enemy.setX(levels[level].getCurrentRoom().getX()+64);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getCurrentRoom().getBottomRectangle(),enemy.getBottomRectangle())){
+        if (Intersector.overlaps(levels[level].getCurrentRoom().getBottomRectangle(), enemy.getBottomRectangle())){
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
             enemy.setY(64);
@@ -408,83 +324,38 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void playerEnemyCollision(Enemy enemy){
-        /*if (Intersector.overlaps(enemy.getBottomRectangle(),playerCharacter.getTopRectangle())) {
-            playerCharacter.setMaxVelocity(playerCharacter.getMaxVelocity()/2);
-            if (enemy.isCollidingWithSomething()) {
-                playerCharacter.setY(enemy.getY() - playerCharacter.getHeight() + playerCharacter.getHeightOffset());
-                playerCharacter.setYVelocity(0);
-            }else{
-                enemy.moveToNearestEdgeCircle(playerCharacter);
-                enemy.setDirection(playerCharacter.getDirection());
-                enemy.setY(playerCharacter.getTopRectangle().getY() + playerCharacter.getTopRectangle().getHeight());
-                enemy.setXVelocity(0);
-                enemy.setYVelocity(0);
-            }
-        }
-        if (Intersector.overlaps(enemy.getLeftRectangle(),playerCharacter.getRightRectangle())){
-            playerCharacter.setMaxVelocity(playerCharacter.getMaxVelocity()/2);
-            if (enemy.isCollidingWithSomething()) {
-                playerCharacter.setX(enemy.getLeftRectangle().getX() - playerCharacter.getWidth());
-                playerCharacter.setXVelocity(0);
-            }else{
-                enemy.setDirection(playerCharacter.getDirection());
-                enemy.setX(playerCharacter.getRightRectangle().getX() + playerCharacter.getRightRectangle().getWidth());
-                enemy.setXVelocity(0);
-                enemy.setYVelocity(0);
-            }
-        }
-        if (Intersector.overlaps(enemy.getRightRectangle(),playerCharacter.getLeftRectangle())){
-            playerCharacter.setMaxVelocity(playerCharacter.getMaxVelocity()/2);
-            if (enemy.isCollidingWithSomething()) {
-                playerCharacter.setX(enemy.getRightRectangle().getX() + enemy.getRightRectangle().getWidth());
-                playerCharacter.setXVelocity(0);
-            }else{
-                enemy.setDirection(playerCharacter.getDirection());
-                enemy.setX(playerCharacter.getLeftRectangle().getX() - enemy.getWidth());
-                enemy.setXVelocity(0);
-                enemy.setYVelocity(0);
-            }
-        }
-        if (Intersector.overlaps(enemy.getTopRectangle(),playerCharacter.getBottomRectangle())){
-            playerCharacter.setMaxVelocity(playerCharacter.getMaxVelocity()/2);
-            if (enemy.isCollidingWithSomething()){
-                playerCharacter.setY(enemy.getTopRectangle().getY() + enemy.getTopRectangle().getHeight());
-                playerCharacter.setYVelocity(0);
-            }else{
-                enemy.setDirection(playerCharacter.getDirection());
-                enemy.setY(playerCharacter.getY() - enemy.getHeight() + enemy.getHeightOffset()-1);
-                enemy.setXVelocity(0);
-                enemy.setYVelocity(0);
-            }
-        }*/
         if (playerCharacter.collides(enemy)) { //Doesn't damage twice because of invincibility frames
             playerCharacter.setMaxVelocity(100);
-            enemy.moveToNearestEdgeCircle(playerCharacter);
+            if (enemy.isCollidingWithSomething()){
+                playerCharacter.moveToNearestEdgeCircle(enemy);
+            }else{
+                enemy.moveToNearestEdgeCircle(playerCharacter);
+            }
             if (enemy.getAttackType() != 1){
                 playerCharacter.damage(enemy.getTouchDamage());
             }
         }
     }
     public void playerWallCollision(){
-        if (Intersector.overlaps(levels[level].getCurrentRoom().getTopRectangle(),playerCharacter.getTopRectangle())) {
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentRoom().getTopRectangle())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setY(levels[level].getCurrentRoom().getTopRectangle().getY() - playerCharacter.getCircleHitbox().radius);
+            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, levels[level].getCurrentRoom().getTopRectangle().getY() - playerCharacter.getCircleHitbox().radius);
         }
-        if (Intersector.overlaps(levels[level].getCurrentRoom().getRightRectangle(),playerCharacter.getRightRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentRoom().getRightRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setX(levels[level].getCurrentRoom().getRightRectangle().getX()-playerCharacter.getWidth());
+            playerCharacter.setHitboxCentre(levels[level].getCurrentRoom().getRightRectangle().getX() - playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
         }
-        if (Intersector.overlaps(levels[level].getCurrentRoom().getLeftRectangle(),playerCharacter.getLeftRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentRoom().getLeftRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setX(levels[level].getCurrentRoom().getX()+64);
+            playerCharacter.setHitboxCentre(64+playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
         }
-        if (Intersector.overlaps(levels[level].getCurrentRoom().getBottomRectangle(),playerCharacter.getBottomRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentRoom().getBottomRectangle())){
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setY(64);//not sure why I need this 2 here. It's wonky.
+            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, 64+playerCharacter.getCircleHitbox().radius);
         }
     }
     public void playerUpdate(){

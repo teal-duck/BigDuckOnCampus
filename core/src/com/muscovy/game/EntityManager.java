@@ -160,6 +160,10 @@ public class EntityManager {
     }
     public void setCurrentRoom(Room screen){
         this.currentRoom = screen;
+        this.obstacleList.clear();
+        this.obstacleList.addAll(screen.getObstacleList());
+        this.enemyList.clear();
+        this.enemyList.addAll(screen.getEnemyList());
     }
     public Room getCurrentRoom(){
         return this.currentRoom;

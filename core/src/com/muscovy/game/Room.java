@@ -32,8 +32,14 @@ public class Room extends OnscreenDrawable{
     public void addEnemy(Enemy enemy){
         enemyList.add(enemy);
     }
+    public ArrayList<Enemy> getEnemyList(){
+        return enemyList;
+    }
     public void addObstacle(Obstacle obstacle){
         obstacleList.add(obstacle);
+    }
+    public ArrayList<Obstacle> getObstacleList(){
+        return obstacleList;
     }
     public Rectangle getBottomRectangle(){
         return walls[0];
