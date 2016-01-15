@@ -13,7 +13,7 @@ public class Building {
     Room[][] roomArray = new Room[7][7];
 
     /* Count the number of rooms adjacent to the given location */
-    public int checkAdjacent (int myY, int myX) {
+    public int checkAdjacent(int myY, int myX) {
 
         int numAdjacent = 0;
 
@@ -42,5 +42,6 @@ public class Building {
 
         return numAdjacent;
     }
+}
 
     /* function is called to generate the array of rooms for our building */

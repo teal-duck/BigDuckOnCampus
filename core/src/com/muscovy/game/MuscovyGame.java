@@ -23,13 +23,65 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	Obstacle obstacle1, obstacle2;
     Enemy enemy1;
 	PlayerCharacter playerCharacter;
-	Sprite roomSprite, testSprite1, testSprite2;
+	Sprite roomSprite, testSprite1, testSprite2, guiMapSprite, guiSelector;
 	GUI dungeonGUI, overworldGUI, pauseGUI, gameOverGUI;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS;
     private BitmapFont xVal, yVal, gameOverFont;
 	float w = 1280;
 	float h = 720;
 	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/Building, 3 = Pause, 4 = Game Over
+	int MapSelected; // 0 = Constantine
+
+	public void cursorLocation(){
+		switch (MapSelected){
+			case 1:
+				guiSelector.setX(850);
+				guiSelector.setY(580);
+				break;
+			case 2:
+				guiSelector.setX(550);
+				guiSelector.setY(500);
+				break;
+			case 3:
+				guiSelector.setX(200);
+				guiSelector.setY(500);
+				break;
+			case 4:
+				guiSelector.setX(130);
+				guiSelector.setY(320);
+				break;
+			case 5:
+				guiSelector.setX(10);
+				guiSelector.setY(260);
+				break;
+			case 6:
+				guiSelector.setX(60);
+				guiSelector.setY(130);
+				break;
+			case 7:
+				guiSelector.setX(230);
+				guiSelector.setY(170);
+				break;
+			case 8:
+				guiSelector.setX(340);
+				guiSelector.setY(240);
+				break;
+		}
+
+	}
+	public void initaliseOverworld(){
+		MapSelected = 1;
+		guiMapSprite = new Sprite();
+		guiSelector = new Sprite();
+		overworldGUI = new GUI();
+		guiSelector.setTexture(new Texture("core/assets/selector.png"));
+		cursorLocation();
+		guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
+		guiMapSprite.setX(0);
+		guiMapSprite.setY(0);
+		overworldGUI.addElement(guiMapSprite);
+		overworldGUI.addElement(guiSelector);
+	}
 
 	@Override
 	public void create () {
@@ -39,6 +91,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		camera.setToOrtho(false, w, h);
         createTestingSprites();
         Gdx.input.setInputProcessor(this);
+		initaliseOverworld();
 	}
 	private void createTestingSprites(){
         Sprite guiMapSprite = new Sprite();
@@ -80,17 +133,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         xVal.setColor(Color.BLACK);
         yVal = new BitmapFont();
         yVal.setColor(Color.BLACK);
-        overworldGUI = new GUI();
         dungeonGUI.addData("PlayerXVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 700);
         dungeonGUI.addData("EnemyXVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 700);
 		dungeonGUI.addData("PlayerYVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 650);
 		dungeonGUI.addData("EnemyYVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 650);
 		dungeonGUI.addData("Collision", "Collision?: False", yVal, 850, 700);
         dungeonGUI.addData("Invincible", "Invincibility counter: False", yVal, 850, 650);
-        guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
-        guiMapSprite.setX(0);
-        guiMapSprite.setY(0);
-        overworldGUI.addElement(guiMapSprite);
         gameOverFont = new BitmapFont();
         gameOverFont.setColor(Color.RED);
         gameOverGUI = new GUI();
@@ -234,7 +282,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			case 0:
 				break;
 			case 1:
-                if(keycode == Input.Keys.ENTER) gameState = 2;
 				break;
 			case 2:
 				if(keycode == Input.Keys.W) keyflagW = true;
@@ -254,6 +301,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			case 0:
 				break;
 			case 1:
+				if(keycode == Input.Keys.ENTER) gameState = 2;
+				if((keycode == Input.Keys.A)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
+				if((keycode == Input.Keys.D)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
+//				if(keycode == Input.Keys.D) guiSelector.setX(guiSelector.getX()+1);
+//				if(keycode == Input.Keys.A) guiSelector.setX(guiSelector.getX()-1);
 				break;
 			case 2:
 				if(keycode == Input.Keys.W) keyflagW = false;
