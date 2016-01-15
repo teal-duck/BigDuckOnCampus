@@ -38,7 +38,7 @@ public class PlayerCharacter extends Collidable{
         upWalkCycle = new ArrayList<Texture>();
         rightWalkCycle = new ArrayList<Texture>();
         leftWalkCycle = new ArrayList<Texture>();
-        for (int i = 1; i < 8; i++) {
+        /*for (int i = 1; i < 8; i++) {
             tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/downduck%d.png", i)));
             downWalkCycle.add(tempTexture);
         }
@@ -53,13 +53,15 @@ public class PlayerCharacter extends Collidable{
         for (int i = 1; i < 12; i++) {
             tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/rightduck%d.png", i)));
             rightWalkCycle.add(tempTexture);
-        }
+        }*/
         playerSprite = new Sprite();
-        playerSprite.setRegion(downWalkCycle.get(0));
+        playerSprite.setRegion(new Texture("core/assets/duck.png"));
         this.setSprite(playerSprite);
         this.initialiseX(0);
         this.initialiseY(0);
         this.setUpBoxes();
+        this.setHitboxYOffset(-6);
+        this.setHitboxRadius(74/2-2);
     }
     public void update(){
         movement();
@@ -149,18 +151,18 @@ public class PlayerCharacter extends Collidable{
         }
     }
     public void movementAnimation(){
-        if (animationCounter == 5){
+        /*if (animationCounter == 5){
             animationCounter = 0;
             walkCycleNext();
         }else{
             animationCounter++;
-        }
+        }*/
     }
     public void idleAnimation(){
-        if ((xVelocity == 0) && (yVelocity == 0)) {
+        /*if ((xVelocity == 0) && (yVelocity == 0)) {
             this.setTexture(downWalkCycle.get(0));
             animationCycle = 0;
-        }
+        }*/
     }
     /**
      * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D
@@ -230,6 +232,16 @@ public class PlayerCharacter extends Collidable{
          */
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
+    }
+    public void backOneStep(){
+        setX(getX() - xVelocity * Gdx.graphics.getDeltaTime());
+        setY(getY() - yVelocity * Gdx.graphics.getDeltaTime());
+    }
+    public void backOneStepX(){
+        setX(getX() - xVelocity * Gdx.graphics.getDeltaTime());
+    }
+    public void backOneStepY(){
+       setY(getY() - yVelocity * Gdx.graphics.getDeltaTime());
     }
 
     public float getXVelocity(){

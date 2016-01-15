@@ -15,8 +15,9 @@ public class Enemy extends Collidable {
     private boolean collidingWithSomething;
 
     private int attackType;     //0 = touch damage, 1 = ranged attack, 2 = both
-
     private float touchDamage;
+    private float currentHealth = 90;
+    private boolean dead = false;
 
     private ArrayList<Projectile> rangedAttack;
     private int shotType = 3;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
@@ -121,6 +122,16 @@ public class Enemy extends Collidable {
     public void setShotType(int shotType) {
         this.shotType = shotType;
     }
+    public void damage(float damage){
+        currentHealth-=damage;
+        if (currentHealth<=0){this.kill();}
+    }
+    public void kill(){
+        dead = true;
+    }
+    public boolean lifeOver(){
+        return dead;
+    }
     public float getAttackRange() {
         return attackRange;
     }
@@ -130,25 +141,20 @@ public class Enemy extends Collidable {
     public float getProjectileRange() {
         return projectileRange;
     }
-
     public void setProjectileRange(float projectileRange) {
         this.projectileRange = projectileRange;
         this.projectileLife = projectileRange/projectileVelocity;
     }
-
     public float getProjectileLife() {
         return projectileLife;
     }
-
     public void setProjectileLife(float projectileLife) {
         this.projectileLife = projectileLife;
         this.projectileRange = projectileVelocity*projectileLife;
     }
-
     public float getProjectileVelocity() {
         return projectileVelocity;
     }
-
     public void setProjectileVelocity(float projectileVelocity) {
         this.projectileVelocity = projectileVelocity;
         this.projectileLife = projectileRange/projectileVelocity;
@@ -218,10 +224,10 @@ public class Enemy extends Collidable {
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
-
+/*
     public float getAngleTo(Collidable collidable){
-        float x = ((collidable.getX()+collidable.getBoundingBox().getWidth()/2)-(this.getX()+this.getWidth()/2));
-        float y = ((collidable.getY()+collidable.getBoundingBox().getHeight()/2)-(this.getY()+this.getHeight()/2));
+        float x = ((collidable.getX()+collidable.getCircleHitbox().radius/2)-(this.getX()+this.getWidth()/2));
+        float y = ((collidable.getY()+collidable.getCircleHitbox().radius/2)-(this.getY()+this.getHeight()/2));
         float angle = (float) Math.atan(x/y);
         if(x >= 0){
             if (y >= 0){
@@ -237,10 +243,10 @@ public class Enemy extends Collidable {
             }
         }
         return angle;
-    }
+    }*/
     public void pointTo(Collidable collidable){
-        float x = ((collidable.getX()+collidable.getBoundingBox().getWidth()/2)-(this.getX()+this.getWidth()/2));
-        float y = ((collidable.getY()+collidable.getBoundingBox().getHeight()/2)-(this.getY()+this.getHeight()/2));
+        float x = ((collidable.getX()+collidable.getCircleHitbox().radius/2)-(this.getX()+this.getWidth()/2));
+        float y = ((collidable.getY()+collidable.getCircleHitbox().radius/2)-(this.getY()+this.getHeight()/2));
         float angle = (float) Math.atan(x/y);
         if(x >= 0){
             if (y >= 0){

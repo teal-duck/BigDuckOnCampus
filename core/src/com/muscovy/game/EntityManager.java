@@ -14,7 +14,9 @@ public class EntityManager {
     private ArrayList<Enemy> enemyList;
     private ArrayList<Projectile> projectileList;
     private Room currentRoom;
-    private Room[][] levelArray;
+    private Level[] level;
+    private int levelNo;
+    private int roomX, roomY;
     private BitmapFont list;//Testing purposes
     public EntityManager(Room newRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
@@ -107,6 +109,18 @@ public class EntityManager {
             projectileList.remove(projectile);
         }
     }
+    public void killEnemies(){
+        ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
+        for (Enemy enemy:enemyList){
+            if (enemy.lifeOver()){
+                deadEnemies.add(enemy);
+            }
+        }
+        for (Enemy enemy:deadEnemies){
+            renderList.remove(enemy);
+            enemyList.remove(enemy);
+        }
+    }
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
     }
@@ -149,5 +163,22 @@ public class EntityManager {
     }
     public Room getCurrentRoom(){
         return this.currentRoom;
+    }
+
+    public void moveNorth(){
+        roomX++;
+        this.currentRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveEast(){
+        roomY++;
+        this.currentRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveWest(){
+        roomY--;
+        this.currentRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveSouth(){
+        roomX--;
+        this.currentRoom = level[levelNo].getRoom(roomX,roomY);
     }
 }
