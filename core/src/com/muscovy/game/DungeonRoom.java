@@ -21,7 +21,7 @@ public class DungeonRoom extends OnscreenDrawable{
     /* roomType indicates the type of room
      * options: "" (default), "start", "boss", "item", "shop" */
     String roomType = "";
-    
+
     public DungeonRoom() {
         this.setSprite(new Sprite(new Texture("core/assets/testMap.png")));
         obstacleList = new ArrayList<Obstacle>();
