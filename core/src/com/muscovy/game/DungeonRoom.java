@@ -9,12 +9,20 @@ import java.util.ArrayList;
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-public class Room extends OnscreenDrawable{
+public class DungeonRoom extends OnscreenDrawable{
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
     private Rectangle[] walls, projectileWalls;
-
-    public Room() {
+    /* variables indicate if there is a door on that wall */
+    Boolean upDoor = false;
+    Boolean rightDoor = false;
+    Boolean downDoor = false;
+    Boolean leftDoor = false;
+    /* roomType indicates the type of room
+     * options: "" (default), "start", "boss", "item", "shop" */
+    String roomType = "";
+    
+    public DungeonRoom() {
         this.setSprite(new Sprite(new Texture("core/assets/testMap.png")));
         obstacleList = new ArrayList<Obstacle>();
         enemyList = new ArrayList<Enemy>();

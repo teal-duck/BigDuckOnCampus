@@ -4,11 +4,11 @@ package com.muscovy.game;
  * Created by ewh502 on 11/01/2016.
  */
 public class Level {
-    Room[][] levelArray;
-    public Level(Room[][] levelArray) {
+    DungeonRoom[][] levelArray;
+    public Level(DungeonRoom[][] levelArray) {
         this.levelArray = levelArray;
     }
-    public Room getRoom(int roomX, int roomY){
+    public DungeonRoom getRoom(int roomX, int roomY){
         return levelArray[roomY][roomX];
     }
 }
