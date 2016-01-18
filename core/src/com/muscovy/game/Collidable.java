@@ -261,7 +261,7 @@ public abstract class Collidable extends OnscreenDrawable{
         /**
          * Use this when setting something in the playable space to make sure it is on the grid.
          */
-        if (YTiles > 15-heightTiles+heightOffsetTiles){YTiles = 15-heightTiles+heightOffsetTiles;}
+        if (YTiles > 20-heightTiles+heightOffsetTiles){YTiles = 20-heightTiles+heightOffsetTiles;}
         this.YTiles = YTiles;
         setY(YTiles *32+64);
     }

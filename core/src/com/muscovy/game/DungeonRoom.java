@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
@@ -40,6 +41,41 @@ public class DungeonRoom extends OnscreenDrawable{
     public void generateRoom(){
         switch (roomType){
             case 0:
+                int[][] TileArray = new int[10][18];
+                Random rand = new Random();
+                int ChosenValue = rand.nextInt(10)+1;
+                switch (ChosenValue){
+                    case 6:
+                        TileArray[5][9] = 1;
+                        TileArray[6][9] = 1;
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    case 10:
+                        break;
+                }
+                TileArray[5][9] = 1;
+                TileArray[6][9] = 1;
+                for (int i = 0; i>TileArray.length; i++){
+                    for (int j = 0; j>TileArray[i].length; j++){
+                        switch (TileArray[i][j]){
+                            case 0:
+                                break;
+                            case 1:
+                                Sprite RockSprite;
+                                Obstacle obstacle5;
+                                RockSprite = new Sprite();
+                                RockSprite.setTexture(new Texture("core/assets/rock.png"));
+                                obstacle5 = new Obstacle(RockSprite);
+                                obstacle5.setXTiles(j*2);
+                                obstacle5.setYTiles(i*2);
+                        }
+                    }
+                }
                 break;
             case 1:
                 Sprite testSprite1, testSprite2;
