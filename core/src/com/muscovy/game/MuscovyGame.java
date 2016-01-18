@@ -24,53 +24,52 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     Enemy enemy1, enemy2;
 	PlayerCharacter playerCharacter;
 	GUI mainMenuGUI, dungeonGUI, overworldGUI, pauseGUI, gameOverGUI;
-    EntityManager[] levels;
+    EntityManager entityManager;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS, keyflagUP, keyflagRIGHT, keyflagLEFT, keyflagDOWN, firing = false;
 	Sprite roomSprite, testSprite1, testSprite2, guiMapSprite, guiSelector;
     private BitmapFont xVal, yVal, gameOverFont;
 	float w = 1280;
 	float h = 960;
-	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/Building, 3 = Pause, 4 = Game Over
-    int level = 0;
+	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over
 	int MapSelected; // 0 = Constantine
 
 	public void cursorLocation(){
 		switch (MapSelected){
 			case 1:
-				guiSelector.setX(850);
-				guiSelector.setY(580);
+				guiSelector.setX(950);
+				guiSelector.setY(680);
 				break;
 			case 2:
-				guiSelector.setX(550);
-				guiSelector.setY(500);
+				guiSelector.setX(650);
+				guiSelector.setY(600);
 				break;
 			case 3:
-				guiSelector.setX(200);
-				guiSelector.setY(500);
+				guiSelector.setX(300);
+				guiSelector.setY(600);
 				break;
 			case 4:
-				guiSelector.setX(130);
-				guiSelector.setY(320);
+				guiSelector.setX(230);
+				guiSelector.setY(420);
 				break;
 			case 5:
-				guiSelector.setX(10);
-				guiSelector.setY(260);
+				guiSelector.setX(110);
+				guiSelector.setY(360);
 				break;
 			case 6:
-				guiSelector.setX(60);
-				guiSelector.setY(130);
+				guiSelector.setX(160);
+				guiSelector.setY(230);
 				break;
 			case 7:
-				guiSelector.setX(230);
-				guiSelector.setY(170);
+				guiSelector.setX(330);
+				guiSelector.setY(270);
 				break;
 			case 8:
-				guiSelector.setX(340);
-				guiSelector.setY(240);
+				guiSelector.setX(440);
+				guiSelector.setY(340);
 				break;
 		}
-
 	}
+
 	public void initaliseOverworld(){
 		MapSelected = 1;
 		guiMapSprite = new Sprite();
@@ -94,19 +93,13 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         initialisePlayerCharacter();
         initialiseLevels();
         initialiseGUIs();
-        initialiseTesting();
+        //initialiseTesting();
         Gdx.input.setInputProcessor(this);
 		initaliseOverworld();
-	}
+    }
     private void initialiseLevels(){
-        roomSprite = new Sprite();
-        roomSprite.setTexture(new Texture("core/assets/testMap.png"));
-        roomSprite.setX(0);
-        roomSprite.setY(0);
-        drawDungeonRoom = new DungeonRoom();
-        drawDungeonRoom.setSprite(roomSprite);
-        levels = new EntityManager[8];
-        levels[0] = new EntityManager(drawDungeonRoom);
+        entityManager = new EntityManager();
+        entityManager.generateLevels();
     }
     private void initialiseGUIs(){
         Sprite mainMenuSprite = new Sprite();
@@ -155,40 +148,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     }
 	private void initialiseTesting(){
         gameState = 0;
-        testSprite1 = new Sprite();
-        testSprite1.setTexture(new Texture("core/assets/rock.png"));
-        obstacle1 = new Obstacle(testSprite1);
-        obstacle1.setXTiles(10);
-        obstacle1.setYTiles(100);
-		testSprite2 = new Sprite();
-		testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
-		obstacle2 = new Obstacle(testSprite2);
-		obstacle2.setX(500);
-		obstacle2.setY(100);
-        obstacle2.setDamaging(true);
-        obstacle2.setTouchDamage(10.0f);
-        testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
-        enemy1 = new Enemy(testSprite1);
-        enemy1.setX(1111);
-        enemy1.setY(300);
-        enemy1.setAttackType(1);
-		enemy1.setMovementType(0);
-        enemy1.setTouchDamage(30);
-        enemy1.setShotType(1);
-        testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
-        enemy2 = new Enemy(testSprite1);
-        enemy2.setXTiles(0);
-        enemy2.setYTiles(1);
-        enemy2.setAttackType(0);
-        enemy2.setMovementType(0);
-        enemy2.setTouchDamage(30);
-        enemy2.setShotType(0);
-		levels[level] = new EntityManager(drawDungeonRoom);
-		levels[level].addNewObstacle(obstacle1);
-		//levels[level].addNewObstacle(obstacle2);
-        levels[level].addNewEnemy(enemy1);
-        //levels[level].addNewEnemy(enemy2);
-		levels[level].addNewDrawable(playerCharacter);
+		entityManager = new EntityManager();
+		entityManager.addNewDrawable(playerCharacter);
 	}
     public void update(){
         switch (gameState){
@@ -216,10 +177,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         timer += Gdx.graphics.getDeltaTime();
     }
     public void enemiesUpdate(){
-        for (Enemy enemy:levels[level].getEnemies()){
+        for (Enemy enemy: entityManager.getEnemies()){
             enemy.update(playerCharacter);
 			if ((enemy.getAttackType() != 0)&&(enemy.checkRangedAttack())) {
-                levels[level].addNewProjectiles(enemy.rangedAttack(playerCharacter));
+                entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
 			}
             playerEnemyCollision(enemy);
             enemyWallCollision(enemy);
@@ -228,7 +189,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void projectilesUpdate(){
-        ArrayList<Projectile> projectileList = new ArrayList<Projectile>(levels[level].getProjectiles());
+        ArrayList<Projectile> projectileList = new ArrayList<Projectile>(entityManager.getProjectiles());
         for (Projectile projectile:projectileList){
             projectile.update();
             projectileWallCollision(projectile);
@@ -236,8 +197,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void cleanupDeadThings(){
-        levels[level].killEnemies();
-        levels[level].killProjectiles();
+        entityManager.killEnemies();
+        entityManager.killProjectiles();
     }
 	@Override
 	public void render () {
@@ -255,19 +216,19 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				overworldGUI.render(batch);
 				break;
             case 2:
-                levels[level].render(batch);
-                dungeonGUI.editData("EnemyXVal", "enemy X: " + String.valueOf(enemy1.getX()));
+                entityManager.render(batch);
+                /*dungeonGUI.editData("EnemyXVal", "enemy X: " + String.valueOf(enemy1.getX()));
 				dungeonGUI.editData("EnemyYVal", "enemy Y: " + String.valueOf(enemy1.getY()));
 				dungeonGUI.editData("PlayerXVal","angle enemy to player: " + String.valueOf(enemy1.getAngleTo(playerCharacter)));
 				dungeonGUI.editData("PlayerYVal","ydist player to enemy: " + String.valueOf(playerCharacter.getY() - enemy1.getY()));
                 //dungeonGUI.editData("Collision","Player health: " + String.valueOf(playerCharacter.getHealth()));
-                dungeonGUI.editData("Invincible","Time since last attack: " + String.valueOf(playerCharacter.getTimeSinceLastAttack()));
+                dungeonGUI.editData("Invincible","Time since last attack: " + String.valueOf(playerCharacter.getTimeSinceLastAttack()));*/
                 dungeonGUI.render(batch);
-                levels[level].render(batch);
+                entityManager.render(batch);
                 break;
             case 3:
                 dungeonGUI.render(batch);
-                levels[level].render(batch);
+                entityManager.render(batch);
                 batch.draw(playerCharacter.getSprite().getTexture(),playerCharacter.getX(),playerCharacter.getY());
                 pauseGUI.render(batch);
                 break;
@@ -279,9 +240,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         batch.end();
 	}
     public void collision(){
-        ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(levels[level].getObstacles());
-        ArrayList<Enemy> enemyList = new ArrayList<Enemy>(levels[level].getEnemies());
-        ArrayList<Projectile> projectileList = new ArrayList<Projectile>(levels[level].getProjectiles());
+        ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(entityManager.getObstacles());
+        ArrayList<Enemy> enemyList = new ArrayList<Enemy>(entityManager.getEnemies());
+        ArrayList<Projectile> projectileList = new ArrayList<Projectile>(entityManager.getProjectiles());
         boolean firstLoop = true;
         playerCharacter.resetMaxVelocity();
         for (Obstacle obstacle:obstacleList) {
@@ -300,6 +261,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             }
         }
         playerWallCollision();
+        if (entityManager.getCurrentDungeonRoom().isEnemiesDead()) {
+            playerDoorCollision();
+        }
 	}
     public void projectileEnemyCollision(Projectile projectile, Enemy enemy){
         if ((Intersector.overlaps(enemy.getCircleHitbox(),projectile.getCollisionBox()))&& !(projectile.getDamagesWho() == 0)){
@@ -319,16 +283,16 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void projectileWallCollision(Projectile projectile){
-        if (Intersector.overlaps(projectile.getCollisionBox(),levels[level].getCurrentDungeonRoom().getProjectileWallBottom())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), entityManager.getCurrentDungeonRoom().getProjectileWallBottom())){
             projectile.kill();
         }
-        if (Intersector.overlaps(projectile.getCollisionBox(),levels[level].getCurrentDungeonRoom().getProjectileWallTop())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), entityManager.getCurrentDungeonRoom().getProjectileWallTop())){
             projectile.kill();
         }
-        if (Intersector.overlaps(projectile.getCollisionBox(),levels[level].getCurrentDungeonRoom().getProjectileWallLeft())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), entityManager.getCurrentDungeonRoom().getProjectileWallLeft())){
             projectile.kill();
         }
-        if (Intersector.overlaps(projectile.getCollisionBox(), levels[level].getCurrentDungeonRoom().getProjectileWallRight())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), entityManager.getCurrentDungeonRoom().getProjectileWallRight())){
             projectile.kill();
         }
     }
@@ -351,25 +315,25 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void enemyWallCollision(Enemy enemy){
-        if (Intersector.overlaps(levels[level].getCurrentDungeonRoom().getTopRectangle(),enemy.getTopRectangle())) {
+        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getTopRectangle(),enemy.getTopRectangle())) {
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setY(levels[level].getCurrentDungeonRoom().getTopRectangle().getY() - enemy.getCircleHitbox().radius);
+            enemy.setY(entityManager.getCurrentDungeonRoom().getTopRectangle().getY() - enemy.getCircleHitbox().radius);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getCurrentDungeonRoom().getRightRectangle(),enemy.getRightRectangle())){
+        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getRightRectangle(),enemy.getRightRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(levels[level].getCurrentDungeonRoom().getRightRectangle().getX()-enemy.getWidth());
+            enemy.setX(entityManager.getCurrentDungeonRoom().getRightRectangle().getX()-enemy.getWidth());
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getCurrentDungeonRoom().getLeftRectangle(),enemy.getLeftRectangle())){
+        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getLeftRectangle(),enemy.getLeftRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(levels[level].getCurrentDungeonRoom().getX()+64);
+            enemy.setX(entityManager.getCurrentDungeonRoom().getX()+64);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(levels[level].getCurrentDungeonRoom().getBottomRectangle(), enemy.getBottomRectangle())){
+        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getBottomRectangle(), enemy.getBottomRectangle())){
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
             enemy.setY(64);
@@ -390,25 +354,55 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void playerWallCollision(){
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentDungeonRoom().getTopRectangle())) {
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopRectangle())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, levels[level].getCurrentDungeonRoom().getTopRectangle().getY() - playerCharacter.getCircleHitbox().radius);
+            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, entityManager.getCurrentDungeonRoom().getTopRectangle().getY() - playerCharacter.getCircleHitbox().radius);
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentDungeonRoom().getRightRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getRightRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(levels[level].getCurrentDungeonRoom().getRightRectangle().getX() - playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
+            playerCharacter.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightRectangle().getX() - playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentDungeonRoom().getLeftRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getLeftRectangle())){
             playerCharacter.setXVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(64+playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
+            playerCharacter.setHitboxCentre(64 + playerCharacter.getCircleHitbox().radius, playerCharacter.getCircleHitbox().y);
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(),levels[level].getCurrentDungeonRoom().getBottomRectangle())){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getBottomRectangle())){
             playerCharacter.setYVelocity(0);
             playerCharacter.setMaxVelocity(200);
-            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, 64+playerCharacter.getCircleHitbox().radius);
+            playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x, 64 + playerCharacter.getCircleHitbox().radius);
+        }
+    }
+    public void playerDoorCollision(){
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
+            playerCharacter.setYVelocity(0);
+            playerCharacter.setXVelocity(0);
+            entityManager.moveNorth();
+            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+            playerCharacter.setY(70);
+        }
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
+            playerCharacter.setYVelocity(0);
+            playerCharacter.setXVelocity(0);
+            entityManager.moveSouth();
+            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+            playerCharacter.setY(768 - playerCharacter.getHeight()-70);
+        }
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
+            playerCharacter.setYVelocity(0);
+            playerCharacter.setXVelocity(0);
+            entityManager.moveEast();
+            playerCharacter.setX(70);
+            playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+        }
+        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
+            playerCharacter.setYVelocity(0);
+            playerCharacter.setXVelocity(0);
+            entityManager.moveWest();
+            playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
+            playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
         }
     }
     public void playerUpdate(){
@@ -422,7 +416,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if (keyflagLEFT) playerCharacter.setShotDirection((float) (3 * Math.PI / 2));
                 if (keyflagUP) playerCharacter.setShotDirection(0);
                 if (keyflagDOWN) playerCharacter.setShotDirection((float) Math.PI);
-                levels[level].addNewProjectiles(playerCharacter.rangedAttack());
+                entityManager.addNewProjectiles(playerCharacter.rangedAttack());
             }
         }else{
             if (playerCharacter.getTimeSinceLastAttack() < 0.5) {
@@ -454,6 +448,13 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if(keycode == Input.Keys.ENTER) gameState = 1;
 				break;
 			case 1:
+                if((keycode == Input.Keys.A)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
+                if((keycode == Input.Keys.D)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
+                if(keycode == Input.Keys.ENTER){
+                    entityManager.setLevel(MapSelected - 1);
+                    entityManager.startLevel(playerCharacter);
+                    gameState = 2;
+                }
 				break;
 			case 2:
 				if(keycode == Input.Keys.W) keyflagW = true;
@@ -487,11 +488,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			case 0:
 				break;
 			case 1:
-				if(keycode == Input.Keys.ENTER) gameState = 2;
-				if((keycode == Input.Keys.A)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
-				if((keycode == Input.Keys.D)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
-//				if(keycode == Input.Keys.D) guiSelector.setX(guiSelector.getX()+1);
-//				if(keycode == Input.Keys.A) guiSelector.setX(guiSelector.getX()-1);
 				break;
 			case 2:
 				if(keycode == Input.Keys.W) keyflagW = false;
