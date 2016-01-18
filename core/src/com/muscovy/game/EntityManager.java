@@ -8,17 +8,22 @@ import java.util.ArrayList;
 /**
  * Created by ewh502 on 04/12/2015.
  */
-public class ScreenController {
+public class EntityManager {
     private ArrayList<OnscreenDrawable> renderList ;
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
-    private OnscreenDrawable screen;
+    private ArrayList<Projectile> projectileList;
+    private DungeonRoom currentDungeonRoom;
+    private Level[] level;
+    private int levelNo;
+    private int roomX, roomY;
     private BitmapFont list;//Testing purposes
-    public ScreenController(Room newRoom) {
+    public EntityManager(DungeonRoom newDungeonRoom) {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
         this.enemyList = new ArrayList<Enemy>();
-        this.screen = newRoom;
+        this.projectileList = new ArrayList<Projectile>();
+        this.currentDungeonRoom = newDungeonRoom;
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
     }
@@ -26,12 +31,29 @@ public class ScreenController {
         /**
          * Renders sprites in the controller so those further back are rendered first, giving a perspective illusion
          */
+        renderList.trimToSize();
+        obstacleList.trimToSize();
+        enemyList.trimToSize();
+        projectileList.trimToSize();
         sortDrawables();
-        batch.draw(screen.getSprite().getTexture(),33,33);
+        batch.draw(currentDungeonRoom.getSprite().getTexture(),0,0);
         for (OnscreenDrawable drawable:renderList){
-            batch.draw(drawable.getSprite().getTexture(),drawable.getX(),drawable.getY());
+            if (drawable instanceof PlayerCharacter){
+                if (((PlayerCharacter) drawable).isInvincible()){
+                    if (!(((PlayerCharacter) drawable).getInvincibilityCounter()*10 % 2 < 0.75)){
+                        batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+                    }
+                }else{
+                    batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+                }
+            }else {
+                batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+            }
         }
-        list.draw(batch,"no of sprites in controller = " + renderList.size(),(float)250,(float)450);//Testing purposes
+        for (Projectile projectile:projectileList){
+            batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
+        }
+        list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes
     }
     private void sortDrawables(){
         /**
@@ -76,7 +98,29 @@ public class ScreenController {
         }
         return list;
     }
-    /**end Quicksort Helper Methods*/
+    public void killProjectiles(){
+        ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
+        for (Projectile projectile:projectileList){
+            if (projectile.lifeOver()){
+                deadProjectiles.add(projectile);
+            }
+        }
+        for (Projectile projectile:deadProjectiles){
+            projectileList.remove(projectile);
+        }
+    }
+    public void killEnemies(){
+        ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
+        for (Enemy enemy:enemyList){
+            if (enemy.lifeOver()){
+                deadEnemies.add(enemy);
+            }
+        }
+        for (Enemy enemy:deadEnemies){
+            renderList.remove(enemy);
+            enemyList.remove(enemy);
+        }
+    }
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
     }
@@ -99,13 +143,46 @@ public class ScreenController {
         renderList.addAll(enemies);
         enemyList.addAll(enemies);
     }
+    public void addNewProjectile(Projectile projectile){
+        projectileList.add(projectile);
+    }
+    public void addNewProjectiles(ArrayList<Projectile> projectiles){
+        projectileList.addAll(projectiles);
+    }
     public ArrayList<Obstacle> getObstacles(){
         return obstacleList;
     }
     public ArrayList<Enemy> getEnemies(){
         return enemyList;
     }
-    public void changeScreen(OnscreenDrawable screen){
-        this.screen = screen;
+    public ArrayList<Projectile> getProjectiles(){
+        return projectileList;
+    }
+    public void setCurrentDungeonRoom(DungeonRoom screen){
+        this.currentDungeonRoom = screen;
+        this.obstacleList.clear();
+        this.obstacleList.addAll(screen.getObstacleList());
+        this.enemyList.clear();
+        this.enemyList.addAll(screen.getEnemyList());
+    }
+    public DungeonRoom getCurrentDungeonRoom(){
+        return this.currentDungeonRoom;
+    }
+
+    public void moveNorth(){
+        roomX++;
+        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveEast(){
+        roomY++;
+        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveWest(){
+        roomY--;
+        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+    }
+    public void moveSouth(){
+        roomX--;
+        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
     }
 }
