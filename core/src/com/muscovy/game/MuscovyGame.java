@@ -127,7 +127,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         xVal.setColor(Color.BLACK);
         yVal = new BitmapFont();
         yVal.setColor(Color.BLACK);
-        dungeonGUI.addData("PlayerXVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 900);
+        dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), xVal, 400, 900);
         dungeonGUI.addData("EnemyXVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 900);
         dungeonGUI.addData("PlayerYVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 650);
         dungeonGUI.addData("EnemyYVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 800);
@@ -217,12 +217,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				break;
             case 2:
                 entityManager.render(batch);
-                /*dungeonGUI.editData("EnemyXVal", "enemy X: " + String.valueOf(enemy1.getX()));
-				dungeonGUI.editData("EnemyYVal", "enemy Y: " + String.valueOf(enemy1.getY()));
-				dungeonGUI.editData("PlayerXVal","angle enemy to player: " + String.valueOf(enemy1.getAngleTo(playerCharacter)));
-				dungeonGUI.editData("PlayerYVal","ydist player to enemy: " + String.valueOf(playerCharacter.getY() - enemy1.getY()));
-                //dungeonGUI.editData("Collision","Player health: " + String.valueOf(playerCharacter.getHealth()));
-                dungeonGUI.editData("Invincible","Time since last attack: " + String.valueOf(playerCharacter.getTimeSinceLastAttack()));*/
                 dungeonGUI.render(batch);
                 entityManager.render(batch);
                 break;
@@ -376,33 +370,41 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void playerDoorCollision(){
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveNorth();
-            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
-            playerCharacter.setY(70);
+        if (entityManager.getCurrentDungeonRoom().getUpDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveNorth();
+                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+                playerCharacter.setY(70);
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveSouth();
-            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
-            playerCharacter.setY(768 - playerCharacter.getHeight()-70);
+        if (entityManager.getCurrentDungeonRoom().getDownDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveSouth();
+                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+                playerCharacter.setY(768 - playerCharacter.getHeight()-70);
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveEast();
-            playerCharacter.setX(70);
-            playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+        if (entityManager.getCurrentDungeonRoom().getRightDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveEast();
+                playerCharacter.setX(70);
+                playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
+        if (entityManager.getCurrentDungeonRoom().getLeftDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setXVelocity(0);
             entityManager.moveWest();
             playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
             playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+            }
         }
     }
     public void playerUpdate(){
