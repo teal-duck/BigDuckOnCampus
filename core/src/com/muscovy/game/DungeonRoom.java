@@ -14,13 +14,13 @@ public class DungeonRoom extends OnscreenDrawable{
     private ArrayList<Enemy> enemyList;
     private Rectangle[] walls, projectileWalls;
     /* variables indicate if there is a door on that wall */
-    Boolean upDoor = false;
-    Boolean rightDoor = false;
-    Boolean downDoor = false;
-    Boolean leftDoor = false;
+    private boolean upDoor = false, rightDoor = false,downDoor = false, leftDoor = false;
+    private Rectangle northDoor, eastDoor, southDoor, westDoor;
+    float doorWidth = 70;
     /* roomType indicates the type of room
      * options: "" (default), "start", "boss", "item", "shop" */
-    String roomType = "";
+    private int roomType = 0; //0 = normal room, 1 = boss room,  2 = item room, 3 = shop room, 4 = start room
+    private boolean enemiesDead;
 
     public DungeonRoom() {
         this.setSprite(new Sprite(new Texture("core/assets/testMap.png")));
@@ -36,6 +36,66 @@ public class DungeonRoom extends OnscreenDrawable{
         projectileWalls[1] = new Rectangle(0,0,32,960-192);//left wall
         projectileWalls[2] = new Rectangle(1280-32,0,32,960-192);//right wall
         projectileWalls[3] = new Rectangle(0,960-192,1280,32);//top wall
+    }
+    public void generateRoom(){
+        switch (roomType){
+            case 0:
+                break;
+            case 1:
+                Sprite testSprite1, testSprite2;
+                Obstacle obstacle1, obstacle2;
+                Enemy enemy1, enemy2;
+                testSprite1 = new Sprite();
+                testSprite1.setTexture(new Texture("core/assets/rock.png"));
+                obstacle1 = new Obstacle(testSprite1);
+                obstacle1.setXTiles(10);
+                obstacle1.setYTiles(100);
+                testSprite2 = new Sprite();
+                testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
+                obstacle2 = new Obstacle(testSprite2);
+                obstacle2.setX(500);
+                obstacle2.setY(100);
+                obstacle2.setDamaging(true);
+                obstacle2.setTouchDamage(10.0f);
+                testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
+                enemy1 = new Enemy(testSprite1);
+                enemy1.setX(1111);
+                enemy1.setY(300);
+                enemy1.setAttackType(1);
+                enemy1.setMovementType(0);
+                enemy1.setTouchDamage(30);
+                enemy1.setShotType(1);
+                testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
+                enemy2 = new Enemy(testSprite1);
+                enemy2.setXTiles(0);
+                enemy2.setYTiles(1);
+                enemy2.setAttackType(0);
+                enemy2.setMovementType(0);
+                enemy2.setTouchDamage(30);
+                enemy2.setShotType(0);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+        initialiseDoors();
+    }
+    public void initialiseDoors(){
+        if(upDoor){
+            Rectangle northDoor = new Rectangle(640-doorWidth/2,768-doorWidth,doorWidth,doorWidth);
+        }
+        if(downDoor){
+            Rectangle southDoor = new Rectangle(640-doorWidth/2,0,doorWidth,doorWidth);
+        }
+        if(rightDoor){
+            Rectangle eastDoor = new Rectangle(1280-doorWidth,384-doorWidth/2,doorWidth,doorWidth);
+        }
+        if(leftDoor){
+            Rectangle westDoor = new Rectangle(0,384-doorWidth/2,doorWidth,doorWidth);
+        }
     }
     public void addEnemy(Enemy enemy){
         enemyList.add(enemy);
@@ -72,6 +132,76 @@ public class DungeonRoom extends OnscreenDrawable{
     }
     public Rectangle getProjectileWallTop(){
         return projectileWalls[3];
+    }
+
+    public int getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(int roomType) {
+        this.roomType = roomType;
+    }
+
+    public boolean isEnemiesDead() {
+        return enemiesDead;
+    }
+
+    public void setEnemiesDead(boolean enemiesDead) {
+        this.enemiesDead = enemiesDead;
+    }
+
+    public Boolean getUpDoor() {
+        return upDoor;
+    }
+    public void setUpDoor(Boolean upDoor) {
+        this.upDoor = upDoor;
+    }
+    public Boolean getRightDoor() {
+        return rightDoor;
+    }
+    public void setRightDoor(Boolean rightDoor) {
+        this.rightDoor = rightDoor;
+    }
+    public Boolean getDownDoor() {
+        return downDoor;
+    }
+    public void setDownDoor(Boolean downDoor) {
+        this.downDoor = downDoor;
+    }
+    public Boolean getLeftDoor() {
+        return leftDoor;
+    }
+    public void setLeftDoor(Boolean leftDoor) {
+        this.leftDoor = leftDoor;
+    }
+    public Rectangle getNorthDoor() {
+        return northDoor;
+    }
+    public void setNorthDoor(Rectangle northDoor) {
+        this.northDoor = northDoor;
+    }
+    public Rectangle getEastDoor() {
+        return eastDoor;
+    }
+    public void setEastDoor(Rectangle eastDoor) {
+        this.eastDoor = eastDoor;
+    }
+    public Rectangle getSouthDoor() {
+        return southDoor;
+    }
+    public void setSouthDoor(Rectangle southDoor) {
+        this.southDoor = southDoor;
+    }
+    public Rectangle getWestDoor() {
+        return westDoor;
+    }
+    public void setWestDoor(Rectangle westDoor) {
+        this.westDoor = westDoor;
+    }
+    public void killEnemy(Enemy enemy){
+        enemyList.remove(enemy);
+        enemyList.trimToSize();
+        if (enemyList.size() == 0){enemiesDead = true;}
     }
     @Override
     public Sprite getSprite() {

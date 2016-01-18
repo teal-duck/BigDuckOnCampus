@@ -120,64 +120,6 @@ public abstract class Collidable extends OnscreenDrawable{
             x = collidable.getRectangleHitbox().getX()-(float)(this.circleHitbox.radius*Math.cos(angle));
             setHitboxCentre(x,y);
         }
-
-
-/*
-        if ((angle >= Math.PI*7/4 || angle < Math.PI/4)||(angle >= Math.PI*3/4 && angle < Math.PI*5/4)){
-            rectDistance = collidable.getRectangleHitbox().getHeight()/2;
-        }else if ((angle >= Math.PI/4 && angle < Math.PI*3/4)||(angle >= Math.PI*5/4 && angle < Math.PI*7/4)){
-            rectDistance = collidable.getRectangleHitbox().getWidth()/2;
-        }
-
-/*
-        if(thisX >= thatX){
-            if (thisY >= 0){
-                if (angle<Math.PI/4){
-                    distanceToEdge = rectDistance/(float)Math.acos(angle);
-                }else{
-                    distanceToEdge = rectDistance/(float) Math.acos((Math.PI/2)-angle);
-                }
-            }else if (thisY < thatY){
-                if (angle<Math.PI*3/4){
-                    distanceToEdge = rectDistance/(float) Math.acos(angle-(Math.PI/2));
-                }else{
-                    distanceToEdge = rectDistance/(float) Math.acos((Math.PI)-angle);
-                }
-            }
-        }else if (thisX < thatX){
-            if (thisY >= thatY){
-                if (angle<Math.PI*7/4){
-                    distanceToEdge = rectDistance/(float) Math.acos(angle-(Math.PI/2));
-                }else{
-                    distanceToEdge = rectDistance/(float) Math.acos((Math.PI*3/2)-angle);
-                }
-            }else if (thisY < thatY){
-                if (angle<Math.PI*5/4){
-                    distanceToEdge = rectDistance/(float) Math.acos(angle-(Math.PI*2));
-                }else{
-                    distanceToEdge = rectDistance/(float) Math.acos((Math.PI*2)-angle);
-                }
-            }
-        }
-        float x = 0;
-        float y = 0;
-        if (angle >= Math.PI*7/4 || angle < Math.PI/4){
-            x = collidable.getCircleHitbox().x+(float)(distanceToEdge*Math.sin(angle));
-            y = collidable.getCircleHitbox().y+(float)(distanceToEdge*Math.cos(angle))+this.circleHitbox.radius;
-            setHitboxCentre(x,y);
-        }else if (angle >= Math.PI/4 && angle < Math.PI*3/4){
-            x = collidable.getCircleHitbox().x+(float)(distanceToEdge*Math.sin(angle))+this.circleHitbox.radius;
-            y = collidable.getCircleHitbox().y+(float)(distanceToEdge*Math.cos(angle))ww;
-            setHitboxCentre(x,y);
-        }else if (angle >= Math.PI*3/4 && angle < Math.PI*5/4){
-            x = collidable.getCircleHitbox().x+(float)(distanceToEdge*Math.sin(angle));
-            y = collidable.getCircleHitbox().y+(float)(distanceToEdge*Math.cos(angle))-this.circleHitbox.radius;
-            setHitboxCentre(x,y);
-        }else if(angle >= Math.PI*5/4 && angle < Math.PI*7/4) {
-            x = collidable.getCircleHitbox().x + (float) (distanceToEdge * Math.sin(angle)) - this.circleHitbox.radius;
-            y = collidable.getCircleHitbox().y + (float) (distanceToEdge * Math.cos(angle));
-            setHitboxCentre(x, y);
-        }*/
     }
     public void setHitboxCentre(float x, float y){
         setX((x - circleHitbox.radius)-((getWidth()/2)-circleHitbox.radius));

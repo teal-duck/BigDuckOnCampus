@@ -14,18 +14,50 @@ public class EntityManager {
     private ArrayList<Enemy> enemyList;
     private ArrayList<Projectile> projectileList;
     private DungeonRoom currentDungeonRoom;
+    private LevelGenerator levelGenerator;
     private Level[] level;
-    private int levelNo;
+    private int levelNo, maxLevels = 8;
     private int roomX, roomY;
     private BitmapFont list;//Testing purposes
-    public EntityManager(DungeonRoom newDungeonRoom) {
+    private PlayerCharacter playerCharacter;
+    public EntityManager() {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
         this.enemyList = new ArrayList<Enemy>();
         this.projectileList = new ArrayList<Projectile>();
-        this.currentDungeonRoom = newDungeonRoom;
+        this.levelGenerator = new LevelGenerator();
+        level = new Level[maxLevels];
         list = new BitmapFont();
         list.setColor(Color.WHITE);//Testing purposes
+        this.currentDungeonRoom = new DungeonRoom();
+        maxLevels = 8;
+    }
+    public void generateLevels(){
+        level[0] = new Level(levelGenerator.generateBuilding(20),0);
+        level[1] = new Level(levelGenerator.generateBuilding(20),0);
+        level[2] = new Level(levelGenerator.generateBuilding(20),0);
+        level[3] = new Level(levelGenerator.generateBuilding(20),0);
+        level[4] = new Level(levelGenerator.generateBuilding(20),0);
+        level[5] = new Level(levelGenerator.generateBuilding(20),0);
+        level[6] = new Level(levelGenerator.generateBuilding(20),0);
+        level[7] = new Level(levelGenerator.generateBuilding(20),0);
+        /*while (steve<maxLevels-2){
+            level[steve] = new Level(levelGenerator.generateBuilding(20),0);
+            steve++;
+        }*/
+    }
+    public int getLevelNo() {
+        return levelNo;
+    }
+    public void setLevel(int levelNo) {
+        this.levelNo = levelNo;
+    }
+    public void startLevel(PlayerCharacter playerCharacter){
+        roomX = 3;
+        roomY = 3;
+        this.playerCharacter = playerCharacter;
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+        this.renderList.add(this.playerCharacter);
     }
     public void render(SpriteBatch batch){
         /**
@@ -119,6 +151,7 @@ public class EntityManager {
         for (Enemy enemy:deadEnemies){
             renderList.remove(enemy);
             enemyList.remove(enemy);
+            this.currentDungeonRoom.killEnemy(enemy);
         }
     }
     public void addNewDrawable(OnscreenDrawable drawable){
@@ -158,12 +191,13 @@ public class EntityManager {
     public ArrayList<Projectile> getProjectiles(){
         return projectileList;
     }
-    public void setCurrentDungeonRoom(DungeonRoom screen){
-        this.currentDungeonRoom = screen;
+    public void setCurrentDungeonRoom(DungeonRoom dungeonRoom){
+        this.currentDungeonRoom = dungeonRoom;
+        this.renderList.clear();
         this.obstacleList.clear();
-        this.obstacleList.addAll(screen.getObstacleList());
+        this.obstacleList.addAll(dungeonRoom.getObstacleList());
         this.enemyList.clear();
-        this.enemyList.addAll(screen.getEnemyList());
+        this.enemyList.addAll(dungeonRoom.getEnemyList());
     }
     public DungeonRoom getCurrentDungeonRoom(){
         return this.currentDungeonRoom;
@@ -171,18 +205,22 @@ public class EntityManager {
 
     public void moveNorth(){
         roomX++;
-        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
+        this.renderList.add(playerCharacter);
     }
     public void moveEast(){
         roomY++;
-        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
+        this.renderList.add(playerCharacter);
     }
     public void moveWest(){
         roomY--;
-        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
+        this.renderList.add(playerCharacter);
     }
     public void moveSouth(){
         roomX--;
-        this.currentDungeonRoom = level[levelNo].getRoom(roomX,roomY);
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+        this.renderList.add(playerCharacter);
     }
 }

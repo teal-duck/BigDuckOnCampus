@@ -18,6 +18,7 @@ public class Enemy extends Collidable {
     private float touchDamage;
     private float currentHealth = 90;
     private boolean dead = false;
+    private int scoreOnDeath = 0;
 
     private ArrayList<Projectile> rangedAttack;
     private int shotType = 3;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
@@ -25,7 +26,7 @@ public class Enemy extends Collidable {
     private float projectileRange = 400, projectileVelocity = 150, projectileLife = projectileRange/projectileVelocity;
     private float attackRange = 480;
 
-    private int movementType;   //0 = static, 1 = following, 2 = random movement
+    private int movementType;   //0 = static, 1 = random movement, 2 = following
     private float movementRange = 480;
     private float xVelocity = 0, yVelocity = 0, defaultVelocity = 200, maxVelocity = 200;
     private float direction;    //0 to 2*pi, 0 being vertically upwards
@@ -78,6 +79,7 @@ public class Enemy extends Collidable {
     }
     public void setAttackType(int attackType) {
         this.attackType = attackType;
+        scoreOnDeath = attackType*10 + movementType*10;
     }
     public ArrayList<Projectile> rangedAttack(PlayerCharacter playerCharacter){
         float x = (this.getX()+this.getWidth()/2);
@@ -184,6 +186,7 @@ public class Enemy extends Collidable {
     }
     public void setMovementType(int movementType) {
         this.movementType = movementType;
+        scoreOnDeath = attackType*10 + movementType*10;
     }
     public int getMovementType() {
         return movementType;
@@ -201,15 +204,6 @@ public class Enemy extends Collidable {
                 setYVelocity(0);
                 break;
             case 1:
-                if (getDistanceTo(player) < movementRange){
-                    pointTo(player);
-                    updateVelocities();
-                }else{
-                    setXVelocity(0);
-                    setYVelocity(0);
-                }
-                break;
-            case 2:
                 if (directionCounter > 0.3){
                     directionCounter = 0;
                     if(random.nextBoolean()){
@@ -219,6 +213,16 @@ public class Enemy extends Collidable {
                     }
                 }else{directionCounter += Gdx.graphics.getDeltaTime();}
                 updateVelocities();
+                break;
+            case 2:
+
+                if (getDistanceTo(player) < movementRange){
+                    pointTo(player);
+                    updateVelocities();
+                }else{
+                    setXVelocity(0);
+                    setYVelocity(0);
+                }
                 break;
         }
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());

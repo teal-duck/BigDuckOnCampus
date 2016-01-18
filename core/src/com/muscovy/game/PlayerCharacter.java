@@ -27,6 +27,8 @@ public class PlayerCharacter extends Collidable{
     private boolean invincible = false;
     private float invincibilityCounter = 0;
 
+    private int score = 0;
+
     public PlayerCharacter() {
         random = new Random();
         animationCycle = 0;
@@ -68,6 +70,16 @@ public class PlayerCharacter extends Collidable{
         if (invincible){
             invincibilityUpdate();
         }
+    }
+
+    public void increaseScore(int score){
+        this.score += score;
+    }
+    public void setScore(int score){
+        this.score = score;
+    }
+    public int getScore(){
+        return this.score;
     }
 
     /**
