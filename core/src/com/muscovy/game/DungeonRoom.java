@@ -38,41 +38,116 @@ public class DungeonRoom extends OnscreenDrawable{
         projectileWalls[2] = new Rectangle(1280-32,0,32,960-192);//right wall
         projectileWalls[3] = new Rectangle(0,768-32,1280,32);//top wall
     }
+    private void CreateBoulder(int x, int y){
+        Sprite RockSprite;
+        Obstacle obstacle5;
+        RockSprite = new Sprite();
+        RockSprite.setTexture(new Texture("core/assets/rock.png"));
+        obstacle5 = new Obstacle(RockSprite);
+        obstacle5.setXTiles(x);
+        obstacle5.setYTiles(y);
+        addObstacle(obstacle5);
+    }
+    private void CreateSpikes(int x, int y){
+        Sprite SpikeSprite;
+        Obstacle obstacle6;
+        SpikeSprite = new Sprite();
+        SpikeSprite.setTexture(new Texture("core/assets/duckplaceholder.gif"));
+        obstacle6 = new Obstacle(SpikeSprite);
+        obstacle6.setXTiles(x);
+        obstacle6.setYTiles(y);
+        addObstacle(obstacle6);
+        obstacle6.setDamaging(true);
+        obstacle6.setTouchDamage(10.0f);
+    }
     public void generateRoom(){
         switch (roomType){
             case 0:
                 int[][] TileArray = new int[10][18];
                 Random rand = new Random();
                 int ChosenValue = rand.nextInt(10)+1;
+                Random rand2 = new Random();
+                int ChosenValue2 = rand.nextInt(2)+1;
                 switch (ChosenValue){
                     case 6:
-                        TileArray[5][9] = 1;
-                        TileArray[6][9] = 1;
+                        TileArray = new int[][]{{0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
                         break;
                     case 7:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 8:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 9:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 10:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                 }
-                TileArray[5][9] = 1;
-                TileArray[6][9] = 1;
-                for (int i = 0; i>TileArray.length; i++){
-                    for (int j = 0; j>TileArray[i].length; j++){
+                for (int i = 0; i<TileArray.length; i++){
+                    for (int j = 0; j<TileArray[i].length; j++){
                         switch (TileArray[i][j]){
                             case 0:
                                 break;
                             case 1:
-                                Sprite RockSprite;
-                                Obstacle obstacle5;
-                                RockSprite = new Sprite();
-                                RockSprite.setTexture(new Texture("core/assets/rock.png"));
-                                obstacle5 = new Obstacle(RockSprite);
-                                obstacle5.setXTiles(j*2);
-                                obstacle5.setYTiles(i*2);
+                                CreateBoulder(2*j, 2*i);
+                                break;
+                            case 2:
+                                CreateSpikes(2*j, 2*i);
+                                break;
+                            case 3:
+                                if(ChosenValue2 == 1){
+                                    CreateBoulder(2*j, 2*i);
+                                }
+                                if(ChosenValue2 == 2){
+                                    CreateSpikes(2*j, 2*i);
+                                }
                         }
                     }
                 }
