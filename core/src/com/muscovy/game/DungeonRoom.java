@@ -89,8 +89,8 @@ public class DungeonRoom extends OnscreenDrawable{
                 testSprite2 = new Sprite();
                 testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
                 obstacle2 = new Obstacle(testSprite2);
-                obstacle2.setX(500);
-                obstacle2.setY(100);
+                obstacle2.setXTiles(15);
+                obstacle2.setYTiles(13);
                 obstacle2.setDamaging(true);
                 obstacle2.setTouchDamage(10.0f);
                 testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
@@ -101,6 +101,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 enemy1.setMovementType(0);
                 enemy1.setTouchDamage(30);
                 enemy1.setShotType(1);
+                enemy1.setScoreOnDeath(500);
                 testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
                 enemy2 = new Enemy(testSprite1);
                 enemy2.setXTiles(0);
@@ -109,6 +110,11 @@ public class DungeonRoom extends OnscreenDrawable{
                 enemy2.setMovementType(0);
                 enemy2.setTouchDamage(30);
                 enemy2.setShotType(0);
+                enemy2.setScoreOnDeath(300);
+                addEnemy(enemy1);
+                addEnemy(enemy2);
+                addObstacle(obstacle1);
+                addObstacle(obstacle2);
                 break;
             case 2:
                 break;
@@ -121,16 +127,16 @@ public class DungeonRoom extends OnscreenDrawable{
     }
     public void initialiseDoors(){
         if(upDoor){
-            Rectangle northDoor = new Rectangle(640-doorWidth/2,768-doorWidth,doorWidth,doorWidth);
+            northDoor = new Rectangle(640-doorWidth/2,768-doorWidth,doorWidth,doorWidth);
         }
         if(downDoor){
-            Rectangle southDoor = new Rectangle(640-doorWidth/2,0,doorWidth,doorWidth);
+            southDoor = new Rectangle(640-doorWidth/2,0,doorWidth,doorWidth);
         }
         if(rightDoor){
-            Rectangle eastDoor = new Rectangle(1280-doorWidth,384-doorWidth/2,doorWidth,doorWidth);
+            eastDoor = new Rectangle(1280-doorWidth,384-doorWidth/2,doorWidth,doorWidth);
         }
         if(leftDoor){
-            Rectangle westDoor = new Rectangle(0,384-doorWidth/2,doorWidth,doorWidth);
+            westDoor = new Rectangle(0,384-doorWidth/2,doorWidth,doorWidth);
         }
     }
     public void addEnemy(Enemy enemy){
@@ -179,6 +185,7 @@ public class DungeonRoom extends OnscreenDrawable{
     }
 
     public boolean isEnemiesDead() {
+        if (enemyList.size() == 0){enemiesDead = true;}
         return enemiesDead;
     }
 

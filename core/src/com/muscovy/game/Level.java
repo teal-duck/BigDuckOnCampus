@@ -6,6 +6,7 @@ package com.muscovy.game;
 public class Level {
     public DungeonRoom[][] levelArray;
     private int objective;
+    private int level; //level, going to be used for
     public Level(DungeonRoom[][] levelArray, int objective) {
         this.levelArray = new DungeonRoom[7][7];
         this.levelArray = levelArray;

@@ -1,6 +1,7 @@
 package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class EntityManager {
     private int roomX, roomY;
     private BitmapFont list;//Testing purposes
     private PlayerCharacter playerCharacter;
+    private Texture northDoorTexture, southDoorTexture, eastDoorTexture, westDoorTexture;
+
     public EntityManager() {
         this.renderList = new ArrayList<OnscreenDrawable>();
         this.obstacleList = new ArrayList<Obstacle>();
@@ -31,6 +34,7 @@ public class EntityManager {
         list.setColor(Color.WHITE);//Testing purposes
         this.currentDungeonRoom = new DungeonRoom();
         maxLevels = 8;
+        northDoorTexture = new Texture("core/assets/testingDoor.png");
     }
     public void generateLevels(){
         level[0] = new Level(levelGenerator.generateBuilding(20),0);
@@ -85,7 +89,19 @@ public class EntityManager {
         for (Projectile projectile:projectileList){
             batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
         }
-        list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes
+        if(currentDungeonRoom.getUpDoor()){
+            batch.draw(northDoorTexture, currentDungeonRoom.getNorthDoor().getX(), currentDungeonRoom.getNorthDoor().getY());
+        }
+        if(currentDungeonRoom.getDownDoor()){
+            batch.draw(northDoorTexture, currentDungeonRoom.getSouthDoor().getX(), currentDungeonRoom.getSouthDoor().getY());
+        }
+        if(currentDungeonRoom.getRightDoor()){
+            batch.draw(northDoorTexture, currentDungeonRoom.getEastDoor().getX(), currentDungeonRoom.getEastDoor().getY());
+        }
+        if(currentDungeonRoom.getLeftDoor()){
+            batch.draw(northDoorTexture, currentDungeonRoom.getWestDoor().getX(), currentDungeonRoom.getWestDoor().getY());
+        }
+        //list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes (shows number of projectiles)
     }
     private void sortDrawables(){
         /**
@@ -149,6 +165,7 @@ public class EntityManager {
             }
         }
         for (Enemy enemy:deadEnemies){
+            playerCharacter.increaseScore(enemy.getScoreOnDeath());
             renderList.remove(enemy);
             enemyList.remove(enemy);
             this.currentDungeonRoom.killEnemy(enemy);
@@ -195,31 +212,32 @@ public class EntityManager {
         this.currentDungeonRoom = dungeonRoom;
         this.renderList.clear();
         this.obstacleList.clear();
-        this.obstacleList.addAll(dungeonRoom.getObstacleList());
+        this.projectileList.clear();
+        addNewObstacles(dungeonRoom.getObstacleList());
         this.enemyList.clear();
-        this.enemyList.addAll(dungeonRoom.getEnemyList());
+        addNewEnemies(dungeonRoom.getEnemyList());
     }
     public DungeonRoom getCurrentDungeonRoom(){
         return this.currentDungeonRoom;
     }
 
     public void moveNorth(){
-        roomX++;
-        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
-        this.renderList.add(playerCharacter);
-    }
-    public void moveEast(){
-        roomY++;
-        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
-        this.renderList.add(playerCharacter);
-    }
-    public void moveWest(){
         roomY--;
         setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
         this.renderList.add(playerCharacter);
     }
-    public void moveSouth(){
+    public void moveEast(){
+        roomX++;
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
+        this.renderList.add(playerCharacter);
+    }
+    public void moveWest(){
         roomX--;
+        setCurrentDungeonRoom(level[levelNo].getRoom(roomX,roomY));
+        this.renderList.add(playerCharacter);
+    }
+    public void moveSouth(){
+        roomY++;
         setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
         this.renderList.add(playerCharacter);
     }

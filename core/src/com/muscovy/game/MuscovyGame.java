@@ -27,10 +27,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     EntityManager entityManager;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS, keyflagUP, keyflagRIGHT, keyflagLEFT, keyflagDOWN, firing = false;
 	Sprite roomSprite, testSprite1, testSprite2, guiMapSprite, guiSelector;
-    private BitmapFont xVal, yVal, gameOverFont;
+    private BitmapFont xVal, yVal, gameOverFont, loading;
 	float w = 1280;
 	float h = 960;
-	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over
+	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over, 101 = Startup, 102 = Loading
 	int MapSelected; // 0 = Constantine
 
 	public void cursorLocation(){
@@ -86,16 +86,13 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 	@Override
 	public void create() {
-		gameState = 0;
+		gameState = 100;
+        loading = new BitmapFont();
+        loading.setColor(Color.WHITE);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);
-        initialisePlayerCharacter();
-        initialiseLevels();
-        initialiseGUIs();
-        //initialiseTesting();
         Gdx.input.setInputProcessor(this);
-		initaliseOverworld();
     }
     private void initialiseLevels(){
         entityManager = new EntityManager();
@@ -127,12 +124,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         xVal.setColor(Color.BLACK);
         yVal = new BitmapFont();
         yVal.setColor(Color.BLACK);
-        dungeonGUI.addData("PlayerXVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 900);
-        dungeonGUI.addData("EnemyXVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 900);
-        dungeonGUI.addData("PlayerYVal", "X Position: " + String.valueOf(playerCharacter.getX()), xVal, 400, 650);
-        dungeonGUI.addData("EnemyYVal", "Y Position: " + String.valueOf(playerCharacter.getY()), yVal, 650, 800);
-        dungeonGUI.addData("Collision", "Collision?: False", yVal, 850, 900);
-        dungeonGUI.addData("Invincible", "Time since last attack: " + String.valueOf(playerCharacter.getTimeSinceLastAttack()), yVal, 850, 650);
+        dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), xVal, 400, 900);
+        dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), xVal, 650, 900);
         //GameOver
         gameOverFont = new BitmapFont();
         gameOverFont.setColor(Color.RED);
@@ -146,11 +139,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         playerCharacter.setY(300);
         playerCharacter.setX(300);
     }
-	private void initialiseTesting(){
-        gameState = 0;
-		entityManager = new EntityManager();
-		entityManager.addNewDrawable(playerCharacter);
-	}
+
     public void update(){
         switch (gameState){
             case 0:
@@ -165,16 +154,24 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				if (playerCharacter.getHealth() <= 0){this.gameState = 4;}
                 collision();
                 cleanupDeadThings();
+                if (timer > 10){
+                    timer = 0; //Useful for debugging. Put a break point here if you need to see the variables after 10 seconds
+                }
+                timer += Gdx.graphics.getDeltaTime();
                 break;
             case 3:
                 break;
             case 4:
                 break;
+            case 102:
+                initialisePlayerCharacter();
+                initialiseLevels();
+                initialiseGUIs();
+                initaliseOverworld();
+                gameState = 0;
+                break;
             }
-        if (timer > 10){
-            timer = 0; //Useful for debugging. Put a break point here if you need to see the variables after 10 seconds
-        }
-        timer += Gdx.graphics.getDeltaTime();
+
     }
     public void enemiesUpdate(){
         for (Enemy enemy: entityManager.getEnemies()){
@@ -204,7 +201,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        this.update();
+        if (!(gameState == 101)){
+            this.update();
+        }
         camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -217,12 +216,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				break;
             case 2:
                 entityManager.render(batch);
-                /*dungeonGUI.editData("EnemyXVal", "enemy X: " + String.valueOf(enemy1.getX()));
-				dungeonGUI.editData("EnemyYVal", "enemy Y: " + String.valueOf(enemy1.getY()));
-				dungeonGUI.editData("PlayerXVal","angle enemy to player: " + String.valueOf(enemy1.getAngleTo(playerCharacter)));
-				dungeonGUI.editData("PlayerYVal","ydist player to enemy: " + String.valueOf(playerCharacter.getY() - enemy1.getY()));
-                //dungeonGUI.editData("Collision","Player health: " + String.valueOf(playerCharacter.getHealth()));
-                dungeonGUI.editData("Invincible","Time since last attack: " + String.valueOf(playerCharacter.getTimeSinceLastAttack()));*/
+                dungeonGUI.editData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()));
+                dungeonGUI.editData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()));
                 dungeonGUI.render(batch);
                 entityManager.render(batch);
                 break;
@@ -234,7 +229,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 break;
             case 4:
                 gameOverGUI.render(batch);
-                batch.draw(playerCharacter.getSprite().getTexture(),playerCharacter.getX(),playerCharacter.getY());
+                batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(), playerCharacter.getY());
+                break;
+            default:
+                loading.draw(batch,"LOADING",1280/2,960/2);
+                gameState = 102;
                 break;
 		}
         batch.end();
@@ -272,7 +271,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void projectileObstacleCollision(Projectile projectile, Obstacle obstacle){
-        if (Intersector.overlaps(obstacle.getCircleHitbox(),projectile.getCollisionBox())){
+        if (Intersector.overlaps(projectile.getCollisionBox(), obstacle.getRectangleHitbox())){
             projectile.kill();
         }
     }
@@ -376,33 +375,41 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         }
     }
     public void playerDoorCollision(){
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveNorth();
-            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
-            playerCharacter.setY(70);
+        if (entityManager.getCurrentDungeonRoom().getUpDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveNorth();
+                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+                playerCharacter.setY(70);
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveSouth();
-            playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
-            playerCharacter.setY(768 - playerCharacter.getHeight()-70);
+        if (entityManager.getCurrentDungeonRoom().getDownDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveSouth();
+                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
+                playerCharacter.setY(768 - playerCharacter.getHeight()-70);
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
-            playerCharacter.setYVelocity(0);
-            playerCharacter.setXVelocity(0);
-            entityManager.moveEast();
-            playerCharacter.setX(70);
-            playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+        if (entityManager.getCurrentDungeonRoom().getRightDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
+                playerCharacter.setYVelocity(0);
+                playerCharacter.setXVelocity(0);
+                entityManager.moveEast();
+                playerCharacter.setX(70);
+                playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+            }
         }
-        if (Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
+        if (entityManager.getCurrentDungeonRoom().getLeftDoor()){
+            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setXVelocity(0);
             entityManager.moveWest();
             playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
             playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+            }
         }
     }
     public void playerUpdate(){
@@ -516,6 +523,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if(keycode == Input.Keys.DOWN){ keyflagDOWN = false; firing = false;}
                 if(keyflagDOWN || keyflagLEFT || keyflagUP || keyflagRIGHT){firing = true;}
                 if(keycode == Input.Keys.P) gameState = 2;
+                if(keycode == Input.Keys.ESCAPE) gameState = 1;
                 break;
             case 4:
                 break;
