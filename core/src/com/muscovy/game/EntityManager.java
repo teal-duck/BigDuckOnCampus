@@ -101,7 +101,7 @@ public class EntityManager {
         if(currentDungeonRoom.getLeftDoor()){
             batch.draw(northDoorTexture, currentDungeonRoom.getWestDoor().getX(), currentDungeonRoom.getWestDoor().getY());
         }
-        list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes
+        //list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes (shows number of projectiles)
     }
     private void sortDrawables(){
         /**
@@ -165,6 +165,7 @@ public class EntityManager {
             }
         }
         for (Enemy enemy:deadEnemies){
+            playerCharacter.increaseScore(enemy.getScoreOnDeath());
             renderList.remove(enemy);
             enemyList.remove(enemy);
             this.currentDungeonRoom.killEnemy(enemy);

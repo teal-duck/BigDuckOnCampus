@@ -65,6 +65,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 enemy1.setMovementType(0);
                 enemy1.setTouchDamage(30);
                 enemy1.setShotType(1);
+                enemy1.setScoreOnDeath(500);
                 testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
                 enemy2 = new Enemy(testSprite1);
                 enemy2.setXTiles(0);
@@ -73,6 +74,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 enemy2.setMovementType(0);
                 enemy2.setTouchDamage(30);
                 enemy2.setShotType(0);
+                enemy2.setScoreOnDeath(300);
                 addEnemy(enemy1);
                 addEnemy(enemy2);
                 addObstacle(obstacle1);

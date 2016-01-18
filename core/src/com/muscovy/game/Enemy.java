@@ -162,6 +162,13 @@ public class Enemy extends Collidable {
         this.projectileLife = projectileRange/projectileVelocity;
     }
 
+    public int getScoreOnDeath() {
+        return scoreOnDeath;
+    }
+
+    public void setScoreOnDeath(int scoreOnDeath) {
+        this.scoreOnDeath = scoreOnDeath;
+    }
 
     /**
      * Movement methods
