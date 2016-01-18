@@ -36,7 +36,7 @@ public class DungeonRoom extends OnscreenDrawable{
         projectileWalls[0] = new Rectangle(0,0,1280,32);//bottom wall
         projectileWalls[1] = new Rectangle(0,0,32,960-192);//left wall
         projectileWalls[2] = new Rectangle(1280-32,0,32,960-192);//right wall
-        projectileWalls[3] = new Rectangle(0,960-192,1280,32);//top wall
+        projectileWalls[3] = new Rectangle(0,768-32,1280,32);//top wall
     }
     public void generateRoom(){
         switch (roomType){

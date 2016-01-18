@@ -232,7 +232,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(), playerCharacter.getY());
                 break;
             default:
-                loading.draw(batch,"LOADING",1280/2,960/2);
+                loading.draw(batch,"RANDOMLY GENERATING LEVELS",1280/2-loading.getSpaceWidth()/2,960/2);
                 gameState = 102;
                 break;
 		}
@@ -384,7 +384,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setXVelocity(0);
                 entityManager.moveNorth();
-                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
                 playerCharacter.setY(70);
             }
         }
@@ -393,7 +392,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setXVelocity(0);
                 entityManager.moveSouth();
-                playerCharacter.setX(1280 / 2 - playerCharacter.getWidth());
                 playerCharacter.setY(768 - playerCharacter.getHeight()-70);
             }
         }
@@ -403,16 +401,14 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 playerCharacter.setXVelocity(0);
                 entityManager.moveEast();
                 playerCharacter.setX(70);
-                playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
             }
         }
         if (entityManager.getCurrentDungeonRoom().getLeftDoor()){
             if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setXVelocity(0);
-            entityManager.moveWest();
-            playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
-            playerCharacter.setY(768 / 2 - playerCharacter.getHeight());
+                entityManager.moveWest();
+                playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
             }
         }
     }
