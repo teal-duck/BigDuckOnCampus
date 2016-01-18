@@ -36,36 +36,36 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void cursorLocation(){
 		switch (MapSelected){
 			case 1:
-				guiSelector.setX(850);
-				guiSelector.setY(580);
+				guiSelector.setX(950);
+				guiSelector.setY(680);
 				break;
 			case 2:
-				guiSelector.setX(550);
-				guiSelector.setY(500);
+				guiSelector.setX(650);
+				guiSelector.setY(600);
 				break;
 			case 3:
-				guiSelector.setX(200);
-				guiSelector.setY(500);
+				guiSelector.setX(300);
+				guiSelector.setY(600);
 				break;
 			case 4:
-				guiSelector.setX(130);
-				guiSelector.setY(320);
+				guiSelector.setX(230);
+				guiSelector.setY(420);
 				break;
 			case 5:
-				guiSelector.setX(10);
-				guiSelector.setY(260);
+				guiSelector.setX(110);
+				guiSelector.setY(360);
 				break;
 			case 6:
-				guiSelector.setX(60);
-				guiSelector.setY(130);
+				guiSelector.setX(160);
+				guiSelector.setY(230);
 				break;
 			case 7:
-				guiSelector.setX(230);
-				guiSelector.setY(170);
+				guiSelector.setX(330);
+				guiSelector.setY(270);
 				break;
 			case 8:
-				guiSelector.setX(340);
-				guiSelector.setY(240);
+				guiSelector.setX(440);
+				guiSelector.setY(340);
 				break;
 		}
 	}
