@@ -1,6 +1,8 @@
 package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
@@ -11,7 +13,6 @@ public class Obstacle extends Collidable {
 
     public Obstacle(Sprite sprite) {
         this.setSprite(sprite);
-        this.setHeightOffset(this.getHeight()/3);
         this.initialiseX(0);
         this.initialiseY(0);
         this.setUpBoxes();
@@ -60,4 +61,8 @@ public class Obstacle extends Collidable {
         super.setY(y);
     }
 
+    @Override
+    public boolean collides(Collidable collidable) {
+        return Intersector.overlaps(collidable.getCircleHitbox(), this.getRectangleHitbox());
+    }
 }
