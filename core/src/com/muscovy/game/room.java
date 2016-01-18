@@ -13,14 +13,6 @@ public class Room extends OnscreenDrawable{
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
     private Rectangle[] walls, projectileWalls;
-    /* variables indicate if there is a door on that wall */
-    Boolean upDoor = false;
-    Boolean rightDoor = false;
-    Boolean downDoor = false;
-    Boolean leftDoor = false;
-    /* roomType indicates the type of room
-     * options: "" (default), "start", "boss", "item", "shop" */
-    String roomType = "";
 
     public Room() {
         this.setSprite(new Sprite(new Texture("core/assets/testMap.png")));
