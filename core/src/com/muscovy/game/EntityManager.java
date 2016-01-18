@@ -101,7 +101,13 @@ public class EntityManager {
         if(currentDungeonRoom.getLeftDoor()){
             batch.draw(northDoorTexture, currentDungeonRoom.getWestDoor().getX(), currentDungeonRoom.getWestDoor().getY());
         }
+        if (level[levelNo].isCompleted()){
+            list.draw(batch,"LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",1280/2-200, 768-64);
+        }
         //list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes (shows number of projectiles)
+    }
+    public boolean levelCompleted(int level){
+        return this.level[level].isCompleted();
     }
     private void sortDrawables(){
         /**
@@ -170,6 +176,7 @@ public class EntityManager {
             enemyList.remove(enemy);
             this.currentDungeonRoom.killEnemy(enemy);
         }
+        checkLevelCompletion();
     }
     public void addNewDrawable(OnscreenDrawable drawable){
         renderList.add(drawable);
@@ -240,5 +247,11 @@ public class EntityManager {
         roomY++;
         setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
         this.renderList.add(playerCharacter);
+
+    }
+    public void checkLevelCompletion(){
+        if (currentDungeonRoom.isEnemiesDead() && currentDungeonRoom.getRoomType()==1){
+            level[levelNo].setCompleted(true);
+        }
     }
 }

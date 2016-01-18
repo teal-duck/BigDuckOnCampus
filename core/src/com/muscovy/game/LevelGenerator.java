@@ -16,7 +16,6 @@ public class LevelGenerator {
     public int checkAdjacent(int myY, int myX, DungeonRoom[][] dungeonRoomArray) {
 
         int numAdjacent = 0;
-
             /* check north */
         if (myY>0) {
             if (dungeonRoomArray[myY - 1][myX] != null) {
@@ -50,6 +49,7 @@ public class LevelGenerator {
 
     /* function is called to generate the array of rooms for our building */
     public DungeonRoom[][] generateBuilding (int maxRooms) {
+        boolean bossSet = false, itemSet = false, shopSet = false;
         DungeonRoom[][] dungeonRoomArray = new DungeonRoom[7][7];
         /* initialise starting room in the centre */
         dungeonRoomArray[3][3] = new DungeonRoom();
@@ -111,30 +111,40 @@ public class LevelGenerator {
                 }
             }
         }
+
         /* place our boss room */
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-                    dungeonRoomArray[yPos][xPos].setRoomType(1);
-                    break;
+                if (!bossSet){
+                    if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
+                        dungeonRoomArray[yPos][xPos].setRoomType(1);
+                        bossSet = true;
+                        break;
+                    }
                 }
             }
         }
         /* place our item room */
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-                    dungeonRoomArray[yPos][xPos].setRoomType(2);
-                    break;
+                if (!itemSet){
+                    if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
+                        dungeonRoomArray[yPos][xPos].setRoomType(2);
+                        itemSet = true;
+                        break;
+                    }
                 }
             }
         }
         /* place our shop room */
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-                    dungeonRoomArray[yPos][xPos].setRoomType(3);
-                    break;
+                if (!shopSet) {
+                    if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
+                        dungeonRoomArray[yPos][xPos].setRoomType(3);
+                        shopSet = true;
+                        break;
+                    }
                 }
             }
         }

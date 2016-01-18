@@ -247,22 +247,26 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         for (Obstacle obstacle:obstacleList) {
             playerObstacleCollision(obstacle);
             for (Enemy enemy:enemyList) {
-                for (Projectile projectile:projectileList){
-                    if (firstLoop){
-                    projectileObstacleCollision(projectile, obstacle);
-                    }
-                    projectileEnemyCollision(projectile,enemy);
-                }
                 enemy.resetMaxVelocity();
                 enemy.setCollidingWithSomething(false);
                 enemyObstacleCollision(enemy,obstacle);
-                firstLoop = false;
             }
         }
         playerWallCollision();
         if (entityManager.getCurrentDungeonRoom().isEnemiesDead()) {
             playerDoorCollision();
         }
+        for (Enemy enemy:enemyList) {
+            for (Projectile projectile:projectileList){
+                projectileEnemyCollision(projectile,enemy);
+            }
+        }
+        for (Obstacle obstacle:obstacleList) {
+            for (Projectile projectile:projectileList){
+                    projectileObstacleCollision(projectile, obstacle);
+            }
+        }
+
 	}
     public void projectileEnemyCollision(Projectile projectile, Enemy enemy){
         if ((Intersector.overlaps(enemy.getCircleHitbox(),projectile.getCollisionBox()))&& !(projectile.getDamagesWho() == 0)){
@@ -458,9 +462,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if((keycode == Input.Keys.A)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
                 if((keycode == Input.Keys.D)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
                 if(keycode == Input.Keys.ENTER){
-                    entityManager.setLevel(MapSelected - 1);
-                    entityManager.startLevel(playerCharacter);
-                    gameState = 2;
+                    if (!entityManager.levelCompleted(MapSelected-1)){
+                        entityManager.setLevel(MapSelected - 1);
+                        entityManager.startLevel(playerCharacter);
+                        gameState = 2;
+                    }
                 }
 				break;
 			case 2:
