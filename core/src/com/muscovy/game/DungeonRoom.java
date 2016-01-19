@@ -83,14 +83,10 @@ public class DungeonRoom extends OnscreenDrawable{
             case 0:
                 enemy.setShotType(0);
                 enemy.setMovementType(1);
-                enemy.setXTiles(x);
-                enemy.setYTiles(y);
                 break;
             case 1:
                 enemy.setShotType(1);
                 enemy.setMovementType(1);
-                enemy.setXTiles(x);
-                enemy.setYTiles(y);
                 break;
             case 2:
                 enemy.setShotType(2);
