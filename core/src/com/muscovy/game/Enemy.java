@@ -16,13 +16,13 @@ public class Enemy extends Collidable {
 
     private int attackType;     //0 = touch damage, 1 = ranged attack, 2 = both
     private float touchDamage;
-    private float currentHealth = 90;
+    private float currentHealth = 40;
     private boolean dead = false;
     private int scoreOnDeath = 0;
 
     private ArrayList<Projectile> rangedAttack;
-    private int shotType = 3;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
-    private float attackTimer, attackInterval = 0.5f; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
+    private int shotType = 1;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
+    private float attackTimer, attackInterval = 1.5f; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
     private float projectileRange = 400, projectileVelocity = 150, projectileLife = projectileRange/projectileVelocity;
     private float attackRange = 480;
 
@@ -162,12 +162,24 @@ public class Enemy extends Collidable {
         this.projectileLife = projectileRange/projectileVelocity;
     }
 
+    public float getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public void setCurrentHealth(float currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
     public int getScoreOnDeath() {
         return scoreOnDeath;
     }
 
     public void setScoreOnDeath(int scoreOnDeath) {
         this.scoreOnDeath = scoreOnDeath;
+    }
+
+    public void calculateScoreOnDeath(){
+        this.scoreOnDeath = attackType*10 + movementType*10;
     }
 
     /**
@@ -193,7 +205,6 @@ public class Enemy extends Collidable {
     }
     public void setMovementType(int movementType) {
         this.movementType = movementType;
-        scoreOnDeath = attackType*10 + movementType*10;
     }
     public int getMovementType() {
         return movementType;
@@ -235,26 +246,6 @@ public class Enemy extends Collidable {
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
-/*
-    public float getAngleTo(Collidable collidable){
-        float x = ((collidable.getX()+collidable.getCircleHitbox().radius/2)-(this.getX()+this.getWidth()/2));
-        float y = ((collidable.getY()+collidable.getCircleHitbox().radius/2)-(this.getY()+this.getHeight()/2));
-        float angle = (float) Math.atan(x/y);
-        if(x >= 0){
-            if (y >= 0){
-                return angle;
-            }else if (y < 0){
-                return (float)(Math.PI + angle);
-            }
-        }else if (x < 0){
-            if (y >= 0){
-                return (float)(2*Math.PI + angle);
-            }else if (y < 0){
-                return (float)(Math.PI + angle);
-            }
-        }
-        return angle;
-    }*/
     public void pointTo(Collidable collidable){
         float x = ((collidable.getX()+collidable.getCircleHitbox().radius/2)-(this.getX()+this.getWidth()/2));
         float y = ((collidable.getY()+collidable.getCircleHitbox().radius/2)-(this.getY()+this.getHeight()/2));

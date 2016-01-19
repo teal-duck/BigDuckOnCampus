@@ -13,26 +13,24 @@ package com.muscovy.game;
 		import com.badlogic.gdx.graphics.g2d.SpriteBatch;
         import com.badlogic.gdx.graphics.g2d.BitmapFont;
         import com.badlogic.gdx.math.Intersector;
-		import java.util.ArrayList;
+        import com.sun.xml.internal.stream.Entity;
+
+        import java.util.ArrayList;
 
 public class MuscovyGame extends ApplicationAdapter implements ApplicationListener, InputProcessor {
 	private OrthographicCamera camera;
     float timer = 0;
 	SpriteBatch batch;
-	DungeonRoom drawDungeonRoom;
-	Obstacle obstacle1, obstacle2;
-    Enemy enemy1, enemy2;
 	PlayerCharacter playerCharacter;
 	GUI mainMenuGUI, dungeonGUI, overworldGUI, pauseGUI, gameOverGUI;
     EntityManager entityManager;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS, keyflagUP, keyflagRIGHT, keyflagLEFT, keyflagDOWN, firing = false;
-	Sprite roomSprite, testSprite1, testSprite2, guiMapSprite, guiSelector;
+	Sprite guiMapSprite, guiSelector;
     private BitmapFont xVal, yVal, gameOverFont, loading;
 	float w = 1280;
 	float h = 960;
 	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over, 101 = Startup, 102 = Loading
 	int MapSelected; // 0 = Constantine
-
 	public void cursorLocation(){
 		switch (MapSelected){
 			case 1:
@@ -100,6 +98,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     }
     private void initialiseGUIs(){
         Sprite mainMenuSprite = new Sprite();
+        Sprite mainMenuStartButton = new Sprite();
         Sprite guiMapSprite = new Sprite();
         Sprite guiDungeonSprite = new Sprite();
         //Main menu
@@ -107,7 +106,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         mainMenuSprite.setTexture(new Texture("core/assets/mainMenu.png"));
         mainMenuSprite.setX(0);
         mainMenuSprite.setY(0);
+        mainMenuStartButton.setTexture(new Texture("core/assets/startGameButton.png"));
+        mainMenuStartButton.setCenter(1280,960);
+        mainMenuStartButton.setX((1280-392)/2);
+        mainMenuStartButton.setY(960/2);
         mainMenuGUI.addElement(mainMenuSprite);
+        mainMenuGUI.addElement(mainMenuStartButton);
         //Overworld
         overworldGUI = new GUI();
         guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
@@ -174,15 +178,17 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
     }
     public void enemiesUpdate(){
-        for (Enemy enemy: entityManager.getEnemies()){
-            enemy.update(playerCharacter);
-			if ((enemy.getAttackType() != 0)&&(enemy.checkRangedAttack())) {
-                entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
-			}
-            playerEnemyCollision(enemy);
-            enemyWallCollision(enemy);
-            playerEnemyCollision(enemy);
-            enemyWallCollision(enemy);
+        if (entityManager.getRoomTimer() > 2){
+            for (Enemy enemy: entityManager.getEnemies()){
+                enemy.update(playerCharacter);
+                if ((enemy.getAttackType() != 0)&&(enemy.checkRangedAttack())) {
+                    entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
+                }
+                playerEnemyCollision(enemy);
+                enemyWallCollision(enemy);
+                playerEnemyCollision(enemy);
+                enemyWallCollision(enemy);
+            }
         }
     }
     public void projectilesUpdate(){
@@ -242,13 +248,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
         ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(entityManager.getObstacles());
         ArrayList<Enemy> enemyList = new ArrayList<Enemy>(entityManager.getEnemies());
         ArrayList<Projectile> projectileList = new ArrayList<Projectile>(entityManager.getProjectiles());
-        boolean firstLoop = true;
         playerCharacter.resetMaxVelocity();
         for (Obstacle obstacle:obstacleList) {
             playerObstacleCollision(obstacle);
             for (Enemy enemy:enemyList) {
                 enemy.resetMaxVelocity();
-                enemy.setCollidingWithSomething(false);
                 enemyObstacleCollision(enemy,obstacle);
             }
         }
@@ -314,10 +318,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             enemy.moveToNearestEdgeRectangle(obstacle);
             if (obstacle.isDamaging()){
                 enemy.damage(obstacle.getTouchDamage());
+                enemy.setCollidingWithSomething(true);
             }
         }
     }
     public void enemyWallCollision(Enemy enemy){
+        enemy.setCollidingWithSomething(false);
         if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getTopRectangle(),enemy.getTopRectangle())) {
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
@@ -455,8 +461,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if(keycode == Input.Keys.ENTER) gameState = 1;
 				break;
 			case 1:
-                if((keycode == Input.Keys.A)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
-                if((keycode == Input.Keys.D)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
+                if((keycode == Input.Keys.DOWN)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
+                if((keycode == Input.Keys.UP)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
                 if(keycode == Input.Keys.ENTER){
                     if (!entityManager.levelCompleted(MapSelected-1)){
                         entityManager.setLevel(MapSelected - 1);
@@ -511,8 +517,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if(keycode == Input.Keys.P) {
                     gameState = 3;
                 }
-                if(keycode == Input.Keys.R){enemy1.setHitboxCentre(600,300);}
-                if(keycode == Input.Keys.T){playerCharacter.setHitboxCentre(300,300);}
+                //if(keycode == Input.Keys.T){playerCharacter.setHitboxCentre(300,300);}
 				break;
 			case 3:
                 if(keycode == Input.Keys.W) keyflagW = false;

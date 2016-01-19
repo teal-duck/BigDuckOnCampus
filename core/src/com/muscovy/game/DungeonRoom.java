@@ -17,14 +17,16 @@ public class DungeonRoom extends OnscreenDrawable{
     /* variables indicate if there is a door on that wall */
     private boolean upDoor = false, rightDoor = false,downDoor = false, leftDoor = false;
     private Rectangle northDoor, eastDoor, southDoor, westDoor;
-    float doorWidth = 70;
+    float doorWidth = 66;
     /* roomType indicates the type of room
      * options: "" (default), "start", "boss", "item", "shop" */
     private int roomType = 0; //0 = normal room, 1 = boss room,  2 = item room, 3 = shop room, 4 = start room
     private boolean enemiesDead;
+    private Random rand;
 
     public DungeonRoom() {
-        this.setSprite(new Sprite(new Texture("core/assets/testMap.png")));
+        rand = new Random();
+        this.setSprite(new Sprite(new Texture("core/assets/accommodationAssets/accommodationBackground.png")));
         obstacleList = new ArrayList<Obstacle>();
         enemyList = new ArrayList<Enemy>();
         walls = new Rectangle[4];
@@ -38,21 +40,21 @@ public class DungeonRoom extends OnscreenDrawable{
         projectileWalls[2] = new Rectangle(1280-32,0,32,960-192);//right wall
         projectileWalls[3] = new Rectangle(0,768-32,1280,32);//top wall
     }
-    private void CreateBoulder(int x, int y){
+    private void createBoulder(int x, int y){
         Sprite RockSprite;
         Obstacle obstacle5;
         RockSprite = new Sprite();
-        RockSprite.setTexture(new Texture("core/assets/rock.png"));
+        RockSprite.setTexture(new Texture("core/assets/accommodationAssets/obstacles/binRecycle.png"));
         obstacle5 = new Obstacle(RockSprite);
         obstacle5.setXTiles(x);
         obstacle5.setYTiles(y);
         addObstacle(obstacle5);
     }
-    private void CreateSpikes(int x, int y){
+    private void createSpikes(int x, int y){
         Sprite SpikeSprite;
         Obstacle obstacle6;
         SpikeSprite = new Sprite();
-        SpikeSprite.setTexture(new Texture("core/assets/duckplaceholder.gif"));
+        SpikeSprite.setTexture(new Texture("core/assets/accommodationAssets/obstacles/binWaste.png"));
         obstacle6 = new Obstacle(SpikeSprite);
         obstacle6.setXTiles(x);
         obstacle6.setYTiles(y);
@@ -60,15 +62,112 @@ public class DungeonRoom extends OnscreenDrawable{
         obstacle6.setDamaging(true);
         obstacle6.setTouchDamage(10.0f);
     }
+    private void createRandomEnemy(int x, int y){
+        Sprite enemySprite;
+        Enemy enemy;
+        if (rand.nextBoolean()){
+            enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
+            enemy = new Enemy(enemySprite);
+            enemy.setAttackType(0);
+        }else{
+            enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+            enemy = new Enemy(enemySprite);
+            enemy.setAttackType(1);
+        }
+        switch (rand.nextInt(3)){
+            case 0:
+                enemy.setShotType(0);
+                enemy.setMovementType(1);
+                enemy.setXTiles(x);
+                enemy.setYTiles(y);
+                break;
+            case 1:
+                enemy.setShotType(1);
+                enemy.setMovementType(1);
+                enemy.setXTiles(x);
+                enemy.setYTiles(y);
+                break;
+            case 2:
+                enemy.setShotType(2);
+                enemy.setMovementType(2);
+                break;
+            case 3:
+                enemy.setShotType(4);
+                enemy.setMovementType(2);
+                break;
+        }
+        enemy.setXTiles(x);
+        enemy.setYTiles(y);
+        enemy.calculateScoreOnDeath();
+        addEnemy(enemy);
+    }
     public void generateRoom(){
         switch (roomType){
             case 0:
                 int[][] TileArray = new int[10][18];
-                Random rand = new Random();
                 int ChosenValue = rand.nextInt(10)+1;
-                Random rand2 = new Random();
-                int ChosenValue2 = rand.nextInt(2)+1;
+                boolean ChosenValue2 = rand.nextBoolean();
                 switch (ChosenValue){
+                    case 1:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                        break;
+                    case 2:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 4, 0, 0, 0, 2, 2, 0, 0, 0, 4, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 4, 0, 0, 0, 2, 2, 0, 0, 0, 4, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                        break;
+                    case 3:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                        break;
+                    case 4:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                        break;
+                    case 5:
+                        TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                        break;
                     case 6:
                         TileArray = new int[][]{{0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
                                                 {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
@@ -83,51 +182,51 @@ public class DungeonRoom extends OnscreenDrawable{
                         break;
                     case 7:
                         TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 8:
                         TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 9:
                         TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                     case 10:
                         TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
                         break;
                 }
                 for (int i = 0; i<TileArray.length; i++){
@@ -136,60 +235,43 @@ public class DungeonRoom extends OnscreenDrawable{
                             case 0:
                                 break;
                             case 1:
-                                CreateBoulder(2*j, 2*i);
+                                createBoulder(2*j, 2*i);
                                 break;
                             case 2:
-                                CreateSpikes(2*j, 2*i);
+                                createSpikes(2*j, 2*i);
                                 break;
                             case 3:
-                                if(ChosenValue2 == 1){
-                                    CreateBoulder(2*j, 2*i);
+                                if(ChosenValue2){
+                                    createBoulder(2*j, 2*i);
+                                }else if(!ChosenValue2){
+                                    createSpikes(2*j, 2*i);
                                 }
-                                if(ChosenValue2 == 2){
-                                    CreateSpikes(2*j, 2*i);
+                                break;
+                            case 4:
+                                if(rand.nextInt(5)<3){
+                                    createRandomEnemy(2*j,2*i);
                                 }
+                                break;
                         }
                     }
                 }
                 break;
             case 1:
-                Sprite testSprite1, testSprite2;
-                Obstacle obstacle1, obstacle2;
-                Enemy enemy1, enemy2;
-                testSprite1 = new Sprite();
-                testSprite1.setTexture(new Texture("core/assets/rock.png"));
-                obstacle1 = new Obstacle(testSprite1);
-                obstacle1.setXTiles(10);
-                obstacle1.setYTiles(100);
-                testSprite2 = new Sprite();
-                testSprite2.setTexture(new Texture("core/assets/thing2.gif"));
-                obstacle2 = new Obstacle(testSprite2);
-                obstacle2.setXTiles(15);
-                obstacle2.setYTiles(13);
-                obstacle2.setDamaging(true);
-                obstacle2.setTouchDamage(10.0f);
-                testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
-                enemy1 = new Enemy(testSprite1);
-                enemy1.setX(1111);
-                enemy1.setY(300);
-                enemy1.setAttackType(1);
-                enemy1.setMovementType(0);
-                enemy1.setTouchDamage(30);
-                enemy1.setShotType(1);
-                enemy1.setScoreOnDeath(500);
-                testSprite1 = new Sprite(new Texture("core/assets/testEnemy.png"));
-                enemy2 = new Enemy(testSprite1);
-                enemy2.setXTiles(0);
-                enemy2.setYTiles(1);
-                enemy2.setAttackType(0);
-                enemy2.setMovementType(0);
-                enemy2.setTouchDamage(30);
-                enemy2.setShotType(0);
-                enemy2.setScoreOnDeath(300);
-                addEnemy(enemy1);
-                addEnemy(enemy2);
-                addObstacle(obstacle1);
-                addObstacle(obstacle2);
+                Sprite bossSprite;
+                Enemy bossEnemy;
+                bossSprite = new Sprite(new Texture("core/assets/accommodationAssets/accommodationBoss.png"));
+                bossEnemy = new Enemy(bossSprite);
+                bossEnemy.setXTiles((int)(36/2-(bossEnemy.getWidth()/64)));
+                bossEnemy.setYTiles((int)(18/2-(bossEnemy.getHeight()/64)));
+                bossEnemy.setAttackType(2);
+                bossEnemy.setMovementType(2);
+                bossEnemy.setMaxVelocity(100);
+                bossEnemy.setTouchDamage(20);
+                bossEnemy.setShotType(3);
+                bossEnemy.setScoreOnDeath(3000);
+                bossEnemy.setCurrentHealth(600);
+                bossEnemy.setHitboxRadius(80);
+                addEnemy(bossEnemy);
                 break;
             case 2:
                 break;

@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
  * Created by ewh502 on 11/01/2016.
  */
 public class Projectile extends OnscreenDrawable{
-    private float damage = 15;
+    private float damage = 10;
     private int damagesWho = 1; //0 = damages player, 1 = damages enemy, 3 = damages both
     private float xVelocity = 0, yVelocity = 0, maxVelocity = 150;
     private float direction = 0;

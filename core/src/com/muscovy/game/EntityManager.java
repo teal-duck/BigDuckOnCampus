@@ -1,5 +1,6 @@
 package com.muscovy.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,9 +20,10 @@ public class EntityManager {
     private Level[] level;
     private int levelNo, maxLevels = 8;
     private int roomX, roomY;
+    private float roomTimer = 0;
     private BitmapFont list;//Testing purposes
     private PlayerCharacter playerCharacter;
-    private Texture northDoorTexture, southDoorTexture, eastDoorTexture, westDoorTexture;
+    private Texture northDoorTextureOpen, southDoorTextureOpen, eastDoorTextureOpen, westDoorTextureOpen, northDoorTextureClosed, southDoorTextureClosed, eastDoorTextureClosed, westDoorTextureClosed;
 
     public EntityManager() {
         this.renderList = new ArrayList<OnscreenDrawable>();
@@ -34,7 +36,15 @@ public class EntityManager {
         list.setColor(Color.WHITE);//Testing purposes
         this.currentDungeonRoom = new DungeonRoom();
         maxLevels = 8;
-        northDoorTexture = new Texture("core/assets/testingDoor.png");
+        northDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
+        northDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
+        eastDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
+        eastDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png");
+        westDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
+        westDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png");
+        southDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
+        southDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png");
+
     }
     public void generateLevels(){
         level[0] = new Level(levelGenerator.generateBuilding(20),0);
@@ -67,12 +77,40 @@ public class EntityManager {
         /**
          * Renders sprites in the controller so those further back are rendered first, giving a perspective illusion
          */
+        roomTimer += Gdx.graphics.getDeltaTime(); //timer used to give the player a few seconds to look at a room before attacking
         renderList.trimToSize();
         obstacleList.trimToSize();
         enemyList.trimToSize();
         projectileList.trimToSize();
         sortDrawables();
         batch.draw(currentDungeonRoom.getSprite().getTexture(),0,0);
+        if (currentDungeonRoom.isEnemiesDead()){
+            if(currentDungeonRoom.getUpDoor()){
+                batch.draw(northDoorTextureOpen, currentDungeonRoom.getNorthDoor().getX()-5, currentDungeonRoom.getNorthDoor().getY()+1);
+            }
+            if(currentDungeonRoom.getDownDoor()){
+                batch.draw(southDoorTextureOpen, currentDungeonRoom.getSouthDoor().getX()-5, currentDungeonRoom.getSouthDoor().getY()+4);
+            }
+            if(currentDungeonRoom.getRightDoor()){
+                batch.draw(eastDoorTextureOpen, currentDungeonRoom.getEastDoor().getX()+1, currentDungeonRoom.getEastDoor().getY());
+            }
+            if(currentDungeonRoom.getLeftDoor()){
+                batch.draw(westDoorTextureOpen, currentDungeonRoom.getWestDoor().getX()+4, currentDungeonRoom.getWestDoor().getY());
+            }
+        }else{
+            if(currentDungeonRoom.getUpDoor()){
+                batch.draw(northDoorTextureClosed, currentDungeonRoom.getNorthDoor().getX()-5, currentDungeonRoom.getNorthDoor().getY());
+            }
+            if(currentDungeonRoom.getDownDoor()){
+                batch.draw(southDoorTextureClosed, currentDungeonRoom.getSouthDoor().getX()-5, currentDungeonRoom.getSouthDoor().getY()+4);
+            }
+            if(currentDungeonRoom.getRightDoor()){
+                batch.draw(eastDoorTextureClosed, currentDungeonRoom.getEastDoor().getX()+1, currentDungeonRoom.getEastDoor().getY());
+            }
+            if(currentDungeonRoom.getLeftDoor()){
+                batch.draw(westDoorTextureClosed, currentDungeonRoom.getWestDoor().getX()+4, currentDungeonRoom.getWestDoor().getY());
+            }
+        }
         for (OnscreenDrawable drawable:renderList){
             if (drawable instanceof PlayerCharacter){
                 if (((PlayerCharacter) drawable).isInvincible()){
@@ -89,20 +127,8 @@ public class EntityManager {
         for (Projectile projectile:projectileList){
             batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
         }
-        if(currentDungeonRoom.getUpDoor()){
-            batch.draw(northDoorTexture, currentDungeonRoom.getNorthDoor().getX(), currentDungeonRoom.getNorthDoor().getY());
-        }
-        if(currentDungeonRoom.getDownDoor()){
-            batch.draw(northDoorTexture, currentDungeonRoom.getSouthDoor().getX(), currentDungeonRoom.getSouthDoor().getY());
-        }
-        if(currentDungeonRoom.getRightDoor()){
-            batch.draw(northDoorTexture, currentDungeonRoom.getEastDoor().getX(), currentDungeonRoom.getEastDoor().getY());
-        }
-        if(currentDungeonRoom.getLeftDoor()){
-            batch.draw(northDoorTexture, currentDungeonRoom.getWestDoor().getX(), currentDungeonRoom.getWestDoor().getY());
-        }
         if (level[levelNo].isCompleted()){
-            list.draw(batch,"LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",1280/2-200, 768-64);
+            list.draw(batch,"LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",1280/2-200, 768-69);
         }
         //list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float) 450);//Testing purposes (shows number of projectiles)
     }
@@ -216,6 +242,7 @@ public class EntityManager {
         return projectileList;
     }
     public void setCurrentDungeonRoom(DungeonRoom dungeonRoom){
+        this.roomTimer = 0;
         this.currentDungeonRoom = dungeonRoom;
         this.renderList.clear();
         this.obstacleList.clear();
@@ -254,4 +281,9 @@ public class EntityManager {
             level[levelNo].setCompleted(true);
         }
     }
+
+    public float getRoomTimer() {
+        return roomTimer;
+    }
+
 }

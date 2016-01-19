@@ -21,9 +21,9 @@ public class PlayerCharacter extends Collidable{
 
     private int shotType = 0;   //0 = single shot, 1 = double shot, 2 = triple shot
     private float attackInterval = 0.25f, timeSinceLastAttack = attackInterval; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
-    private float projectileVelocity = 450, projectileRange = 800, projectileLife = projectileRange/projectileVelocity;
+    private float projectileVelocity = 450, projectileRange = 600, projectileLife = projectileRange/projectileVelocity;
 
-    private float currentHealth = 100000, maxHealth = 100000;
+    private float currentHealth = 100, maxHealth = 100;
     private boolean invincible = false;
     private float invincibilityCounter = 0;
 
