@@ -23,6 +23,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	SpriteBatch batch;
 	PlayerCharacter playerCharacter;
 	GUI mainMenuGUI, dungeonGUI, overworldGUI, pauseGUI, gameOverGUI;
+    Texture availableLevel, unavailableLevel;
     EntityManager entityManager;
 	boolean keyflagW,keyflagD,keyflagA,keyflagS, keyflagUP, keyflagRIGHT, keyflagLEFT, keyflagDOWN, firing = false;
 	Sprite guiMapSprite, guiSelector;
@@ -34,34 +35,74 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void cursorLocation(){
 		switch (MapSelected){
 			case 1:
+                if(!entityManager.levelCompleted(0)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(950);
 				guiSelector.setY(680);
 				break;
 			case 2:
+                if(!entityManager.levelCompleted(1)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(650);
 				guiSelector.setY(600);
 				break;
 			case 3:
+                if(!entityManager.levelCompleted(2)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(300);
 				guiSelector.setY(600);
 				break;
 			case 4:
+                if(!entityManager.levelCompleted(3)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(230);
 				guiSelector.setY(420);
 				break;
 			case 5:
+                if(!entityManager.levelCompleted(4)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(110);
 				guiSelector.setY(360);
 				break;
 			case 6:
+                if(!entityManager.levelCompleted(5)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(160);
 				guiSelector.setY(230);
 				break;
 			case 7:
+                if(!entityManager.levelCompleted(6)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(330);
 				guiSelector.setY(270);
 				break;
 			case 8:
+                if(!entityManager.levelCompleted(7)){
+                    guiSelector.setTexture(availableLevel);
+                }else{
+                    guiSelector.setTexture(unavailableLevel);
+                }
 				guiSelector.setX(440);
 				guiSelector.setY(340);
 				break;
@@ -73,7 +114,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		guiMapSprite = new Sprite();
 		guiSelector = new Sprite();
 		overworldGUI = new GUI();
-		guiSelector.setTexture(new Texture("core/assets/selector.png"));
+        availableLevel = new Texture("core/assets/selector.png");
+        unavailableLevel = new Texture("core/assets/badselector.png");
+		guiSelector.setTexture(availableLevel);
 		cursorLocation();
 		guiMapSprite.setTexture(new Texture("core/assets/hesEastMap.png"));
 		guiMapSprite.setX(0);
@@ -149,6 +192,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             case 0:
                 break;
             case 1:
+                cursorLocation();
                 break;
             case 2:
                 playerUpdate();
@@ -461,8 +505,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
                 if(keycode == Input.Keys.ENTER) gameState = 1;
 				break;
 			case 1:
-                if((keycode == Input.Keys.DOWN)&&(MapSelected < 8)) {MapSelected += 1; cursorLocation();}
-                if((keycode == Input.Keys.UP)&&(MapSelected > 1)) {MapSelected -= 1; cursorLocation();}
+                if((keycode == Input.Keys.DOWN)&&(MapSelected < 8)) {MapSelected += 1;}
+                if((keycode == Input.Keys.UP)&&(MapSelected > 1)) {MapSelected -= 1;}
                 if(keycode == Input.Keys.ENTER){
                     if (!entityManager.levelCompleted(MapSelected-1)){
                         entityManager.setLevel(MapSelected - 1);
@@ -501,6 +545,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public boolean keyUp(int keycode) {
 		switch (gameState){
 			case 0:
+                if(keycode == Input.Keys.ESCAPE) Gdx.app.exit();
 				break;
 			case 1:
 				break;
