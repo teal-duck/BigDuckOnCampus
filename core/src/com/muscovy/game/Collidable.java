@@ -11,36 +11,108 @@ import java.util.Map;
  * Created by SeldomBucket on 05-Jan-16.
  */
 public abstract class Collidable extends OnscreenDrawable{
-    private Rectangle[] collisionBoxes;
     private Circle circleHitbox;
     private Rectangle rectangleHitbox;
-    private float rectangleBorderSize = 10;
-    private float bufferBorder = 0;
-    private float heightOffset = 64;
-    private int heightOffsetTiles = 2;
+    //Offset from centre of collidable: offset of 6 means centre of circle hitbox is 6 pixels above centre of collidable
     private float hitboxYOffset = 0;
     private int XTiles, YTiles;
     private int widthTiles, heightTiles;
 
+    /**
+     * Getters and Setters
+     */
+    @Override
+    public void setX(float x) {
+        super.setX(x);
+        updateBoxesPosition();
+    }
+    @Override
+    public void setY(float y) {
+        super.setY(y);
+        updateBoxesPosition();
+    }
+    public int getXTiles() {
+        return XTiles;
+    }
+    public int getYTiles() {
+        return YTiles;
+    }
+    /**
+     * setXTiles and setYTiles moves the collidable to fit on the grid directly.
+     * Clamps to walls of dungeon room, assuming a 64x64 collidable
+     * Useful for placing stuff in the dungeon rooms
+     */
+    public void setXTiles(int XTiles) {
+        /**
+         * Use this when setting something in the playable space to make sure it is on the grid.
+         */
+        if (XTiles > 37-widthTiles){
+            XTiles = 37-widthTiles;}
+        this.XTiles = XTiles;
+        setX(XTiles *32+64);
+    }
+    public void setYTiles(int YTiles) {
+        /**
+         * Use this when setting something in the playable space to make sure it is on the grid.
+         */
+        if (YTiles > 21 - heightTiles) {
+            YTiles = 21-heightTiles;}
+        this.YTiles = YTiles;
+        setY(YTiles * 32 + 64);
+    }
+    public void setHitboxCentre(float x, float y){
+        /**
+         * Calculates the x and y of the bottom left corner using radius and y offset of the hitbox
+         */
+        setX((x - circleHitbox.radius) - ((getWidth() / 2) - circleHitbox.radius));
+        setY((y - circleHitbox.radius)-((getHeight()/2)- circleHitbox.radius)-hitboxYOffset);
+    }
+    public void setHitboxYOffset(float hitboxYOffset){
+        this.hitboxYOffset = hitboxYOffset;
+    }
+    public void setHitboxRadius(float radius){
+        this.circleHitbox.setRadius(radius);
+    }
+    public Rectangle getRectangleHitbox() {
+        return rectangleHitbox;
+    }
+    public Circle getCircleHitbox() {
+        return circleHitbox;
+    }
+    /**
+     * Initialisation Methods
+     */
+    //initialise X and Y for moving the collidable before the hitboxes are set up
+    public void initialiseX(float x){
+        super.setX(x);
+    }
+    public void initialiseY(float y){
+        super.setY(y);
+    }
     public void setUpBoxes(){
+        /**
+         * Initialises circle and rectangle hitboxes based on current x and y, width and height
+         * Circle hitbox automatically has radius of width/2
+         * Rectangle hitbox automatically same size as the sprite image
+         */
         float x = this.getX();
         float y = this.getY();
         float width = this.getWidth();
         float height = this.getHeight();
         this.widthTiles = (int)Math.floorDiv((long)width,(long)32)+1;
         this.heightTiles = (int)Math.floorDiv((long)height,(long)32)+1;
-        this.heightOffset = this.getHeight()/3;
-        this.heightOffsetTiles = (int)Math.floorDiv((long)heightOffset,(long)32);
         circleHitbox = new Circle(x + (width/2),y+(height/2)+ hitboxYOffset,width/2);
         rectangleHitbox = new Rectangle(x,y,width,height);
-        collisionBoxes = new Rectangle[4];
-        collisionBoxes[0] = new Rectangle(x + bufferBorder + 1,                        y + bufferBorder,                                    width - 2 - bufferBorder*2, rectangleBorderSize);//bottom rectangle
-        collisionBoxes[1] = new Rectangle(x + bufferBorder,                            y + bufferBorder + 1,                                rectangleBorderSize *2,               height - heightOffset - 2 - bufferBorder*2); //left rectangle
-        collisionBoxes[2] = new Rectangle(x - bufferBorder + width - rectangleBorderSize,  y + bufferBorder + 1, rectangleBorderSize,                 height - heightOffset - 2 - bufferBorder*2); //right rectangle
-        collisionBoxes[3] = new Rectangle(x + bufferBorder + 1,                        y - bufferBorder + height - rectangleBorderSize - heightOffset,    width - 2, rectangleBorderSize); //top rectangle
     }
-
+    /**
+     * Collision Methods
+     */
     public void moveToNearestEdgeCircle(Collidable collidable){
+        /**
+         * Calculates angle between the centre of the circles, and calculates the x & y distance needed so the centres
+         * are this radius + collidable radius away.
+         * (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+         */
         float angle = getAngleFrom(collidable);
         float distance = collidable.getCircleHitbox().radius + circleHitbox.radius;
         if(this.getCircleHitbox().x >= collidable.getCircleHitbox().x){
@@ -79,6 +151,11 @@ public abstract class Collidable extends OnscreenDrawable{
         }
     }
     public void moveToNearestEdgeRectangle(Collidable collidable){
+        /**
+         * Checks where the centre of the circle of the other collidable is in relation to the rectangle, and moves it
+         * accordingly.
+         * (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+         */
         float angle = getAngleFrom(collidable);
         float thisX = getCircleHitbox().x;
         float thisY = getCircleHitbox().y;
@@ -121,10 +198,9 @@ public abstract class Collidable extends OnscreenDrawable{
             setHitboxCentre(x,y);
         }
     }
-    public void setHitboxCentre(float x, float y){
-        setX((x - circleHitbox.radius)-((getWidth()/2)-circleHitbox.radius));
-        setY((y - circleHitbox.radius)-((getHeight()/2)- circleHitbox.radius)-hitboxYOffset);
-    }
+    /**
+     * Angle methods use trig to calculate angles, then it's position to calculate the angle clockwise from the vertical
+     */
     public float getAngleFrom(Collidable collidable){
         float x = (this.getCircleHitbox().x-collidable.getCircleHitbox().x);
         float y = (this.getCircleHitbox().y-collidable.getCircleHitbox().y);
@@ -164,116 +240,15 @@ public abstract class Collidable extends OnscreenDrawable{
         return angle;
     }
     public void updateBoxesPosition(){
-        collisionBoxes[0].setX(this.getX());
-        collisionBoxes[0].setY(this.getY());
-        collisionBoxes[1].setX(this.getX());
-        collisionBoxes[1].setY(this.getY());
-        collisionBoxes[2].setX(this.getX() + this.getWidth() - rectangleBorderSize);
-        collisionBoxes[2].setY(this.getY());
-        collisionBoxes[3].setX(this.getX());
-        collisionBoxes[3].setY(this.getY() + this.getHeight() - rectangleBorderSize -heightOffset);
         circleHitbox.setX(this.getX()+(this.getWidth()/2));
         circleHitbox.setY(this.getY()+(this.getHeight()/2)+ hitboxYOffset);
         rectangleHitbox.setX(this.getX());
         rectangleHitbox.setY(this.getY());
     }
-
-    public Circle getCircleHitbox() {
-        return circleHitbox;
-    }
-    public float getHeightOffset() {
-        return heightOffset;
-    }
-    public void setHeightOffset(float heightOffset) {
-        this.heightOffset = heightOffset;
-        this.heightOffsetTiles = (int)Math.floorDiv((long)heightOffset,(long)32);
-    }
-    public Rectangle getBottomRectangle(){
-        return collisionBoxes[0];
-    }
-    public Rectangle getLeftRectangle(){
-        return collisionBoxes[1];
-    }
-    public Rectangle getRightRectangle(){
-        return collisionBoxes[2];
-    }
-    public Rectangle getTopRectangle(){
-        return collisionBoxes[3];
-    }
-    public void setBottomRectangle(float x, float y){
-        collisionBoxes[0].setX(x);
-        collisionBoxes[0].setY(y);
-    }
-    public void setLeftRectangle(float x, float y){
-        collisionBoxes[1].setX(x);
-        collisionBoxes[1].setY(y);
-    }
-    public void setRightRectangle(float x, float y){
-        collisionBoxes[2].setX(x);
-        collisionBoxes[2].setY(y);
-    }
-    public void setTopRectangle(float x, float y){
-        collisionBoxes[3].setX(x);
-        collisionBoxes[3].setY(y);
-    }
-    public float getBufferBorder() {
-        return bufferBorder;
-    }
-    public float getRectangleBorderSize() {
-        return rectangleBorderSize;
-    }
     public boolean collides(Collidable collidable){
         return Intersector.overlaps(this.circleHitbox, collidable.getCircleHitbox());
     }
-    public void initialiseX(float x){
-        super.setX(x);
-    }
-    public void initialiseY(float y){
-        super.setY(y);
-    }
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-        updateBoxesPosition();
-    }
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-        updateBoxesPosition();
-    }
 
-    public int getXTiles() {
-        return XTiles;
-    }
-    public void setXTiles(int XTiles) {
-        /**
-         * Use this when setting something in the playable space to make sure it is on the grid.
-         */
-        if (XTiles > 37-widthTiles){
-            XTiles = 37-widthTiles;}
-        this.XTiles = XTiles;
-        setX(XTiles *32+64);
-    }
-    public int getYTiles() {
-        return YTiles;
-    }
-    public void setYTiles(int YTiles) {
-        /**
-         * Use this when setting something in the playable space to make sure it is on the grid.
-         */
-        if (YTiles > 21 -heightTiles+heightOffsetTiles){YTiles = 21-heightTiles+heightOffsetTiles;}
-        this.YTiles = YTiles;
-        setY(YTiles *32+64);
-    }
-    public void setHitboxYOffset(float hitboxYOffset){
-        this.hitboxYOffset = hitboxYOffset;
-    }
-    public void setHitboxRadius(float radius){
-        this.circleHitbox.setRadius(radius);
-    }
 
-    public Rectangle getRectangleHitbox() {
-        return rectangleHitbox;
-    }
 }
 

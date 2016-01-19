@@ -63,7 +63,8 @@ public class GUI {
         guiElements = new ArrayList<Sprite>();
         guiData = new ArrayList<guiData>();
     }
-    /**GUI Text Methods*/
+    /**GUI Text Methods
+     * These are confusing, I think, so give me a shout if you need it explaining. You could probably find an easier way to do it*/
 
     /**
      * @param ID the ID you will use to refer to this particular piece of text when editing using editData, moveData, changeDataFont

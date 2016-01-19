@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by SeldomBucket on 05-Dec-15.
+ * I should hope this is all fairly self-explanatory
  */
 public class Obstacle extends Collidable {
     private boolean damaging;

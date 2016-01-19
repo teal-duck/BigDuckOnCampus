@@ -7,10 +7,9 @@ import java.util.Random;
  */
 
 public class LevelGenerator {
-    /* As 2d arrays are indexed {{row1}{row2}{row3}...},
+    /** As 2d arrays are indexed {{row1}{row2}{row3}...},
      * we want to refer to locations in this format:
      * dungeonRoomArray[yPosition][xPosition] */
-
 
     /* Count the number of rooms adjacent to the given location */
     public int checkAdjacent(int myY, int myX, DungeonRoom[][] dungeonRoomArray) {
@@ -111,6 +110,7 @@ public class LevelGenerator {
                 }
             }
         }
+/*These are quite naive approaches atm, but they work!*/
 
         /* place our boss room */
         for (int xPos = 0; xPos < 7; xPos++) {

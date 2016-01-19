@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Created by ewh502 on 04/12/2015.
  */
 public abstract class OnscreenDrawable {
+    /**
+     * Basically just a wrapper class for a sprite, but in such a way so I can extend from it and know what I'm getting
+     * myself into, innit
+     */
     private Sprite sprite;
     private float x, y;
 

@@ -9,6 +9,7 @@ import java.util.Random;
 
 /**
  * Created by ewh502 on 04/12/2015.
+ * Good luck
  */
 public class PlayerCharacter extends Collidable{
     private Random random;
@@ -35,12 +36,13 @@ public class PlayerCharacter extends Collidable{
         xVelocity = 0;
         yVelocity = 0;
         Sprite playerSprite;
-        Texture tempTexture;
         downWalkCycle = new ArrayList<Texture>();
         upWalkCycle = new ArrayList<Texture>();
         rightWalkCycle = new ArrayList<Texture>();
         leftWalkCycle = new ArrayList<Texture>();
-        /*for (int i = 1; i < 8; i++) {
+        //Commented out due to animation not actually existing yet
+        /*Texture tempTexture;
+        for (int i = 1; i < 8; i++) {
             tempTexture = new Texture(Gdx.files.internal(String.format("core/assets/BasicDuckWalkCycle/downduck%d.png", i)));
             downWalkCycle.add(tempTexture);
         }
@@ -62,18 +64,43 @@ public class PlayerCharacter extends Collidable{
         this.initialiseX(0);
         this.initialiseY(0);
         this.setUpBoxes();
-        this.setHitboxYOffset(-6);
+        this.setHitboxYOffset(-6);      //Just to get the hitbox in line with that fat fuck of a duck's body
         this.setHitboxRadius(74/2-2);
     }
-    public void update(){
-        movement();
-        if (invincible){
-            invincibilityUpdate();
+
+    /**
+     * Getters and Setters
+     */
+    public float getHealth() {
+        return currentHealth;
+    }
+    public void setHealth(float currentHealth) {
+        if (currentHealth<=maxHealth){
+            this.currentHealth = currentHealth;
+        }else{
+            this.currentHealth = maxHealth;
         }
     }
-
-    public void increaseScore(int score){
-        this.score += score;
+    public float getMaxHealth() {
+        return maxHealth;
+    }
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+    public float getInvincibilityCounter() {
+        return invincibilityCounter;
+    }
+    public int getAnimationCounter() {
+        return animationCounter;
+    }
+    public int getAnimationCycle() {
+        return animationCycle;
+    }
+    public void setDirection(float direction) {
+        this.direction = direction;
+    }
+    public float getDirection() {
+        return direction;
     }
     public void setScore(int score){
         this.score = score;
@@ -81,16 +108,87 @@ public class PlayerCharacter extends Collidable{
     public int getScore(){
         return this.score;
     }
+    public float getXVelocity(){
+        return xVelocity;
+    }
+    public void setXVelocity(float velocity){
+        //Clamps velocity to max velocity
+        xVelocity = velocity;
+        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
+        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
+    }
+    public float getYVelocity(){
+        return yVelocity;
+    }
+    public void setYVelocity(float velocity){
+        //Clamps velocity to max velocity
+        yVelocity = velocity;
+        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
+        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
+    }
+    public void setMaxVelocity(float maxVelocity) {
+        this.maxVelocity = maxVelocity;
+    }
+    public float getMaxVelocity() {
+        return maxVelocity;
+    }
+    public float getShotDirection() {
+        return shotDirection;
+    }
+    public void setShotDirection(float shotDirection) {
+        this.shotDirection = shotDirection;
+    }
+    public float getTimeSinceLastAttack() {
+        return timeSinceLastAttack;
+    }
+    public void setTimeSinceLastAttack(float timeSinceLastAttack) {
+        this.timeSinceLastAttack = timeSinceLastAttack;
+    }
+    /**
+     * Projectile life, range and velocity work so that the range, life and shot speed are consistent with each other.
+     */
+    public float getProjectileRange() {
+        return projectileRange;
+    }
+    public void setProjectileRange(float projectileRange) {
+        this.projectileRange = projectileRange;
+        this.projectileLife = projectileRange/projectileVelocity;
+    }
+    public float getProjectileLife() {
+        return projectileLife;
+    }
+    public void setProjectileLife(float projectileLife) {
+        this.projectileLife = projectileLife;
+        this.projectileRange = projectileVelocity*projectileLife;
+    }
+    public float getProjectileVelocity() {
+        return projectileVelocity;
+    }
+    public void setProjectileVelocity(float projectileVelocity) {
+        this.projectileVelocity = projectileVelocity;
+        this.projectileLife = projectileRange/projectileVelocity;
+    }
+
+    public void update(){
+        movement();
+        if (invincible){
+            invincibilityUpdate();
+        }
+        if (currentHealth>maxHealth){
+            this.currentHealth = maxHealth;
+        }
+    }
+
+    /**
+     * Score Methods
+     */
+    public void increaseScore(int score){
+        this.score += score;
+    }
 
     /**
      * Health methods
      */
-    public float getHealth() {
-        return currentHealth;
-    }
-    public void setHealth(float currentHealth) {
-        this.currentHealth = currentHealth;
-    }
     public void damage(float damage){
         if (!invincible) {
             this.currentHealth -= damage;
@@ -108,23 +206,14 @@ public class PlayerCharacter extends Collidable{
             invincibilityCounter = 0;
         }
     }
-
-    public float getInvincibilityCounter() {
-        return invincibilityCounter;
-    }
-
     public boolean isInvincible(){
         return this.invincible;
     }
     /**
-    * Animation methods
-    */
-    public int getAnimationCounter() {
-        return animationCounter;
-    }
-    public int getAnimationCycle() {
-        return animationCycle;
-    }
+     * Animation methods
+     * currently commented out, as we only have one sprite atm, but they should be easy to work out. Might be worth
+     * revamping later though
+     */
     public void walkCycleNext(){
         int switcher = (int)(direction / (Math.PI/2));
         switch (switcher){
@@ -177,8 +266,10 @@ public class PlayerCharacter extends Collidable{
         }*/
     }
     /**
-     * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D
-     * If opposite directions are pressed, velocity decelerated to 0
+     * Movement methods.
+     * Called when the gamestate is 2 and the listener hears W A S or D
+     * If opposite directions are pressed at the same time, velocity decelerated to 0
+     * Calculates velocity based on delta time and acceleration
      */
     public void Right() {
         if(animationCycle > 10) animationCycle = 0;
@@ -190,7 +281,7 @@ public class PlayerCharacter extends Collidable{
     }
     public void Left(){
         if(animationCycle > 10) animationCycle = 0;
-        changeXVelocity((-accel)*Gdx.graphics.getDeltaTime());
+        changeXVelocity((-accel) * Gdx.graphics.getDeltaTime());
     }
     public void Up() {
         if(animationCycle > 6) animationCycle = 0;
@@ -245,60 +336,22 @@ public class PlayerCharacter extends Collidable{
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
-    public void backOneStep(){
-        setX(getX() - xVelocity * Gdx.graphics.getDeltaTime());
-        setY(getY() - yVelocity * Gdx.graphics.getDeltaTime());
-    }
-    public void backOneStepX(){
-        setX(getX() - xVelocity * Gdx.graphics.getDeltaTime());
-    }
-    public void backOneStepY(){
-       setY(getY() - yVelocity * Gdx.graphics.getDeltaTime());
-    }
-
-    public float getXVelocity(){
-        return xVelocity;
-    }
     public void changeXVelocity(float velocity){
         xVelocity += velocity;
         if (xVelocity > maxVelocity) xVelocity = maxVelocity;
         if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
-    }
-    public void setXVelocity(float velocity){
-        xVelocity = velocity;
-        if (xVelocity > maxVelocity) xVelocity = maxVelocity;
-        if (xVelocity < -maxVelocity) xVelocity = -maxVelocity;
-    }
-    public float getYVelocity(){
-        return yVelocity;
     }
     public void changeYVelocity(float velocity){
         yVelocity += velocity;
         if (yVelocity > maxVelocity) yVelocity = maxVelocity;
         if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
     }
-    public void setYVelocity(float velocity){
-        yVelocity = velocity;
-        if (yVelocity > maxVelocity) yVelocity = maxVelocity;
-        if (yVelocity < -maxVelocity) yVelocity = -maxVelocity;
-    }
-    public void setMaxVelocity(float maxVelocity) {
-        this.maxVelocity = maxVelocity;
-    }
-    public float getMaxVelocity() {
-        return maxVelocity;
-    }
     public void resetMaxVelocity() {
         this.maxVelocity = defaultVelocity;
     }
-    public void setDirection(float direction) {
-        this.direction = direction;
-    }
-    public float getDirection() {
-        return direction;
-    }
     /**
      * Attack methods
+     * (only shots currently)
      */
     public boolean checkRangedAttack(){
         if (timeSinceLastAttack > attackInterval){
@@ -315,15 +368,11 @@ public class PlayerCharacter extends Collidable{
     public void resetAttackTimer(){
         timeSinceLastAttack = attackInterval;
     }
-    public float getTimeSinceLastAttack() {
-        return timeSinceLastAttack;
-    }
-
-    public void setTimeSinceLastAttack(float timeSinceLastAttack) {
-        this.timeSinceLastAttack = timeSinceLastAttack;
-    }
-
     public ArrayList<Projectile> rangedAttack(){
+        /**
+         * Returns a different projectile array list depending on the shot type, so that needs to be given directly
+         * to the entity manager
+         */
         ArrayList<Projectile> rangedAttack = new ArrayList<Projectile>();
         float x = (this.getX()+this.getWidth()/2-8);
         float y = (this.getY()+this.getHeight()-32);
@@ -343,37 +392,5 @@ public class PlayerCharacter extends Collidable{
         }
         return rangedAttack;
     }
-    public float getShotDirection() {
-        return shotDirection;
-    }
-    public void setShotDirection(float shotDirection) {
-        this.shotDirection = shotDirection;
-    }
 
-    public float getProjectileRange() {
-        return projectileRange;
-    }
-
-    public void setProjectileRange(float projectileRange) {
-        this.projectileRange = projectileRange;
-        this.projectileLife = projectileRange/projectileVelocity;
-    }
-
-    public float getProjectileLife() {
-        return projectileLife;
-    }
-
-    public void setProjectileLife(float projectileLife) {
-        this.projectileLife = projectileLife;
-        this.projectileRange = projectileVelocity*projectileLife;
-    }
-
-    public float getProjectileVelocity() {
-        return projectileVelocity;
-    }
-
-    public void setProjectileVelocity(float projectileVelocity) {
-        this.projectileVelocity = projectileVelocity;
-        this.projectileLife = projectileRange/projectileVelocity;
-    }
 }

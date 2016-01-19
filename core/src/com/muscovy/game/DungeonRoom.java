@@ -11,17 +11,22 @@ import java.util.Random;
  * Created by SeldomBucket on 05-Dec-15.
  */
 public class DungeonRoom extends OnscreenDrawable{
+    /**
+     * Contains lists of obstacles and enemies in that room. They are passed to the entity manager when the room is entered.
+     * Room is generated using a 2d array (explained in more detail further down)
+     * There are 2 sets of walls, one for the enemies and player to collide with, and one for the projectile to collide
+     *      with so it looks like they break halfway up the wall, and have some height associated with them.
+     */
     private ArrayList<Obstacle> obstacleList;
     private ArrayList<Enemy> enemyList;
     private Rectangle[] walls, projectileWalls;
     /* variables indicate if there is a door on that wall */
-    private boolean upDoor = false, rightDoor = false,downDoor = false, leftDoor = false;
+    private boolean upDoor = false, rightDoor = false,downDoor = false, leftDoor = false, enemiesDead;
     private Rectangle northDoor, eastDoor, southDoor, westDoor;
     float doorWidth = 66;
     /* roomType indicates the type of room
      * options: "" (default), "start", "boss", "item", "shop" */
     private int roomType = 0; //0 = normal room, 1 = boss room,  2 = item room, 3 = shop room, 4 = start room
-    private boolean enemiesDead;
     private Random rand;
 
     public DungeonRoom() {
@@ -40,7 +45,7 @@ public class DungeonRoom extends OnscreenDrawable{
         projectileWalls[2] = new Rectangle(1280-32,0,32,960-192);//right wall
         projectileWalls[3] = new Rectangle(0,768-32,1280,32);//top wall
     }
-    private void createBoulder(int x, int y){
+    private void createNonDamagingObstacle(int x, int y){
         Sprite RockSprite;
         Obstacle obstacle5;
         RockSprite = new Sprite();
@@ -50,7 +55,7 @@ public class DungeonRoom extends OnscreenDrawable{
         obstacle5.setYTiles(y);
         addObstacle(obstacle5);
     }
-    private void createSpikes(int x, int y){
+    private void createDamagingObstacle(int x, int y){
         Sprite SpikeSprite;
         Obstacle obstacle6;
         SpikeSprite = new Sprite();
@@ -102,6 +107,12 @@ public class DungeonRoom extends OnscreenDrawable{
         addEnemy(enemy);
     }
     public void generateRoom(){
+        /**
+         * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of obstacle.
+         * Tile array is based on a grid where each tile is 64x64. Represents the room.
+         * 0 = empty space, 1 = non-damaging obstacle, 2 = damaging obstacle, 3 = random obstacle, 4 = random enemy
+         * Easy to put in more, just extend the case statement below to have more specific stuff.
+         */
         Sprite enemySprite;
         Enemy enemy;
         switch (roomType){
@@ -138,10 +149,10 @@ public class DungeonRoom extends OnscreenDrawable{
                         TileArray = new int[][]{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                                                {0, 0, 0, 1, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 1, 0, 0, 0},
-                                                {0, 0, 0, 1, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 1, 0, 0, 0},
-                                                {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
@@ -151,8 +162,8 @@ public class DungeonRoom extends OnscreenDrawable{
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
-                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
-                                                {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -237,16 +248,16 @@ public class DungeonRoom extends OnscreenDrawable{
                             case 0:
                                 break;
                             case 1:
-                                createBoulder(2*j, 2*i);
+                                createNonDamagingObstacle(2 * j, 2 * i);
                                 break;
                             case 2:
-                                createSpikes(2*j, 2*i);
+                                createDamagingObstacle(2 * j, 2 * i);
                                 break;
                             case 3:
                                 if(ChosenValue2){
-                                    createBoulder(2*j, 2*i);
+                                    createNonDamagingObstacle(2 * j, 2 * i);
                                 }else if(!ChosenValue2){
-                                    createSpikes(2*j, 2*i);
+                                    createDamagingObstacle(2 * j, 2 * i);
                                 }
                                 break;
                             case 4:
@@ -263,8 +274,8 @@ public class DungeonRoom extends OnscreenDrawable{
                 Enemy bossEnemy;
                 bossSprite = new Sprite(new Texture("core/assets/accommodationAssets/accommodationBoss.png"));
                 bossEnemy = new Enemy(bossSprite);
-                bossEnemy.setXTiles((int)(36/2-(bossEnemy.getWidth()/64)));
-                bossEnemy.setYTiles((int)(18/2-(bossEnemy.getHeight()/64)));
+                bossEnemy.setXTiles((int) (36 / 2 - (bossEnemy.getWidth() / 64)));
+                bossEnemy.setYTiles((int) (18 / 2 - (bossEnemy.getHeight() / 64)));
                 bossEnemy.setAttackType(2);
                 bossEnemy.setMovementType(2);
                 bossEnemy.setMaxVelocity(100);
@@ -313,8 +324,17 @@ public class DungeonRoom extends OnscreenDrawable{
             westDoor = new Rectangle(0,384-doorWidth/2,doorWidth,doorWidth);
         }
     }
+
+    /**
+     * Getters and Setters
+     */
     public void addEnemy(Enemy enemy){
         enemyList.add(enemy);
+    }
+    public void killEnemy(Enemy enemy){
+        enemyList.remove(enemy);
+        enemyList.trimToSize();
+        if (enemyList.size() == 0){enemiesDead = true;}
     }
     public ArrayList<Enemy> getEnemyList(){
         return enemyList;
@@ -349,24 +369,19 @@ public class DungeonRoom extends OnscreenDrawable{
     public Rectangle getProjectileWallTop(){
         return projectileWalls[3];
     }
-
     public int getRoomType() {
         return roomType;
     }
-
     public void setRoomType(int roomType) {
         this.roomType = roomType;
     }
-
     public boolean isEnemiesDead() {
         if (enemyList.size() == 0){enemiesDead = true;}
         return enemiesDead;
     }
-
     public void setEnemiesDead(boolean enemiesDead) {
         this.enemiesDead = enemiesDead;
     }
-
     public Boolean getUpDoor() {
         return upDoor;
     }
@@ -415,35 +430,11 @@ public class DungeonRoom extends OnscreenDrawable{
     public void setWestDoor(Rectangle westDoor) {
         this.westDoor = westDoor;
     }
-    public void killEnemy(Enemy enemy){
-        enemyList.remove(enemy);
-        enemyList.trimToSize();
-        if (enemyList.size() == 0){enemiesDead = true;}
-    }
-    @Override
-    public Sprite getSprite() {
-        return super.getSprite();
-    }
     @Override
     public void setSprite(Sprite sprite) {
         sprite.setX(0);
         sprite.setY(0);
         super.setSprite(sprite);
     }
-    @Override
-    public float getX() {
-        return super.getX();
-    }
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-    }
-    @Override
-    public float getY() {
-        return super.getY();
-    }
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-    }
+
 }

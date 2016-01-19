@@ -29,7 +29,78 @@ public class Projectile extends OnscreenDrawable{
         this.yVelocity += yVelocity;
         this.damagesWho = damagesWho;
     }
-
+    /**
+     * Getters and Setters
+     */
+    public float getDamage() {
+        return damage;
+    }
+    public void setDamage(float damage) {
+        this.damage = damage;
+    }
+    public int getDamagesWho() {
+        return damagesWho;
+    }
+    public void setDamagesWho(int damagesWho) {
+        this.damagesWho = damagesWho;
+    }
+    public float getLife() {
+        return life;
+    }
+    public void setLife(float life) {
+        this.life = life;
+    }
+    public float getxVelocity() {
+        return xVelocity;
+    }
+    public void setxVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+    public float getyVelocity() {
+        return yVelocity;
+    }
+    public void setyVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+    public float getMaxVelocity() {
+        return maxVelocity;
+    }
+    public void setMaxVelocity(float maxVelocity) {
+        this.maxVelocity = maxVelocity;
+    }
+    public float getDirection() {
+        return direction;
+    }
+    public void setDirection(float direction) {
+        this.direction = direction;
+    }
+    public Circle getCollisionBox() {
+        return collisionBox;
+    }
+    public void setCollisionBox(Circle collisionBox) {
+        this.collisionBox = collisionBox;
+    }
+    @Override
+    public void setSprite(Sprite sprite) {
+        super.setSprite(sprite);
+        collisionBox = new Circle((int)this.getX(),(int)this.getY(),this.getSprite().getRegionWidth()/2);
+    }
+    /**
+     * X and Y setters move collision box too
+     */
+    @Override
+    public void setX(float x) {
+        super.setX(x);
+        collisionBox.setX(x);
+    }
+    @Override
+    public void setY(float y) {
+        super.setY(y);
+        collisionBox.setY(y);
+    }
+    /**
+     * Other shit, self explanatory
+     */
     public void update(){
         movement();
         lifeOver();
@@ -48,87 +119,5 @@ public class Projectile extends OnscreenDrawable{
     }
     public boolean lifeOver(){
         return (lifeCounter > life);
-    }
-
-    public float getDamage() {
-        return damage;
-    }
-
-    public void setDamage(float damage) {
-        this.damage = damage;
-    }
-
-    public int getDamagesWho() {
-        return damagesWho;
-    }
-
-    public void setDamagesWho(int damagesWho) {
-        this.damagesWho = damagesWho;
-    }
-
-    public float getLife() {
-        return life;
-    }
-
-    public void setLife(float life) {
-        this.life = life;
-    }
-
-    public float getxVelocity() {
-        return xVelocity;
-    }
-
-    public void setxVelocity(float xVelocity) {
-        this.xVelocity = xVelocity;
-    }
-
-    public float getyVelocity() {
-        return yVelocity;
-    }
-
-    public void setyVelocity(float yVelocity) {
-        this.yVelocity = yVelocity;
-    }
-
-    public float getMaxVelocity() {
-        return maxVelocity;
-    }
-
-    public void setMaxVelocity(float maxVelocity) {
-        this.maxVelocity = maxVelocity;
-    }
-
-    public float getDirection() {
-        return direction;
-    }
-
-    public void setDirection(float direction) {
-        this.direction = direction;
-    }
-
-    public Circle getCollisionBox() {
-        return collisionBox;
-    }
-
-    public void setCollisionBox(Circle collisionBox) {
-        this.collisionBox = collisionBox;
-    }
-
-    @Override
-    public void setSprite(Sprite sprite) {
-        super.setSprite(sprite);
-        collisionBox = new Circle((int)this.getX(),(int)this.getY(),this.getSprite().getRegionWidth()/2);
-    }
-
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-        collisionBox.setX(x);
-    }
-
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-        collisionBox.setY(y);
     }
 }

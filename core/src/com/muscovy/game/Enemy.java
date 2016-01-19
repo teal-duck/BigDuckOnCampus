@@ -40,7 +40,6 @@ public class Enemy extends Collidable {
         spriteHeight = sprite.getRegionHeight();
         rangedAttack = new ArrayList<Projectile>();
         this.setSprite(sprite);
-        this.setHeightOffset(this.getHeight()/3);
         this.touchDamage = 10.0f;
         this.movementType = 0;
         this.attackType = 0;
