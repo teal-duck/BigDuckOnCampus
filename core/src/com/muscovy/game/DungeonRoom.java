@@ -102,6 +102,8 @@ public class DungeonRoom extends OnscreenDrawable{
         addEnemy(enemy);
     }
     public void generateRoom(){
+        Sprite enemySprite;
+        Enemy enemy;
         switch (roomType){
             case 0:
                 int[][] TileArray = new int[10][18];
@@ -274,10 +276,25 @@ public class DungeonRoom extends OnscreenDrawable{
                 addEnemy(bossEnemy);
                 break;
             case 2:
+                //Item
+                enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+                enemy = new Enemy(enemySprite);
+                enemy.setAttackType(1);
+                enemy.setXTiles(100);
+                enemy.setYTiles(100);
+                addEnemy(enemy);
                 break;
             case 3:
+                //Shop
+                enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+                enemy = new Enemy(enemySprite);
+                enemy.setAttackType(1);
+                enemy.setX(0);
+                enemy.setY(0);
+                addEnemy(enemy);
                 break;
             case 4:
+                //Start
                 break;
         }
         initialiseDoors();
