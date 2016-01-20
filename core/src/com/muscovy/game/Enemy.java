@@ -161,6 +161,14 @@ public class Enemy extends Collidable {
         this.projectileLife = projectileRange/projectileVelocity;
     }
 
+    public float getMovementRange() {
+        return movementRange;
+    }
+
+    public void setMovementRange(float movementRange) {
+        this.movementRange = movementRange;
+    }
+
     public float getCurrentHealth() {
         return currentHealth;
     }

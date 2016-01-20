@@ -13,7 +13,6 @@ package com.muscovy.game;
 		import com.badlogic.gdx.graphics.g2d.SpriteBatch;
         import com.badlogic.gdx.graphics.g2d.BitmapFont;
         import com.badlogic.gdx.math.Intersector;
-
         import java.util.ArrayList;
 
 /**
@@ -32,7 +31,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
     private BitmapFont xVal, yVal, gameOverFont, loading;
 	float w = 1280, h = 960;
 	int gameState; // 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over, 101 = Startup, 102 = Loading
-	int MapSelected; // 0 = Constantine, 1 = Langwith, 3 = Goodricke, 4 = Law and Management, 5 = Catalyst, 6 = TFTV, 7 = Computer Science, 8 = Ron Cooke Hub
+	int MapSelected; // 1 = Constantine, 2 = Langwith, 3 = Goodricke, 4 = Law and Management, 5 = Catalyst, 6 = TFTV, 7 = Computer Science, 8 = Ron Cooke Hub
 
     @Override
     public void create() {
@@ -449,28 +448,28 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
     public void enemyWallCollision(Enemy enemy){
         enemy.setCollidingWithSomething(false);
-        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getTopRectangle(),enemy.getRectangleHitbox())) {
+        if (Intersector.overlaps(enemy.getCircleHitbox(),entityManager.getCurrentDungeonRoom().getTopRectangle())) {
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setY(entityManager.getCurrentDungeonRoom().getTopRectangle().getY() - enemy.getCircleHitbox().radius);
+            enemy.setHitboxCentre(enemy.getCircleHitbox().x, entityManager.getCurrentDungeonRoom().getTopRectangle().getY()-enemy.getCircleHitbox().radius);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getRightRectangle(),enemy.getRectangleHitbox())){
+        if (Intersector.overlaps(enemy.getCircleHitbox(),entityManager.getCurrentDungeonRoom().getRightRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(entityManager.getCurrentDungeonRoom().getRightRectangle().getX()-enemy.getWidth());
+            enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightRectangle().getX()-enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getLeftRectangle(),enemy.getRectangleHitbox())){
+        if (Intersector.overlaps(enemy.getCircleHitbox(),entityManager.getCurrentDungeonRoom().getLeftRectangle())){
             enemy.setXVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setX(entityManager.getCurrentDungeonRoom().getX()+64);
+            enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getLeftRectangle().getX()+entityManager.getCurrentDungeonRoom().getLeftRectangle().getWidth()+enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
             enemy.setCollidingWithSomething(true);
         }
-        if (Intersector.overlaps(entityManager.getCurrentDungeonRoom().getBottomRectangle(), enemy.getRectangleHitbox())){
+        if (Intersector.overlaps(enemy.getCircleHitbox(),entityManager.getCurrentDungeonRoom().getBottomRectangle())){
             enemy.setYVelocity(0);
             enemy.setMaxVelocity(50);
-            enemy.setY(64);
+            enemy.setHitboxCentre(enemy.getCircleHitbox().x, entityManager.getCurrentDungeonRoom().getBottomRectangle().getY()+entityManager.getCurrentDungeonRoom().getBottomRectangle().getHeight()+enemy.getCircleHitbox().radius);
             enemy.setCollidingWithSomething(true);
         }
     }
@@ -517,7 +516,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
     public void playerDoorCollision(){
         if (entityManager.getCurrentDungeonRoom().getUpDoor()){
-            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) {
+            if ((Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getNorthDoor())) && keyflagW) {
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setXVelocity(0);
                 entityManager.moveNorth();
@@ -525,7 +524,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             }
         }
         if (entityManager.getCurrentDungeonRoom().getDownDoor()){
-            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) {
+            if ((Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getSouthDoor())) && keyflagS) {
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setXVelocity(0);
                 entityManager.moveSouth();
@@ -533,7 +532,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             }
         }
         if (entityManager.getCurrentDungeonRoom().getRightDoor()){
-            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) {
+            if ((Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getEastDoor())) && keyflagD) {
                 playerCharacter.setYVelocity(0);
                 playerCharacter.setXVelocity(0);
                 entityManager.moveEast();
@@ -541,7 +540,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
             }
         }
         if (entityManager.getCurrentDungeonRoom().getLeftDoor()){
-            if (Intersector.overlaps(playerCharacter.getRectangleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) {
+            if ((Intersector.overlaps(playerCharacter.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getWestDoor())) && keyflagA) {
             playerCharacter.setYVelocity(0);
             playerCharacter.setXVelocity(0);
                 entityManager.moveWest();

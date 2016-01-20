@@ -23,7 +23,7 @@ public class DungeonRoom extends OnscreenDrawable{
     /* variables indicate if there is a door on that wall */
     private boolean upDoor = false, rightDoor = false,downDoor = false, leftDoor = false, enemiesDead;
     private Rectangle northDoor, eastDoor, southDoor, westDoor;
-    float doorWidth = 66;
+    float doorSize = 65;
     /* roomType indicates the type of room
      * options: "" (default), "start", "boss", "item", "shop" */
     private int roomType = 0; //0 = normal room, 1 = boss room,  2 = item room, 3 = shop room, 4 = start room
@@ -31,7 +31,6 @@ public class DungeonRoom extends OnscreenDrawable{
 
     public DungeonRoom() {
         rand = new Random();
-        this.setSprite(new Sprite(new Texture("core/assets/accommodationAssets/accommodationBackground.png")));
         obstacleList = new ArrayList<Obstacle>();
         enemyList = new ArrayList<Enemy>();
         walls = new Rectangle[4];
@@ -102,7 +101,7 @@ public class DungeonRoom extends OnscreenDrawable{
         enemy.calculateScoreOnDeath();
         addEnemy(enemy);
     }
-    public void generateRoom(){
+    public void generateRoom(int level){
         /**
          * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of obstacle.
          * Tile array is based on a grid where each tile is 64x64. Represents the room.
@@ -111,8 +110,10 @@ public class DungeonRoom extends OnscreenDrawable{
          */
         Sprite enemySprite;
         Enemy enemy;
+        Texture texture;
         switch (roomType){
             case 0:
+                //Normal
                 int[][] TileArray = new int[10][18];
                 int ChosenValue = rand.nextInt(10)+1;
                 boolean ChosenValue2 = rand.nextBoolean();
@@ -266,6 +267,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 }
                 break;
             case 1:
+                //Boss
                 Sprite bossSprite;
                 Enemy bossEnemy;
                 bossSprite = new Sprite(new Texture("core/assets/accommodationAssets/accommodationBoss.png"));
@@ -280,6 +282,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 bossEnemy.setScoreOnDeath(3000);
                 bossEnemy.setCurrentHealth(600);
                 bossEnemy.setHitboxRadius(80);
+                bossEnemy.setMovementRange(1000);
                 addEnemy(bossEnemy);
                 break;
             case 2:
@@ -304,20 +307,47 @@ public class DungeonRoom extends OnscreenDrawable{
                 //Start
                 break;
         }
+        switch (level){
+            case 0:
+                texture = new Texture("core/assets/accommodationAssets/constantineBackground.png");
+                break;
+            case 1:
+                texture = new Texture("core/assets/accommodationAssets/langwithBackground.png");
+                break;
+            case 2:
+                texture = new Texture("core/assets/accommodationAssets/goodrickeBackground.png");
+                break;
+            case 3:
+                texture = new Texture("core/assets/accommodationAssets/lmbBackground.png");
+                break;
+            case 4:
+                texture = new Texture("core/assets/accommodationAssets/catalystBackground.png");
+                break;
+            case 5:
+                texture = new Texture("core/assets/accommodationAssets/tftvBackground.png");
+                break;
+            case 6:
+                texture = new Texture("core/assets/accommodationAssets/csBackground.png");
+                break;
+            default:
+                texture = new Texture("core/assets/accommodationAssets/rchBackground.png");
+                break;
+        }
+        this.setSprite(new Sprite(texture));
         initialiseDoors();
     }
     public void initialiseDoors(){
         if(upDoor){
-            northDoor = new Rectangle(640-doorWidth/2,768-doorWidth,doorWidth,doorWidth);
+            northDoor = new Rectangle((1280-doorSize)/2,768- doorSize, doorSize, doorSize);
         }
         if(downDoor){
-            southDoor = new Rectangle(640-doorWidth/2,0,doorWidth,doorWidth);
+            southDoor = new Rectangle((1280-doorSize)/2, 0, doorSize, doorSize);
         }
         if(rightDoor){
-            eastDoor = new Rectangle(1280-doorWidth,384-doorWidth/2,doorWidth,doorWidth);
+            eastDoor = new Rectangle(1280-doorSize, (768-doorSize)/2, doorSize, doorSize);
         }
         if(leftDoor){
-            westDoor = new Rectangle(0,384-doorWidth/2,doorWidth,doorWidth);
+            westDoor = new Rectangle(0,(768-doorSize)/2, doorSize, doorSize);
         }
     }
 

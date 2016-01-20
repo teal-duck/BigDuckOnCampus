@@ -1,5 +1,7 @@
 package com.muscovy.game;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import java.util.Random;
 
 /**
@@ -10,6 +12,7 @@ public class LevelGenerator {
     /** As 2d arrays are indexed {{row1}{row2}{row3}...},
      * we want to refer to locations in this format:
      * dungeonRoomArray[yPosition][xPosition] */
+
 
     /* Count the number of rooms adjacent to the given location */
     public int checkAdjacent(int myY, int myX, DungeonRoom[][] dungeonRoomArray) {
@@ -47,7 +50,8 @@ public class LevelGenerator {
     }
 
     /* function is called to generate the array of rooms for our building */
-    public DungeonRoom[][] generateBuilding (int maxRooms) {
+    public DungeonRoom[][] generateBuilding (int maxRooms, int level) {
+        Texture texture;
         boolean bossSet = false, itemSet = false, shopSet = false;
         DungeonRoom[][] dungeonRoomArray = new DungeonRoom[7][7];
         /* initialise starting room in the centre */
@@ -151,7 +155,7 @@ public class LevelGenerator {
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
                 if (dungeonRoomArray[yPos][xPos] != null){
-                    dungeonRoomArray[yPos][xPos].generateRoom();
+                    dungeonRoomArray[yPos][xPos].generateRoom(level);
                 }
             }
         }

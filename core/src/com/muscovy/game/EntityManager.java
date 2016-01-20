@@ -47,14 +47,14 @@ public class EntityManager {
 
     }
     public void generateLevels(){
-        level[0] = new Level(levelGenerator.generateBuilding(20),0);
-        level[1] = new Level(levelGenerator.generateBuilding(20),0);
-        level[2] = new Level(levelGenerator.generateBuilding(20),0);
-        level[3] = new Level(levelGenerator.generateBuilding(20),0);
-        level[4] = new Level(levelGenerator.generateBuilding(20),0);
-        level[5] = new Level(levelGenerator.generateBuilding(20),0);
-        level[6] = new Level(levelGenerator.generateBuilding(20),0);
-        level[7] = new Level(levelGenerator.generateBuilding(20),0);
+        level[0] = new Level(levelGenerator.generateBuilding(20,0),0,0);
+        level[1] = new Level(levelGenerator.generateBuilding(20,1),0,1);
+        level[2] = new Level(levelGenerator.generateBuilding(20,2),0,2);
+        level[3] = new Level(levelGenerator.generateBuilding(20,3),0,3);
+        level[4] = new Level(levelGenerator.generateBuilding(20,4),0,4);
+        level[5] = new Level(levelGenerator.generateBuilding(20,5),0,5);
+        level[6] = new Level(levelGenerator.generateBuilding(20,6),0,6);
+        level[7] = new Level(levelGenerator.generateBuilding(20,7),0,7);
         /*while (steve<maxLevels-2){
             level[steve] = new Level(levelGenerator.generateBuilding(20),0);
             steve++;
@@ -86,29 +86,29 @@ public class EntityManager {
         batch.draw(currentDungeonRoom.getSprite().getTexture(),0,0);
         if (currentDungeonRoom.isEnemiesDead()){
             if(currentDungeonRoom.getUpDoor()){
-                batch.draw(northDoorTextureOpen, currentDungeonRoom.getNorthDoor().getX()-5, currentDungeonRoom.getNorthDoor().getY()+1);
+                batch.draw(northDoorTextureOpen, (1280-northDoorTextureOpen.getWidth())/2, currentDungeonRoom.getNorthDoor().getY()+(currentDungeonRoom.getNorthDoor().getWidth()-64));
             }
             if(currentDungeonRoom.getDownDoor()){
-                batch.draw(southDoorTextureOpen, currentDungeonRoom.getSouthDoor().getX()-5, currentDungeonRoom.getSouthDoor().getY()+4);
+                batch.draw(southDoorTextureOpen, (1280-southDoorTextureOpen.getWidth())/2, currentDungeonRoom.getSouthDoor().getY()+4);
             }
             if(currentDungeonRoom.getRightDoor()){
-                batch.draw(eastDoorTextureOpen, currentDungeonRoom.getEastDoor().getX()+1, currentDungeonRoom.getEastDoor().getY());
+                batch.draw(eastDoorTextureOpen, currentDungeonRoom.getEastDoor().getX()+(currentDungeonRoom.getEastDoor().getWidth()-64), (768-eastDoorTextureOpen.getWidth())/2);
             }
             if(currentDungeonRoom.getLeftDoor()){
-                batch.draw(westDoorTextureOpen, currentDungeonRoom.getWestDoor().getX()+4, currentDungeonRoom.getWestDoor().getY());
+                batch.draw(westDoorTextureOpen, currentDungeonRoom.getWestDoor().getX()+4, (768-westDoorTextureOpen.getWidth())/2);
             }
         }else{
             if(currentDungeonRoom.getUpDoor()){
-                batch.draw(northDoorTextureClosed, currentDungeonRoom.getNorthDoor().getX()-5, currentDungeonRoom.getNorthDoor().getY());
+                batch.draw(northDoorTextureClosed, (1280-northDoorTextureOpen.getWidth())/2, currentDungeonRoom.getNorthDoor().getY()+(currentDungeonRoom.getNorthDoor().getWidth()-64));
             }
             if(currentDungeonRoom.getDownDoor()){
-                batch.draw(southDoorTextureClosed, currentDungeonRoom.getSouthDoor().getX()-5, currentDungeonRoom.getSouthDoor().getY()+4);
+                batch.draw(southDoorTextureClosed, (1280-southDoorTextureOpen.getWidth())/2, currentDungeonRoom.getSouthDoor().getY()+4);
             }
             if(currentDungeonRoom.getRightDoor()){
-                batch.draw(eastDoorTextureClosed, currentDungeonRoom.getEastDoor().getX()+1, currentDungeonRoom.getEastDoor().getY());
+                batch.draw(eastDoorTextureClosed, currentDungeonRoom.getEastDoor().getX()+(currentDungeonRoom.getEastDoor().getWidth()-64), (768-eastDoorTextureOpen.getWidth())/2);
             }
             if(currentDungeonRoom.getLeftDoor()){
-                batch.draw(westDoorTextureClosed, currentDungeonRoom.getWestDoor().getX()+4, currentDungeonRoom.getWestDoor().getY());
+                batch.draw(westDoorTextureClosed, currentDungeonRoom.getWestDoor().getX()+4, (768-westDoorTextureOpen.getWidth())/2);
             }
         }
         for (OnscreenDrawable drawable:renderList){
@@ -277,7 +277,7 @@ public class EntityManager {
 
     }
     public void checkLevelCompletion(){
-        if (currentDungeonRoom.isEnemiesDead() && currentDungeonRoom.getRoomType()==1){
+        if (currentDungeonRoom.isEnemiesDead() && currentDungeonRoom.getRoomType()==1 && level[levelNo].getObjective() == 0){
             level[levelNo].setCompleted(true);
         }
     }
