@@ -1,8 +1,5 @@
 package com.muscovy.game;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 /**
  * Created by ewh502 on 11/01/2016.
  */
@@ -14,15 +11,18 @@ public class Level {
     private int objective; //0 = Boss fight, 1 = Find specific item, 3 = Kill certain number of enemies
     private int level; // 0 = Constantine, 1 = Langwith, 2 = Goodricke, 3 = Law and Management, 4 = Catalyst, 5 = TFTV, 6 = Computer Science, 7 = Ron Cooke Hub
     private boolean completed = false;
+
     public Level(DungeonRoom[][] levelArray, int objective, int level) {
         this.levelArray = new DungeonRoom[7][7];
         this.levelArray = levelArray;
         this.objective = objective;
         this.level = level;
     }
-    public DungeonRoom getRoom(int roomX, int roomY){
+
+    public DungeonRoom getRoom(int roomX, int roomY) {
         return levelArray[roomY][roomX];
     }
+
     public DungeonRoom[][] getLevelArray() {
         return levelArray;
     }

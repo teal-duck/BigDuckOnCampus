@@ -23,7 +23,7 @@ public class Enemy extends Collidable {
     private ArrayList<Projectile> rangedAttack;
     private int shotType = 1;   //0 = single shot in direction of movement, 1 = shoot towards player if in range, 2 = double shot towards player if in range, 3 = triple shot towards player if in range, 4 = random shot direction
     private float attackTimer, attackInterval = 1.5f; //MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
-    private float projectileRange = 400, projectileVelocity = 150, projectileLife = projectileRange/projectileVelocity;
+    private float projectileRange = 400, projectileVelocity = 150, projectileLife = projectileRange / projectileVelocity;
     private float attackRange = 480;
 
     private int movementType;   //0 = static, 1 = random movement, 2 = following
@@ -32,7 +32,7 @@ public class Enemy extends Collidable {
     private float direction;    //0 to 2*pi, 0 being vertically upwards
     float directionCounter = 0;
 
-    private float upperXBounds = 1280-32, upperYBounds = 720-128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
+    private float upperXBounds = 1280 - 32, upperYBounds = 720 - 128, lowerYBounds = 32, lowerXBounds = 32, spriteWidth, spriteHeight;
 
     public Enemy(Sprite sprite) {
         random = new Random();
@@ -58,7 +58,7 @@ public class Enemy extends Collidable {
         this.collidingWithSomething = collidingWithSomething;
     }
 
-    public void update(PlayerCharacter player){
+    public void update(PlayerCharacter player) {
         rangedAttack.clear();
         movement(player);
         attackTimer += Gdx.graphics.getDeltaTime();
@@ -70,95 +70,114 @@ public class Enemy extends Collidable {
     public float getTouchDamage() {
         return touchDamage;
     }
+
     public void setTouchDamage(float touchDamage) {
         this.touchDamage = touchDamage;
     }
+
     public int getAttackType() {
         return attackType;
     }
+
     public void setAttackType(int attackType) {
         this.attackType = attackType;
-        scoreOnDeath = attackType*10 + movementType*10;
+        scoreOnDeath = attackType * 10 + movementType * 10;
     }
-    public ArrayList<Projectile> rangedAttack(PlayerCharacter playerCharacter){
-        float x = (this.getX()+this.getWidth()/2);
-        float y = (this.getY()+this.getHeight()/2);
+
+    public ArrayList<Projectile> rangedAttack(PlayerCharacter playerCharacter) {
+        float x = (this.getX() + this.getWidth() / 2);
+        float y = (this.getY() + this.getHeight() / 2);
         float dist = getDistanceTo(playerCharacter);
-        switch (shotType){
+        switch (shotType) {
             case 0:
-                rangedAttack.add(new Projectile(x, y,this.direction, projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                rangedAttack.add(new Projectile(x, y, this.direction, projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
                 break;
             case 1:
-                if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                if (dist < attackRange) {
+                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
                 }
                 break;
             case 2:
-                if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                if (dist < attackRange) {
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 24)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
                 }
                 break;
             case 3:
-                if (dist<attackRange) {
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
-                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
-                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                if (dist < attackRange) {
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) - (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
+                    rangedAttack.add(new Projectile(x, y, (float) (this.getAngleTo(playerCharacter) + (Math.PI / 12)), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
+                    rangedAttack.add(new Projectile(x, y, this.getAngleTo(playerCharacter), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
                 }
                 break;
             case 4:
-                rangedAttack.add(new Projectile(x, y,(float)(random.nextFloat()*Math.PI*2), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity,0));
+                rangedAttack.add(new Projectile(x, y, (float) (random.nextFloat() * Math.PI * 2), projectileRange, this.projectileVelocity, this.xVelocity, this.yVelocity, 0));
                 break;
         }
         return rangedAttack;
     }
-    public boolean checkRangedAttack(){
-        if (attackTimer > attackInterval){
+
+    public boolean checkRangedAttack() {
+        if (attackTimer > attackInterval) {
             attackTimer = 0;
             return true;
-        }else {
+        } else {
             return false;
         }
     }
+
     public void setShotType(int shotType) {
         this.shotType = shotType;
     }
-    public void damage(float damage){
-        currentHealth-=damage;
-        if (currentHealth<=0){this.kill();}
+
+    public void damage(float damage) {
+        currentHealth -= damage;
+        if (currentHealth <= 0) {
+            this.kill();
+        }
     }
-    public void kill(){
+
+    public void kill() {
         dead = true;
     }
-    public boolean lifeOver(){
+
+    public boolean lifeOver() {
         return dead;
     }
+
     public float getAttackRange() {
         return attackRange;
     }
+
     public void setAttackRange(float attackRange) {
         this.attackRange = attackRange;
     }
+
     public float getProjectileRange() {
         return projectileRange;
     }
+
     public void setProjectileRange(float projectileRange) {
         this.projectileRange = projectileRange;
-        this.projectileLife = projectileRange/projectileVelocity;
+        this.projectileLife = projectileRange / projectileVelocity;
     }
+
     public float getProjectileLife() {
         return projectileLife;
     }
+
     public void setProjectileLife(float projectileLife) {
         this.projectileLife = projectileLife;
-        this.projectileRange = projectileVelocity*projectileLife;
+        this.projectileRange = projectileVelocity * projectileLife;
     }
+
     public float getProjectileVelocity() {
         return projectileVelocity;
     }
+
     public void setProjectileVelocity(float projectileVelocity) {
         this.projectileVelocity = projectileVelocity;
-        this.projectileLife = projectileRange/projectileVelocity;
+        this.projectileLife = projectileRange / projectileVelocity;
     }
 
     public float getMovementRange() {
@@ -185,8 +204,8 @@ public class Enemy extends Collidable {
         this.scoreOnDeath = scoreOnDeath;
     }
 
-    public void calculateScoreOnDeath(){
-        this.scoreOnDeath = attackType*10 + movementType*10;
+    public void calculateScoreOnDeath() {
+        this.scoreOnDeath = attackType * 10 + movementType * 10;
     }
 
     /**
@@ -195,56 +214,68 @@ public class Enemy extends Collidable {
     public float getXVelocity() {
         return xVelocity;
     }
+
     public void setXVelocity(float xVelocity) {
         this.xVelocity = xVelocity;
     }
+
     public float getYVelocity() {
         return yVelocity;
     }
+
     public void setYVelocity(float yVelocity) {
         this.yVelocity = yVelocity;
     }
+
     public float getDefaultVelocity() {
         return defaultVelocity;
     }
+
     public void setDefaultVelocity(float defaultVelocity) {
         this.defaultVelocity = defaultVelocity;
     }
+
     public void setMovementType(int movementType) {
         this.movementType = movementType;
     }
+
     public int getMovementType() {
         return movementType;
     }
+
     public void setMaxVelocity(float maxVelocity) {
         this.maxVelocity = maxVelocity;
     }
-    public void resetMaxVelocity(){
+
+    public void resetMaxVelocity() {
         this.maxVelocity = defaultVelocity;
     }
-    public void movement(PlayerCharacter player){
-        switch (movementType){
+
+    public void movement(PlayerCharacter player) {
+        switch (movementType) {
             case 0:
                 setXVelocity(0);
                 setYVelocity(0);
                 break;
             case 1:
-                if (directionCounter > 0.3){
+                if (directionCounter > 0.3) {
                     directionCounter = 0;
-                    if(random.nextBoolean()){
-                        direction = (float)((direction + random.nextFloat()) % Math.PI*2);
-                    }else{
-                        direction = (float)((direction - random.nextFloat()) % Math.PI*2);
+                    if (random.nextBoolean()) {
+                        direction = (float) ((direction + random.nextFloat()) % Math.PI * 2);
+                    } else {
+                        direction = (float) ((direction - random.nextFloat()) % Math.PI * 2);
                     }
-                }else{directionCounter += Gdx.graphics.getDeltaTime();}
+                } else {
+                    directionCounter += Gdx.graphics.getDeltaTime();
+                }
                 updateVelocities();
                 break;
             case 2:
 
-                if (getDistanceTo(player) < movementRange){
+                if (getDistanceTo(player) < movementRange) {
                     pointTo(player);
                     updateVelocities();
-                }else{
+                } else {
                     setXVelocity(0);
                     setYVelocity(0);
                 }
@@ -253,32 +284,35 @@ public class Enemy extends Collidable {
         setX(getX() + xVelocity * Gdx.graphics.getDeltaTime());
         setY(getY() + yVelocity * Gdx.graphics.getDeltaTime());
     }
-    public void pointTo(Collidable collidable){
-        float x = ((collidable.getX()+collidable.getCircleHitbox().radius/2)-(this.getX()+this.getWidth()/2));
-        float y = ((collidable.getY()+collidable.getCircleHitbox().radius/2)-(this.getY()+this.getHeight()/2));
-        float angle = (float) Math.atan(x/y);
-        if(x >= 0){
-            if (y >= 0){
+
+    public void pointTo(Collidable collidable) {
+        float x = ((collidable.getX() + collidable.getCircleHitbox().radius / 2) - (this.getX() + this.getWidth() / 2));
+        float y = ((collidable.getY() + collidable.getCircleHitbox().radius / 2) - (this.getY() + this.getHeight() / 2));
+        float angle = (float) Math.atan(x / y);
+        if (x >= 0) {
+            if (y >= 0) {
                 direction = angle;
-            }else if (y < 0){
-                direction = (float)(Math.PI + angle);
+            } else if (y < 0) {
+                direction = (float) (Math.PI + angle);
             }
-        }else if (x < 0){
-            if (y >= 0){
-                direction = (float)(2*Math.PI + angle);
-            }else if (y < 0){
-                direction = (float)(Math.PI + angle);
+        } else if (x < 0) {
+            if (y >= 0) {
+                direction = (float) (2 * Math.PI + angle);
+            } else if (y < 0) {
+                direction = (float) (Math.PI + angle);
             }
         }
     }
-    public float getDistanceTo(Collidable collidable){
-        float xdist = (collidable.getX()-this.getX());
-        float ydist = (collidable.getY()-this.getY());
-        return (float) Math.sqrt((xdist*xdist) + (ydist*ydist));
+
+    public float getDistanceTo(Collidable collidable) {
+        float xdist = (collidable.getX() - this.getX());
+        float ydist = (collidable.getY() - this.getY());
+        return (float) Math.sqrt((xdist * xdist) + (ydist * ydist));
     }
-    public void updateVelocities(){
-        this.xVelocity = (float)(defaultVelocity *Math.sin(direction));
-        this.yVelocity = (float)(defaultVelocity *Math.cos(direction));
+
+    public void updateVelocities() {
+        this.xVelocity = (float) (defaultVelocity * Math.sin(direction));
+        this.yVelocity = (float) (defaultVelocity * Math.cos(direction));
     }
 
     public float getDirection() {
@@ -293,22 +327,27 @@ public class Enemy extends Collidable {
     public Sprite getSprite() {
         return super.getSprite();
     }
+
     @Override
     public void setSprite(Sprite sprite) {
         super.setSprite(sprite);
     }
+
     @Override
     public float getX() {
         return super.getX();
     }
+
     @Override
     public void setX(float x) {
         super.setX(x);
     }
+
     @Override
     public float getY() {
         return super.getY();
     }
+
     @Override
     public void setY(float y) {
         super.setY(y);

@@ -14,12 +14,14 @@ public abstract class OnscreenDrawable {
     private Sprite sprite;
     private float x, y;
 
-    public float getHeight(){
+    public float getHeight() {
         return this.sprite.getTexture().getHeight();
     }
-    public float getWidth(){
+
+    public float getWidth() {
         return this.sprite.getTexture().getWidth();
     }
+
     public Sprite getSprite() {
         return sprite;
     }
@@ -28,7 +30,7 @@ public abstract class OnscreenDrawable {
         this.sprite = sprite;
     }
 
-    public void setTexture(Texture texture){
+    public void setTexture(Texture texture) {
         this.sprite.setTexture(texture);
     }
 

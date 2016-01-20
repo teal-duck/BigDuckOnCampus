@@ -36,14 +36,14 @@ public class EntityManager {
         list.setColor(Color.WHITE);//Testing purposes
         this.currentDungeonRoom = new DungeonRoom();
         maxLevels = 8;
-        northDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
-        northDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
-        eastDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
-        eastDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png");
-        westDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
-        westDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png");
-        southDoorTextureOpen = new Texture("core/assets/accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
-        southDoorTextureClosed = new Texture("core/assets/accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png");
+        northDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
+        northDoorTextureClosed = new Texture("accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
+        eastDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
+        eastDoorTextureClosed = new Texture("accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png");
+        westDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
+        westDoorTextureClosed = new Texture("accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png");
+        southDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
+        southDoorTextureClosed = new Texture("accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png");
 
     }
     public void generateLevels(){

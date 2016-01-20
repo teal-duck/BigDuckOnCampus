@@ -9,9 +9,11 @@ import java.util.Random;
  */
 
 public class LevelGenerator {
-    /** As 2d arrays are indexed {{row1}{row2}{row3}...},
+    /**
+     * As 2d arrays are indexed {{row1}{row2}{row3}...},
      * we want to refer to locations in this format:
-     * dungeonRoomArray[yPosition][xPosition] */
+     * dungeonRoomArray[yPosition][xPosition]
+     */
 
 
     /* Count the number of rooms adjacent to the given location */
@@ -19,24 +21,24 @@ public class LevelGenerator {
 
         int numAdjacent = 0;
             /* check north */
-        if (myY>0) {
+        if (myY > 0) {
             if (dungeonRoomArray[myY - 1][myX] != null) {
                 numAdjacent++;
             }
         }
             /* check  east */
-        if (myX<6) {
+        if (myX < 6) {
             if (dungeonRoomArray[myY][myX + 1] != null) {
                 numAdjacent++;
             }
         }
-        if (myY<6) {
+        if (myY < 6) {
             /* check south */
             if (dungeonRoomArray[myY + 1][myX] != null) {
                 numAdjacent++;
             }
         }
-        if (myX>0) {
+        if (myX > 0) {
             /* check west */
             if (dungeonRoomArray[myY][myX - 1] != null) {
                 numAdjacent++;
@@ -50,7 +52,7 @@ public class LevelGenerator {
     }
 
     /* function is called to generate the array of rooms for our building */
-    public DungeonRoom[][] generateBuilding (int maxRooms, int level) {
+    public DungeonRoom[][] generateBuilding(int maxRooms, int level) {
         Texture texture;
         boolean bossSet = false, itemSet = false, shopSet = false;
         DungeonRoom[][] dungeonRoomArray = new DungeonRoom[7][7];
@@ -119,7 +121,7 @@ public class LevelGenerator {
         /* place our boss room */
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if (!bossSet){
+                if (!bossSet) {
                     if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
                         dungeonRoomArray[yPos][xPos].setRoomType(1);
                         bossSet = true;
@@ -131,7 +133,7 @@ public class LevelGenerator {
         /* place our item room */
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if (!itemSet){
+                if (!itemSet) {
                     if ((dungeonRoomArray[yPos][xPos] != null) && (dungeonRoomArray[yPos][xPos].getRoomType() == 0) && (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
                         dungeonRoomArray[yPos][xPos].setRoomType(2);
                         itemSet = true;
@@ -154,7 +156,7 @@ public class LevelGenerator {
         }
         for (int xPos = 0; xPos < 7; xPos++) {
             for (int yPos = 0; yPos < 7; yPos++) {
-                if (dungeonRoomArray[yPos][xPos] != null){
+                if (dungeonRoomArray[yPos][xPos] != null) {
                     dungeonRoomArray[yPos][xPos].generateRoom(level);
                 }
             }

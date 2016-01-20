@@ -48,7 +48,7 @@ public class DungeonRoom extends OnscreenDrawable{
         Sprite RockSprite;
         Obstacle obstacle5;
         RockSprite = new Sprite();
-        RockSprite.setTexture(new Texture("core/assets/accommodationAssets/obstacles/binRecycle.png"));
+        RockSprite.setTexture(new Texture("accommodationAssets/obstacles/binRecycle.png"));
         obstacle5 = new Obstacle(RockSprite);
         obstacle5.setXTiles(x);
         obstacle5.setYTiles(y);
@@ -58,7 +58,7 @@ public class DungeonRoom extends OnscreenDrawable{
         Sprite SpikeSprite;
         Obstacle obstacle6;
         SpikeSprite = new Sprite();
-        SpikeSprite.setTexture(new Texture("core/assets/accommodationAssets/obstacles/binWaste.png"));
+        SpikeSprite.setTexture(new Texture("accommodationAssets/obstacles/binWaste.png"));
         obstacle6 = new Obstacle(SpikeSprite);
         obstacle6.setXTiles(x);
         obstacle6.setYTiles(y);
@@ -70,11 +70,11 @@ public class DungeonRoom extends OnscreenDrawable{
         Sprite enemySprite;
         Enemy enemy;
         if (rand.nextBoolean()){
-            enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
+            enemySprite = new Sprite(new Texture("accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
             enemy = new Enemy(enemySprite);
             enemy.setAttackType(0);
         }else{
-            enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+            enemySprite = new Sprite(new Texture("accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
             enemy = new Enemy(enemySprite);
             enemy.setAttackType(1);
         }
@@ -270,7 +270,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 //Boss
                 Sprite bossSprite;
                 Enemy bossEnemy;
-                bossSprite = new Sprite(new Texture("core/assets/accommodationAssets/accommodationBoss.png"));
+                bossSprite = new Sprite(new Texture("accommodationAssets/accommodationBoss.png"));
                 bossEnemy = new Enemy(bossSprite);
                 bossEnemy.setXTiles((int) (36 / 2 - (bossEnemy.getWidth() / 64)));
                 bossEnemy.setYTiles((int) (18 / 2 - (bossEnemy.getHeight() / 64)));
@@ -287,7 +287,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 break;
             case 2:
                 //Item
-                enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+                enemySprite = new Sprite(new Texture("accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
                 enemy = new Enemy(enemySprite);
                 enemy.setAttackType(1);
                 enemy.setXTiles(100);
@@ -296,7 +296,7 @@ public class DungeonRoom extends OnscreenDrawable{
                 break;
             case 3:
                 //Shop
-                enemySprite = new Sprite(new Texture("core/assets/accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
+                enemySprite = new Sprite(new Texture("accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
                 enemy = new Enemy(enemySprite);
                 enemy.setAttackType(1);
                 enemy.setX(0);
@@ -309,28 +309,28 @@ public class DungeonRoom extends OnscreenDrawable{
         }
         switch (level){
             case 0:
-                texture = new Texture("core/assets/accommodationAssets/constantineBackground.png");
+                texture = new Texture("accommodationAssets/constantineBackground.png");
                 break;
             case 1:
-                texture = new Texture("core/assets/accommodationAssets/langwithBackground.png");
+                texture = new Texture("accommodationAssets/langwithBackground.png");
                 break;
             case 2:
-                texture = new Texture("core/assets/accommodationAssets/goodrickeBackground.png");
+                texture = new Texture("accommodationAssets/goodrickeBackground.png");
                 break;
             case 3:
-                texture = new Texture("core/assets/accommodationAssets/lmbBackground.png");
+                texture = new Texture("accommodationAssets/lmbBackground.png");
                 break;
             case 4:
-                texture = new Texture("core/assets/accommodationAssets/catalystBackground.png");
+                texture = new Texture("accommodationAssets/catalystBackground.png");
                 break;
             case 5:
-                texture = new Texture("core/assets/accommodationAssets/tftvBackground.png");
+                texture = new Texture("accommodationAssets/tftvBackground.png");
                 break;
             case 6:
-                texture = new Texture("core/assets/accommodationAssets/csBackground.png");
+                texture = new Texture("accommodationAssets/csBackground.png");
                 break;
             default:
-                texture = new Texture("core/assets/accommodationAssets/rchBackground.png");
+                texture = new Texture("accommodationAssets/rchBackground.png");
                 break;
         }
         this.setSprite(new Sprite(texture));
