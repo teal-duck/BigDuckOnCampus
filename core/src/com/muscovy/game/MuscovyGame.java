@@ -68,16 +68,27 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	private final int playerStartX = 300;
 	private final int playerStartY = 300;
 
+	private TextureMap textureMap;
+
 
 	@Override
 	public void create() {
 		gameState = GameState.STARTUP;
+		textureMap = new TextureMap();
+
 		loading = new BitmapFont();
 		loading.setColor(Color.WHITE);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, MuscovyGame.WINDOW_WIDTH, MuscovyGame.WINDOW_HEIGHT);
 		Gdx.input.setInputProcessor(this);
+	}
+
+
+	@Override
+	public void dispose() {
+		textureMap.disposeAllTextures();
+		super.dispose();
 	}
 
 
@@ -139,7 +150,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	 * INITIALISATION METHODS
 	 */
 	private void initialiseLevels() {
-		entityManager = new EntityManager();
+		entityManager = new EntityManager(textureMap);
 		entityManager.generateLevels();
 	}
 
@@ -155,10 +166,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		// Main menu
 		mainMenuGUI = new GUI();
-		mainMenuSprite.setTexture(new Texture(Gdx.files.internal("mainMenu.png")));
+		mainMenuSprite.setTexture(textureMap.getTextureOrLoadFile("mainMenu.png"));
 		mainMenuSprite.setX(0);
 		mainMenuSprite.setY(MuscovyGame.WINDOW_HEIGHT - mainMenuSprite.getTexture().getHeight());
-		mainMenuStartButton.setTexture(new Texture(Gdx.files.internal("startGameButton.png")));
+
+		mainMenuStartButton.setTexture(textureMap.getTextureOrLoadFile("startGameButton.png"));
 		mainMenuStartButton.setCenter(MuscovyGame.WINDOW_WIDTH, MuscovyGame.WINDOW_HEIGHT);
 		mainMenuStartButton.setX((MuscovyGame.WINDOW_WIDTH - 392) / 2);
 		mainMenuStartButton.setY(MuscovyGame.WINDOW_HEIGHT / 2);
@@ -167,7 +179,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		// Dungeon
 		dungeonGUI = new GUI();
-		guiDungeonSprite.setTexture(new Texture(Gdx.files.internal("guiFrame.png")));
+		guiDungeonSprite.setTexture(textureMap.getTextureOrLoadFile("guiFrame.png"));
 		guiDungeonSprite.setX(0);
 		guiDungeonSprite.setY(0);
 		dungeonGUI.addElement(guiDungeonSprite);
@@ -192,7 +204,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	private void initialisePlayerCharacter() {
-		playerCharacter = new PlayerCharacter();
+		playerCharacter = new PlayerCharacter(textureMap);
 		playerCharacter.setY(playerStartX);
 		playerCharacter.setX(playerStartY);
 	}
@@ -204,13 +216,15 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		guiMapSprite = new Sprite();
 		guiSelector = new Sprite();
 		overworldGUI = new GUI();
-		availableLevel = new Texture(Gdx.files.internal("selector.png"));
-		unavailableLevel = new Texture(Gdx.files.internal("badselector.png"));
+
+		availableLevel = textureMap.getTextureOrLoadFile("selector.png");
+		unavailableLevel = textureMap.getTextureOrLoadFile("badselector.png");
+
 		guiSelector.setTexture(availableLevel);
 
 		cursorUpdate();
 
-		guiMapSprite.setTexture(new Texture(Gdx.files.internal("hesEastMap.png")));
+		guiMapSprite.setTexture(textureMap.getTextureOrLoadFile("hesEastMap.png"));
 		guiMapSprite.setX(0);
 		guiMapSprite.setY((MuscovyGame.WINDOW_HEIGHT - guiMapSprite.getTexture().getHeight()) / 2);
 		overworldGUI.addElement(guiMapSprite);

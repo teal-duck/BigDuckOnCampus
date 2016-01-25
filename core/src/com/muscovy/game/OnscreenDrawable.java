@@ -15,7 +15,6 @@ public abstract class OnscreenDrawable {
 	 * getting myself into, innit
 	 */
 	private Sprite sprite;
-	// private float x, y;
 	private Vector2 position;
 
 

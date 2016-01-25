@@ -48,7 +48,7 @@ public class LevelGenerator {
 
 
 	/* function is called to generate the array of rooms for our building */
-	public DungeonRoom[][] generateBuilding(int maxRooms, LevelType level) {
+	public DungeonRoom[][] generateBuilding(TextureMap textureMap, int maxRooms, LevelType level) {
 		// Texture texture;
 		boolean bossSet = false;
 		boolean itemSet = false;
@@ -56,7 +56,8 @@ public class LevelGenerator {
 
 		DungeonRoom[][] dungeonRoomArray = new DungeonRoom[LevelGenerator.DUNGEON_ROOM_HEIGHT][LevelGenerator.DUNGEON_ROOM_WIDTH];
 		/* initialise starting room in the centre */
-		dungeonRoomArray[LevelGenerator.START_ROOM_Y][LevelGenerator.START_ROOM_X] = new DungeonRoom();
+		dungeonRoomArray[LevelGenerator.START_ROOM_Y][LevelGenerator.START_ROOM_X] = new DungeonRoom(
+				textureMap);
 		dungeonRoomArray[LevelGenerator.START_ROOM_Y][LevelGenerator.START_ROOM_X].setRoomType(RoomType.START);
 
 		/* initialise counter for current number of rooms */
@@ -78,7 +79,8 @@ public class LevelGenerator {
 									&& (checkAdjacent(yPos - 1, xPos,
 											dungeonRoomArray) <= 1)) {
 								/* place room above current */
-								dungeonRoomArray[yPos - 1][xPos] = new DungeonRoom();
+								dungeonRoomArray[yPos - 1][xPos] = new DungeonRoom(
+										textureMap);
 								dungeonRoomArray[yPos - 1][xPos].setDownDoor(true);
 								dungeonRoomArray[yPos][xPos].setUpDoor(true);
 								currentRooms += 1;
@@ -92,7 +94,8 @@ public class LevelGenerator {
 									&& (checkAdjacent(yPos, xPos + 1,
 											dungeonRoomArray) <= 1)) {
 								/* place room right of current */
-								dungeonRoomArray[yPos][xPos + 1] = new DungeonRoom();
+								dungeonRoomArray[yPos][xPos + 1] = new DungeonRoom(
+										textureMap);
 								dungeonRoomArray[yPos][xPos + 1].setLeftDoor(true);
 								dungeonRoomArray[yPos][xPos].setRightDoor(true);
 								currentRooms += 1;
@@ -106,7 +109,8 @@ public class LevelGenerator {
 									&& (checkAdjacent(yPos + 1, xPos,
 											dungeonRoomArray) <= 1)) {
 								/* place room below current */
-								dungeonRoomArray[yPos + 1][xPos] = new DungeonRoom();
+								dungeonRoomArray[yPos + 1][xPos] = new DungeonRoom(
+										textureMap);
 								dungeonRoomArray[yPos + 1][xPos].setUpDoor(true);
 								dungeonRoomArray[yPos][xPos].setDownDoor(true);
 								currentRooms += 1;
@@ -120,7 +124,8 @@ public class LevelGenerator {
 									&& (checkAdjacent(yPos, xPos - 1,
 											dungeonRoomArray) <= 1)) {
 								/* place room left of current */
-								dungeonRoomArray[yPos][xPos - 1] = new DungeonRoom();
+								dungeonRoomArray[yPos][xPos - 1] = new DungeonRoom(
+										textureMap);
 								dungeonRoomArray[yPos][xPos - 1].setRightDoor(true);
 								dungeonRoomArray[yPos][xPos].setLeftDoor(true);
 								currentRooms += 1;

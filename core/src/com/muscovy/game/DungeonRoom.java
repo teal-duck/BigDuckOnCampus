@@ -45,8 +45,11 @@ public class DungeonRoom extends OnscreenDrawable {
 
 	private Random rand;
 
+	private TextureMap textureMap;
 
-	public DungeonRoom() {
+
+	public DungeonRoom(TextureMap textureMap) {
+		this.textureMap = textureMap;
 		rand = new Random();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
@@ -78,7 +81,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		Sprite rockSprite;
 		Obstacle obstacle5;
 		rockSprite = new Sprite();
-		rockSprite.setTexture(new Texture("accommodationAssets/obstacles/binRecycle.png"));
+		rockSprite.setTexture(textureMap.getTextureOrLoadFile("accommodationAssets/obstacles/binRecycle.png"));
 		obstacle5 = new Obstacle(rockSprite);
 		obstacle5.setXTiles(x);
 		obstacle5.setYTiles(y);
@@ -90,7 +93,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		Sprite spikeSprite;
 		Obstacle obstacle6;
 		spikeSprite = new Sprite();
-		spikeSprite.setTexture(new Texture("accommodationAssets/obstacles/binWaste.png"));
+		spikeSprite.setTexture(textureMap.getTextureOrLoadFile("accommodationAssets/obstacles/binWaste.png"));
 		obstacle6 = new Obstacle(spikeSprite);
 		obstacle6.setXTiles(x);
 		obstacle6.setYTiles(y);
@@ -105,14 +108,14 @@ public class DungeonRoom extends OnscreenDrawable {
 		Enemy enemy;
 
 		if (rand.nextBoolean()) {
-			enemySprite = new Sprite(new Texture(
+			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
-			enemy = new Enemy(enemySprite);
+			enemy = new Enemy(textureMap, enemySprite);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
-			enemySprite = new Sprite(new Texture(
+			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(enemySprite);
+			enemy = new Enemy(textureMap, enemySprite);
 			enemy.setAttackType(AttackType.RANGE);
 		}
 
@@ -323,8 +326,9 @@ public class DungeonRoom extends OnscreenDrawable {
 			Sprite bossSprite;
 			Enemy bossEnemy;
 
-			bossSprite = new Sprite(new Texture("accommodationAssets/accommodationBoss.png"));
-			bossEnemy = new Enemy(bossSprite);
+			bossSprite = new Sprite(
+					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
+			bossEnemy = new Enemy(textureMap, bossSprite);
 			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
 			bossEnemy.setYTiles((int) ((18 / 2) - (bossEnemy.getHeight() / 64)));
 			bossEnemy.setAttackType(AttackType.BOTH);
@@ -341,9 +345,9 @@ public class DungeonRoom extends OnscreenDrawable {
 
 		case ITEM:
 			// Item
-			enemySprite = new Sprite(new Texture(
+			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(enemySprite);
+			enemy = new Enemy(textureMap, enemySprite);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(100);
 			enemy.setYTiles(100);
@@ -352,9 +356,9 @@ public class DungeonRoom extends OnscreenDrawable {
 
 		case SHOP:
 			// Shop
-			enemySprite = new Sprite(new Texture(
+			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(enemySprite);
+			enemy = new Enemy(textureMap, enemySprite);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setX(0);
 			enemy.setY(0);
@@ -369,28 +373,28 @@ public class DungeonRoom extends OnscreenDrawable {
 		// TODO: Make level backgrounds an array
 		switch (level) {
 		case CONSTANTINE:
-			texture = new Texture("accommodationAssets/constantineBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/constantineBackground.png");
 			break;
 		case LANGWITH:
-			texture = new Texture("accommodationAssets/langwithBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/langwithBackground.png");
 			break;
 		case GOODRICKE:
-			texture = new Texture("accommodationAssets/goodrickeBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/goodrickeBackground.png");
 			break;
 		case LMB:
-			texture = new Texture("accommodationAssets/lmbBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/lmbBackground.png");
 			break;
 		case CATALYST:
-			texture = new Texture("accommodationAssets/catalystBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/catalystBackground.png");
 			break;
 		case TFTV:
-			texture = new Texture("accommodationAssets/tftvBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/tftvBackground.png");
 			break;
 		case COMP_SCI:
-			texture = new Texture("accommodationAssets/csBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/csBackground.png");
 			break;
 		case RCH:
-			texture = new Texture("accommodationAssets/rchBackground.png");
+			texture = textureMap.getTextureOrLoadFile("accommodationAssets/rchBackground.png");
 			break;
 		default:
 			texture = null;

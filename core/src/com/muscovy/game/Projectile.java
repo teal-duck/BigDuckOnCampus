@@ -4,7 +4,6 @@ package com.muscovy.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -25,9 +24,9 @@ public class Projectile extends OnscreenDrawable {
 	private Circle collisionBox;
 
 
-	public Projectile(Vector2 position, Vector2 direction, float life, float maxVelocity,
+	public Projectile(TextureMap textureMap, Vector2 position, Vector2 direction, float life, float maxVelocity,
 			ProjectileDamager damagesWho) {
-		setSprite(new Sprite(new Texture(Gdx.files.internal("breadBullet.png"))));
+		setSprite(new Sprite(textureMap.getTextureOrLoadFile("breadBullet.png")));
 		setPosition(position);
 		this.life = life;
 		this.maxVelocity = maxVelocity;
@@ -145,8 +144,8 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public static ArrayList<Projectile> shootProjectiles(int count, Vector2 position, Vector2 direction, float life,
-			float maxVelocity, ProjectileDamager damagesWho) {
+	public static ArrayList<Projectile> shootProjectiles(TextureMap textureMap, int count, Vector2 position,
+			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 		float maxSpread = 0;
@@ -170,8 +169,8 @@ public class Projectile extends OnscreenDrawable {
 		float spreadAngle = -maxSpread;
 
 		for (int i = 0; i < count; i += 1) {
-			projectiles.add(new Projectile(position, direction.cpy().rotateRad(spreadAngle), life,
-					maxVelocity, damagesWho));
+			projectiles.add(new Projectile(textureMap, position, direction.cpy().rotateRad(spreadAngle),
+					life, maxVelocity, damagesWho));
 			spreadAngle += spreadDelta;
 		}
 

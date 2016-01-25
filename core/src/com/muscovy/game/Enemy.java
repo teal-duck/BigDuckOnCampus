@@ -46,8 +46,11 @@ public class Enemy extends Collidable {
 	private float defaultVelocity = 200;
 	private float directionCounter = 0;
 
+	private TextureMap textureMap;
 
-	public Enemy(Sprite sprite) {
+
+	public Enemy(TextureMap textureMap, Sprite sprite) {
+		this.textureMap = textureMap;
 		random = new Random();
 		rangedAttack = new ArrayList<Projectile>();
 		setSprite(sprite);
@@ -141,8 +144,8 @@ public class Enemy extends Collidable {
 			break;
 		}
 
-		return Projectile.shootProjectiles(count, position, shootDirection, projectileRange, projectileVelocity,
-				ProjectileDamager.PLAYER);
+		return Projectile.shootProjectiles(textureMap, count, position, shootDirection, projectileRange,
+				projectileVelocity, ProjectileDamager.PLAYER);
 	}
 
 

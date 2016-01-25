@@ -52,8 +52,12 @@ public class PlayerCharacter extends Collidable {
 
 	private int score = 0;
 
+	private TextureMap textureMap;
 
-	public PlayerCharacter() {
+
+	public PlayerCharacter(TextureMap textureMap) {
+		this.textureMap = textureMap;
+
 		animationCycle = 0;
 		velocity = new Vector2(0, 0);
 		shotDirection = new Vector2(0, 1);
@@ -64,19 +68,29 @@ public class PlayerCharacter extends Collidable {
 		rightWalkCycle = new ArrayList<Texture>();
 		leftWalkCycle = new ArrayList<Texture>();
 		// Commented out due to animation not actually existing yet
-		/*
-		 * Texture tempTexture; for (int i = 1; i < 8; i++) { tempTexture = new
-		 * Texture(Gdx.files.internal(String.format("BasicDuckWalkCycle/downduck%d.png", i)));
-		 * downWalkCycle.add(tempTexture); } for (int i = 1; i < 8; i++) { tempTexture = new
-		 * Texture(Gdx.files.internal(String.format("BasicDuckWalkCycle/upduck%d.png", i)));
-		 * upWalkCycle.add(tempTexture); } for (int i = 1; i < 12; i++) { tempTexture = new
-		 * Texture(Gdx.files.internal(String.format("BasicDuckWalkCycle/leftduck%d.png", i)));
-		 * leftWalkCycle.add(tempTexture); } for (int i = 1; i < 12; i++) { tempTexture = new
-		 * Texture(Gdx.files.internal(String.format("BasicDuckWalkCycle/rightduck%d.png", i)));
-		 * rightWalkCycle.add(tempTexture); }
-		 */
+
+		// TODO: Change animations to use spritesheets
+		// Texture tempTexture;
+		// for (int i = 1; i < 8; i++) {
+		// tempTexture = textureMap.getTextureOrLoadFile(String.format("BasicDuckWalkCycle/downduck%d.png", i));
+		// downWalkCycle.add(tempTexture);
+		// }
+		// for (int i = 1; i < 8; i++) {
+		// tempTexture = textureMap.getTextureOrLoadFile(String.format("BasicDuckWalkCycle/upduck%d.png", i));
+		// upWalkCycle.add(tempTexture);
+		// }
+		// for (int i = 1; i < 12; i++) {
+		// tempTexture = textureMap.getTextureOrLoadFile(String.format("BasicDuckWalkCycle/leftduck%d.png", i));
+		// leftWalkCycle.add(tempTexture);
+		// }
+		// for (int i = 1; i < 12; i++) {
+		// tempTexture = textureMap.getTextureOrLoadFile(String.format("BasicDuckWalkCycle/rightduck%d.png",
+		// i));
+		// rightWalkCycle.add(tempTexture);
+		// }
+
 		playerSprite = new Sprite();
-		playerSprite.setRegion(new Texture(Gdx.files.internal("duck.png")));
+		playerSprite.setRegion(textureMap.getTextureOrLoadFile("duck.png"));
 		setSprite(playerSprite);
 		initialiseX(0);
 		initialiseY(0);
@@ -551,7 +565,7 @@ public class PlayerCharacter extends Collidable {
 			break;
 		}
 
-		return Projectile.shootProjectiles(count, position, direction, projectileLife, projectileVelocity,
-				ProjectileDamager.ENEMY);
+		return Projectile.shootProjectiles(textureMap, count, position, direction, projectileLife,
+				projectileVelocity, ProjectileDamager.ENEMY);
 	}
 }

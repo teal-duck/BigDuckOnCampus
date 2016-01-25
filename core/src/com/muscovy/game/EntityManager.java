@@ -43,8 +43,11 @@ public class EntityManager {
 	private int startRoomX = 3;
 	private int startRoomY = 3;
 
+	private TextureMap textureMap;
 
-	public EntityManager() {
+
+	public EntityManager(TextureMap textureMap) {
+		this.textureMap = textureMap;
 		renderList = new ArrayList<OnscreenDrawable>();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
@@ -56,21 +59,25 @@ public class EntityManager {
 		list = new BitmapFont();
 		list.setColor(Color.WHITE);// Testing purposes
 
-		currentDungeonRoom = new DungeonRoom();
+		currentDungeonRoom = new DungeonRoom(textureMap);
 
 		maxLevels = 8;
 
-		northDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
-		northDoorTextureClosed = new Texture(
+		northDoorTextureOpen = textureMap
+				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
+		northDoorTextureClosed = textureMap.getTextureOrLoadFile(
 				"accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
-		eastDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
-		eastDoorTextureClosed = new Texture(
+		eastDoorTextureOpen = textureMap
+				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
+		eastDoorTextureClosed = textureMap.getTextureOrLoadFile(
 				"accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png");
-		westDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
-		westDoorTextureClosed = new Texture(
+		westDoorTextureOpen = textureMap
+				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
+		westDoorTextureClosed = textureMap.getTextureOrLoadFile(
 				"accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png");
-		southDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
-		southDoorTextureClosed = new Texture(
+		southDoorTextureOpen = textureMap
+				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
+		southDoorTextureClosed = textureMap.getTextureOrLoadFile(
 				"accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png");
 
 	}
@@ -79,21 +86,21 @@ public class EntityManager {
 	public void generateLevels() {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
-		level[0] = new Level(levelGenerator.generateBuilding(20, LevelType.CONSTANTINE), ObjectiveType.BOSS,
-				LevelType.CONSTANTINE);
-		level[1] = new Level(levelGenerator.generateBuilding(20, LevelType.LANGWITH), ObjectiveType.BOSS,
-				LevelType.LANGWITH);
-		level[2] = new Level(levelGenerator.generateBuilding(20, LevelType.GOODRICKE), ObjectiveType.BOSS,
-				LevelType.GOODRICKE);
-		level[3] = new Level(levelGenerator.generateBuilding(20, LevelType.LMB), ObjectiveType.BOSS,
+		level[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
+				ObjectiveType.BOSS, LevelType.CONSTANTINE);
+		level[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
+				ObjectiveType.BOSS, LevelType.LANGWITH);
+		level[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
+				ObjectiveType.BOSS, LevelType.GOODRICKE);
+		level[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB), ObjectiveType.BOSS,
 				LevelType.LMB);
-		level[4] = new Level(levelGenerator.generateBuilding(20, LevelType.CATALYST), ObjectiveType.BOSS,
-				LevelType.CATALYST);
-		level[5] = new Level(levelGenerator.generateBuilding(20, LevelType.TFTV), ObjectiveType.BOSS,
-				LevelType.TFTV);
-		level[6] = new Level(levelGenerator.generateBuilding(20, LevelType.COMP_SCI), ObjectiveType.BOSS,
-				LevelType.COMP_SCI);
-		level[7] = new Level(levelGenerator.generateBuilding(20, LevelType.RCH), ObjectiveType.BOSS,
+		level[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
+				ObjectiveType.BOSS, LevelType.CATALYST);
+		level[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
+				ObjectiveType.BOSS, LevelType.TFTV);
+		level[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
+				ObjectiveType.BOSS, LevelType.COMP_SCI);
+		level[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH), ObjectiveType.BOSS,
 				LevelType.RCH);
 		/*
 		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;

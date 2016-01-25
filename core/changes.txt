@@ -1,7 +1,11 @@
 - Added Collidable.floorDiv() so it's compatible with < Java 8
+
 - Run Eclipse source cleanup on project
+
 - Commented out unused variables
+
 - Renaming variables to consistent style (lowerCamelCase)
+
 - Changing some variables to use enums
 	- RoomType
 	- AttackType
@@ -15,13 +19,24 @@
 	- GameState
 	- PlayerShotType
 	- ProjectileDamager (need to think of better name for this)
+	
 - Trying to cleanup magic numbers
 	- Coordinates for rendering between relative to the window size
 	
 - Changed "float x, y, xVelocity, yVelocity, angle;" etc to use Vector2 position, velocity
+
 - Created shootProjectiles() static function in projectile class to remove duplicate of logic
 	- Player and enemy now use this as it handles bullet spread for multiple shots
-
-
+	
+- Created TextureMap, changed all texture loading to use it instead so they can be disposed
+	- Originally, for every entity and bullet, the texture was reloaded from file every time it was used
+		- Slows game down
+		- Wastes memory
+	- Now the getTextureOrLoadFile method only loads the texture the first time it is requested
+		- Else just returns the already loaded instance
+	- TextureMap.disposeAllTextures() called in MuscovyGame.dispose() (i.e. when the game window closes)
+	
+	
 
 When enemies are in bottom corners, player can't shoot them from the side
+
