@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.muscovy.game.enums.ProjectileDamager;
 
 
 /**
@@ -12,15 +13,20 @@ import com.badlogic.gdx.math.Circle;
  */
 public class Projectile extends OnscreenDrawable {
 	private float damage = 10;
-	private int damagesWho = 1; // 0 = damages player, 1 = damages enemy, 3 = damages both
-	private float xVelocity = 0, yVelocity = 0, maxVelocity = 150;
+	// Old documentation, both is now 2
+	// 0 = damages player, 1 = damages enemy, 3 = damages both
+	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
+	private float xVelocity = 0;
+	private float yVelocity = 0;
+	private float maxVelocity = 150;
 	private float direction = 0;
-	private float lifeCounter = 0, life = 1.5f;
+	private float lifeCounter = 0;
+	private float life = 1.5f;
 	private Circle collisionBox;
 
 
 	public Projectile(float x, float y, float direction, float life, float maxVelocity, float xVelocity,
-			float yVelocity, int damagesWho) {
+			float yVelocity, ProjectileDamager damagesWho) {
 		setSprite(new Sprite(new Texture(Gdx.files.internal("breadBullet.png"))));
 		setX(x);
 		setY(y);
@@ -47,12 +53,12 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public int getDamagesWho() {
+	public ProjectileDamager getDamagesWho() {
 		return damagesWho;
 	}
 
 
-	public void setDamagesWho(int damagesWho) {
+	public void setDamagesWho(ProjectileDamager damagesWho) {
 		this.damagesWho = damagesWho;
 	}
 

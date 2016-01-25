@@ -3,6 +3,8 @@ package com.muscovy.game;
 
 import java.util.Random;
 
+import com.muscovy.game.enums.RoomType;
+
 
 /**
  * Created by Thomas on 04/12/2015.
@@ -14,33 +16,28 @@ public class LevelGenerator {
 	 * dungeonRoomArray[yPosition][xPosition]
 	 */
 
+	// TODO: LevelGenerator magic numbers
+	// I think the levels are 7x7
+	// private final int levelWidth = 7;
+
 	/* Count the number of rooms adjacent to the given location */
 	public int checkAdjacent(int myY, int myX, DungeonRoom[][] dungeonRoomArray) {
-
 		int numAdjacent = 0;
 		/* check north */
-		if (myY > 0) {
-			if (dungeonRoomArray[myY - 1][myX] != null) {
-				numAdjacent++;
-			}
+		if ((myY > 0) && (dungeonRoomArray[myY - 1][myX] != null)) {
+			numAdjacent++;
 		}
 		/* check east */
-		if (myX < 6) {
-			if (dungeonRoomArray[myY][myX + 1] != null) {
-				numAdjacent++;
-			}
+		if ((myX < 6) && (dungeonRoomArray[myY][myX + 1] != null)) {
+			numAdjacent++;
 		}
-		if (myY < 6) {
-			/* check south */
-			if (dungeonRoomArray[myY + 1][myX] != null) {
-				numAdjacent++;
-			}
+		/* check south */
+		if ((myY < 6) && (dungeonRoomArray[myY + 1][myX] != null)) {
+			numAdjacent++;
 		}
-		if (myX > 0) {
-			/* check west */
-			if (dungeonRoomArray[myY][myX - 1] != null) {
-				numAdjacent++;
-			}
+		/* check west */
+		if ((myX > 0) && (dungeonRoomArray[myY][myX - 1] != null)) {
+			numAdjacent++;
 		}
 
 		/*
@@ -59,7 +56,7 @@ public class LevelGenerator {
 		DungeonRoom[][] dungeonRoomArray = new DungeonRoom[7][7];
 		/* initialise starting room in the centre */
 		dungeonRoomArray[3][3] = new DungeonRoom();
-		dungeonRoomArray[3][3].setRoomType(4);
+		dungeonRoomArray[3][3].setRoomType(RoomType.START);
 
 		/* initialise counter for current number of rooms */
 		int currentRooms = 1;
@@ -131,28 +128,33 @@ public class LevelGenerator {
 		}
 		/* These are quite naive approaches atm, but they work! */
 
+		// TODO: Move break in room placement loops
+
 		/* place our boss room */
 		for (int xPos = 0; xPos < 7; xPos++) {
 			for (int yPos = 0; yPos < 7; yPos++) {
 				if (!bossSet) {
 					if ((dungeonRoomArray[yPos][xPos] != null)
-							&& (dungeonRoomArray[yPos][xPos].getRoomType() == 0)
+							&& (dungeonRoomArray[yPos][xPos]
+									.getRoomType() == RoomType.NORMAL)
 							&& (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-						dungeonRoomArray[yPos][xPos].setRoomType(1);
+						dungeonRoomArray[yPos][xPos].setRoomType(RoomType.BOSS);
 						bossSet = true;
 						break;
 					}
 				}
 			}
 		}
+
 		/* place our item room */
 		for (int xPos = 0; xPos < 7; xPos++) {
 			for (int yPos = 0; yPos < 7; yPos++) {
 				if (!itemSet) {
 					if ((dungeonRoomArray[yPos][xPos] != null)
-							&& (dungeonRoomArray[yPos][xPos].getRoomType() == 0)
+							&& (dungeonRoomArray[yPos][xPos]
+									.getRoomType() == RoomType.NORMAL)
 							&& (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-						dungeonRoomArray[yPos][xPos].setRoomType(2);
+						dungeonRoomArray[yPos][xPos].setRoomType(RoomType.ITEM);
 						itemSet = true;
 						break;
 					}
@@ -164,15 +166,17 @@ public class LevelGenerator {
 			for (int yPos = 0; yPos < 7; yPos++) {
 				if (!shopSet) {
 					if ((dungeonRoomArray[yPos][xPos] != null)
-							&& (dungeonRoomArray[yPos][xPos].getRoomType() == 0)
+							&& (dungeonRoomArray[yPos][xPos]
+									.getRoomType() == RoomType.NORMAL)
 							&& (checkAdjacent(yPos, xPos, dungeonRoomArray) == 1)) {
-						dungeonRoomArray[yPos][xPos].setRoomType(3);
+						dungeonRoomArray[yPos][xPos].setRoomType(RoomType.SHOP);
 						shopSet = true;
 						break;
 					}
 				}
 			}
 		}
+
 		for (int xPos = 0; xPos < 7; xPos++) {
 			for (int yPos = 0; yPos < 7; yPos++) {
 				if (dungeonRoomArray[yPos][xPos] != null) {
@@ -180,6 +184,7 @@ public class LevelGenerator {
 				}
 			}
 		}
+
 		return dungeonRoomArray;
 	}
 }

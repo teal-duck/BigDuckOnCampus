@@ -7,6 +7,10 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.muscovy.game.enums.AttackType;
+import com.muscovy.game.enums.EnemyShotType;
+import com.muscovy.game.enums.MovementType;
+import com.muscovy.game.enums.RoomType;
 
 
 /**
@@ -21,15 +25,24 @@ public class DungeonRoom extends OnscreenDrawable {
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
-	private Rectangle[] walls, projectileWalls;
+	private Rectangle[] walls;
+	private Rectangle[] projectileWalls;
 	/* variables indicate if there is a door on that wall */
-	private boolean upDoor = false, rightDoor = false, downDoor = false, leftDoor = false, enemiesDead;
-	private Rectangle northDoor, eastDoor, southDoor, westDoor;
-	float doorSize = 65;
+	private boolean upDoor = false;
+	private boolean rightDoor = false;
+	private boolean downDoor = false;
+	private boolean leftDoor = false;
+	private boolean enemiesDead;
+	private Rectangle northDoor;
+	private Rectangle eastDoor;
+	private Rectangle southDoor;
+	private Rectangle westDoor;
+	private float doorSize = 65;
 	/*
 	 * roomType indicates the type of room options: "" (default), "start", "boss", "item", "shop"
 	 */
-	private int roomType = 0; // 0 = normal room, 1 = boss room, 2 = item room, 3 = shop room, 4 = start room
+	private RoomType roomType = RoomType.NORMAL; // 0 = normal room, 1 = boss room, 2 = item room, 3 = shop room, 4
+							// = start room
 	private Random rand;
 
 
@@ -37,6 +50,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		rand = new Random();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
+		// TODO: Use constants for sizes of objects
 		walls = new Rectangle[4];
 		walls[0] = new Rectangle(0, 0, 1280, 64);// bottom wall
 		walls[1] = new Rectangle(0, 0, 64, 960 - 192);// left wall
@@ -51,11 +65,11 @@ public class DungeonRoom extends OnscreenDrawable {
 
 
 	private void createNonDamagingObstacle(int x, int y) {
-		Sprite RockSprite;
+		Sprite rockSprite;
 		Obstacle obstacle5;
-		RockSprite = new Sprite();
-		RockSprite.setTexture(new Texture("accommodationAssets/obstacles/binRecycle.png"));
-		obstacle5 = new Obstacle(RockSprite);
+		rockSprite = new Sprite();
+		rockSprite.setTexture(new Texture("accommodationAssets/obstacles/binRecycle.png"));
+		obstacle5 = new Obstacle(rockSprite);
 		obstacle5.setXTiles(x);
 		obstacle5.setYTiles(y);
 		addObstacle(obstacle5);
@@ -63,11 +77,11 @@ public class DungeonRoom extends OnscreenDrawable {
 
 
 	private void createDamagingObstacle(int x, int y) {
-		Sprite SpikeSprite;
+		Sprite spikeSprite;
 		Obstacle obstacle6;
-		SpikeSprite = new Sprite();
-		SpikeSprite.setTexture(new Texture("accommodationAssets/obstacles/binWaste.png"));
-		obstacle6 = new Obstacle(SpikeSprite);
+		spikeSprite = new Sprite();
+		spikeSprite.setTexture(new Texture("accommodationAssets/obstacles/binWaste.png"));
+		obstacle6 = new Obstacle(spikeSprite);
 		obstacle6.setXTiles(x);
 		obstacle6.setYTiles(y);
 		addObstacle(obstacle6);
@@ -83,29 +97,29 @@ public class DungeonRoom extends OnscreenDrawable {
 			enemySprite = new Sprite(new Texture(
 					"accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
 			enemy = new Enemy(enemySprite);
-			enemy.setAttackType(0);
+			enemy.setAttackType(AttackType.TOUCH);
 		} else {
 			enemySprite = new Sprite(new Texture(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
 			enemy = new Enemy(enemySprite);
-			enemy.setAttackType(1);
+			enemy.setAttackType(AttackType.RANGE);
 		}
 		switch (rand.nextInt(3)) {
 		case 0:
-			enemy.setShotType(0);
-			enemy.setMovementType(1);
+			enemy.setShotType(EnemyShotType.SINGLE_TOWARDS_PLAYER);
+			enemy.setMovementType(MovementType.RANDOM);
 			break;
 		case 1:
-			enemy.setShotType(1);
-			enemy.setMovementType(1);
+			enemy.setShotType(EnemyShotType.SINGLE_TOWARDS_PLAYER);
+			enemy.setMovementType(MovementType.RANDOM);
 			break;
 		case 2:
-			enemy.setShotType(2);
-			enemy.setMovementType(2);
+			enemy.setShotType(EnemyShotType.DOUBLE_TOWARDS_PLAYER);
+			enemy.setMovementType(MovementType.FOLLOW);
 			break;
 		case 3:
-			enemy.setShotType(4);
-			enemy.setMovementType(2);
+			enemy.setShotType(EnemyShotType.RANDOM_DIRECTION);
+			enemy.setMovementType(MovementType.FOLLOW);
 			break;
 		}
 		enemy.setXTiles(x);
@@ -126,14 +140,15 @@ public class DungeonRoom extends OnscreenDrawable {
 		Enemy enemy;
 		Texture texture;
 		switch (roomType) {
-		case 0:
+		case NORMAL:
 			// Normal
-			int[][] TileArray = new int[10][18];
-			int ChosenValue = rand.nextInt(10) + 1;
-			boolean ChosenValue2 = rand.nextBoolean();
-			switch (ChosenValue) {
+			int[][] tileArray = new int[10][18];
+			int chosenLayout = rand.nextInt(10) + 1;
+			// TODO: Load maps from file
+			// TODO: What do 0, 1, 2, 3 and 4 mean in tileArray
+			switch (chosenLayout) {
 			case 1:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -145,7 +160,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 2:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -157,7 +172,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 3:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
@@ -169,7 +184,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 4:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -181,7 +196,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 5:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -193,7 +208,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 6:
-				TileArray = new int[][] { { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -205,7 +220,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 } };
 				break;
 			case 7:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
@@ -217,7 +232,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 8:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0 },
@@ -229,7 +244,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 9:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
@@ -241,7 +256,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 10:
-				TileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0 },
@@ -253,9 +268,10 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			}
-			for (int i = 0; i < TileArray.length; i++) {
-				for (int j = 0; j < TileArray[i].length; j++) {
-					switch (TileArray[i][j]) {
+			boolean obstacleType3NonDamaging = rand.nextBoolean();
+			for (int i = 0; i < tileArray.length; i++) {
+				for (int j = 0; j < tileArray[i].length; j++) {
+					switch (tileArray[i][j]) {
 					case 0:
 						break;
 					case 1:
@@ -265,9 +281,9 @@ public class DungeonRoom extends OnscreenDrawable {
 						createDamagingObstacle(2 * j, 2 * i);
 						break;
 					case 3:
-						if (ChosenValue2) {
+						if (obstacleType3NonDamaging) {
 							createNonDamagingObstacle(2 * j, 2 * i);
-						} else if (!ChosenValue2) {
+						} else if (!obstacleType3NonDamaging) {
 							createDamagingObstacle(2 * j, 2 * i);
 						}
 						break;
@@ -280,7 +296,7 @@ public class DungeonRoom extends OnscreenDrawable {
 				}
 			}
 			break;
-		case 1:
+		case BOSS:
 			// Boss
 			Sprite bossSprite;
 			Enemy bossEnemy;
@@ -288,41 +304,43 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossEnemy = new Enemy(bossSprite);
 			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
 			bossEnemy.setYTiles((int) ((18 / 2) - (bossEnemy.getHeight() / 64)));
-			bossEnemy.setAttackType(2);
-			bossEnemy.setMovementType(2);
+			bossEnemy.setAttackType(AttackType.BOTH);
+			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
 			bossEnemy.setTouchDamage(20);
-			bossEnemy.setShotType(3);
+			bossEnemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
 			bossEnemy.setScoreOnDeath(3000);
 			bossEnemy.setCurrentHealth(600);
 			bossEnemy.setHitboxRadius(80);
 			bossEnemy.setMovementRange(1000);
 			addEnemy(bossEnemy);
 			break;
-		case 2:
+		case ITEM:
 			// Item
 			enemySprite = new Sprite(new Texture(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
 			enemy = new Enemy(enemySprite);
-			enemy.setAttackType(1);
+			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(100);
 			enemy.setYTiles(100);
 			addEnemy(enemy);
 			break;
-		case 3:
+		case SHOP:
 			// Shop
 			enemySprite = new Sprite(new Texture(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
 			enemy = new Enemy(enemySprite);
-			enemy.setAttackType(1);
+			enemy.setAttackType(AttackType.RANGE);
 			enemy.setX(0);
 			enemy.setY(0);
 			addEnemy(enemy);
 			break;
-		case 4:
+		case START:
 			// Start
 			break;
 		}
+
+		// TODO: Make level backgrounds an array
 		switch (level) {
 		case 0:
 			texture = new Texture("accommodationAssets/constantineBackground.png");
@@ -349,6 +367,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			texture = new Texture("accommodationAssets/rchBackground.png");
 			break;
 		}
+
 		setSprite(new Sprite(texture));
 		initialiseDoors();
 	}
@@ -442,12 +461,12 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public int getRoomType() {
+	public RoomType getRoomType() {
 		return roomType;
 	}
 
 
-	public void setRoomType(int roomType) {
+	public void setRoomType(RoomType roomType) {
 		this.roomType = roomType;
 	}
 
@@ -465,42 +484,42 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public Boolean getUpDoor() {
+	public boolean getUpDoor() {
 		return upDoor;
 	}
 
 
-	public void setUpDoor(Boolean upDoor) {
+	public void setUpDoor(boolean upDoor) {
 		this.upDoor = upDoor;
 	}
 
 
-	public Boolean getRightDoor() {
+	public boolean getRightDoor() {
 		return rightDoor;
 	}
 
 
-	public void setRightDoor(Boolean rightDoor) {
+	public void setRightDoor(boolean rightDoor) {
 		this.rightDoor = rightDoor;
 	}
 
 
-	public Boolean getDownDoor() {
+	public boolean getDownDoor() {
 		return downDoor;
 	}
 
 
-	public void setDownDoor(Boolean downDoor) {
+	public void setDownDoor(boolean downDoor) {
 		this.downDoor = downDoor;
 	}
 
 
-	public Boolean getLeftDoor() {
+	public boolean getLeftDoor() {
 		return leftDoor;
 	}
 
 
-	public void setLeftDoor(Boolean leftDoor) {
+	public void setLeftDoor(boolean leftDoor) {
 		this.leftDoor = leftDoor;
 	}
 
@@ -551,5 +570,4 @@ public class DungeonRoom extends OnscreenDrawable {
 		sprite.setY(0);
 		super.setSprite(sprite);
 	}
-
 }

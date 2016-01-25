@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.muscovy.game.enums.LevelType;
+import com.muscovy.game.enums.ObjectiveType;
+import com.muscovy.game.enums.RoomType;
 
 
 /**
@@ -21,13 +24,21 @@ public class EntityManager {
 	private DungeonRoom currentDungeonRoom;
 	private LevelGenerator levelGenerator;
 	private Level[] level;
-	private int levelNo, maxLevels = 8;
-	private int roomX, roomY;
+	private int levelNo;
+	private int maxLevels = 8;
+	private int roomX;
+	private int roomY;
 	private float roomTimer = 0;
 	private BitmapFont list;// Testing purposes
 	private PlayerCharacter playerCharacter;
-	private Texture northDoorTextureOpen, southDoorTextureOpen, eastDoorTextureOpen, westDoorTextureOpen,
-			northDoorTextureClosed, southDoorTextureClosed, eastDoorTextureClosed, westDoorTextureClosed;
+	private Texture northDoorTextureOpen;
+	private Texture southDoorTextureOpen;
+	private Texture eastDoorTextureOpen;
+	private Texture westDoorTextureOpen;
+	private Texture northDoorTextureClosed;
+	private Texture southDoorTextureClosed;
+	private Texture eastDoorTextureClosed;
+	private Texture westDoorTextureClosed;
 
 
 	public EntityManager() {
@@ -35,12 +46,17 @@ public class EntityManager {
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
 		projectileList = new ArrayList<Projectile>();
+
 		levelGenerator = new LevelGenerator();
 		level = new Level[maxLevels];
+
 		list = new BitmapFont();
 		list.setColor(Color.WHITE);// Testing purposes
+
 		currentDungeonRoom = new DungeonRoom();
+
 		maxLevels = 8;
+
 		northDoorTextureOpen = new Texture("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
 		northDoorTextureClosed = new Texture(
 				"accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
@@ -58,14 +74,16 @@ public class EntityManager {
 
 
 	public void generateLevels() {
-		level[0] = new Level(levelGenerator.generateBuilding(20, 0), 0, 0);
-		level[1] = new Level(levelGenerator.generateBuilding(20, 1), 0, 1);
-		level[2] = new Level(levelGenerator.generateBuilding(20, 2), 0, 2);
-		level[3] = new Level(levelGenerator.generateBuilding(20, 3), 0, 3);
-		level[4] = new Level(levelGenerator.generateBuilding(20, 4), 0, 4);
-		level[5] = new Level(levelGenerator.generateBuilding(20, 5), 0, 5);
-		level[6] = new Level(levelGenerator.generateBuilding(20, 6), 0, 6);
-		level[7] = new Level(levelGenerator.generateBuilding(20, 7), 0, 7);
+		// TODO: Only generate level when player wants to play it?
+		// Game is slow to load atm
+		level[0] = new Level(levelGenerator.generateBuilding(20, 0), ObjectiveType.BOSS, LevelType.CONSTANTINE);
+		level[1] = new Level(levelGenerator.generateBuilding(20, 1), ObjectiveType.BOSS, LevelType.LANGWITH);
+		level[2] = new Level(levelGenerator.generateBuilding(20, 2), ObjectiveType.BOSS, LevelType.GOODRICKE);
+		level[3] = new Level(levelGenerator.generateBuilding(20, 3), ObjectiveType.BOSS, LevelType.LMB);
+		level[4] = new Level(levelGenerator.generateBuilding(20, 4), ObjectiveType.BOSS, LevelType.CATALYST);
+		level[5] = new Level(levelGenerator.generateBuilding(20, 5), ObjectiveType.BOSS, LevelType.TFTV);
+		level[6] = new Level(levelGenerator.generateBuilding(20, 6), ObjectiveType.BOSS, LevelType.COMP_SCI);
+		level[7] = new Level(levelGenerator.generateBuilding(20, 7), ObjectiveType.BOSS, LevelType.RCH);
 		/*
 		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;
 		 * }
@@ -103,8 +121,11 @@ public class EntityManager {
 		obstacleList.trimToSize();
 		enemyList.trimToSize();
 		projectileList.trimToSize();
+
 		sortDrawables();
+
 		batch.draw(currentDungeonRoom.getSprite().getTexture(), 0, 0);
+
 		if (currentDungeonRoom.isEnemiesDead()) {
 			if (currentDungeonRoom.getUpDoor()) {
 				batch.draw(northDoorTextureOpen, (1280 - northDoorTextureOpen.getWidth()) / 2,
@@ -146,6 +167,7 @@ public class EntityManager {
 						(768 - westDoorTextureOpen.getWidth()) / 2);
 			}
 		}
+
 		for (OnscreenDrawable drawable : renderList) {
 			if (drawable instanceof PlayerCharacter) {
 				if (((PlayerCharacter) drawable).isInvincible()) {
@@ -161,6 +183,7 @@ public class EntityManager {
 				batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
 			}
 		}
+
 		for (Projectile projectile : projectileList) {
 			batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 		}
@@ -363,8 +386,8 @@ public class EntityManager {
 
 
 	public void checkLevelCompletion() {
-		if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == 1)
-				&& (level[levelNo].getObjective() == 0)) {
+		if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == RoomType.BOSS)
+				&& (level[levelNo].getObjective() == ObjectiveType.BOSS)) {
 			level[levelNo].setCompleted(true);
 		}
 	}
@@ -373,5 +396,4 @@ public class EntityManager {
 	public float getRoomTimer() {
 		return roomTimer;
 	}
-
 }

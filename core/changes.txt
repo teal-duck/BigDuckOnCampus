@@ -1,3 +1,17 @@
 - Added Collidable.floorDiv() so it's compatible with < Java 8
 - Run Eclipse source cleanup on project
 - Commented out unused variables
+- Renaming variables to consistent style (lowerCamelCase)
+- Changing some variables to use enums
+	- RoomType
+	- AttackType
+	- EnemyShotType
+	- MovementType
+	- ObjectiveType
+	- LevelType
+		- Changed MuscovyGame.mapSelected to use this
+		- Levels are 0-7 but mapSelected was 1-8
+		- Updated the logic for this
+	- GameState
+	- PlayerShotType
+	- ProjectileDamager (need to think of better name for this)

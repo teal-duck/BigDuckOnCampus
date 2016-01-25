@@ -13,10 +13,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class GUI {
 	private ArrayList<Sprite> guiElements;
-	private ArrayList<guiData> guiData;
+	private ArrayList<GuiData> guiData;
 
 
-	private class guiData {
+	private class GuiData {
 		/**
 		 * Helper Class: guiData Structure for the text elements of the GUI. No need to access directly, getters
 		 * and setters are provided for the bits you might need to change.
@@ -27,7 +27,7 @@ public class GUI {
 		private int x, y;
 
 
-		public guiData(String ID, BitmapFont font, String data, int x, int y) {
+		public GuiData(String ID, BitmapFont font, String data, int x, int y) {
 			this.ID = ID;
 			this.data = data;
 			this.font = font;
@@ -41,9 +41,10 @@ public class GUI {
 		}
 
 
-//		public void setID(String ID) {
-//			this.ID = ID;
-//		}
+		@SuppressWarnings("unused")
+		public void setID(String ID) {
+			this.ID = ID;
+		}
 
 
 		public int getX() {
@@ -89,7 +90,7 @@ public class GUI {
 
 	public GUI() {
 		guiElements = new ArrayList<Sprite>();
-		guiData = new ArrayList<guiData>();
+		guiData = new ArrayList<GuiData>();
 	}
 	/**
 	 * GUI Text Methods These are confusing, I think, so give me a shout if you need it explaining. You could
@@ -115,12 +116,12 @@ public class GUI {
 		 * ID is used to identify the text you want to change using editData, so use something memorable (works
 		 * like a variable name)
 		 */
-		guiData.add(new guiData(ID, font, data, x, y));
+		guiData.add(new GuiData(ID, font, data, x, y));
 	}
 
 
 	public void editData(String ID, String newData) {
-		for (guiData data : guiData) {
+		for (GuiData data : guiData) {
 			if (data.getID().matches(ID)) {
 				data.setData(newData);
 			}
@@ -129,7 +130,7 @@ public class GUI {
 
 
 	public void moveData(String ID, int x, int y) {
-		for (guiData data : guiData) {
+		for (GuiData data : guiData) {
 			if (data.getID().matches(ID)) {
 				data.setX(x);
 				data.setY(y);
@@ -139,7 +140,7 @@ public class GUI {
 
 
 	public void changeDataFont(String ID, BitmapFont font) {
-		for (guiData data : guiData) {
+		for (GuiData data : guiData) {
 			if (data.getID().matches(ID)) {
 				data.setFont(font);
 			}
@@ -161,7 +162,8 @@ public class GUI {
 		for (Sprite sprite : guiElements) {
 			batch.draw(sprite.getTexture(), sprite.getX(), sprite.getY());
 		}
-		for (guiData element : guiData) {
+
+		for (GuiData element : guiData) {
 			element.getFont().draw(batch, element.getData(), element.getX(), element.getY());
 		}
 	}

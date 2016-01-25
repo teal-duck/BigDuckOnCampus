@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.muscovy.game.enums.PlayerShotType;
+import com.muscovy.game.enums.ProjectileDamager;
 
 
 /**
@@ -15,21 +17,31 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class PlayerCharacter extends Collidable {
 	// private Random random;
 
-	private float xVelocity, yVelocity;
-	private float maxVelocity = 350, defaultVelocity = 350, accel = maxVelocity * 6, decel = maxVelocity * 5.5f;
-	private float direction = 0, shotDirection = 0; // 0 - 2*PI
-	private ArrayList<Texture> downWalkCycle, leftWalkCycle, rightWalkCycle, upWalkCycle;
-	private int animationCycle, animationCounter;
+	private float xVelocity;
+	private float yVelocity;
+	private float maxVelocity = 350;
+	private float defaultVelocity = 350;
+	private float accel = maxVelocity * 6;
+	private float decel = maxVelocity * 5.5f;
+	private float direction = 0;
+	private float shotDirection = 0; // 0 - 2*PI
+	private ArrayList<Texture> downWalkCycle;
+	private ArrayList<Texture> leftWalkCycle;
+	private ArrayList<Texture> rightWalkCycle;
+	private ArrayList<Texture> upWalkCycle;
+	private int animationCycle;
+	private int animationCounter;
 
-	private int shotType = 0; // 0 = single shot, 1 = double shot, 2 = triple shot
-	private float attackInterval = 0.25f, timeSinceLastAttack = attackInterval; // MuscovyGame.java checks these and
-											// does an attack if attack
-											// timer is greater than attack
-											// interval.
-	private float projectileVelocity = 450, projectileRange = 600,
-			projectileLife = projectileRange / projectileVelocity;
+	private PlayerShotType shotType = PlayerShotType.SINGLE; // 0 = single shot, 1 = double shot, 2 = triple shot
+	// MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
+	private float attackInterval = 0.25f;
+	private float timeSinceLastAttack = attackInterval;
+	private float projectileVelocity = 450;
+	private float projectileRange = 600;
+	private float projectileLife = projectileRange / projectileVelocity;
 
-	private float currentHealth = 100, maxHealth = 100;
+	private float currentHealth = 100;
+	private float maxHealth = 100;
 	private boolean invincible = false;
 	private float invincibilityCounter = 0;
 
@@ -341,15 +353,18 @@ public class PlayerCharacter extends Collidable {
 		 */
 	}
 
+	// TODO: Why do only right and up apply decceleration?
+
 
 	/**
 	 * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D If opposite directions are
 	 * pressed at the same time, velocity decelerated to 0 Calculates velocity based on delta time and acceleration
 	 */
-	public void Right() {
+	public void goRight() {
 		if (animationCycle > 10) {
 			animationCycle = 0;
 		}
+
 		if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.A)) {
 			decelXToStop();
 		} else {
@@ -358,18 +373,20 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public void Left() {
+	public void goLeft() {
 		if (animationCycle > 10) {
 			animationCycle = 0;
 		}
+
 		changeXVelocity((-accel) * Gdx.graphics.getDeltaTime());
 	}
 
 
-	public void Up() {
+	public void goUp() {
 		if (animationCycle > 6) {
 			animationCycle = 0;
 		}
+
 		if (Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.S)) {
 			decelYToStop();
 		} else {
@@ -378,10 +395,11 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public void Down() {
+	public void goDown() {
 		if (animationCycle > 6) {
 			animationCycle = 0;
 		}
+
 		changeYVelocity((-accel) * Gdx.graphics.getDeltaTime());
 	}
 
@@ -394,6 +412,7 @@ public class PlayerCharacter extends Collidable {
 				changeXVelocity(-decel * Gdx.graphics.getDeltaTime());
 			}
 		}
+
 		if (getXVelocity() < 0) {
 			if ((getXVelocity() + (decel * Gdx.graphics.getDeltaTime())) > 0) {
 				setXVelocity(0);
@@ -401,6 +420,7 @@ public class PlayerCharacter extends Collidable {
 				changeXVelocity(decel * Gdx.graphics.getDeltaTime());
 			}
 		}
+
 		idleAnimation();
 	}
 
@@ -413,6 +433,7 @@ public class PlayerCharacter extends Collidable {
 				changeYVelocity(-decel * Gdx.graphics.getDeltaTime());
 			}
 		}
+
 		if (getYVelocity() < 0) {
 			if ((getYVelocity() + (decel * Gdx.graphics.getDeltaTime())) > 0) {
 				setYVelocity(0);
@@ -420,6 +441,7 @@ public class PlayerCharacter extends Collidable {
 				changeYVelocity(decel * Gdx.graphics.getDeltaTime());
 			}
 		}
+
 		idleAnimation();
 	}
 
@@ -435,9 +457,11 @@ public class PlayerCharacter extends Collidable {
 
 	public void changeXVelocity(float velocity) {
 		xVelocity += velocity;
+
 		if (xVelocity > maxVelocity) {
 			xVelocity = maxVelocity;
 		}
+
 		if (xVelocity < -maxVelocity) {
 			xVelocity = -maxVelocity;
 		}
@@ -446,9 +470,11 @@ public class PlayerCharacter extends Collidable {
 
 	public void changeYVelocity(float velocity) {
 		yVelocity += velocity;
+
 		if (yVelocity > maxVelocity) {
 			yVelocity = maxVelocity;
 		}
+
 		if (yVelocity < -maxVelocity) {
 			yVelocity = -maxVelocity;
 		}
@@ -493,23 +519,23 @@ public class PlayerCharacter extends Collidable {
 		float x = ((getX() + (getWidth() / 2)) - 8);
 		float y = ((getY() + getHeight()) - 32);
 		switch (shotType) {
-		case 0:
+		case SINGLE:
 			rangedAttack.add(new Projectile(x, y, shotDirection, projectileLife, projectileVelocity,
-					xVelocity / 4, yVelocity / 4, 1));
+					xVelocity / 4, yVelocity / 4, ProjectileDamager.ENEMY));
 			break;
-		case 1:
+		case DOUBLE:
 			rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 24)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, 1));
+					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
 			rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 24)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, 1));
+					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
 			break;
-		case 2:
+		case TRIPLE:
 			rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 12)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, 1));
+					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
 			rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 12)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, 1));
+					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
 			rangedAttack.add(new Projectile(x, y, shotDirection, projectileLife, projectileVelocity,
-					xVelocity, yVelocity, 1));
+					xVelocity, yVelocity, ProjectileDamager.ENEMY));
 			break;
 		}
 		return rangedAttack;

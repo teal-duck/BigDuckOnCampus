@@ -15,8 +15,10 @@ public abstract class Collidable extends OnscreenDrawable {
 	// Offset from centre of collidable: offset of 6 means centre of circle hitbox is 6 pixels above centre of
 	// collidable
 	private float hitboxYOffset = 0;
-	private int XTiles, YTiles;
-	private int widthTiles, heightTiles;
+	private int xTiles;
+	private int yTiles;
+	private int widthTiles;
+	private int heightTiles;
 
 
 	// http://stackoverflow.com/questions/27643616/ceil-conterpart-for-math-floordiv-in-java
@@ -48,40 +50,42 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	public int getXTiles() {
-		return XTiles;
+		return xTiles;
 	}
 
 
 	public int getYTiles() {
-		return YTiles;
+		return yTiles;
 	}
 
+
+	// TODO: Should setX/YTiles use modulo and constants for world width/height
 
 	/**
 	 * setXTiles and setYTiles moves the collidable to fit on the grid directly. Clamps to walls of dungeon room,
 	 * assuming a 64x64 collidable Useful for placing stuff in the dungeon rooms
 	 */
-	public void setXTiles(int XTiles) {
+	public void setXTiles(int xTiles) {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (XTiles > (37 - widthTiles)) {
-			XTiles = 37 - widthTiles;
+		if (xTiles > (37 - widthTiles)) {
+			xTiles = 37 - widthTiles;
 		}
-		this.XTiles = XTiles;
-		setX((XTiles * 32) + 64);
+		this.xTiles = xTiles;
+		setX((xTiles * 32) + 64);
 	}
 
 
-	public void setYTiles(int YTiles) {
+	public void setYTiles(int yTiles) {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (YTiles > (21 - heightTiles)) {
-			YTiles = 21 - heightTiles;
+		if (yTiles > (21 - heightTiles)) {
+			yTiles = 21 - heightTiles;
 		}
-		this.YTiles = YTiles;
-		setY((YTiles * 32) + 64);
+		this.yTiles = yTiles;
+		setY((yTiles * 32) + 64);
 	}
 
 
@@ -201,8 +205,8 @@ public abstract class Collidable extends OnscreenDrawable {
 		float thisY = getCircleHitbox().y;
 		float thatX = collidable.getCircleHitbox().x;
 		float thatY = collidable.getCircleHitbox().y;
-//		float rectDistance = 0;
-//		float distanceToEdge = 0;
+		// float rectDistance = 0;
+		// float distanceToEdge = 0;
 		float x, y;
 		if ((thisX > collidable.getX()) && (thisX < (collidable.getX() + collidable.getWidth()))
 				&& (thisY > thatY)) {
@@ -272,6 +276,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	public float getAngleFrom(Collidable collidable) {
 		float x = (getCircleHitbox().x - collidable.getCircleHitbox().x);
 		float y = (getCircleHitbox().y - collidable.getCircleHitbox().y);
+		// TODO: Use Math.atan2
 		float angle = (float) Math.atan(x / y);
 		if (x >= 0) {
 			if (y >= 0) {
@@ -293,6 +298,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	public float getAngleTo(Collidable collidable) {
 		float x = (collidable.getCircleHitbox().x - circleHitbox.x);
 		float y = (collidable.getCircleHitbox().y - circleHitbox.y);
+		// TODO: Use Math.atan2
 		float angle = (float) Math.atan(x / y);
 		if (x >= 0) {
 			if (y >= 0) {
@@ -322,5 +328,4 @@ public abstract class Collidable extends OnscreenDrawable {
 	public boolean collides(Collidable collidable) {
 		return Intersector.overlaps(circleHitbox, collidable.getCircleHitbox());
 	}
-
 }
