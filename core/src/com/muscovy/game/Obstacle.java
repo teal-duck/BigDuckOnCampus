@@ -1,71 +1,84 @@
 package com.muscovy.game;
 
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
 
+
 /**
- * Created by SeldomBucket on 05-Dec-15.
- * I should hope this is all fairly self-explanatory
+ * Created by SeldomBucket on 05-Dec-15. I should hope this is all fairly self-explanatory
  */
 public class Obstacle extends Collidable {
-    private boolean damaging;
-    private float touchDamage;
+	private boolean damaging;
+	private float touchDamage;
 
-    public Obstacle(Sprite sprite) {
-        this.setSprite(sprite);
-        this.initialiseX(0);
-        this.initialiseY(0);
-        this.setUpBoxes();
-    }
 
-    public boolean isDamaging() {
-        return damaging;
-    }
+	public Obstacle(Sprite sprite) {
+		setSprite(sprite);
+		initialiseX(0);
+		initialiseY(0);
+		setUpBoxes();
+	}
 
-    public void setDamaging(boolean damaging) {
-        this.damaging = damaging;
-    }
 
-    public float getTouchDamage() {
-        return touchDamage;
-    }
+	public boolean isDamaging() {
+		return damaging;
+	}
 
-    public void setTouchDamage(float touchDamage) {
-        this.touchDamage = touchDamage;
-    }
 
-    @Override
-    public Sprite getSprite() {
-        return super.getSprite();
-    }
+	public void setDamaging(boolean damaging) {
+		this.damaging = damaging;
+	}
 
-    @Override
-    public void setSprite(Sprite sprite) {
-        super.setSprite(sprite);
-    }
 
-    @Override
-    public float getX() {
-        return super.getX();
-    }
+	public float getTouchDamage() {
+		return touchDamage;
+	}
 
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-    }
 
-    @Override
-    public float getY() {
-        return super.getY();
-    }
+	public void setTouchDamage(float touchDamage) {
+		this.touchDamage = touchDamage;
+	}
 
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-    }
 
-    @Override
-    public boolean collides(Collidable collidable) {
-        return Intersector.overlaps(collidable.getCircleHitbox(), this.getRectangleHitbox());
-    }
+	@Override
+	public Sprite getSprite() {
+		return super.getSprite();
+	}
+
+
+	@Override
+	public void setSprite(Sprite sprite) {
+		super.setSprite(sprite);
+	}
+
+
+	@Override
+	public float getX() {
+		return super.getX();
+	}
+
+
+	@Override
+	public void setX(float x) {
+		super.setX(x);
+	}
+
+
+	@Override
+	public float getY() {
+		return super.getY();
+	}
+
+
+	@Override
+	public void setY(float y) {
+		super.setY(y);
+	}
+
+
+	@Override
+	public boolean collides(Collidable collidable) {
+		return Intersector.overlaps(collidable.getCircleHitbox(), getRectangleHitbox());
+	}
 }

@@ -1,0 +1,3 @@
+- Added Collidable.floorDiv() so it's compatible with < Java 8
+- Run Eclipse source cleanup on project
+- Commented out unused variables
