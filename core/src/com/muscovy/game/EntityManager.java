@@ -40,6 +40,9 @@ public class EntityManager {
 	private Texture eastDoorTextureClosed;
 	private Texture westDoorTextureClosed;
 
+	private int startRoomX = 3;
+	private int startRoomY = 3;
+
 
 	public EntityManager() {
 		renderList = new ArrayList<OnscreenDrawable>();
@@ -76,14 +79,22 @@ public class EntityManager {
 	public void generateLevels() {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
-		level[0] = new Level(levelGenerator.generateBuilding(20, 0), ObjectiveType.BOSS, LevelType.CONSTANTINE);
-		level[1] = new Level(levelGenerator.generateBuilding(20, 1), ObjectiveType.BOSS, LevelType.LANGWITH);
-		level[2] = new Level(levelGenerator.generateBuilding(20, 2), ObjectiveType.BOSS, LevelType.GOODRICKE);
-		level[3] = new Level(levelGenerator.generateBuilding(20, 3), ObjectiveType.BOSS, LevelType.LMB);
-		level[4] = new Level(levelGenerator.generateBuilding(20, 4), ObjectiveType.BOSS, LevelType.CATALYST);
-		level[5] = new Level(levelGenerator.generateBuilding(20, 5), ObjectiveType.BOSS, LevelType.TFTV);
-		level[6] = new Level(levelGenerator.generateBuilding(20, 6), ObjectiveType.BOSS, LevelType.COMP_SCI);
-		level[7] = new Level(levelGenerator.generateBuilding(20, 7), ObjectiveType.BOSS, LevelType.RCH);
+		level[0] = new Level(levelGenerator.generateBuilding(20, LevelType.CONSTANTINE), ObjectiveType.BOSS,
+				LevelType.CONSTANTINE);
+		level[1] = new Level(levelGenerator.generateBuilding(20, LevelType.LANGWITH), ObjectiveType.BOSS,
+				LevelType.LANGWITH);
+		level[2] = new Level(levelGenerator.generateBuilding(20, LevelType.GOODRICKE), ObjectiveType.BOSS,
+				LevelType.GOODRICKE);
+		level[3] = new Level(levelGenerator.generateBuilding(20, LevelType.LMB), ObjectiveType.BOSS,
+				LevelType.LMB);
+		level[4] = new Level(levelGenerator.generateBuilding(20, LevelType.CATALYST), ObjectiveType.BOSS,
+				LevelType.CATALYST);
+		level[5] = new Level(levelGenerator.generateBuilding(20, LevelType.TFTV), ObjectiveType.BOSS,
+				LevelType.TFTV);
+		level[6] = new Level(levelGenerator.generateBuilding(20, LevelType.COMP_SCI), ObjectiveType.BOSS,
+				LevelType.COMP_SCI);
+		level[7] = new Level(levelGenerator.generateBuilding(20, LevelType.RCH), ObjectiveType.BOSS,
+				LevelType.RCH);
 		/*
 		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;
 		 * }
@@ -102,8 +113,8 @@ public class EntityManager {
 
 
 	public void startLevel(PlayerCharacter playerCharacter) {
-		roomX = 3;
-		roomY = 3;
+		roomX = startRoomX;
+		roomY = startRoomY;
 		this.playerCharacter = playerCharacter;
 		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
 		renderList.add(this.playerCharacter);
@@ -126,46 +137,40 @@ public class EntityManager {
 
 		batch.draw(currentDungeonRoom.getSprite().getTexture(), 0, 0);
 
-		if (currentDungeonRoom.isEnemiesDead()) {
-			if (currentDungeonRoom.getUpDoor()) {
-				batch.draw(northDoorTextureOpen, (1280 - northDoorTextureOpen.getWidth()) / 2,
-						currentDungeonRoom.getNorthDoor().getY()
-								+ (currentDungeonRoom.getNorthDoor().getWidth() - 64));
-			}
-			if (currentDungeonRoom.getDownDoor()) {
-				batch.draw(southDoorTextureOpen, (1280 - southDoorTextureOpen.getWidth()) / 2,
-						currentDungeonRoom.getSouthDoor().getY() + 4);
-			}
-			if (currentDungeonRoom.getRightDoor()) {
-				batch.draw(eastDoorTextureOpen,
-						currentDungeonRoom.getEastDoor().getX()
-								+ (currentDungeonRoom.getEastDoor().getWidth() - 64),
-						(768 - eastDoorTextureOpen.getWidth()) / 2);
-			}
-			if (currentDungeonRoom.getLeftDoor()) {
-				batch.draw(westDoorTextureOpen, currentDungeonRoom.getWestDoor().getX() + 4,
-						(768 - westDoorTextureOpen.getWidth()) / 2);
-			}
-		} else {
-			if (currentDungeonRoom.getUpDoor()) {
-				batch.draw(northDoorTextureClosed, (1280 - northDoorTextureOpen.getWidth()) / 2,
-						currentDungeonRoom.getNorthDoor().getY()
-								+ (currentDungeonRoom.getNorthDoor().getWidth() - 64));
-			}
-			if (currentDungeonRoom.getDownDoor()) {
-				batch.draw(southDoorTextureClosed, (1280 - southDoorTextureOpen.getWidth()) / 2,
-						currentDungeonRoom.getSouthDoor().getY() + 4);
-			}
-			if (currentDungeonRoom.getRightDoor()) {
-				batch.draw(eastDoorTextureClosed,
-						currentDungeonRoom.getEastDoor().getX()
-								+ (currentDungeonRoom.getEastDoor().getWidth() - 64),
-						(768 - eastDoorTextureOpen.getWidth()) / 2);
-			}
-			if (currentDungeonRoom.getLeftDoor()) {
-				batch.draw(westDoorTextureClosed, currentDungeonRoom.getWestDoor().getX() + 4,
-						(768 - westDoorTextureOpen.getWidth()) / 2);
-			}
+		float windowWidth = MuscovyGame.WINDOW_WIDTH;
+		float windowHeight = MuscovyGame.WINDOW_HEIGHT;
+		float tileSize = MuscovyGame.TILE_SIZE;
+		float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
+		float worldHeight = windowHeight - topGuiSize;
+
+		Texture doorTexture;
+		if (currentDungeonRoom.getUpDoor()) {
+			doorTexture = (currentDungeonRoom.isEnemiesDead() ? northDoorTextureOpen
+					: northDoorTextureClosed);
+			batch.draw(doorTexture, (windowWidth - doorTexture.getWidth()) / 2,
+					currentDungeonRoom.getNorthDoor().getY()
+							+ (currentDungeonRoom.getNorthDoor().getWidth() - tileSize));
+
+		}
+		if (currentDungeonRoom.getDownDoor()) {
+			doorTexture = (currentDungeonRoom.isEnemiesDead() ? southDoorTextureOpen
+					: southDoorTextureClosed);
+			batch.draw(doorTexture, (windowWidth - southDoorTextureOpen.getWidth()) / 2,
+					currentDungeonRoom.getSouthDoor().getY() + 4);
+		}
+		if (currentDungeonRoom.getRightDoor()) {
+			doorTexture = (currentDungeonRoom.isEnemiesDead() ? eastDoorTextureOpen
+					: eastDoorTextureClosed);
+			batch.draw(doorTexture,
+					currentDungeonRoom.getEastDoor().getX()
+							+ (currentDungeonRoom.getEastDoor().getWidth() - tileSize),
+					(worldHeight - eastDoorTextureOpen.getWidth()) / 2);
+		}
+		if (currentDungeonRoom.getLeftDoor()) {
+			doorTexture = (currentDungeonRoom.isEnemiesDead() ? westDoorTextureOpen
+					: westDoorTextureClosed);
+			batch.draw(doorTexture, currentDungeonRoom.getWestDoor().getX() + 4,
+					(worldHeight - westDoorTextureOpen.getWidth()) / 2);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
@@ -188,8 +193,8 @@ public class EntityManager {
 			batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 		}
 		if (level[levelNo].isCompleted()) {
-			list.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (1280 / 2) - 200,
-					768 - 69);
+			list.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
+					worldHeight - 69);
 		}
 		// list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float)
 		// 450);//Testing purposes (shows number of projectiles)

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
+import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.RoomType;
 
@@ -27,6 +28,9 @@ public class DungeonRoom extends OnscreenDrawable {
 	private ArrayList<Enemy> enemyList;
 	private Rectangle[] walls;
 	private Rectangle[] projectileWalls;
+	private RoomType roomType = RoomType.NORMAL;
+
+	// TODO: Maybe rename the URDL and NESW names for doors to hasUpDoor and upDoorRect etc?
 	/* variables indicate if there is a door on that wall */
 	private boolean upDoor = false;
 	private boolean rightDoor = false;
@@ -38,11 +42,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	private Rectangle southDoor;
 	private Rectangle westDoor;
 	private float doorSize = 65;
-	/*
-	 * roomType indicates the type of room options: "" (default), "start", "boss", "item", "shop"
-	 */
-	private RoomType roomType = RoomType.NORMAL; // 0 = normal room, 1 = boss room, 2 = item room, 3 = shop room, 4
-							// = start room
+
 	private Random rand;
 
 
@@ -50,17 +50,27 @@ public class DungeonRoom extends OnscreenDrawable {
 		rand = new Random();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
-		// TODO: Use constants for sizes of objects
+
+		float windowWidth = MuscovyGame.WINDOW_WIDTH;
+		float windowHeight = MuscovyGame.WINDOW_HEIGHT;
+		float tileSize = MuscovyGame.TILE_SIZE;
+		float halfTileSize = tileSize / 2;
+		float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
+		float worldHeight = windowHeight - topGuiSize;
+
 		walls = new Rectangle[4];
-		walls[0] = new Rectangle(0, 0, 1280, 64);// bottom wall
-		walls[1] = new Rectangle(0, 0, 64, 960 - 192);// left wall
-		walls[2] = new Rectangle(1280 - 64, 0, 64, 960 - 192);// right wall
-		walls[3] = new Rectangle(0, 960 - 192 - 64, 1280, 64);// top wall
+		walls[0] = new Rectangle(0, 0, windowWidth, tileSize); // bottom wall
+		walls[1] = new Rectangle(0, 0, tileSize, windowHeight - topGuiSize); // left wall
+		walls[2] = new Rectangle(windowWidth - tileSize, 0, tileSize, windowHeight - topGuiSize); // right wall
+		walls[3] = new Rectangle(0, worldHeight - tileSize, windowWidth, tileSize); // top wall
+
 		projectileWalls = new Rectangle[4];
-		projectileWalls[0] = new Rectangle(0, 0, 1280, 32);// bottom wall
-		projectileWalls[1] = new Rectangle(0, 0, 32, 960 - 192);// left wall
-		projectileWalls[2] = new Rectangle(1280 - 32, 0, 32, 960 - 192);// right wall
-		projectileWalls[3] = new Rectangle(0, 768 - 32, 1280, 32);// top wall
+		projectileWalls[0] = new Rectangle(0, 0, windowWidth, halfTileSize); // bottom wall
+		projectileWalls[1] = new Rectangle(0, 0, halfTileSize, windowHeight - topGuiSize); // left wall
+		projectileWalls[2] = new Rectangle(windowWidth - halfTileSize, 0, halfTileSize,
+				windowHeight - topGuiSize); // right wall
+		projectileWalls[3] = new Rectangle(0, worldHeight - halfTileSize, windowWidth, halfTileSize); // top
+														// wall
 	}
 
 
@@ -93,6 +103,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	private void createRandomEnemy(int x, int y) {
 		Sprite enemySprite;
 		Enemy enemy;
+
 		if (rand.nextBoolean()) {
 			enemySprite = new Sprite(new Texture(
 					"accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
@@ -104,6 +115,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			enemy = new Enemy(enemySprite);
 			enemy.setAttackType(AttackType.RANGE);
 		}
+
 		switch (rand.nextInt(3)) {
 		case 0:
 			enemy.setShotType(EnemyShotType.SINGLE_TOWARDS_PLAYER);
@@ -122,6 +134,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			enemy.setMovementType(MovementType.FOLLOW);
 			break;
 		}
+
 		enemy.setXTiles(x);
 		enemy.setYTiles(y);
 		enemy.calculateScoreOnDeath();
@@ -129,7 +142,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public void generateRoom(int level) {
+	public void generateRoom(LevelType level) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -139,15 +152,21 @@ public class DungeonRoom extends OnscreenDrawable {
 		Sprite enemySprite;
 		Enemy enemy;
 		Texture texture;
+
 		switch (roomType) {
 		case NORMAL:
 			// Normal
-			int[][] tileArray = new int[10][18];
-			int chosenLayout = rand.nextInt(10) + 1;
+			int roomHeight = 10;
+			int roomWidth = 18;
+			int[][] tileArray = new int[roomHeight][roomWidth];
+
+			int roomChoiceCount = 10;
+			int chosenLayout = rand.nextInt(roomChoiceCount);
+
 			// TODO: Load maps from file
 			// TODO: What do 0, 1, 2, 3 and 4 mean in tileArray
 			switch (chosenLayout) {
-			case 1:
+			case 0:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -159,7 +178,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
-			case 2:
+			case 1:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0 },
@@ -171,7 +190,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
-			case 3:
+			case 2:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -179,6 +198,18 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+				break;
+			case 3:
+				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
@@ -187,27 +218,15 @@ public class DungeonRoom extends OnscreenDrawable {
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
+						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			case 5:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 6:
 				tileArray = new int[][] { { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -219,7 +238,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 } };
 				break;
-			case 7:
+			case 6:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
@@ -231,7 +250,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
-			case 8:
+			case 7:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
@@ -243,7 +262,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
-			case 9:
+			case 8:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
@@ -255,7 +274,7 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
-			case 10:
+			case 9:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -268,38 +287,42 @@ public class DungeonRoom extends OnscreenDrawable {
 						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 				break;
 			}
+
 			boolean obstacleType3NonDamaging = rand.nextBoolean();
-			for (int i = 0; i < tileArray.length; i++) {
-				for (int j = 0; j < tileArray[i].length; j++) {
-					switch (tileArray[i][j]) {
+
+			for (int row = 0; row < tileArray.length; row++) {
+				for (int col = 0; col < tileArray[row].length; col++) {
+					switch (tileArray[row][col]) {
 					case 0:
 						break;
 					case 1:
-						createNonDamagingObstacle(2 * j, 2 * i);
+						createNonDamagingObstacle(2 * col, 2 * row);
 						break;
 					case 2:
-						createDamagingObstacle(2 * j, 2 * i);
+						createDamagingObstacle(2 * col, 2 * row);
 						break;
 					case 3:
 						if (obstacleType3NonDamaging) {
-							createNonDamagingObstacle(2 * j, 2 * i);
+							createNonDamagingObstacle(2 * col, 2 * row);
 						} else if (!obstacleType3NonDamaging) {
-							createDamagingObstacle(2 * j, 2 * i);
+							createDamagingObstacle(2 * col, 2 * row);
 						}
 						break;
 					case 4:
 						if (rand.nextInt(5) < 3) {
-							createRandomEnemy(2 * j, 2 * i);
+							createRandomEnemy(2 * col, 2 * row);
 						}
 						break;
 					}
 				}
 			}
 			break;
+
 		case BOSS:
 			// Boss
 			Sprite bossSprite;
 			Enemy bossEnemy;
+
 			bossSprite = new Sprite(new Texture("accommodationAssets/accommodationBoss.png"));
 			bossEnemy = new Enemy(bossSprite);
 			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
@@ -315,6 +338,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossEnemy.setMovementRange(1000);
 			addEnemy(bossEnemy);
 			break;
+
 		case ITEM:
 			// Item
 			enemySprite = new Sprite(new Texture(
@@ -325,6 +349,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			enemy.setYTiles(100);
 			addEnemy(enemy);
 			break;
+
 		case SHOP:
 			// Shop
 			enemySprite = new Sprite(new Texture(
@@ -335,6 +360,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			enemy.setY(0);
 			addEnemy(enemy);
 			break;
+
 		case START:
 			// Start
 			break;
@@ -342,29 +368,32 @@ public class DungeonRoom extends OnscreenDrawable {
 
 		// TODO: Make level backgrounds an array
 		switch (level) {
-		case 0:
+		case CONSTANTINE:
 			texture = new Texture("accommodationAssets/constantineBackground.png");
 			break;
-		case 1:
+		case LANGWITH:
 			texture = new Texture("accommodationAssets/langwithBackground.png");
 			break;
-		case 2:
+		case GOODRICKE:
 			texture = new Texture("accommodationAssets/goodrickeBackground.png");
 			break;
-		case 3:
+		case LMB:
 			texture = new Texture("accommodationAssets/lmbBackground.png");
 			break;
-		case 4:
+		case CATALYST:
 			texture = new Texture("accommodationAssets/catalystBackground.png");
 			break;
-		case 5:
+		case TFTV:
 			texture = new Texture("accommodationAssets/tftvBackground.png");
 			break;
-		case 6:
+		case COMP_SCI:
 			texture = new Texture("accommodationAssets/csBackground.png");
 			break;
-		default:
+		case RCH:
 			texture = new Texture("accommodationAssets/rchBackground.png");
+			break;
+		default:
+			texture = null;
 			break;
 		}
 
@@ -375,16 +404,18 @@ public class DungeonRoom extends OnscreenDrawable {
 
 	public void initialiseDoors() {
 		if (upDoor) {
-			northDoor = new Rectangle((1280 - doorSize) / 2, 768 - doorSize, doorSize, doorSize);
+			northDoor = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2,
+					MuscovyGame.WORLD_HEIGHT - doorSize, doorSize, doorSize);
 		}
 		if (downDoor) {
-			southDoor = new Rectangle((1280 - doorSize) / 2, 0, doorSize, doorSize);
+			southDoor = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2, 0, doorSize, doorSize);
 		}
 		if (rightDoor) {
-			eastDoor = new Rectangle(1280 - doorSize, (768 - doorSize) / 2, doorSize, doorSize);
+			eastDoor = new Rectangle(MuscovyGame.WINDOW_WIDTH - doorSize,
+					(MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
 		}
 		if (leftDoor) {
-			westDoor = new Rectangle(0, (768 - doorSize) / 2, doorSize, doorSize);
+			westDoor = new Rectangle(0, (MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
 		}
 	}
 

@@ -15,3 +15,5 @@
 	- GameState
 	- PlayerShotType
 	- ProjectileDamager (need to think of better name for this)
+- Trying to cleanup magic numbers
+	- Coordinates for rendering between relative to the window size

@@ -14,15 +14,13 @@ public class Level {
 	 * used, but yeah
 	 */
 	public DungeonRoom[][] levelArray;
-	private ObjectiveType objective; // 0 = Boss fight, 1 = Find specific item, 3 = Kill certain number of enemies
-	private LevelType level; // 0 = Constantine, 1 = Langwith, 2 = Goodricke, 3 = Law and Management, 4 = Catalyst,
-					// 5 =
-					// TFTV, 6 = Computer Science, 7 = Ron Cooke Hub
+	private ObjectiveType objective;
+	private LevelType level;
 	private boolean completed = false;
 
 
 	public Level(DungeonRoom[][] levelArray, ObjectiveType objective, LevelType level) {
-		this.levelArray = new DungeonRoom[7][7];
+		this.levelArray = new DungeonRoom[LevelGenerator.DUNGEON_ROOM_HEIGHT][LevelGenerator.DUNGEON_ROOM_WIDTH];
 		this.levelArray = levelArray;
 		this.objective = objective;
 		this.level = level;

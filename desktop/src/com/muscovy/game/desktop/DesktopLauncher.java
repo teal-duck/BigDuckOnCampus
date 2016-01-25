@@ -9,9 +9,10 @@ import com.muscovy.game.MuscovyGame;
 public class DesktopLauncher {
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new MuscovyGame(), config);
 		config.width = 1280;
-		config.height = 960;
+		config.height = 816; // 960;
 		config.resizable = true;
+		config.title = "Big Duck On Campus";
+		new LwjglApplication(new MuscovyGame(), config);
 	}
 }

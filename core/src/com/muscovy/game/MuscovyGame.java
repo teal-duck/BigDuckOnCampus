@@ -53,18 +53,20 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	private BitmapFont yVal;
 	private BitmapFont gameOverFont;
 	private BitmapFont loading;
-	// TODO: Window width and height constants
-	private float windowWidth = 1280;
-	private float windowHeight = 960;
+
+	public static final float WINDOW_WIDTH = 1280;
+	public static final float WINDOW_HEIGHT = 816; // 960;
+	public static final float TILE_SIZE = 64;
+	public static final float HALF_TILE_SIZE = MuscovyGame.TILE_SIZE / 2; // 32
+	public static final float WORLD_HEIGHT = 768; // WINDOW_HEIGHT - TOP_GUI_SIZE; // 768
+	public static final float TOP_GUI_SIZE = MuscovyGame.WINDOW_HEIGHT - MuscovyGame.WORLD_HEIGHT; // 192; //
+													// TILE_SIZE * 3
 
 	private GameState gameState;
-	// 0 = Main Menu, 1 = Overworld/Map, 2 = Dungeon/LevelGenerator, 3 = Pause, 4 = Game Over
-	// 101 = Startup, 102 = Loading
-
 	private LevelType mapSelected;
-	// This documentation is old, it's offseted by 1 compared to LevelType
-	// 1 = Constantine, 2 = Langwith, 3 = Goodricke, 4 = Law and Management, 5 = Catalyst,
-	// 6 = TFTV, 7 = Computer Science, 8 = Ron Cooke Hub
+
+	private final int playerStartX = 300;
+	private final int playerStartY = 300;
 
 
 	@Override
@@ -74,7 +76,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		loading.setColor(Color.WHITE);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, windowWidth, windowHeight);
+		camera.setToOrtho(false, MuscovyGame.WINDOW_WIDTH, MuscovyGame.WINDOW_HEIGHT);
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -92,27 +94,23 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		switch (gameState) {
 		case MAIN_MENU:
-			// MAIN MENU
 			mainMenuGUI.render(batch);
 			break;
+
 		case OVERWORLD:
-			// OVERWORLD
 			overworldGUI.render(batch);
 			break;
 
 		case DUNGEON:
-			// IN DUNGEON/BUILDING
 			entityManager.render(batch);
 			// These work by referencing the data you want to change with the first string you pass it
 			dungeonGUI.editData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()));
 			dungeonGUI.editData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()));
-			//
 			dungeonGUI.render(batch);
 			entityManager.render(batch);
 			break;
 
 		case PAUSE:
-			// PAUSE
 			dungeonGUI.render(batch);
 			entityManager.render(batch);
 			batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(),
@@ -121,18 +119,18 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			break;
 
 		case GAME_OVER:
-			// GAME OVER
 			gameOverGUI.render(batch);
 			batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(),
 					playerCharacter.getY());
 			break;
 
 		default:
-			// GENERATING LEVELS
-			loading.draw(batch, "RANDOMLY GENERATING LEVELS", (1280 / 2) - 150, 960 / 2);
+			loading.draw(batch, "RANDOMLY GENERATING LEVELS", (MuscovyGame.WINDOW_WIDTH / 2) - 150,
+					MuscovyGame.WINDOW_HEIGHT / 2);
 			gameState = GameState.LOADING; // Indicates that the render cycle has finished
 			break;
 		}
+
 		batch.end();
 	}
 
@@ -159,11 +157,11 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		mainMenuGUI = new GUI();
 		mainMenuSprite.setTexture(new Texture(Gdx.files.internal("mainMenu.png")));
 		mainMenuSprite.setX(0);
-		mainMenuSprite.setY(0);
+		mainMenuSprite.setY(MuscovyGame.WINDOW_HEIGHT - mainMenuSprite.getTexture().getHeight());
 		mainMenuStartButton.setTexture(new Texture(Gdx.files.internal("startGameButton.png")));
-		mainMenuStartButton.setCenter(windowWidth, windowHeight);
-		mainMenuStartButton.setX((windowWidth - 392) / 2);
-		mainMenuStartButton.setY(windowHeight / 2);
+		mainMenuStartButton.setCenter(MuscovyGame.WINDOW_WIDTH, MuscovyGame.WINDOW_HEIGHT);
+		mainMenuStartButton.setX((MuscovyGame.WINDOW_WIDTH - 392) / 2);
+		mainMenuStartButton.setY(MuscovyGame.WINDOW_HEIGHT / 2);
 		mainMenuGUI.addElement(mainMenuSprite);
 		mainMenuGUI.addElement(mainMenuStartButton);
 
@@ -177,24 +175,26 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		xVal.setColor(Color.BLACK);
 		yVal = new BitmapFont();
 		yVal.setColor(Color.BLACK);
+
+		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT - 16); // 900;
 		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), xVal, 400,
-				900);
+				dungeonGuiY);
 		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), xVal, 650,
-				900);
+				dungeonGuiY);
 		// GameOver
 		gameOverFont = new BitmapFont();
 		gameOverFont.setColor(Color.RED);
 		gameOverGUI = new GUI();
 		gameOverGUI.addData("Gameover", "Game Over", gameOverFont, 640, 150);
 		pauseGUI = new GUI();
-		pauseGUI.addData("Pause", "PAUSE", gameOverFont, (int) (windowWidth / 2), 720 / 2);
+		pauseGUI.addData("Pause", "PAUSE", gameOverFont, (int) (MuscovyGame.WINDOW_WIDTH / 2), 720 / 2);
 	}
 
 
 	private void initialisePlayerCharacter() {
 		playerCharacter = new PlayerCharacter();
-		playerCharacter.setY(300);
-		playerCharacter.setX(300);
+		playerCharacter.setY(playerStartX);
+		playerCharacter.setX(playerStartY);
 	}
 
 
@@ -212,7 +212,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		guiMapSprite.setTexture(new Texture(Gdx.files.internal("hesEastMap.png")));
 		guiMapSprite.setX(0);
-		guiMapSprite.setY(0);
+		guiMapSprite.setY((MuscovyGame.WINDOW_HEIGHT - guiMapSprite.getTexture().getHeight()) / 2);
 		overworldGUI.addElement(guiMapSprite);
 		overworldGUI.addElement(guiSelector);
 	}
@@ -227,11 +227,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		 * everything (case 102), so the loading screen can be displayed
 		 */
 		switch (gameState) {
-		// case MAIN_MENU:
-		// break;
 		case OVERWORLD:
 			cursorUpdate();
 			break;
+
 		case DUNGEON:
 			playerUpdate();
 			playerCharacter.update();
@@ -248,10 +247,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			}
 			timer += Gdx.graphics.getDeltaTime();
 			break;
-		// case PAUSE:
-		// break;
-		// case GAME_OVER:
-		// break;
+
 		case LOADING:
 			initialisePlayerCharacter();
 			initialiseLevels();

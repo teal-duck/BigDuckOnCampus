@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class GUI {
 	private ArrayList<Sprite> guiElements;
+	// TODO: Should guiData be a HashMap?
+	// TODO: Should gui ID comparison use .equals() instead of .matches()?
 	private ArrayList<GuiData> guiData;
 
 
