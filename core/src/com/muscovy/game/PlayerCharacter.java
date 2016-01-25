@@ -491,24 +491,8 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	// TODO: Use velocity.limit(maxVelocity) instead of setting components
-	// This is mathematically correct, but changes game play
 	private void clampVelocity() {
-		if (velocity.x > maxVelocity) {
-			velocity.x = maxVelocity;
-		}
-
-		if (velocity.x < -maxVelocity) {
-			velocity.x = -maxVelocity;
-		}
-
-		if (velocity.y > maxVelocity) {
-			velocity.y = maxVelocity;
-		}
-
-		if (velocity.y < -maxVelocity) {
-			velocity.y = -maxVelocity;
-		}
+		velocity.limit(maxVelocity);
 	}
 
 

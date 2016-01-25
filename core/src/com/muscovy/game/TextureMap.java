@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 
 public class TextureMap {
-	// TODO: TextureMap should have a way to tell if a texture was already loaded
 	private HashMap<String, Texture> textures;
 
 

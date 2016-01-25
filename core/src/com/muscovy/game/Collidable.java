@@ -281,11 +281,11 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * Angle methods use trig to calculate angles, then it's position to calculate the angle clockwise from the
 	 * vertical
 	 */
+	// TODO: Use Math.atan2 or vector.angleRad()
 	public float getAngleFrom(Collidable collidable) {
 		float x = (getCircleHitbox().x - collidable.getCircleHitbox().x);
 		float y = (getCircleHitbox().y - collidable.getCircleHitbox().y);
-		// TODO: Use Math.atan2
-		float angle = (float) Math.atan(x / y);
+		float angle = (float) Math.atan(x / y); // MathUtils.atan2(y, x)
 		if (x >= 0) {
 			if (y >= 0) {
 				return angle;
@@ -306,8 +306,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	public float getAngleTo(Collidable collidable) {
 		float x = (collidable.getCircleHitbox().x - circleHitbox.x);
 		float y = (collidable.getCircleHitbox().y - circleHitbox.y);
-		// TODO: Use Math.atan2
-		float angle = (float) Math.atan(x / y);
+		float angle = (float) Math.atan(x / y); // MathUtils.atan2(y, x);
 		if (x >= 0) {
 			if (y >= 0) {
 				return angle;

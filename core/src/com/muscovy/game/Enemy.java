@@ -295,8 +295,7 @@ public class Enemy extends Collidable {
 
 	public void setMovementType(MovementType movementType) {
 		this.movementType = movementType;
-		// TODO: Call calculate score on death when setting movement type?
-		// calculateScoreOnDeath() ?
+		calculateScoreOnDeath();
 	}
 
 
@@ -357,7 +356,6 @@ public class Enemy extends Collidable {
 
 
 	public void updateVelocities() {
-		// TODO: Is enemy.updateVelocities() needed?
 		velocity.setLength(defaultVelocity);
 	}
 

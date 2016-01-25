@@ -277,7 +277,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	public void enemiesUpdate() {
-		// TODO: Is the 2 in enemies update how long they wait before attacking?
 		if (entityManager.getRoomTimer() > 2) {
 			for (Enemy enemy : entityManager.getEnemies()) {
 				enemy.update(playerCharacter);
@@ -660,13 +659,14 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	public void playerDoorCollision() {
+		float doorOffset = 70;
 		if (entityManager.getCurrentDungeonRoom().getUpDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getNorthDoor())) && keyflagW) {
 				playerCharacter.setYVelocity(0);
 				playerCharacter.setXVelocity(0);
 				entityManager.moveNorth();
-				playerCharacter.setY(70);
+				playerCharacter.setY(doorOffset);
 			}
 		}
 
@@ -676,7 +676,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerCharacter.setYVelocity(0);
 				playerCharacter.setXVelocity(0);
 				entityManager.moveSouth();
-				playerCharacter.setY(768 - playerCharacter.getHeight() - 70);
+				playerCharacter.setY(
+						MuscovyGame.WORLD_HEIGHT - playerCharacter.getHeight() - doorOffset);
 			}
 		}
 
@@ -686,7 +687,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerCharacter.setYVelocity(0);
 				playerCharacter.setXVelocity(0);
 				entityManager.moveEast();
-				playerCharacter.setX(70);
+				playerCharacter.setX(doorOffset);
 			}
 		}
 
@@ -696,7 +697,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerCharacter.setYVelocity(0);
 				playerCharacter.setXVelocity(0);
 				entityManager.moveWest();
-				playerCharacter.setX(1280 - playerCharacter.getWidth() - 70);
+				playerCharacter.setX(
+						MuscovyGame.WINDOW_WIDTH - playerCharacter.getWidth() - doorOffset);
 			}
 		}
 	}

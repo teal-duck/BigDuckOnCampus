@@ -137,8 +137,6 @@ public class LevelGenerator {
 		}
 		/* These are quite naive approaches atm, but they work! */
 
-		// TODO: Move break in room placement loops
-
 		/* place our boss room */
 		for (int xPos = 0; xPos < LevelGenerator.DUNGEON_ROOM_WIDTH; xPos++) {
 			for (int yPos = 0; yPos < LevelGenerator.DUNGEON_ROOM_HEIGHT; yPos++) {

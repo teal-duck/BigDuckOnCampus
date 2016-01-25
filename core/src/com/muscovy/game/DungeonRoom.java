@@ -166,8 +166,13 @@ public class DungeonRoom extends OnscreenDrawable {
 			int roomChoiceCount = 10;
 			int chosenLayout = rand.nextInt(roomChoiceCount);
 
+			final int emptyTile = 0;
+			final int nonDamagingObstacle = 1;
+			final int damagingObstacle = 2;
+			final int maybeDamagingObstacle = 3;
+			final int maybeEnemy = 4;
+
 			// TODO: Load maps from file
-			// TODO: What do 0, 1, 2, 3 and 4 mean in tileArray
 			switch (chosenLayout) {
 			case 0:
 				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -296,25 +301,27 @@ public class DungeonRoom extends OnscreenDrawable {
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
 					switch (tileArray[row][col]) {
-					case 0:
+					case emptyTile:
 						break;
-					case 1:
+					case nonDamagingObstacle:
 						createNonDamagingObstacle(2 * col, 2 * row);
 						break;
-					case 2:
+					case damagingObstacle:
 						createDamagingObstacle(2 * col, 2 * row);
 						break;
-					case 3:
+					case maybeDamagingObstacle:
 						if (obstacleType3NonDamaging) {
 							createNonDamagingObstacle(2 * col, 2 * row);
 						} else if (!obstacleType3NonDamaging) {
 							createDamagingObstacle(2 * col, 2 * row);
 						}
 						break;
-					case 4:
+					case maybeEnemy:
 						if (rand.nextInt(5) < 3) {
 							createRandomEnemy(2 * col, 2 * row);
 						}
+						break;
+					default:
 						break;
 					}
 				}

@@ -35,8 +35,11 @@
 	- Now the getTextureOrLoadFile method only loads the texture the first time it is requested
 		- Else just returns the already loaded instance
 	- TextureMap.disposeAllTextures() called in MuscovyGame.dispose() (i.e. when the game window closes)
-	
+
+- Player clampVelocity now uses velocity.limit() instead of changing components
+	- Mathematically correct, but changes gameplay
 	
 
 When enemies are in bottom corners, player can't shoot them from the side
+Collision could maybe use our code from featherline york?
 
