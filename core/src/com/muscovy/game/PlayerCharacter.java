@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
 
@@ -15,27 +16,31 @@ import com.muscovy.game.enums.ProjectileDamager;
  * Created by ewh502 on 04/12/2015. Good luck
  */
 public class PlayerCharacter extends Collidable {
-	// private Random random;
-
-	private float xVelocity;
-	private float yVelocity;
+	// TODO: Possibly make a MoveableEntity class with these velocity parameters?
+	// Player and enemy extend MoveableEntity
+	private Vector2 velocity;
 	private float maxVelocity = 350;
 	private float defaultVelocity = 350;
+
 	private float accel = maxVelocity * 6;
 	private float decel = maxVelocity * 5.5f;
-	private float direction = 0;
-	private float shotDirection = 0; // 0 - 2*PI
+
+	private Vector2 shotDirection;
+
 	private ArrayList<Texture> downWalkCycle;
 	private ArrayList<Texture> leftWalkCycle;
 	private ArrayList<Texture> rightWalkCycle;
 	private ArrayList<Texture> upWalkCycle;
+
 	private int animationCycle;
 	private int animationCounter;
 
-	private PlayerShotType shotType = PlayerShotType.SINGLE; // 0 = single shot, 1 = double shot, 2 = triple shot
+	private PlayerShotType shotType = PlayerShotType.SINGLE;
+
 	// MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
 	private float attackInterval = 0.25f;
 	private float timeSinceLastAttack = attackInterval;
+
 	private float projectileVelocity = 450;
 	private float projectileRange = 600;
 	private float projectileLife = projectileRange / projectileVelocity;
@@ -49,10 +54,10 @@ public class PlayerCharacter extends Collidable {
 
 
 	public PlayerCharacter() {
-		// random = new Random();
 		animationCycle = 0;
-		xVelocity = 0;
-		yVelocity = 0;
+		velocity = new Vector2(0, 0);
+		shotDirection = new Vector2(0, 1);
+
 		Sprite playerSprite;
 		downWalkCycle = new ArrayList<Texture>();
 		upWalkCycle = new ArrayList<Texture>();
@@ -123,16 +128,6 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public void setDirection(float direction) {
-		this.direction = direction;
-	}
-
-
-	public float getDirection() {
-		return direction;
-	}
-
-
 	public void setScore(int score) {
 		this.score = score;
 	}
@@ -144,36 +139,26 @@ public class PlayerCharacter extends Collidable {
 
 
 	public float getXVelocity() {
-		return xVelocity;
+		return velocity.x;
 	}
 
 
-	public void setXVelocity(float velocity) {
+	public void setXVelocity(float x) {
 		// Clamps velocity to max velocity
-		xVelocity = velocity;
-		if (xVelocity > maxVelocity) {
-			xVelocity = maxVelocity;
-		}
-		if (xVelocity < -maxVelocity) {
-			xVelocity = -maxVelocity;
-		}
+		velocity.x = x;
+		clampVelocity();
 	}
 
 
 	public float getYVelocity() {
-		return yVelocity;
+		return velocity.y;
 	}
 
 
-	public void setYVelocity(float velocity) {
+	public void setYVelocity(float y) {
 		// Clamps velocity to max velocity
-		yVelocity = velocity;
-		if (yVelocity > maxVelocity) {
-			yVelocity = maxVelocity;
-		}
-		if (yVelocity < -maxVelocity) {
-			yVelocity = -maxVelocity;
-		}
+		velocity.y = y;
+		clampVelocity();
 	}
 
 
@@ -187,13 +172,18 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public float getShotDirection() {
+	public Vector2 getShotDirection() {
 		return shotDirection;
 	}
 
 
-	public void setShotDirection(float shotDirection) {
-		this.shotDirection = shotDirection;
+	public void setShotDirection(Vector2 shotDirection) {
+		this.shotDirection.set(shotDirection).nor();
+	}
+
+
+	public void setShotDirection(float x, float y) {
+		shotDirection.set(x, y).nor();
 	}
 
 
@@ -301,7 +291,24 @@ public class PlayerCharacter extends Collidable {
 	 * out. Might be worth revamping later though
 	 */
 	public void walkCycleNext() {
+		float direction = velocity.angleRad();
 		int switcher = (int) (direction / (Math.PI / 2));
+
+		// int switcher = 0;
+		// if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
+		// if (velocity.x > 0) {
+		// switcher = 1;
+		// } else {
+		// switcher = 3;
+		// }
+		// } else {
+		// if (velocity.y > 0) {
+		// switcher = 0;
+		// } else {
+		// switcher = 2;
+		// }
+		// }
+
 		switch (switcher) {
 		case 0:
 			setTexture(upWalkCycle.get(animationCycle));
@@ -340,26 +347,29 @@ public class PlayerCharacter extends Collidable {
 
 
 	public void movementAnimation() {
-		/*
-		 * if (animationCounter == 5){ animationCounter = 0; walkCycleNext(); }else{ animationCounter++; }
-		 */
+		// if (animationCounter == 5) {
+		// animationCounter = 0;
+		// walkCycleNext();
+		// } else {
+		// animationCounter++;
+		// }
 	}
 
 
 	public void idleAnimation() {
-		/*
-		 * if ((xVelocity == 0) && (yVelocity == 0)) { this.setTexture(downWalkCycle.get(0)); animationCycle =
-		 * 0; }
-		 */
+		// velocity.len2() < 1
+		// if ((velocity.x == 0) && (velocity.y == 0)) {
+		// this.setTexture(downWalkCycle.get(0));
+		// animationCycle = 0;
+		// }
 	}
-
-	// TODO: Why do only right and up apply decceleration?
 
 
 	/**
 	 * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D If opposite directions are
 	 * pressed at the same time, velocity decelerated to 0 Calculates velocity based on delta time and acceleration
 	 */
+	// TODO: Why do only right and up apply deceleration?
 	public void goRight() {
 		if (animationCycle > 10) {
 			animationCycle = 0;
@@ -450,33 +460,40 @@ public class PlayerCharacter extends Collidable {
 		/**
 		 * Changes X and Y according to velocity and time elapsed between frames
 		 */
-		setX(getX() + (xVelocity * Gdx.graphics.getDeltaTime()));
-		setY(getY() + (yVelocity * Gdx.graphics.getDeltaTime()));
+		getPosition().mulAdd(velocity, Gdx.graphics.getDeltaTime());
+		updateBoxesPosition();
 	}
 
 
-	public void changeXVelocity(float velocity) {
-		xVelocity += velocity;
-
-		if (xVelocity > maxVelocity) {
-			xVelocity = maxVelocity;
-		}
-
-		if (xVelocity < -maxVelocity) {
-			xVelocity = -maxVelocity;
-		}
+	public void changeXVelocity(float x) {
+		velocity.x += x;
+		clampVelocity();
 	}
 
 
-	public void changeYVelocity(float velocity) {
-		yVelocity += velocity;
+	public void changeYVelocity(float y) {
+		velocity.y += y;
+		clampVelocity();
+	}
 
-		if (yVelocity > maxVelocity) {
-			yVelocity = maxVelocity;
+
+	// TODO: Use velocity.limit(maxVelocity) instead of setting components
+	// This is mathematically correct, but changes game play
+	private void clampVelocity() {
+		if (velocity.x > maxVelocity) {
+			velocity.x = maxVelocity;
 		}
 
-		if (yVelocity < -maxVelocity) {
-			yVelocity = -maxVelocity;
+		if (velocity.x < -maxVelocity) {
+			velocity.x = -maxVelocity;
+		}
+
+		if (velocity.y > maxVelocity) {
+			velocity.y = maxVelocity;
+		}
+
+		if (velocity.y < -maxVelocity) {
+			velocity.y = -maxVelocity;
 		}
 	}
 
@@ -515,30 +532,26 @@ public class PlayerCharacter extends Collidable {
 		 * Returns a different projectile array list depending on the shot type, so that needs to be given
 		 * directly to the entity manager
 		 */
-		ArrayList<Projectile> rangedAttack = new ArrayList<Projectile>();
 		float x = ((getX() + (getWidth() / 2)) - 8);
 		float y = ((getY() + getHeight()) - 32);
+
+		Vector2 position = new Vector2(x, y);
+		Vector2 direction = shotDirection.cpy();
+
+		int count = 0;
 		switch (shotType) {
 		case SINGLE:
-			rangedAttack.add(new Projectile(x, y, shotDirection, projectileLife, projectileVelocity,
-					xVelocity / 4, yVelocity / 4, ProjectileDamager.ENEMY));
+			count = 1;
 			break;
 		case DOUBLE:
-			rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 24)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
-			rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 24)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
+			count = 2;
 			break;
 		case TRIPLE:
-			rangedAttack.add(new Projectile(x, y, (float) (shotDirection - (Math.PI / 12)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
-			rangedAttack.add(new Projectile(x, y, (float) (shotDirection + (Math.PI / 12)), projectileLife,
-					projectileVelocity, xVelocity, yVelocity, ProjectileDamager.ENEMY));
-			rangedAttack.add(new Projectile(x, y, shotDirection, projectileLife, projectileVelocity,
-					xVelocity, yVelocity, ProjectileDamager.ENEMY));
+			count = 3;
 			break;
 		}
-		return rangedAttack;
-	}
 
+		return Projectile.shootProjectiles(count, position, direction, projectileLife, projectileVelocity,
+				ProjectileDamager.ENEMY);
+	}
 }

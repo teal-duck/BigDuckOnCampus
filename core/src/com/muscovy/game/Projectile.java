@@ -1,10 +1,14 @@
 package com.muscovy.game;
 
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.ProjectileDamager;
 
 
@@ -13,29 +17,21 @@ import com.muscovy.game.enums.ProjectileDamager;
  */
 public class Projectile extends OnscreenDrawable {
 	private float damage = 10;
-	// Old documentation, both is now 2
-	// 0 = damages player, 1 = damages enemy, 3 = damages both
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
-	private float xVelocity = 0;
-	private float yVelocity = 0;
+	private Vector2 velocity;
 	private float maxVelocity = 150;
-	private float direction = 0;
 	private float lifeCounter = 0;
 	private float life = 1.5f;
 	private Circle collisionBox;
 
 
-	public Projectile(float x, float y, float direction, float life, float maxVelocity, float xVelocity,
-			float yVelocity, ProjectileDamager damagesWho) {
+	public Projectile(Vector2 position, Vector2 direction, float life, float maxVelocity,
+			ProjectileDamager damagesWho) {
 		setSprite(new Sprite(new Texture(Gdx.files.internal("breadBullet.png"))));
-		setX(x);
-		setY(y);
-		this.direction = direction;
+		setPosition(position);
 		this.life = life;
 		this.maxVelocity = maxVelocity;
-		updateVelocities();
-		this.xVelocity += xVelocity;
-		this.yVelocity += yVelocity;
+		velocity = direction.cpy().setLength(maxVelocity);
 		this.damagesWho = damagesWho;
 	}
 
@@ -73,26 +69,6 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public float getxVelocity() {
-		return xVelocity;
-	}
-
-
-	public void setxVelocity(float xVelocity) {
-		this.xVelocity = xVelocity;
-	}
-
-
-	public float getyVelocity() {
-		return yVelocity;
-	}
-
-
-	public void setyVelocity(float yVelocity) {
-		this.yVelocity = yVelocity;
-	}
-
-
 	public float getMaxVelocity() {
 		return maxVelocity;
 	}
@@ -100,16 +76,6 @@ public class Projectile extends OnscreenDrawable {
 
 	public void setMaxVelocity(float maxVelocity) {
 		this.maxVelocity = maxVelocity;
-	}
-
-
-	public float getDirection() {
-		return direction;
-	}
-
-
-	public void setDirection(float direction) {
-		this.direction = direction;
 	}
 
 
@@ -147,6 +113,12 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
+	public void updateCollisionBox() {
+		collisionBox.setX(getX());
+		collisionBox.setY(getY());
+	}
+
+
 	/**
 	 * Other shit, self explanatory
 	 */
@@ -157,15 +129,9 @@ public class Projectile extends OnscreenDrawable {
 
 
 	public void movement() {
-		setX(getX() + (xVelocity * Gdx.graphics.getDeltaTime()));
-		setY(getY() + (yVelocity * Gdx.graphics.getDeltaTime()));
+		getPosition().mulAdd(velocity, Gdx.graphics.getDeltaTime());
+		updateCollisionBox();
 		lifeCounter += Gdx.graphics.getDeltaTime();
-	}
-
-
-	public void updateVelocities() {
-		xVelocity = (float) (maxVelocity * Math.sin(direction));
-		yVelocity = (float) (maxVelocity * Math.cos(direction));
 	}
 
 
@@ -176,5 +142,39 @@ public class Projectile extends OnscreenDrawable {
 
 	public boolean lifeOver() {
 		return (lifeCounter > life);
+	}
+
+
+	public static ArrayList<Projectile> shootProjectiles(int count, Vector2 position, Vector2 direction, float life,
+			float maxVelocity, ProjectileDamager damagesWho) {
+		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+
+		float maxSpread = 0;
+		float spreadDelta = 0;
+
+		switch (count) {
+		case 2:
+			maxSpread = MathUtils.PI / 24;
+			spreadDelta = maxSpread * 2;
+			break;
+		case 3:
+			maxSpread = MathUtils.PI / 12;
+			spreadDelta = maxSpread;
+			break;
+		default:
+			maxSpread = 0;
+			spreadDelta = 0;
+			break;
+		}
+
+		float spreadAngle = -maxSpread;
+
+		for (int i = 0; i < count; i += 1) {
+			projectiles.add(new Projectile(position, direction.cpy().rotateRad(spreadAngle), life,
+					maxVelocity, damagesWho));
+			spreadAngle += spreadDelta;
+		}
+
+		return projectiles;
 	}
 }

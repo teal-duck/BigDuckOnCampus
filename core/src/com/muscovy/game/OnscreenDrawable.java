@@ -3,6 +3,7 @@ package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 
 /**
@@ -14,7 +15,13 @@ public abstract class OnscreenDrawable {
 	 * getting myself into, innit
 	 */
 	private Sprite sprite;
-	private float x, y;
+	// private float x, y;
+	private Vector2 position;
+
+
+	public OnscreenDrawable() {
+		position = new Vector2(0, 0);
+	}
 
 
 	public float getHeight() {
@@ -43,22 +50,31 @@ public abstract class OnscreenDrawable {
 
 
 	public float getX() {
-		return x;
+		return position.x;
 	}
 
 
 	public void setX(float x) {
-		this.x = x;
+		position.x = x;
 	}
 
 
 	public float getY() {
-		return y;
+		return position.y;
 	}
 
 
 	public void setY(float y) {
-		this.y = y;
+		position.y = y;
 	}
 
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(Vector2 position) {
+		this.position.set(position);
+	}
 }

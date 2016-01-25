@@ -309,16 +309,20 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (firing) {
 			if (playerCharacter.checkRangedAttack()) {
 				if (keyflagRight) {
-					playerCharacter.setShotDirection((float) (Math.PI / 2));
+					playerCharacter.setShotDirection(1, 0);
+					// playerCharacter.setShotDirection((float) (Math.PI / 2));
 				}
 				if (keyflagLeft) {
-					playerCharacter.setShotDirection((float) ((3 * Math.PI) / 2));
+					playerCharacter.setShotDirection(-1, 0);
+					// playerCharacter.setShotDirection((float) ((3 * Math.PI) / 2));
 				}
 				if (keyflagUp) {
-					playerCharacter.setShotDirection(0);
+					playerCharacter.setShotDirection(0, 1);
+					// playerCharacter.setShotDirection(0);
 				}
 				if (keyflagDown) {
-					playerCharacter.setShotDirection((float) Math.PI);
+					playerCharacter.setShotDirection(0, -1);
+					// playerCharacter.setShotDirection((float) Math.PI);
 				}
 				entityManager.addNewProjectiles(playerCharacter.rangedAttack());
 			}
@@ -358,19 +362,20 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		/**
 		 * Animation stuff
 		 */
-		if (keyflagD) {
-			playerCharacter.setDirection((float) (Math.PI / 2));
-		}
-		if (keyflagA) {
-			playerCharacter.setDirection((float) ((3 * Math.PI) / 2));
-		}
-		// if (keyflagA && keyflagD) playerCharacter.setDirection(2);
-		if (keyflagW) {
-			playerCharacter.setDirection(0);
-		}
-		if (keyflagS) {
-			playerCharacter.setDirection((float) Math.PI);
-		}
+		// Possibly not needed as can be calculated from velocity vector?
+		// if (keyflagD) {
+		// playerCharacter.setDirection((float) (Math.PI / 2));
+		// }
+		// if (keyflagA) {
+		// playerCharacter.setDirection((float) ((3 * Math.PI) / 2));
+		// }
+		// // if (keyflagA && keyflagD) playerCharacter.setDirection(2);
+		// if (keyflagW) {
+		// playerCharacter.setDirection(0);
+		// }
+		// if (keyflagS) {
+		// playerCharacter.setDirection((float) Math.PI);
+		// }
 	}
 
 

@@ -4,6 +4,7 @@ package com.muscovy.game;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 
 /**
@@ -45,6 +46,13 @@ public abstract class Collidable extends OnscreenDrawable {
 	@Override
 	public void setY(float y) {
 		super.setY(y);
+		updateBoxesPosition();
+	}
+
+
+	@Override
+	public void setPosition(Vector2 position) {
+		super.setPosition(position);
 		updateBoxesPosition();
 	}
 

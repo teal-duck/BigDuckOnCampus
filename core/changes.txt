@@ -17,3 +17,11 @@
 	- ProjectileDamager (need to think of better name for this)
 - Trying to cleanup magic numbers
 	- Coordinates for rendering between relative to the window size
+	
+- Changed "float x, y, xVelocity, yVelocity, angle;" etc to use Vector2 position, velocity
+- Created shootProjectiles() static function in projectile class to remove duplicate of logic
+	- Player and enemy now use this as it handles bullet spread for multiple shots
+
+
+
+When enemies are in bottom corners, player can't shoot them from the side
