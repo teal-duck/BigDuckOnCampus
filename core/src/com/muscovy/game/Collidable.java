@@ -95,7 +95,7 @@ public abstract class Collidable extends OnscreenDrawable {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
 		this.yTiles = yTiles;
-		setY((yTiles * (MuscovyGame.TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
 

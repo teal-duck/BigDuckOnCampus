@@ -170,7 +170,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			int[][] tileArray = new int[roomHeight][roomWidth];
 
 			int roomChoiceCount = 10;
-			int chosenLayout = 5;
+			int chosenLayout = rand.nextInt(roomChoiceCount);
 
 			final int emptyTile = 0;
 			final int nonDamagingObstacle = 1;
