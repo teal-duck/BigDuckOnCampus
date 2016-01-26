@@ -51,8 +51,8 @@ public class DungeonRoom extends OnscreenDrawable {
 	private TextureMap textureMap;
 	
 	
-	public static final int FLOOR_HEIGHT_IN_HALF_TILES = 21;
-	public static final int FLOOR_WIDTH_IN_HALF_TILES = 37;
+	public static final int FLOOR_HEIGHT_IN_HALF_TILES = 20;
+	public static final int FLOOR_WIDTH_IN_HALF_TILES = 36;
 	
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;

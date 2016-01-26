@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by SeldomBucket on 05-Jan-16.
+ * 
+ * Players and enemies both exist on a 64x64 tile. 
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -81,7 +83,7 @@ public abstract class Collidable extends OnscreenDrawable {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles;
 		}
 		this.xTiles = xTiles;
-		setX((xTiles * MuscovyGame.HALF_TILE_SIZE) + MuscovyGame.TILE_SIZE);
+		setX((xTiles * (MuscovyGame.HALF_TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -93,7 +95,7 @@ public abstract class Collidable extends OnscreenDrawable {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles;
 		}
 		this.yTiles = yTiles;
-		setY((yTiles * MuscovyGame.HALF_TILE_SIZE) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (MuscovyGame.HALF_TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
 	}
 
 
