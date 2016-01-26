@@ -51,8 +51,8 @@ public class DungeonRoom extends OnscreenDrawable {
 	private TextureMap textureMap;
 	
 	
-	public static final int FLOOR_HEIGHT_IN_HALF_TILES = 20;
-	public static final int FLOOR_WIDTH_IN_HALF_TILES = 36;
+	public static final int FLOOR_HEIGHT_IN_TILES = 10;
+	public static final int FLOOR_WIDTH_IN_TILES = 18;
 	
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;
@@ -170,7 +170,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			int[][] tileArray = new int[roomHeight][roomWidth];
 
 			int roomChoiceCount = 10;
-			int chosenLayout = rand.nextInt(roomChoiceCount);
+			int chosenLayout = 5;
 
 			final int emptyTile = 0;
 			final int nonDamagingObstacle = 1;
@@ -310,21 +310,21 @@ public class DungeonRoom extends OnscreenDrawable {
 					case emptyTile:
 						break;
 					case nonDamagingObstacle:
-						createNonDamagingObstacle(2 * col, 2 * row);
+						createNonDamagingObstacle(col, row);
 						break;
 					case damagingObstacle:
-						createDamagingObstacle(2 * col, 2 * row);
+						createDamagingObstacle(col, row);
 						break;
 					case maybeDamagingObstacle:
 						if (obstacleType3NonDamaging) {
-							createNonDamagingObstacle(2 * col, 2 * row);
+							createNonDamagingObstacle(col, row);
 						} else if (!obstacleType3NonDamaging) {
-							createDamagingObstacle(2 * col, 2 * row);
+							createDamagingObstacle(col, row);
 						}
 						break;
 					case maybeEnemy:
 						if (rand.nextInt(5) < 3) {
-							createRandomEnemy(2 * col, 2 * row);
+							createRandomEnemy(col, row);
 						}
 						break;
 					default:

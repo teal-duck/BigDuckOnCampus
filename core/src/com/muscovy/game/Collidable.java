@@ -79,11 +79,11 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles)) {
-			xTiles = DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles;
+		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
+			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
 		this.xTiles = xTiles;
-		setX((xTiles * (MuscovyGame.HALF_TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
+		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -91,11 +91,11 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles)) {
-			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles;
+		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
+			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
 		this.yTiles = yTiles;
-		setY((yTiles * (MuscovyGame.HALF_TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (MuscovyGame.TILE_SIZE + 100)) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -151,8 +151,8 @@ public abstract class Collidable extends OnscreenDrawable {
 		float y = getY();
 		float width = getWidth();
 		float height = getHeight();
-		widthTiles = (int) Collidable.floorDiv((long) width, 32) + 1;
-		heightTiles = (int) Collidable.floorDiv((long) height, 32) + 1;
+		widthTiles = (int) Collidable.floorDiv((long) width, MuscovyGame.TILE_SIZE) + 1;
+		heightTiles = (int) Collidable.floorDiv((long) height, MuscovyGame.TILE_SIZE) + 1;
 		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}
