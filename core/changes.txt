@@ -48,10 +48,24 @@
 - Now renders a map overlay
 	- Graphics need to be changed
 	- Helpful for debugging
+
+- Map overlay now shows doors
+
+- Level generation parameterized
+	- Takes the size of the world to make etc as parameters
+	- Parameters are calculated based on which level it is
 	
+- Made parameter order for (x, y) consistent
+
+- Moved boss spawn location up
+	- Before if the player entered the boss room from below, they'd walk right into the boss
+	
+- Started to make level completion checking be based on the objective for the level
 	
 
-When enemies are in bottom corners, player can't shoot them from the side
-Collision could maybe use our code from featherline york?
-Need to change where the boss room spawns - currently always favours bottom left
-Player and enemy projectiles should look different
+Other possible things to do:
+- When enemies are in bottom corners, player can't shoot them from the side
+- Collision could maybe use our code from featherline york?
+- Player and enemy projectiles should look different
+- Perhaps create a base MovingEntity class for enemy and player (and projectile?) to extend
+- Should split the entity manager class up as it does a lot in 1 class

@@ -145,7 +145,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public void generateRoom(LevelType level) {
+	public void generateRoom(LevelType levelType) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -337,7 +337,8 @@ public class DungeonRoom extends OnscreenDrawable {
 					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
 			bossEnemy = new Enemy(textureMap, bossSprite);
 			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
-			bossEnemy.setYTiles((int) ((18 / 2) - (bossEnemy.getHeight() / 64)));
+			// Used to be (18 / 2)
+			bossEnemy.setYTiles((int) ((22 / 2) - (bossEnemy.getHeight() / 64)));
 			bossEnemy.setAttackType(AttackType.BOTH);
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
@@ -381,7 +382,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		}
 
 		// TODO: Make level backgrounds an array
-		switch (level) {
+		switch (levelType) {
 		case CONSTANTINE:
 			texture = textureMap.getTextureOrLoadFile("accommodationAssets/constantineBackground.png");
 			break;
@@ -516,7 +517,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public boolean isEnemiesDead() {
+	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			enemiesDead = true;
 		}

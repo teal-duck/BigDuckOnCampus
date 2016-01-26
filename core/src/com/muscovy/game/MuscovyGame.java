@@ -400,7 +400,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	public void cursorUpdate() {
-		if (!entityManager.levelCompleted(mapSelected.ordinal())) {
+		if (!entityManager.isLevelCompleted(mapSelected.ordinal())) {
 			guiSelector.setTexture(availableLevel);
 		} else {
 			guiSelector.setTexture(unavailableLevel);
@@ -475,7 +475,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		playerWallCollision();
 
-		if (entityManager.getCurrentDungeonRoom().isEnemiesDead()) {
+		if (entityManager.getCurrentDungeonRoom().areAllEnemiesDead()) {
 			playerDoorCollision();
 		} else {
 			for (Enemy enemy : enemyList) {
@@ -733,7 +733,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			}
 
 			if (keycode == Input.Keys.ENTER) {
-				if (!entityManager.levelCompleted(mapSelected.ordinal())) {
+				if (!entityManager.isLevelCompleted(mapSelected.ordinal())) {
 					entityManager.setLevel(mapSelected.ordinal());
 					entityManager.startLevel(playerCharacter);
 					gameState = GameState.DUNGEON;

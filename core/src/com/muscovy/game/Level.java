@@ -15,22 +15,27 @@ public class Level {
 	 */
 	public DungeonRoom[][] levelArray;
 	public boolean[][] visitedRooms;
-	private ObjectiveType objective;
-	private LevelType level;
+	private ObjectiveType objectiveType;
+	private LevelType levelType;
 	private boolean completed = false;
 
-	private int roomsWide = LevelGenerator.DUNGEON_ROOMS_WIDE;
-	private int roomsHigh = LevelGenerator.DUNGEON_ROOMS_HIGH;
+	private int roomsWide;
+	private int roomsHigh;
+	private int startX;
+	private int startY;
 
 
-	public Level(DungeonRoom[][] levelArray, ObjectiveType objective, LevelType level) {
+	public Level(DungeonRoom[][] levelArray, LevelType levelType, LevelParameters levelParameters) {
 		this.levelArray = levelArray;
-		roomsHigh = levelArray.length;
-		roomsWide = levelArray[0].length;
-		visitedRooms = new boolean[roomsHigh][roomsWide];
-		this.objective = objective;
-		this.level = level;
 
+		roomsHigh = levelParameters.getRoomsHigh();
+		roomsWide = levelParameters.getRoomsWide();
+		startX = levelParameters.getStartX();
+		startY = levelParameters.getStartY();
+		objectiveType = levelParameters.getObjectiveType();
+		this.levelType = levelType;
+
+		visitedRooms = new boolean[roomsHigh][roomsWide];
 		for (int y = 0; y < visitedRooms.length; y += 1) {
 			for (int x = 0; x < visitedRooms[y].length; x += 1) {
 				visitedRooms[y][x] = false;
@@ -40,52 +45,85 @@ public class Level {
 
 
 	public void markRoomVisited(int roomX, int roomY) {
-		visitedRooms[roomY][roomX] = true;
+		if (locationInBounds(roomX, roomY)) {
+			visitedRooms[roomY][roomX] = true;
+		}
 	}
 
 
 	public boolean isRoomVisited(int roomX, int roomY) {
-		return visitedRooms[roomY][roomX];
+		if (locationInBounds(roomX, roomY)) {
+			return visitedRooms[roomY][roomX];
+		} else {
+			return false;
+		}
 	}
 
 
 	public boolean isRoomNeighbourVisited(int roomX, int roomY) {
-		if ((roomX > 0) && isRoomVisited(roomX - 1, roomY)) {
-			return true;
-		} else if ((roomX < (roomsWide - 1)) && isRoomVisited(roomX + 1, roomY)) {
-			return true;
-		} else if ((roomY > 0) && isRoomVisited(roomX, roomY - 1)) {
-			return true;
-		} else if ((roomY < (roomsHigh - 1)) && isRoomVisited(roomX, roomY + 1)) {
-			return true;
-		}
-
-		return false;
+		return (isLeftNeighbourVisited(roomX, roomY) //
+				|| isRightNeighbourVisited(roomX, roomY) //
+				|| isUpNeighbourVisited(roomX, roomY) //
+				|| isDownNeighbourVisited(roomX, roomY));
 	}
 
 
-	public int getRoomsWide() {
-		return roomsWide;
+	public boolean isLeftNeighbourVisited(int roomX, int roomY) {
+		return ((roomX > 0) && isRoomVisited(roomX - 1, roomY));
 	}
 
 
-	public int getRoomsHigh() {
-		return roomsHigh;
+	public boolean isRightNeighbourVisited(int roomX, int roomY) {
+		return ((roomX < (roomsWide - 1)) && isRoomVisited(roomX + 1, roomY));
+	}
+
+
+	public boolean isUpNeighbourVisited(int roomX, int roomY) {
+		return ((roomY > 0) && isRoomVisited(roomX, roomY - 1));
+	}
+
+
+	public boolean isDownNeighbourVisited(int roomX, int roomY) {
+		return ((roomY < (roomsHigh - 1)) && isRoomVisited(roomX, roomY + 1));
+	}
+
+
+	public DungeonRoom getLeftRoom(int roomX, int roomY) {
+		return ((roomX > 0) ? getRoom(roomX - 1, roomY) : null);
+	}
+
+
+	public DungeonRoom getRightRoom(int roomX, int roomY) {
+		return ((roomX < (roomsWide - 1)) ? getRoom(roomX + 1, roomY) : null);
+	}
+
+
+	public DungeonRoom getUpRoom(int roomX, int roomY) {
+		return ((roomY > 0) ? getRoom(roomX, roomY - 1) : null);
+	}
+
+
+	public DungeonRoom getDownRoom(int roomX, int roomY) {
+		return ((roomY < (roomsHigh - 1)) ? getRoom(roomX, roomY + 1) : null);
+	}
+
+
+	public boolean locationInBounds(int roomX, int roomsY) {
+		return ((roomX >= 0) && (roomX < roomsWide) && (roomsY >= 0) && (roomsY < roomsHigh));
 	}
 
 
 	public DungeonRoom getRoom(int roomX, int roomY) {
-		return levelArray[roomY][roomX];
+		if (locationInBounds(roomX, roomY)) {
+			return levelArray[roomY][roomX];
+		} else {
+			return null;
+		}
 	}
 
 
 	public DungeonRoom[][] getLevelArray() {
 		return levelArray;
-	}
-
-
-	public void setLevelArray(DungeonRoom[][] levelArray) {
-		this.levelArray = levelArray;
 	}
 
 
@@ -100,21 +138,31 @@ public class Level {
 
 
 	public LevelType getLevel() {
-		return level;
+		return levelType;
 	}
 
 
-	public void setLevel(LevelType level) {
-		this.level = level;
+	public ObjectiveType getObjectiveType() {
+		return objectiveType;
 	}
 
 
-	public ObjectiveType getObjective() {
-		return objective;
+	public int getRoomsWide() {
+		return roomsWide;
 	}
 
 
-	public void setObjective(ObjectiveType objective) {
-		this.objective = objective;
+	public int getRoomsHigh() {
+		return roomsHigh;
+	}
+
+
+	public int getStartX() {
+		return startX;
+	}
+
+
+	public int getStartY() {
+		return startY;
 	}
 }
