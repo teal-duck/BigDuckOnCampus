@@ -24,9 +24,10 @@ public class Level {
 
 
 	public Level(DungeonRoom[][] levelArray, ObjectiveType objective, LevelType level) {
-		this.levelArray = new DungeonRoom[roomsHigh][roomsWide];
-		visitedRooms = new boolean[roomsHigh][roomsWide];
 		this.levelArray = levelArray;
+		roomsHigh = levelArray.length;
+		roomsWide = levelArray[0].length;
+		visitedRooms = new boolean[roomsHigh][roomsWide];
 		this.objective = objective;
 		this.level = level;
 

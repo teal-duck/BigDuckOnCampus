@@ -13,6 +13,11 @@ public enum LevelType {
 	private static final LevelType[] levelValues = LevelType.values();
 
 
+	public static LevelType fromInt(int i) {
+		return LevelType.levelValues[i];
+	}
+
+
 	public static LevelType advanceLevel(LevelType level, int amount) {
 		int currentLevel = level.ordinal();
 		int nextLevel = currentLevel + amount;

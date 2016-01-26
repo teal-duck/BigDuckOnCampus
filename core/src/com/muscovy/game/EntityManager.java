@@ -92,22 +92,39 @@ public class EntityManager {
 	public void generateLevels() {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
-		levels[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
-				ObjectiveType.BOSS, LevelType.CONSTANTINE);
-		levels[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
-				ObjectiveType.BOSS, LevelType.LANGWITH);
-		levels[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
-				ObjectiveType.BOSS, LevelType.GOODRICKE);
-		levels[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB),
-				ObjectiveType.BOSS, LevelType.LMB);
-		levels[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
-				ObjectiveType.BOSS, LevelType.CATALYST);
-		levels[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
-				ObjectiveType.BOSS, LevelType.TFTV);
-		levels[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
-				ObjectiveType.BOSS, LevelType.COMP_SCI);
-		levels[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH),
-				ObjectiveType.BOSS, LevelType.RCH);
+
+		for (int i = 0; i < maxLevels; i += 1) {
+			int roomsWide = LevelGenerator.DUNGEON_ROOMS_WIDE;
+			int roomsHigh = LevelGenerator.DUNGEON_ROOMS_HIGH;
+			int maxRooms = LevelGenerator.MAX_ROOMS;
+			int startX = LevelGenerator.START_ROOM_X;
+			int startY = LevelGenerator.START_ROOM_Y;
+			LevelType levelType = LevelType.fromInt(i);
+			ObjectiveType objectiveType = ObjectiveType.BOSS;
+
+			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, maxRooms, levelType,
+					roomsWide, roomsHigh, startX, startY);
+			Level level = new Level(rooms, objectiveType, levelType);
+
+			levels[i] = level;
+
+		}
+		// levels[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
+		// ObjectiveType.BOSS, LevelType.CONSTANTINE);
+		// levels[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
+		// ObjectiveType.BOSS, LevelType.LANGWITH);
+		// levels[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
+		// ObjectiveType.BOSS, LevelType.GOODRICKE);
+		// levels[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB),
+		// ObjectiveType.BOSS, LevelType.LMB);
+		// levels[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
+		// ObjectiveType.BOSS, LevelType.CATALYST);
+		// levels[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
+		// ObjectiveType.BOSS, LevelType.TFTV);
+		// levels[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
+		// ObjectiveType.BOSS, LevelType.COMP_SCI);
+		// levels[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH),
+		// ObjectiveType.BOSS, LevelType.RCH);
 		/*
 		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;
 		 * }
