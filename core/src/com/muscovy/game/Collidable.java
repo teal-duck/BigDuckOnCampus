@@ -77,11 +77,11 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (xTiles > (37 - widthTiles)) {
-			xTiles = 37 - widthTiles;
+		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles)) {
+			xTiles = DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles;
 		}
 		this.xTiles = xTiles;
-		setX((xTiles * 32) + 64);
+		setX((xTiles * MuscovyGame.HALF_TILE_SIZE) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -89,11 +89,11 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (yTiles > (21 - heightTiles)) {
-			yTiles = 21 - heightTiles;
+		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles)) {
+			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles;
 		}
 		this.yTiles = yTiles;
-		setY((yTiles * 32) + 64);
+		setY((yTiles * MuscovyGame.HALF_TILE_SIZE) + MuscovyGame.TILE_SIZE);
 	}
 
 
