@@ -60,7 +60,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public static final float WORLD_HEIGHT = 768; // WINDOW_HEIGHT - TOP_GUI_SIZE; // 768
 	public static final float TOP_GUI_SIZE = MuscovyGame.WINDOW_HEIGHT - MuscovyGame.WORLD_HEIGHT; // 192; //
 													// TILE_SIZE * 3
-	
+
 	private GameState gameState;
 	private LevelType mapSelected;
 
@@ -68,7 +68,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	private final int playerStartY = 300;
 
 	private TextureMap textureMap;
-	
 
 
 	@Override

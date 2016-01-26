@@ -23,9 +23,9 @@ public class DungeonRoom extends OnscreenDrawable {
 	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
 	 * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
 	 * like they break halfway up the wall, and have some height associated with them.
-	 * 
-	 * The room is made up of 32x32 'half tiles' (used in map gen). The number of tiles in each direction is stored in constants
-	 * in {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.  
+	 *
+	 * The room is made up of 32x32 'half tiles' (used in map gen). The number of tiles in each direction is stored
+	 * in constants in {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
@@ -49,11 +49,11 @@ public class DungeonRoom extends OnscreenDrawable {
 	private Random rand;
 
 	private TextureMap textureMap;
-	
-	
+
 	public static final int FLOOR_HEIGHT_IN_HALF_TILES = 20;
 	public static final int FLOOR_WIDTH_IN_HALF_TILES = 36;
-	
+
+
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;
 		rand = new Random();
