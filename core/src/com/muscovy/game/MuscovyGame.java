@@ -49,8 +49,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	private boolean firing = false;
 	private Sprite guiMapSprite;
 	private Sprite guiSelector;
-	private BitmapFont xVal;
-	private BitmapFont yVal;
+	private BitmapFont font;
 	private BitmapFont gameOverFont;
 	private BitmapFont loading;
 
@@ -104,6 +103,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
+		boolean batchEnded = false;
+
 		switch (gameState) {
 		case MAIN_MENU:
 			mainMenuGUI.render(batch);
@@ -120,6 +121,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			dungeonGUI.editData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()));
 			dungeonGUI.render(batch);
 			entityManager.render(batch);
+			batchEnded = true;
+			batch.end();
+			entityManager.renderMapOverlay(camera);
 			break;
 
 		case PAUSE:
@@ -128,6 +132,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(),
 					playerCharacter.getY());
 			pauseGUI.render(batch);
+			batchEnded = true;
+			batch.end();
+			entityManager.renderMapOverlay(camera);
 			break;
 
 		case GAME_OVER:
@@ -143,7 +150,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			break;
 		}
 
-		batch.end();
+		if (!batchEnded) {
+			batch.end();
+		}
 	}
 
 
@@ -184,15 +193,13 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		guiDungeonSprite.setX(0);
 		guiDungeonSprite.setY(0);
 		dungeonGUI.addElement(guiDungeonSprite);
-		xVal = new BitmapFont();
-		xVal.setColor(Color.BLACK);
-		yVal = new BitmapFont();
-		yVal.setColor(Color.BLACK);
+		font = new BitmapFont();
+		font.setColor(Color.BLACK);
 
 		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT - 16); // 900;
-		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), xVal, 400,
+		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), font, 400,
 				dungeonGuiY);
-		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), xVal, 650,
+		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), font, 650,
 				dungeonGuiY);
 		// GameOver
 		gameOverFont = new BitmapFont();

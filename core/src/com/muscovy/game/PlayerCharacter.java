@@ -548,6 +548,7 @@ public class PlayerCharacter extends Collidable {
 			count = 3;
 			break;
 		}
+		count = 3;
 
 		return Projectile.shootProjectiles(textureMap, count, position, direction, projectileLife,
 				projectileVelocity, ProjectileDamager.ENEMY);

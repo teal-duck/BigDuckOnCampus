@@ -5,9 +5,12 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
@@ -23,8 +26,8 @@ public class EntityManager {
 	private ArrayList<Projectile> projectileList;
 	private DungeonRoom currentDungeonRoom;
 	private LevelGenerator levelGenerator;
-	private Level[] level;
-	private int levelNo;
+	private Level[] levels;
+	private int currentLevelNumber;
 	private int maxLevels = 8;
 	private int roomX;
 	private int roomY;
@@ -45,23 +48,26 @@ public class EntityManager {
 
 	private TextureMap textureMap;
 
+	private ShapeRenderer shapeRenderer;
+
 
 	public EntityManager(TextureMap textureMap) {
 		this.textureMap = textureMap;
+		shapeRenderer = new ShapeRenderer();
+
 		renderList = new ArrayList<OnscreenDrawable>();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
 		projectileList = new ArrayList<Projectile>();
 
 		levelGenerator = new LevelGenerator();
-		level = new Level[maxLevels];
+		maxLevels = 8;
+		levels = new Level[maxLevels];
 
 		list = new BitmapFont();
 		list.setColor(Color.WHITE);// Testing purposes
 
 		currentDungeonRoom = new DungeonRoom(textureMap);
-
-		maxLevels = 8;
 
 		northDoorTextureOpen = textureMap
 				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
@@ -86,22 +92,39 @@ public class EntityManager {
 	public void generateLevels() {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
-		level[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
-				ObjectiveType.BOSS, LevelType.CONSTANTINE);
-		level[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
-				ObjectiveType.BOSS, LevelType.LANGWITH);
-		level[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
-				ObjectiveType.BOSS, LevelType.GOODRICKE);
-		level[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB), ObjectiveType.BOSS,
-				LevelType.LMB);
-		level[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
-				ObjectiveType.BOSS, LevelType.CATALYST);
-		level[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
-				ObjectiveType.BOSS, LevelType.TFTV);
-		level[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
-				ObjectiveType.BOSS, LevelType.COMP_SCI);
-		level[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH), ObjectiveType.BOSS,
-				LevelType.RCH);
+
+		for (int i = 0; i < maxLevels; i += 1) {
+			int roomsWide = LevelGenerator.DUNGEON_ROOMS_WIDE;
+			int roomsHigh = LevelGenerator.DUNGEON_ROOMS_HIGH;
+			int maxRooms = LevelGenerator.MAX_ROOMS;
+			int startX = LevelGenerator.START_ROOM_X;
+			int startY = LevelGenerator.START_ROOM_Y;
+			LevelType levelType = LevelType.fromInt(i);
+			ObjectiveType objectiveType = ObjectiveType.BOSS;
+
+			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, maxRooms, levelType,
+					roomsWide, roomsHigh, startX, startY);
+			Level level = new Level(rooms, objectiveType, levelType);
+
+			levels[i] = level;
+
+		}
+		// levels[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
+		// ObjectiveType.BOSS, LevelType.CONSTANTINE);
+		// levels[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
+		// ObjectiveType.BOSS, LevelType.LANGWITH);
+		// levels[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
+		// ObjectiveType.BOSS, LevelType.GOODRICKE);
+		// levels[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB),
+		// ObjectiveType.BOSS, LevelType.LMB);
+		// levels[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
+		// ObjectiveType.BOSS, LevelType.CATALYST);
+		// levels[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
+		// ObjectiveType.BOSS, LevelType.TFTV);
+		// levels[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
+		// ObjectiveType.BOSS, LevelType.COMP_SCI);
+		// levels[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH),
+		// ObjectiveType.BOSS, LevelType.RCH);
 		/*
 		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;
 		 * }
@@ -110,12 +133,22 @@ public class EntityManager {
 
 
 	public int getLevelNo() {
-		return levelNo;
+		return currentLevelNumber;
 	}
 
 
-	public void setLevel(int levelNo) {
-		this.levelNo = levelNo;
+	public void setLevel(int levelNumber) {
+		currentLevelNumber = levelNumber;
+	}
+
+
+	public Level getCurrentLevel() {
+		return levels[currentLevelNumber];
+	}
+
+
+	public Level getLevel(int levelNumber) {
+		return levels[levelNumber];
 	}
 
 
@@ -123,7 +156,9 @@ public class EntityManager {
 		roomX = startRoomX;
 		roomY = startRoomY;
 		this.playerCharacter = playerCharacter;
-		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+		setCurrentDungeonRoom(roomX, roomY);
+		// setCurrentDungeonRoom(levels[currentLevelNumber].getRoom(roomX, roomY));
+		getCurrentLevel().markRoomVisited(roomX, roomY);
 		renderList.add(this.playerCharacter);
 	}
 
@@ -199,7 +234,7 @@ public class EntityManager {
 		for (Projectile projectile : projectileList) {
 			batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 		}
-		if (level[levelNo].isCompleted()) {
+		if (levels[currentLevelNumber].isCompleted()) {
 			list.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
 					worldHeight - 69);
 		}
@@ -208,8 +243,66 @@ public class EntityManager {
 	}
 
 
-	public boolean levelCompleted(int level) {
-		return this.level[level].isCompleted();
+	public void renderMapOverlay(OrthographicCamera camera) {
+		Level level = levels[currentLevelNumber];
+
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Filled);
+
+		float renderWidth = 25;
+		float renderHeight = 15;
+		float xOffset = MuscovyGame.WINDOW_WIDTH - (renderWidth * level.getRoomsWide());
+		float yOffset = MuscovyGame.WINDOW_HEIGHT - renderHeight;
+
+		float windowEdgeOffset = 0;
+		xOffset -= windowEdgeOffset;
+		yOffset -= windowEdgeOffset;
+
+		for (int row = 0; row < level.getRoomsHigh(); row += 1) {
+			for (int col = 0; col < level.getRoomsWide(); col += 1) {
+				DungeonRoom room = level.getRoom(col, row);
+
+				Color colour = Color.BLACK;
+				if (room != null) {
+					boolean isCurrentRoom = ((roomX == col) && (roomY == row));
+					boolean isBossRoom = (room.getRoomType() == RoomType.BOSS);
+
+					if (isCurrentRoom) {
+						colour = Color.RED;
+					} else {
+						if (level.isRoomVisited(col, row)) {
+							if (isBossRoom) {
+								colour = Color.BLUE;
+							} else {
+								colour = Color.WHITE;
+							}
+						} else if (level.isRoomNeighbourVisited(col, row)) {
+							if (isBossRoom) {
+								colour = Color.BROWN;
+							} else {
+								colour = Color.DARK_GRAY;
+							}
+						}
+					}
+				}
+				shapeRenderer.setColor(colour);
+
+				float x = xOffset + (col * renderWidth);
+				float y = yOffset - (row * renderHeight);
+				float w = renderWidth;
+				float h = renderHeight;
+
+				shapeRenderer.rect(x, y, w, h);
+			}
+		}
+
+		shapeRenderer.end();
+
+	}
+
+
+	public boolean levelCompleted(int levelNumber) {
+		return getLevel(levelNumber).isCompleted();
 	}
 
 
@@ -363,6 +456,14 @@ public class EntityManager {
 	}
 
 
+	public void setCurrentDungeonRoom(int roomX, int roomY) {
+		Level currentLevel = getCurrentLevel();
+		DungeonRoom room = currentLevel.getRoom(roomX, roomY);
+		setCurrentDungeonRoom(room);
+		currentLevel.markRoomVisited(roomX, roomY);
+	}
+
+
 	public DungeonRoom getCurrentDungeonRoom() {
 		return currentDungeonRoom;
 	}
@@ -370,28 +471,28 @@ public class EntityManager {
 
 	public void moveNorth() {
 		roomY--;
-		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+		setCurrentDungeonRoom(roomX, roomY);
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveEast() {
 		roomX++;
-		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+		setCurrentDungeonRoom(roomX, roomY);
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveWest() {
 		roomX--;
-		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+		setCurrentDungeonRoom(roomX, roomY);
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveSouth() {
 		roomY++;
-		setCurrentDungeonRoom(level[levelNo].getRoom(roomX, roomY));
+		setCurrentDungeonRoom(roomX, roomY);
 		renderList.add(playerCharacter);
 
 	}
@@ -399,8 +500,8 @@ public class EntityManager {
 
 	public void checkLevelCompletion() {
 		if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == RoomType.BOSS)
-				&& (level[levelNo].getObjective() == ObjectiveType.BOSS)) {
-			level[levelNo].setCompleted(true);
+				&& (levels[currentLevelNumber].getObjective() == ObjectiveType.BOSS)) {
+			levels[currentLevelNumber].setCompleted(true);
 		}
 	}
 

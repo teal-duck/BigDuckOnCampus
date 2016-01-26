@@ -347,6 +347,9 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossEnemy.setAttackType(AttackType.BOTH);
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
+			// TODO: Change boss parameters
+			bossEnemy.setDefaultVelocity(bossEnemy.getDefaultVelocity() * 0.8f);
+			bossEnemy.setProjectileVelocity(bossEnemy.getProjectileVelocity() * 2);
 			bossEnemy.setTouchDamage(20);
 			bossEnemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
 			bossEnemy.setScoreOnDeath(3000);
