@@ -38,8 +38,20 @@
 
 - Player clampVelocity now uses velocity.limit() instead of changing components
 	- Mathematically correct, but changes gameplay
+
+- Boss now spawns in a random room
+	- Used to pick the first room it found with only 1 neighbour, starting in bottom left
+	- Now builds a list of all potential rooms (only 1 neighbour), then picks a random one
+	
+- Boss parameters (move speed, shot speed) being changed
+
+- Now renders a map overlay
+	- Graphics need to be changed
+	- Helpful for debugging
+	
 	
 
 When enemies are in bottom corners, player can't shoot them from the side
 Collision could maybe use our code from featherline york?
-
+Need to change where the boss room spawns - currently always favours bottom left
+Player and enemy projectiles should look different

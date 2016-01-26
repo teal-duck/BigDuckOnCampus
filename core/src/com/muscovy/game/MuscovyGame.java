@@ -103,6 +103,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
+		boolean batchEnded = false;
+
 		switch (gameState) {
 		case MAIN_MENU:
 			mainMenuGUI.render(batch);
@@ -119,6 +121,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			dungeonGUI.editData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()));
 			dungeonGUI.render(batch);
 			entityManager.render(batch);
+			batchEnded = true;
+			batch.end();
+			entityManager.renderMapOverlay(camera);
 			break;
 
 		case PAUSE:
@@ -142,7 +147,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			break;
 		}
 
-		batch.end();
+		if (!batchEnded) {
+			batch.end();
+		}
 	}
 
 
