@@ -139,7 +139,7 @@ public class Enemy extends Collidable {
 			}
 			break;
 		case RANDOM_DIRECTION:
-			count = 1;
+			count = 4;
 			shootDirection.setToRandomDirection();
 			break;
 		}
