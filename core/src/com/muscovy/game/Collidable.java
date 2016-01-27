@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by SeldomBucket on 05-Jan-16.
+ * Class in inherited by all entities in game that can be collided with.
  * 
- * Players and enemies both exist on a 64x64 tile. 
+ * All inheritors of Collidable exist on a 64x64 tile. 
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -18,8 +19,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	// Offset from centre of collidable: offset of 6 means centre of circle hitbox is 6 pixels above centre of
 	// collidable
 	private float hitboxYOffset = 0;
-	private int xTiles;
-	private int yTiles;
 	private int widthTiles;
 	private int heightTiles;
 
@@ -59,16 +58,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
-	public int getXTiles() {
-		return xTiles;
-	}
-
-
-	public int getYTiles() {
-		return yTiles;
-	}
-
-
 	// TODO: Should setX/YTiles use modulo and constants for world width/height
 
 	/**
@@ -82,7 +71,6 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
-		this.xTiles = xTiles;
 		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
@@ -94,7 +82,6 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
-		this.yTiles = yTiles;
 		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
