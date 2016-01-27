@@ -339,8 +339,8 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossSprite = new Sprite(
 					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
 			bossEnemy = new Enemy(textureMap, bossSprite);
-			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
-			bossEnemy.setYTiles((int) ((18 / 2) - (bossEnemy.getHeight() / 64)));
+			bossEnemy.setXTiles((int) ((FLOOR_WIDTH_IN_TILES / 2) - (bossEnemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
+			bossEnemy.setYTiles((int) ((FLOOR_HEIGHT_IN_TILES / 2) - (bossEnemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
 			bossEnemy.setAttackType(AttackType.BOTH);
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
