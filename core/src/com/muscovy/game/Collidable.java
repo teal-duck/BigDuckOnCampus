@@ -9,8 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by SeldomBucket on 05-Jan-16.
+<<<<<<< HEAD
+ * Class in inherited by all entities in game that can be collided with.
+ * 
+ * All inheritors of Collidable exist on a 64x64 tile. 
+=======
  *
  * Players and enemies both exist on a 64x64 tile.
+>>>>>>> master
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -18,8 +24,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	// Offset from centre of collidable: offset of 6 means centre of circle hitbox is 6 pixels above centre of
 	// collidable
 	private float hitboxYOffset = 0;
-	private int xTiles;
-	private int yTiles;
 	private int widthTiles;
 	private int heightTiles;
 
@@ -59,16 +63,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
-	public int getXTiles() {
-		return xTiles;
-	}
-
-
-	public int getYTiles() {
-		return yTiles;
-	}
-
-
 	// TODO: Should setX/YTiles use modulo and constants for world width/height
 
 	/**
@@ -79,11 +73,10 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles)) {
-			xTiles = DungeonRoom.FLOOR_WIDTH_IN_HALF_TILES - widthTiles;
+		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
+			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
-		this.xTiles = xTiles;
-		setX((xTiles * (MuscovyGame.HALF_TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -91,11 +84,10 @@ public abstract class Collidable extends OnscreenDrawable {
 		/**
 		 * Use this when setting something in the playable space to make sure it is on the grid.
 		 */
-		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles)) {
-			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_HALF_TILES - heightTiles;
+		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
+			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
-		this.yTiles = yTiles;
-		setY((yTiles * (MuscovyGame.HALF_TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
 	}
 
 
@@ -151,8 +143,8 @@ public abstract class Collidable extends OnscreenDrawable {
 		float y = getY();
 		float width = getWidth();
 		float height = getHeight();
-		widthTiles = (int) Collidable.floorDiv((long) width, 32) + 1;
-		heightTiles = (int) Collidable.floorDiv((long) height, 32) + 1;
+		widthTiles = (int) Collidable.floorDiv((long) width, MuscovyGame.TILE_SIZE) + 1;
+		heightTiles = (int) Collidable.floorDiv((long) height, MuscovyGame.TILE_SIZE) + 1;
 		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}

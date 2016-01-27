@@ -23,9 +23,12 @@ public class DungeonRoom extends OnscreenDrawable {
 	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
 	 * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
 	 * like they break halfway up the wall, and have some height associated with them.
+<<<<<<< HEAD
+=======
 	 *
 	 * The room is made up of 32x32 'half tiles' (used in map gen). The number of tiles in each direction is stored
 	 * in constants in {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
+>>>>>>> master
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
@@ -50,10 +53,10 @@ public class DungeonRoom extends OnscreenDrawable {
 
 	private TextureMap textureMap;
 
-	public static final int FLOOR_HEIGHT_IN_HALF_TILES = 20;
-	public static final int FLOOR_WIDTH_IN_HALF_TILES = 36;
+	public static final int FLOOR_HEIGHT_IN_TILES = 10;
+	public static final int FLOOR_WIDTH_IN_TILES = 18;
 
-
+	
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;
 		rand = new Random();
@@ -310,21 +313,21 @@ public class DungeonRoom extends OnscreenDrawable {
 					case emptyTile:
 						break;
 					case nonDamagingObstacle:
-						createNonDamagingObstacle(2 * col, 2 * row);
+						createNonDamagingObstacle(col, row);
 						break;
 					case damagingObstacle:
-						createDamagingObstacle(2 * col, 2 * row);
+						createDamagingObstacle(col, row);
 						break;
 					case maybeDamagingObstacle:
 						if (obstacleType3NonDamaging) {
-							createNonDamagingObstacle(2 * col, 2 * row);
+							createNonDamagingObstacle(col, row);
 						} else if (!obstacleType3NonDamaging) {
-							createDamagingObstacle(2 * col, 2 * row);
+							createDamagingObstacle(col, row);
 						}
 						break;
 					case maybeEnemy:
 						if (rand.nextInt(5) < 3) {
-							createRandomEnemy(2 * col, 2 * row);
+							createRandomEnemy(col, row);
 						}
 						break;
 					default:
@@ -342,9 +345,8 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossSprite = new Sprite(
 					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
 			bossEnemy = new Enemy(textureMap, bossSprite);
-			bossEnemy.setXTiles((int) ((36 / 2) - (bossEnemy.getWidth() / 64)));
-			// Used to be (18 / 2)
-			bossEnemy.setYTiles((int) ((22 / 2) - (bossEnemy.getHeight() / 64)));
+			bossEnemy.setXTiles((int) ((FLOOR_WIDTH_IN_TILES / 2) - (bossEnemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
+			bossEnemy.setYTiles((int) ((FLOOR_HEIGHT_IN_TILES / 2) - (bossEnemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
 			bossEnemy.setAttackType(AttackType.BOTH);
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
