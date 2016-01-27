@@ -173,6 +173,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		 */
 		Sprite mainMenuSprite = new Sprite();
 		Sprite mainMenuStartButton = new Sprite();
+		Sprite mainMenuLoadButton = new Sprite();
+		Sprite mainMenuSettingsButton = new Sprite();
 		// Sprite guiMapSprite = new Sprite();
 		Sprite guiDungeonSprite = new Sprite();
 
@@ -203,11 +205,15 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				dungeonGuiY);
 		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), font, 650,
 				dungeonGuiY);
+		
 		// GameOver
 		gameOverFont = new BitmapFont();
 		gameOverFont.setColor(Color.RED);
 		gameOverGUI = new GUI();
 		gameOverGUI.addData("Gameover", "Game Over", gameOverFont, 640, 150);
+		gameOverGUI.addData("Gameover", "Press ENTER to restart and ESC to quit", gameOverFont, 640, 130);
+		
+		//Pause
 		pauseGUI = new GUI();
 		pauseGUI.addData("Pause", "PAUSE", gameOverFont, (int) (MuscovyGame.WINDOW_WIDTH / 2), 720 / 2);
 	}
@@ -816,6 +822,16 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				gameState = GameState.OVERWORLD;
 			}
 			break;
+		
+		case GAME_OVER:
+			if (keycode == Input.Keys.ENTER) {
+				gameState = GameState.STARTUP;
+			}
+			if (keycode == Input.Keys.ESCAPE) {
+				Gdx.app.exit();
+			}
+			break;
+
 		default:
 			break;
 		}
