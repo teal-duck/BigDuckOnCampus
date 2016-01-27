@@ -42,6 +42,17 @@ public class Level {
 			}
 		}
 	}
+	
+	public boolean areAllEnemiesDead() {
+		for (int j=0; j<levelArray.length; j++) {
+			for (int i=0; i<levelArray[0].length; i++) {
+				if (this.getRoom(i, j) != null && !this.getRoom(i, j).areAllEnemiesDead()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 
 	public void markRoomVisited(int roomX, int roomY) {

@@ -565,7 +565,8 @@ public class EntityManager {
 		if (completed) {
 			return true;
 		}
-
+		
+		
 		if (objectiveType == ObjectiveType.BOSS) {
 			// TODO: Implement level.getBossRoom()
 			if (currentDungeonRoom.areAllEnemiesDead()
@@ -573,10 +574,19 @@ public class EntityManager {
 				completed = true;
 			}
 		}
-
+			
+		else if (objectiveType == ObjectiveType.KILL_ENEMIES) {
+			if (level.areAllEnemiesDead()) {
+				completed = true;
+			}
+		}
+		
+		else if (objectiveType == ObjectiveType.FIND_ITEM) {
+			completed = false;
+		}
+		
 		level.setCompleted(completed);
 		return completed;
-
 	}
 
 

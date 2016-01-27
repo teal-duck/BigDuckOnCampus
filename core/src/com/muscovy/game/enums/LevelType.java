@@ -43,9 +43,9 @@ public enum LevelType {
 	public static LevelParameters getParametersForLevel(LevelType level) {
 		switch (level) {
 		case CONSTANTINE:
-			return new LevelParameters(5, 5, 8, 2, 2, ObjectiveType.BOSS);
-		// case RCH:
-		// return new LevelParameters(50, 50, 1000, 20, 20, ObjectiveType.BOSS);
+			return new LevelParameters(4, 4, 4, 1, 1, ObjectiveType.BOSS);
+		case LANGWITH:
+			return new LevelParameters(5, 5, 3, 3, 3, ObjectiveType.KILL_ENEMIES);
 		default:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		}

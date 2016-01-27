@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.LevelType;
+import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
 
 
@@ -143,30 +144,32 @@ public class LevelGenerator {
 		/* place our boss room */
 		ArrayList<Vector2> potentialBossRooms = new ArrayList<Vector2>();
 
-		for (int xPos = 0; xPos < roomsWide; xPos++) {
-			for (int yPos = 0; yPos < roomsHigh; yPos++) {
-				if (!bossSet) {
-					if ((dungeonRoomArray[yPos][xPos] != null)
-							&& (dungeonRoomArray[yPos][xPos]
-									.getRoomType() == RoomType.NORMAL)
-							&& (checkAdjacent(dungeonRoomArray, xPos, yPos) == 1)) {
-
-						potentialBossRooms.add(new Vector2(xPos, yPos));
+		if (levelParameters.getObjectiveType() == ObjectiveType.BOSS) {
+			for (int xPos = 0; xPos < roomsWide; xPos++) {
+				for (int yPos = 0; yPos < roomsHigh; yPos++) {
+					if (!bossSet) {
+						if ((dungeonRoomArray[yPos][xPos] != null)
+								&& (dungeonRoomArray[yPos][xPos]
+										.getRoomType() == RoomType.NORMAL)
+								&& (checkAdjacent(dungeonRoomArray, xPos, yPos) == 1)) {
+	
+							potentialBossRooms.add(new Vector2(xPos, yPos));
+						}
 					}
 				}
 			}
-		}
-
-		if (potentialBossRooms.size() > 0) {
-			int randomIndex = randomGenerator.nextInt(potentialBossRooms.size());
-			Vector2 randomPosition = potentialBossRooms.get(randomIndex);
-			int x = (int) randomPosition.x;
-			int y = (int) randomPosition.y;
-			dungeonRoomArray[y][x].setRoomType(RoomType.BOSS);
-			// System.out.println("On level " + level.toString() + ", adding boss room at " +
-			// randomPosition);
-		} else {
-			// System.out.println("No boss room");
+	
+			if (potentialBossRooms.size() > 0) {
+				int randomIndex = randomGenerator.nextInt(potentialBossRooms.size());
+				Vector2 randomPosition = potentialBossRooms.get(randomIndex);
+				int x = (int) randomPosition.x;
+				int y = (int) randomPosition.y;
+				dungeonRoomArray[y][x].setRoomType(RoomType.BOSS);
+				// System.out.println("On level " + level.toString() + ", adding boss room at " +
+				// randomPosition);
+			} else {
+				// System.out.println("No boss room");
+			}
 		}
 
 		/* place our item room */
