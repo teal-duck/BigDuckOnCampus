@@ -173,11 +173,6 @@ public class DungeonRoom {
 			int[][] tileArray = templateLoader.getRandomTemplateOrLoad(rand);
 
 			boolean obstacleType3NonDamaging = rand.nextBoolean();
-			// final int emptyTile = 0;
-			// final int nonDamagingObstacle = 1;
-			// final int damagingObstacle = 2;
-			// final int maybeDamagingObstacle = 3;
-			// final int maybeEnemy = 4;
 
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
@@ -497,7 +492,6 @@ public class DungeonRoom {
 
 	public void setBackgroundTexture(Texture backgroundTexture) {
 		this.backgroundTexture = backgroundTexture;
-		// super.setSprite(sprite);
 	}
 
 

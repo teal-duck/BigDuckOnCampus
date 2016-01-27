@@ -553,10 +553,6 @@ public class EntityManager {
 
 
 	public boolean checkLevelCompletion(int levelNumber) {
-		// if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == RoomType.BOSS)
-		// && (levels[currentLevelNumber].getObjective() == ObjectiveType.BOSS)) {
-		// levels[currentLevelNumber].setCompleted(true);
-		// }
 		Level level = getLevel(levelNumber);
 		ObjectiveType objectiveType = level.getObjectiveType();
 
@@ -565,26 +561,25 @@ public class EntityManager {
 		if (completed) {
 			return true;
 		}
-		
-		
-		if (objectiveType == ObjectiveType.BOSS) {
+
+		switch (objectiveType) {
+		case BOSS:
 			// TODO: Implement level.getBossRoom()
 			if (currentDungeonRoom.areAllEnemiesDead()
 					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
 				completed = true;
 			}
-		}
-			
-		else if (objectiveType == ObjectiveType.KILL_ENEMIES) {
+			break;
+		case KILL_ENEMIES:
 			if (level.areAllEnemiesDead()) {
 				completed = true;
 			}
-		}
-		
-		else if (objectiveType == ObjectiveType.FIND_ITEM) {
+			break;
+		case FIND_ITEM:
 			completed = false;
+			break;
 		}
-		
+
 		level.setCompleted(completed);
 		return completed;
 	}
