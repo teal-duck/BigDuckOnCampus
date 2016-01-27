@@ -61,6 +61,9 @@
 	- Before if the player entered the boss room from below, they'd walk right into the boss
 	
 - Started to make level completion checking be based on the objective for the level
+
+- Room templates are now loaded from a CSV file
+	- The format is a bit awkward right now, but it's functional
 	
 
 Other possible things to do:
@@ -69,3 +72,6 @@ Other possible things to do:
 - Player and enemy projectiles should look different
 - Perhaps create a base MovingEntity class for enemy and player (and projectile?) to extend
 - Should split the entity manager class up as it does a lot in 1 class
+
+
+Enemies spawn in bottom left/top right corner because that room is the shop or item room

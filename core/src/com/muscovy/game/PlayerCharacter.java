@@ -532,7 +532,7 @@ public class PlayerCharacter extends Collidable {
 		 */
 		float x = ((getX() + (getWidth() / 2)) - 8);
 		// TODO: This should get player's height, not tile size
-		float y = ((getY() + getHeight()) - MuscovyGame.TILE_SIZE/2);
+		float y = ((getY() + getHeight()) - (MuscovyGame.TILE_SIZE / 2));
 
 		Vector2 position = new Vector2(x, y);
 		Vector2 direction = shotDirection.cpy();

@@ -152,6 +152,9 @@ public class Projectile extends OnscreenDrawable {
 		float spreadDelta = 0;
 
 		switch (count) {
+		case 1:
+			maxSpread = 0;
+			spreadDelta = 0;
 		case 2:
 			maxSpread = MathUtils.PI / 24;
 			spreadDelta = maxSpread * 2;
@@ -161,6 +164,7 @@ public class Projectile extends OnscreenDrawable {
 			spreadDelta = maxSpread;
 			break;
 		default:
+			System.out.println("Spread not calculated for " + count + " bullets");
 			maxSpread = 0;
 			spreadDelta = 0;
 			break;
@@ -169,8 +173,8 @@ public class Projectile extends OnscreenDrawable {
 		float spreadAngle = -maxSpread;
 
 		for (int i = 0; i < count; i += 1) {
-			projectiles.add(new Projectile(textureMap, position, direction.cpy().rotateRad(spreadAngle),
-					life, maxVelocity, damagesWho));
+			projectiles.add(new Projectile(textureMap, position.cpy(),
+					direction.cpy().rotateRad(spreadAngle), life, maxVelocity, damagesWho));
 			spreadAngle += spreadDelta;
 		}
 
