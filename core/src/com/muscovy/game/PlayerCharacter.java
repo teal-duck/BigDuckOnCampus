@@ -55,14 +55,15 @@ public class PlayerCharacter extends Collidable {
 	private TextureMap textureMap;
 
 
-	public PlayerCharacter(TextureMap textureMap) {
+	public PlayerCharacter(Sprite playerSprite, Vector2 position, TextureMap textureMap) {
+		super(playerSprite, position);
 		this.textureMap = textureMap;
 
 		animationCycle = 0;
 		velocity = new Vector2(0, 0);
 		shotDirection = new Vector2(0, 1);
 
-		Sprite playerSprite;
+		// Sprite playerSprite;
 		downWalkCycle = new ArrayList<Texture>();
 		upWalkCycle = new ArrayList<Texture>();
 		rightWalkCycle = new ArrayList<Texture>();
@@ -89,12 +90,9 @@ public class PlayerCharacter extends Collidable {
 		// rightWalkCycle.add(tempTexture);
 		// }
 
-		playerSprite = new Sprite();
-		playerSprite.setRegion(textureMap.getTextureOrLoadFile("duck.png"));
-		setSprite(playerSprite);
-		initialiseX(0);
-		initialiseY(0);
-		setUpBoxes();
+		// playerSprite = new Sprite();
+		// playerSprite.setRegion(textureMap.getTextureOrLoadFile("duck.png"));
+		// setSprite(playerSprite);
 		setHitboxYOffset(-6); // Just to get the hitbox in line with that fat fuck of a duck's body
 		setHitboxRadius((74 / 2) - 2);
 	}
@@ -551,7 +549,7 @@ public class PlayerCharacter extends Collidable {
 		}
 		count = 3;
 
-		return Projectile.shootProjectiles(textureMap, count, position, direction, projectileLife,
-				projectileVelocity, ProjectileDamager.ENEMY);
+		return Projectile.shootProjectiles(count, position, direction, projectileLife, projectileVelocity,
+				ProjectileDamager.ENEMY, textureMap);
 	}
 }

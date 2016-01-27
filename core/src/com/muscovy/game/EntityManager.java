@@ -153,7 +153,7 @@ public class EntityManager {
 
 		sortDrawables();
 
-		batch.draw(currentDungeonRoom.getSprite().getTexture(), 0, 0);
+		batch.draw(currentDungeonRoom.getBackgroundTexture(), 0, 0);
 
 		float windowWidth = MuscovyGame.WINDOW_WIDTH;
 		float windowHeight = MuscovyGame.WINDOW_HEIGHT;

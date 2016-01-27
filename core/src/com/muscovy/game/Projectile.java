@@ -24,14 +24,17 @@ public class Projectile extends OnscreenDrawable {
 	private Circle collisionBox;
 
 
-	public Projectile(TextureMap textureMap, Vector2 position, Vector2 direction, float life, float maxVelocity,
-			ProjectileDamager damagesWho) {
-		setSprite(new Sprite(textureMap.getTextureOrLoadFile("breadBullet.png")));
-		setPosition(position);
+	public Projectile(Vector2 position, Vector2 direction, float life, float maxVelocity,
+			ProjectileDamager damagesWho, TextureMap textureMap) {
+		// setSprite();
+		// setPosition(position);
+		super(new Sprite(textureMap.getTextureOrLoadFile("breadBullet.png")), position);
 		this.life = life;
 		this.maxVelocity = maxVelocity;
 		velocity = direction.cpy().setLength(maxVelocity);
 		this.damagesWho = damagesWho;
+
+		collisionBox = new Circle((int) getX(), (int) getY(), getSprite().getRegionWidth() / 2);
 	}
 
 
@@ -83,17 +86,9 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public void setCollisionBox(Circle collisionBox) {
-		this.collisionBox = collisionBox;
-	}
-
-
-	@Override
-	public void setSprite(Sprite sprite) {
-		super.setSprite(sprite);
-		collisionBox = new Circle((int) getX(), (int) getY(), getSprite().getRegionWidth() / 2);
-	}
-
+	// public void setCollisionBox(Circle collisionBox) {
+	// this.collisionBox = collisionBox;
+	// }
 
 	/**
 	 * X and Y setters move collision box too
@@ -144,8 +139,8 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public static ArrayList<Projectile> shootProjectiles(TextureMap textureMap, int count, Vector2 position,
-			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho) {
+	public static ArrayList<Projectile> shootProjectiles(int count, Vector2 position, Vector2 direction, float life,
+			float maxVelocity, ProjectileDamager damagesWho, TextureMap textureMap) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 		float maxSpread = 0;
@@ -173,8 +168,8 @@ public class Projectile extends OnscreenDrawable {
 		float spreadAngle = -maxSpread;
 
 		for (int i = 0; i < count; i += 1) {
-			projectiles.add(new Projectile(textureMap, position.cpy(),
-					direction.cpy().rotateRad(spreadAngle), life, maxVelocity, damagesWho));
+			projectiles.add(new Projectile(position.cpy(), direction.cpy().rotateRad(spreadAngle), life,
+					maxVelocity, damagesWho, textureMap));
 			spreadAngle += spreadDelta;
 		}
 

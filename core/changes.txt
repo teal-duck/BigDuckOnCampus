@@ -65,6 +65,11 @@
 - Room templates are now loaded from a CSV file
 	- The format is a bit awkward right now, but it's functional
 	
+- Entities now take their position in the constructor, passed up inheritance tree
+
+- Dungeon room no longer inherits from OnscreenDrawable
+	- Only inherited before to use a sprite for the background
+	
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

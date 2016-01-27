@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.GameState;
 import com.muscovy.game.enums.LevelType;
@@ -93,10 +94,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 	@Override
 	public void render() {
+		float deltaTime = Gdx.graphics.getDeltaTime();
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (!(gameState == GameState.STARTUP)) {
-			update(); // Waiting for 1 render cycle before initialising anything
+			update(deltaTime); // Waiting for 1 render cycle before initialising anything
 		}
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
@@ -211,9 +214,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	private void initialisePlayerCharacter() {
-		playerCharacter = new PlayerCharacter(textureMap);
-		playerCharacter.setY(playerStartX);
-		playerCharacter.setX(playerStartY);
+		Sprite playerSprite = new Sprite();
+		playerSprite.setRegion(textureMap.getTextureOrLoadFile("duck.png"));
+		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
+		playerCharacter = new PlayerCharacter(playerSprite, playerStartPosition, textureMap);
+		// playerCharacter.setY(playerStartX);
+		// playerCharacter.setX(playerStartY);
 	}
 
 
@@ -242,7 +248,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	/**
 	 * UPDATE METHODS
 	 */
-	public void update() {
+	public void update(float deltaTime) {
 		/**
 		 * Uses gameState to update game as needed for each state. Waits for 1 render cycle before initialising
 		 * everything (case 102), so the loading screen can be displayed
@@ -256,7 +262,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			playerUpdate();
 			playerCharacter.update();
 			projectilesUpdate();
-			enemiesUpdate();
+			enemiesUpdate(deltaTime);
 			if (playerCharacter.getHealth() <= 0) {
 				gameState = GameState.GAME_OVER;
 			}
@@ -283,10 +289,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	}
 
 
-	public void enemiesUpdate() {
+	public void enemiesUpdate(float deltaTime) {
 		if (entityManager.getRoomTimer() > 2) {
 			for (Enemy enemy : entityManager.getEnemies()) {
-				enemy.update(playerCharacter);
+				enemy.update(deltaTime, playerCharacter);
 				if ((enemy.getAttackType() != AttackType.TOUCH) && (enemy.checkRangedAttack())) {
 					entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
 				}
@@ -498,7 +504,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if ((Intersector.overlaps(enemy.getCircleHitbox(), projectile.getCollisionBox()))
 				&& !(projectile.getDamagesWho() == ProjectileDamager.PLAYER)) {
 			projectile.kill();
-			enemy.damage(projectile.getDamage());
+			enemy.takeDamage(projectile.getDamage());
 		}
 	}
 
@@ -555,7 +561,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (enemy.collides(obstacle)) {
 			enemy.moveToNearestEdgeRectangle(obstacle);
 			if (obstacle.isDamaging()) {
-				enemy.damage(obstacle.getTouchDamage());
+				enemy.takeDamage(obstacle.getTouchDamage());
 				enemy.setCollidingWithSomething(true);
 			}
 		}
@@ -567,7 +573,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getTopRectangle())) {
-			enemy.setYVelocity(0);
+			enemy.setVelocityY(0);
 			// enemy.setMaxVelocity(50);
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getTopRectangle().getY()
@@ -577,7 +583,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getRightRectangle())) {
-			enemy.setXVelocity(0);
+			enemy.setVelocityX(0);
 			// enemy.setMaxVelocity(50);
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightRectangle().getX()
 					- enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
@@ -586,7 +592,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getLeftRectangle())) {
-			enemy.setXVelocity(0);
+			enemy.setVelocityX(0);
 			// enemy.setMaxVelocity(50);
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getLeftRectangle().getX()
 					+ entityManager.getCurrentDungeonRoom().getLeftRectangle().getWidth()
@@ -596,7 +602,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getBottomRectangle())) {
-			enemy.setYVelocity(0);
+			enemy.setVelocityY(0);
 			// enemy.setMaxVelocity(50);
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getBottomRectangle().getY()

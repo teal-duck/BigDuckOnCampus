@@ -1,8 +1,10 @@
 package com.muscovy.game;
 
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -14,27 +16,63 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
 	private Rectangle rectangleHitbox;
-	// Offset from centre of collidable: offset of 6 means centre of circle hitbox is 6 pixels above centre of
-	// collidable
-	private float hitboxYOffset = 0;
+
 	private int widthTiles;
 	private int heightTiles;
 
+	// Offset from centre of collidable
+	private float hitboxYOffset = 0;
 
-	// http://stackoverflow.com/questions/27643616/ceil-conterpart-for-math-floordiv-in-java
-	public static long floorDiv(long x, long y) {
-		long r = x / y;
-		// if the signs are different and modulo not zero, round down
-		if (((x ^ y) < 0) && ((r * y) != x)) {
-			r--;
-		}
-		return r;
+
+	public Collidable(Sprite sprite, float x, float y) {
+		this(sprite, new Vector2(x, y));
+	}
+
+
+	public Collidable(Sprite sprite, Vector2 position) {
+		super(sprite, position);
+		initialisePosition(position);
+		setUpBoxes();
 	}
 
 
 	/**
-	 * Getters and Setters
+	 * Initialisation Methods
 	 */
+	// initialise X and Y for moving the collidable before the hitboxes are set up
+	public void initialiseX(float x) {
+		super.setX(x);
+	}
+
+
+	public void initialiseY(float y) {
+		super.setY(y);
+	}
+
+
+	public void initialisePosition(Vector2 position) {
+		initialiseX(position.x);
+		initialiseY(position.y);
+	}
+
+
+	/**
+	 * Initialises circle and rectangle hitboxes based on current x and y, width and height Circle hitbox
+	 * automatically has radius of width/2 Rectangle hitbox automatically same size as the sprite image
+	 */
+	public void setUpBoxes() {
+		float x = getX();
+		float y = getY();
+		float width = getWidth();
+		float height = getHeight();
+
+		widthTiles = (int) Collidable.floorDiv((long) width, MuscovyGame.TILE_SIZE) + 1;
+		heightTiles = (int) Collidable.floorDiv((long) height, MuscovyGame.TILE_SIZE) + 1;
+		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
+		rectangleHitbox = new Rectangle(x, y, width, height);
+	}
+
+
 	@Override
 	public void setX(float x) {
 		super.setX(x);
@@ -56,16 +94,18 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
-	// TODO: Should setX/YTiles use modulo and constants for world width/height
-
 	/**
 	 * setXTiles and setYTiles moves the collidable to fit on the grid directly. Clamps to walls of dungeon room,
 	 * assuming a 64x64 collidable Useful for placing stuff in the dungeon rooms
 	 */
+
+	/**
+	 * Use this when setting something in the playable space to make sure it is on the grid.
+	 *
+	 * @param xTiles
+	 */
 	public void setXTiles(int xTiles) {
-		/**
-		 * Use this when setting something in the playable space to make sure it is on the grid.
-		 */
+
 		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
@@ -73,10 +113,13 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * Use this when setting something in the playable space to make sure it is on the grid.
+	 *
+	 * @param yTiles
+	 */
 	public void setYTiles(int yTiles) {
-		/**
-		 * Use this when setting something in the playable space to make sure it is on the grid.
-		 */
+
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
@@ -84,10 +127,13 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * Calculates the x and y of the bottom left corner using radius and y offset of the hitbox
+	 *
+	 * @param x
+	 * @param y
+	 */
 	public void setHitboxCentre(float x, float y) {
-		/**
-		 * Calculates the x and y of the bottom left corner using radius and y offset of the hitbox
-		 */
 		setX((x - circleHitbox.radius) - ((getWidth() / 2) - circleHitbox.radius));
 		setY((y - circleHitbox.radius) - ((getHeight() / 2) - circleHitbox.radius) - hitboxYOffset);
 	}
@@ -114,36 +160,6 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * Initialisation Methods
-	 */
-	// initialise X and Y for moving the collidable before the hitboxes are set up
-	public void initialiseX(float x) {
-		super.setX(x);
-	}
-
-
-	public void initialiseY(float y) {
-		super.setY(y);
-	}
-
-
-	public void setUpBoxes() {
-		/**
-		 * Initialises circle and rectangle hitboxes based on current x and y, width and height Circle hitbox
-		 * automatically has radius of width/2 Rectangle hitbox automatically same size as the sprite image
-		 */
-		float x = getX();
-		float y = getY();
-		float width = getWidth();
-		float height = getHeight();
-		widthTiles = (int) Collidable.floorDiv((long) width, MuscovyGame.TILE_SIZE) + 1;
-		heightTiles = (int) Collidable.floorDiv((long) height, MuscovyGame.TILE_SIZE) + 1;
-		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
-		rectangleHitbox = new Rectangle(x, y, width, height);
-	}
-
-
-	/**
 	 * Collision Methods
 	 */
 	public void moveToNearestEdgeCircle(Collidable collidable) {
@@ -153,6 +169,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		 */
 		float angle = getAngleFrom(collidable);
 		float distance = collidable.getCircleHitbox().radius + circleHitbox.radius;
+
 		if (getCircleHitbox().x >= collidable.getCircleHitbox().x) {
 			if (getCircleHitbox().y >= collidable.getCircleHitbox().y) {
 
@@ -166,27 +183,30 @@ public abstract class Collidable extends OnscreenDrawable {
 				angle = (float) ((2 * Math.PI) - angle);
 			}
 		}
+
+		float x = collidable.getCircleHitbox().x;
+		float y = collidable.getCircleHitbox().y;
+		float distanceSinAngle = distance * MathUtils.sin(angle);
+		float distanceCosAngle = distance * MathUtils.cos(angle);
+
 		if (getCircleHitbox().x >= collidable.getCircleHitbox().x) {
+			x += distanceSinAngle;
 			if (getCircleHitbox().y >= collidable.getCircleHitbox().y) {
-				float x = collidable.getCircleHitbox().x + (float) (distance * Math.sin(angle));
-				float y = collidable.getCircleHitbox().y + (float) (distance * Math.cos(angle));
-				setHitboxCentre(x, y);
+				y += distanceCosAngle;
+
 			} else {
-				float x = collidable.getCircleHitbox().x + (float) (distance * Math.sin(angle));
-				float y = collidable.getCircleHitbox().y - (float) (distance * Math.cos(angle));
-				setHitboxCentre(x, y);
+				y -= distanceCosAngle;
 			}
 		} else if (getCircleHitbox().x < collidable.getCircleHitbox().x) {
+			x -= distanceSinAngle;
 			if (getCircleHitbox().y >= collidable.getCircleHitbox().y) {
-				float x = collidable.getCircleHitbox().x - (float) (distance * Math.sin(angle));
-				float y = collidable.getCircleHitbox().y - (float) (distance * Math.cos(angle));
-				setHitboxCentre(x, y);
+				y -= distanceCosAngle;
 			} else {
-				float x = collidable.getCircleHitbox().x - (float) (distance * Math.sin(angle));
-				float y = collidable.getCircleHitbox().y + (float) (distance * Math.cos(angle));
-				setHitboxCentre(x, y);
+				y += distanceCosAngle;
 			}
 		}
+
+		setHitboxCentre(x, y);
 	}
 
 
@@ -200,8 +220,6 @@ public abstract class Collidable extends OnscreenDrawable {
 		float thisY = getCircleHitbox().y;
 		float thatX = collidable.getCircleHitbox().x;
 		float thatY = collidable.getCircleHitbox().y;
-		// float rectDistance = 0;
-		// float distanceToEdge = 0;
 		float x, y;
 		if ((thisX > collidable.getX()) && (thisX < (collidable.getX() + collidable.getWidth()))
 				&& (thisY > thatY)) {
@@ -321,5 +339,16 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	public boolean collides(Collidable collidable) {
 		return Intersector.overlaps(circleHitbox, collidable.getCircleHitbox());
+	}
+
+
+	// http://stackoverflow.com/questions/27643616/ceil-conterpart-for-math-floordiv-in-java
+	public static long floorDiv(long x, long y) {
+		long r = x / y;
+		// if the signs are different and modulo not zero, round down
+		if (((x ^ y) < 0) && ((r * y) != x)) {
+			r--;
+		}
+		return r;
 	}
 }

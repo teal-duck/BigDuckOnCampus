@@ -18,8 +18,22 @@ public abstract class OnscreenDrawable {
 	private Vector2 position;
 
 
-	public OnscreenDrawable() {
-		position = new Vector2(0, 0);
+	// public OnscreenDrawable() {
+	// this(null, new Vector2(0, 0));
+	// }
+
+	public OnscreenDrawable(Sprite sprite) {
+		this(sprite, new Vector2(0, 0));
+	}
+
+
+	// public OnscreenDrawable(Vector2 position) {
+	// this(null, position);
+	// }
+
+	public OnscreenDrawable(Sprite sprite, Vector2 position) {
+		this.sprite = sprite;
+		this.position = position;
 	}
 
 
@@ -75,5 +89,20 @@ public abstract class OnscreenDrawable {
 
 	public void setPosition(Vector2 position) {
 		this.position.set(position);
+	}
+
+
+	public float getCenterX() {
+		return position.x + (getWidth() / 2);
+	}
+
+
+	public float getCenterY() {
+		return position.y + (getHeight() / 2);
+	}
+
+
+	public Vector2 getCenter() {
+		return new Vector2(getCenterX(), getCenterY());
 	}
 }

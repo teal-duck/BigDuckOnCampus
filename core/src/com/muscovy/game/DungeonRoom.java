@@ -7,6 +7,7 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.LevelType;
@@ -17,7 +18,7 @@ import com.muscovy.game.enums.RoomType;
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-public class DungeonRoom extends OnscreenDrawable {
+public class DungeonRoom {
 	/**
 	 * Contains lists of obstacles and enemies in that room. They are passed to the entity manager when the room is
 	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
@@ -48,6 +49,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	private Random rand;
 
 	private TextureMap textureMap;
+	private Texture backgroundTexture;
 
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;
@@ -87,7 +89,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		Obstacle obstacle5;
 		rockSprite = new Sprite();
 		rockSprite.setTexture(textureMap.getTextureOrLoadFile("accommodationAssets/obstacles/binRecycle.png"));
-		obstacle5 = new Obstacle(rockSprite);
+		obstacle5 = new Obstacle(rockSprite, new Vector2(x, y));
 		obstacle5.setXTiles(x);
 		obstacle5.setYTiles(y);
 		addObstacle(obstacle5);
@@ -99,7 +101,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		Obstacle obstacle6;
 		spikeSprite = new Sprite();
 		spikeSprite.setTexture(textureMap.getTextureOrLoadFile("accommodationAssets/obstacles/binWaste.png"));
-		obstacle6 = new Obstacle(spikeSprite);
+		obstacle6 = new Obstacle(spikeSprite, new Vector2(x, y));
 		obstacle6.setXTiles(x);
 		obstacle6.setYTiles(y);
 		addObstacle(obstacle6);
@@ -111,16 +113,17 @@ public class DungeonRoom extends OnscreenDrawable {
 	private void createRandomEnemy(int x, int y) {
 		Sprite enemySprite;
 		Enemy enemy;
+		Vector2 position = new Vector2(x, y);
 
 		if (rand.nextBoolean()) {
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png"));
-			enemy = new Enemy(textureMap, enemySprite);
+			enemy = new Enemy(enemySprite, position, textureMap, rand);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(textureMap, enemySprite);
+			enemy = new Enemy(enemySprite, position, textureMap, rand);
 			enemy.setAttackType(AttackType.RANGE);
 		}
 
@@ -216,7 +219,7 @@ public class DungeonRoom extends OnscreenDrawable {
 
 			bossSprite = new Sprite(
 					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
-			bossEnemy = new Enemy(textureMap, bossSprite);
+			bossEnemy = new Enemy(bossSprite, new Vector2(0, 0), textureMap, rand);
 			bossEnemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 					- (bossEnemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
 			bossEnemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
@@ -225,7 +228,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);
 			// TODO: Change boss parameters
-			bossEnemy.setDefaultVelocity(bossEnemy.getDefaultVelocity() * 0.8f);
+			bossEnemy.setSpeed(bossEnemy.getSpeed() * 0.8f);
 			bossEnemy.setProjectileVelocity(bossEnemy.getProjectileVelocity() * 2);
 			bossEnemy.setTouchDamage(20);
 			bossEnemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
@@ -240,7 +243,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			// Item
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(textureMap, enemySprite);
+			enemy = new Enemy(enemySprite, new Vector2(0, 0), textureMap, rand);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(100);
 			enemy.setYTiles(100);
@@ -251,7 +254,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			// Shop
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(
 					"accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png"));
-			enemy = new Enemy(textureMap, enemySprite);
+			enemy = new Enemy(enemySprite, new Vector2(0, 0), textureMap, rand);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setX(0);
 			enemy.setY(0);
@@ -294,7 +297,7 @@ public class DungeonRoom extends OnscreenDrawable {
 			break;
 		}
 
-		setSprite(new Sprite(texture));
+		setBackgroundTexture(texture);
 		initialiseDoors();
 	}
 
@@ -492,10 +495,13 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	@Override
-	public void setSprite(Sprite sprite) {
-		sprite.setX(0);
-		sprite.setY(0);
-		super.setSprite(sprite);
+	public void setBackgroundTexture(Texture backgroundTexture) {
+		this.backgroundTexture = backgroundTexture;
+		// super.setSprite(sprite);
+	}
+
+
+	public Texture getBackgroundTexture() {
+		return backgroundTexture;
 	}
 }

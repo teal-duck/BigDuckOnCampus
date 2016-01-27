@@ -3,6 +3,7 @@ package com.muscovy.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector2;
 
 
 /**
@@ -13,11 +14,8 @@ public class Obstacle extends Collidable {
 	private float touchDamage;
 
 
-	public Obstacle(Sprite sprite) {
-		setSprite(sprite);
-		initialiseX(0);
-		initialiseY(0);
-		setUpBoxes();
+	public Obstacle(Sprite sprite, Vector2 position) {
+		super(sprite, position);
 	}
 
 
