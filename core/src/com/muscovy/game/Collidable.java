@@ -9,9 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by SeldomBucket on 05-Jan-16.
+<<<<<<< HEAD
  * Class in inherited by all entities in game that can be collided with.
  * 
  * All inheritors of Collidable exist on a 64x64 tile. 
+=======
+ *
+ * Players and enemies both exist on a 64x64 tile.
+>>>>>>> master
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;

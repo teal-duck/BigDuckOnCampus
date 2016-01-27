@@ -23,6 +23,12 @@ public class DungeonRoom extends OnscreenDrawable {
 	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
 	 * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
 	 * like they break halfway up the wall, and have some height associated with them.
+<<<<<<< HEAD
+=======
+	 *
+	 * The room is made up of 32x32 'half tiles' (used in map gen). The number of tiles in each direction is stored
+	 * in constants in {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
+>>>>>>> master
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
@@ -46,10 +52,10 @@ public class DungeonRoom extends OnscreenDrawable {
 	private Random rand;
 
 	private TextureMap textureMap;
-	
-	
+
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;
+
 	
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;
@@ -148,7 +154,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public void generateRoom(LevelType level) {
+	public void generateRoom(LevelType levelType) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -384,7 +390,7 @@ public class DungeonRoom extends OnscreenDrawable {
 		}
 
 		// TODO: Make level backgrounds an array
-		switch (level) {
+		switch (levelType) {
 		case CONSTANTINE:
 			texture = textureMap.getTextureOrLoadFile("accommodationAssets/constantineBackground.png");
 			break;
@@ -519,7 +525,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public boolean isEnemiesDead() {
+	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			enemiesDead = true;
 		}

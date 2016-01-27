@@ -43,8 +43,8 @@ public class EntityManager {
 	private Texture eastDoorTextureClosed;
 	private Texture westDoorTextureClosed;
 
-	private int startRoomX = 3;
-	private int startRoomY = 3;
+	// private int startRoomX = 3;
+	// private int startRoomY = 3;
 
 	private TextureMap textureMap;
 
@@ -93,42 +93,16 @@ public class EntityManager {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
 
-		for (int i = 0; i < maxLevels; i += 1) {
-			int roomsWide = LevelGenerator.DUNGEON_ROOMS_WIDE;
-			int roomsHigh = LevelGenerator.DUNGEON_ROOMS_HIGH;
-			int maxRooms = LevelGenerator.MAX_ROOMS;
-			int startX = LevelGenerator.START_ROOM_X;
-			int startY = LevelGenerator.START_ROOM_Y;
+		for (int i = 0; i < levels.length; i += 1) {
 			LevelType levelType = LevelType.fromInt(i);
-			ObjectiveType objectiveType = ObjectiveType.BOSS;
+			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
 
-			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, maxRooms, levelType,
-					roomsWide, roomsHigh, startX, startY);
-			Level level = new Level(rooms, objectiveType, levelType);
+			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, levelType, levelParameters);
+			Level level = new Level(rooms, levelType, levelParameters);
 
 			levels[i] = level;
 
 		}
-		// levels[0] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CONSTANTINE),
-		// ObjectiveType.BOSS, LevelType.CONSTANTINE);
-		// levels[1] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LANGWITH),
-		// ObjectiveType.BOSS, LevelType.LANGWITH);
-		// levels[2] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.GOODRICKE),
-		// ObjectiveType.BOSS, LevelType.GOODRICKE);
-		// levels[3] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.LMB),
-		// ObjectiveType.BOSS, LevelType.LMB);
-		// levels[4] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.CATALYST),
-		// ObjectiveType.BOSS, LevelType.CATALYST);
-		// levels[5] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.TFTV),
-		// ObjectiveType.BOSS, LevelType.TFTV);
-		// levels[6] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.COMP_SCI),
-		// ObjectiveType.BOSS, LevelType.COMP_SCI);
-		// levels[7] = new Level(levelGenerator.generateBuilding(textureMap, 20, LevelType.RCH),
-		// ObjectiveType.BOSS, LevelType.RCH);
-		/*
-		 * while (steve<maxLevels-2){ level[steve] = new Level(levelGenerator.generateBuilding(20),0); steve++;
-		 * }
-		 */
 	}
 
 
@@ -153,12 +127,12 @@ public class EntityManager {
 
 
 	public void startLevel(PlayerCharacter playerCharacter) {
-		roomX = startRoomX;
-		roomY = startRoomY;
 		this.playerCharacter = playerCharacter;
+		Level level = getCurrentLevel();
+		roomX = level.getStartX();
+		roomY = level.getStartY();
 		setCurrentDungeonRoom(roomX, roomY);
-		// setCurrentDungeonRoom(levels[currentLevelNumber].getRoom(roomX, roomY));
-		getCurrentLevel().markRoomVisited(roomX, roomY);
+		level.markRoomVisited(roomX, roomY);
 		renderList.add(this.playerCharacter);
 	}
 
@@ -187,7 +161,7 @@ public class EntityManager {
 
 		Texture doorTexture;
 		if (currentDungeonRoom.getUpDoor()) {
-			doorTexture = (currentDungeonRoom.isEnemiesDead() ? northDoorTextureOpen
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? northDoorTextureOpen
 					: northDoorTextureClosed);
 			batch.draw(doorTexture, (windowWidth - doorTexture.getWidth()) / 2,
 					currentDungeonRoom.getNorthDoor().getY()
@@ -195,13 +169,13 @@ public class EntityManager {
 
 		}
 		if (currentDungeonRoom.getDownDoor()) {
-			doorTexture = (currentDungeonRoom.isEnemiesDead() ? southDoorTextureOpen
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? southDoorTextureOpen
 					: southDoorTextureClosed);
 			batch.draw(doorTexture, (windowWidth - southDoorTextureOpen.getWidth()) / 2,
 					currentDungeonRoom.getSouthDoor().getY() + 4);
 		}
 		if (currentDungeonRoom.getRightDoor()) {
-			doorTexture = (currentDungeonRoom.isEnemiesDead() ? eastDoorTextureOpen
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? eastDoorTextureOpen
 					: eastDoorTextureClosed);
 			batch.draw(doorTexture,
 					currentDungeonRoom.getEastDoor().getX()
@@ -209,7 +183,7 @@ public class EntityManager {
 					(worldHeight - eastDoorTextureOpen.getWidth()) / 2);
 		}
 		if (currentDungeonRoom.getLeftDoor()) {
-			doorTexture = (currentDungeonRoom.isEnemiesDead() ? westDoorTextureOpen
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? westDoorTextureOpen
 					: westDoorTextureClosed);
 			batch.draw(doorTexture, currentDungeonRoom.getWestDoor().getX() + 4,
 					(worldHeight - westDoorTextureOpen.getWidth()) / 2);
@@ -251,7 +225,17 @@ public class EntityManager {
 
 		float renderWidth = 25;
 		float renderHeight = 15;
-		float xOffset = MuscovyGame.WINDOW_WIDTH - (renderWidth * level.getRoomsWide());
+
+		// Size of items inside room (e.g. player location)
+		float innerRoomSize = 10;
+
+		// The distance between the rooms
+		float doorLength = 5;
+		// How thick the doors are
+		float doorWidth = 5;
+
+		float xOffset = (MuscovyGame.WINDOW_WIDTH - ((renderWidth + doorLength) * level.getRoomsWide()))
+				+ doorLength;
 		float yOffset = MuscovyGame.WINDOW_HEIGHT - renderHeight;
 
 		float windowEdgeOffset = 0;
@@ -262,37 +246,96 @@ public class EntityManager {
 			for (int col = 0; col < level.getRoomsWide(); col += 1) {
 				DungeonRoom room = level.getRoom(col, row);
 
-				Color colour = Color.BLACK;
-				if (room != null) {
-					boolean isCurrentRoom = ((roomX == col) && (roomY == row));
-					boolean isBossRoom = (room.getRoomType() == RoomType.BOSS);
-
-					if (isCurrentRoom) {
-						colour = Color.RED;
-					} else {
-						if (level.isRoomVisited(col, row)) {
-							if (isBossRoom) {
-								colour = Color.BLUE;
-							} else {
-								colour = Color.WHITE;
-							}
-						} else if (level.isRoomNeighbourVisited(col, row)) {
-							if (isBossRoom) {
-								colour = Color.BROWN;
-							} else {
-								colour = Color.DARK_GRAY;
-							}
-						}
-					}
+				if (room == null) {
+					continue;
 				}
+				boolean isCurrentRoom = ((roomX == col) && (roomY == row));
+				boolean isBossRoom = (room.getRoomType() == RoomType.BOSS);
+
+				Color colour = Color.BLACK;
+				boolean renderRoom = false;
+
+				if (level.isRoomVisited(col, row)) {
+					if (isBossRoom) {
+						colour = Color.BLUE;
+					} else {
+						colour = Color.WHITE;
+					}
+
+					renderRoom = true;
+				} else if (level.isRoomNeighbourVisited(col, row)) {
+					if (isBossRoom) {
+						colour = Color.BROWN;
+					} else {
+						colour = Color.DARK_GRAY;
+					}
+
+					renderRoom = true;
+				}
+
+				if (!renderRoom) {
+					continue;
+				}
+
 				shapeRenderer.setColor(colour);
 
-				float x = xOffset + (col * renderWidth);
-				float y = yOffset - (row * renderHeight);
+				float x = xOffset + (col * (renderWidth + doorLength));
+				float y = yOffset - (row * (renderHeight + doorLength));
 				float w = renderWidth;
 				float h = renderHeight;
 
 				shapeRenderer.rect(x, y, w, h);
+
+				if (isCurrentRoom) {
+					shapeRenderer.setColor(Color.RED);
+					w = innerRoomSize;
+					h = innerRoomSize;
+					x += (renderWidth / 2) - (w / 2);
+					y += (renderHeight / 2) - (h / 2);
+
+					shapeRenderer.rect(x, y, w, h);
+				}
+			}
+		}
+
+		shapeRenderer.setColor(Color.BLACK);
+
+		// TODO: When rendering doors in maps, check if room actually has a door
+		// If we add bombs like binding of isaac, where you can get to secrets by blowing up a wall
+		// We need to render this on the map so a secret room is only visible if they've been there
+		for (int col = 0; col < level.getRoomsWide(); col += 1) {
+			for (int row = 0; row < level.getRoomsHigh(); row += 1) {
+				DungeonRoom room = level.getRoom(col, row);
+				DungeonRoom rightRoom = level.getRoom(col + 1, row);
+
+				if (room == null) {
+					continue;
+				}
+
+				if (rightRoom != null) {
+					if (level.isRoomVisited(col, row) || level.isRoomVisited(col + 1, row)) {
+						float x = xOffset + (col * (renderWidth + doorLength)) + renderWidth;
+						float y = ((yOffset - (row * (renderHeight + doorLength)))
+								+ (renderHeight / 2)) - (doorWidth / 2);
+						float w = doorLength;
+						float h = doorWidth;
+
+						shapeRenderer.rect(x, y, w, h);
+					}
+				}
+				DungeonRoom downRoom = level.getRoom(col, row + 1);
+
+				if (downRoom != null) {
+					if (level.isRoomVisited(col, row) || level.isRoomVisited(col, row + 1)) {
+						float x = (xOffset + (col * (renderWidth + doorLength))
+								+ (renderWidth / 2)) - (doorWidth / 2);
+						float y = yOffset - (row * (renderHeight + doorLength)) - doorLength;
+						float w = doorWidth;
+						float h = doorLength;
+
+						shapeRenderer.rect(x, y, w, h);
+					}
+				}
 			}
 		}
 
@@ -301,7 +344,7 @@ public class EntityManager {
 	}
 
 
-	public boolean levelCompleted(int levelNumber) {
+	public boolean isLevelCompleted(int levelNumber) {
 		return getLevel(levelNumber).isCompleted();
 	}
 
@@ -381,7 +424,7 @@ public class EntityManager {
 			enemyList.remove(enemy);
 			currentDungeonRoom.killEnemy(enemy);
 		}
-		checkLevelCompletion();
+		checkCurrentLevelCompletion();
 	}
 
 
@@ -498,11 +541,36 @@ public class EntityManager {
 	}
 
 
-	public void checkLevelCompletion() {
-		if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == RoomType.BOSS)
-				&& (levels[currentLevelNumber].getObjective() == ObjectiveType.BOSS)) {
-			levels[currentLevelNumber].setCompleted(true);
+	public boolean checkCurrentLevelCompletion() {
+		return checkLevelCompletion(currentLevelNumber);
+	}
+
+
+	public boolean checkLevelCompletion(int levelNumber) {
+		// if (currentDungeonRoom.isEnemiesDead() && (currentDungeonRoom.getRoomType() == RoomType.BOSS)
+		// && (levels[currentLevelNumber].getObjective() == ObjectiveType.BOSS)) {
+		// levels[currentLevelNumber].setCompleted(true);
+		// }
+		Level level = getLevel(levelNumber);
+		ObjectiveType objectiveType = level.getObjectiveType();
+
+		// If the level has already been completed, don't check again
+		boolean completed = level.isCompleted();
+		if (completed) {
+			return true;
 		}
+
+		if (objectiveType == ObjectiveType.BOSS) {
+			// TODO: Implement level.getBossRoom()
+			if (currentDungeonRoom.areAllEnemiesDead()
+					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
+				completed = true;
+			}
+		}
+
+		level.setCompleted(completed);
+		return completed;
+
 	}
 
 
