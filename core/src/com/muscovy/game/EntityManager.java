@@ -34,6 +34,7 @@ public class EntityManager {
 	private float roomTimer = 0;
 	private BitmapFont list;// Testing purposes
 	private PlayerCharacter playerCharacter;
+	// TODO: Only load 1 door texture and rotate when renderering
 	private Texture northDoorTextureOpen;
 	private Texture southDoorTextureOpen;
 	private Texture eastDoorTextureOpen;
@@ -42,9 +43,6 @@ public class EntityManager {
 	private Texture southDoorTextureClosed;
 	private Texture eastDoorTextureClosed;
 	private Texture westDoorTextureClosed;
-
-	// private int startRoomX = 3;
-	// private int startRoomY = 3;
 
 	private TextureMap textureMap;
 
@@ -93,16 +91,20 @@ public class EntityManager {
 		// TODO: Only generate level when player wants to play it?
 		// Game is slow to load atm
 
+		String templateFilename = "room_templates.csv";
+		DungeonRoomTemplateLoader templateLoader = new DungeonRoomTemplateLoader(templateFilename);
 		for (int i = 0; i < levels.length; i += 1) {
 			LevelType levelType = LevelType.fromInt(i);
 			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
 
-			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, levelType, levelParameters);
+			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, templateLoader, levelType,
+					levelParameters);
 			Level level = new Level(rooms, levelType, levelParameters);
 
 			levels[i] = level;
 
 		}
+		templateLoader.dispose();
 	}
 
 
@@ -242,76 +244,80 @@ public class EntityManager {
 		xOffset -= windowEdgeOffset;
 		yOffset -= windowEdgeOffset;
 
+		final Color roomColour = Color.WHITE;
+		final Color bossColour = Color.BLUE;
+		final Color shopColour = Color.BROWN;
+		final Color itemColour = Color.YELLOW;
+		final Color playerColour = Color.RED;
+		final Color doorColour = Color.BLACK;
+		final float darkerScale = 0.35f;
+
 		for (int row = 0; row < level.getRoomsHigh(); row += 1) {
 			for (int col = 0; col < level.getRoomsWide(); col += 1) {
 				DungeonRoom room = level.getRoom(col, row);
-
 				if (room == null) {
 					continue;
 				}
-				boolean isCurrentRoom = ((roomX == col) && (roomY == row));
-				boolean isBossRoom = (room.getRoomType() == RoomType.BOSS);
 
-				Color colour = Color.BLACK;
-				boolean renderRoom = false;
-
-				if (level.isRoomVisited(col, row)) {
-					if (isBossRoom) {
-						colour = Color.BLUE;
-					} else {
-						colour = Color.WHITE;
-					}
-
-					renderRoom = true;
-				} else if (level.isRoomNeighbourVisited(col, row)) {
-					if (isBossRoom) {
-						colour = Color.BROWN;
-					} else {
-						colour = Color.DARK_GRAY;
-					}
-
-					renderRoom = true;
-				}
-
-				if (!renderRoom) {
+				// Only render visited or neighbours of visited rooms
+				boolean isVisited = level.isRoomVisited(col, row);
+				if (!isVisited && !level.isRoomNeighbourVisited(col, row)) {
 					continue;
 				}
 
-				shapeRenderer.setColor(colour);
+				Color colour = roomColour;
+				if (room.getRoomType() == RoomType.BOSS) {
+					colour = bossColour;
+				}
+				if (room.getRoomType() == RoomType.SHOP) {
+					colour = shopColour;
+				}
+				if (room.getRoomType() == RoomType.ITEM) {
+					colour = itemColour;
+				}
+
+				// If player hasn't visited room, make the colour darker
+				if (!isVisited) {
+					colour = new Color(colour.r * darkerScale, colour.g * darkerScale,
+							colour.b * darkerScale, 1f);
+				}
 
 				float x = xOffset + (col * (renderWidth + doorLength));
 				float y = yOffset - (row * (renderHeight + doorLength));
 				float w = renderWidth;
 				float h = renderHeight;
 
+				shapeRenderer.setColor(colour);
 				shapeRenderer.rect(x, y, w, h);
 
-				if (isCurrentRoom) {
-					shapeRenderer.setColor(Color.RED);
+				// Render the player in the current room
+				if ((roomX == col) && (roomY == row)) {
 					w = innerRoomSize;
 					h = innerRoomSize;
 					x += (renderWidth / 2) - (w / 2);
 					y += (renderHeight / 2) - (h / 2);
 
+					shapeRenderer.setColor(playerColour);
 					shapeRenderer.rect(x, y, w, h);
 				}
 			}
 		}
 
-		shapeRenderer.setColor(Color.BLACK);
+		shapeRenderer.setColor(doorColour);
 
 		// TODO: When rendering doors in maps, check if room actually has a door
 		// If we add bombs like binding of isaac, where you can get to secrets by blowing up a wall
 		// We need to render this on the map so a secret room is only visible if they've been there
+
+		// For rendering doors, only look at the right and down
 		for (int col = 0; col < level.getRoomsWide(); col += 1) {
 			for (int row = 0; row < level.getRoomsHigh(); row += 1) {
 				DungeonRoom room = level.getRoom(col, row);
-				DungeonRoom rightRoom = level.getRoom(col + 1, row);
-
 				if (room == null) {
 					continue;
 				}
 
+				DungeonRoom rightRoom = level.getRoom(col + 1, row);
 				if (rightRoom != null) {
 					if (level.isRoomVisited(col, row) || level.isRoomVisited(col + 1, row)) {
 						float x = xOffset + (col * (renderWidth + doorLength)) + renderWidth;
@@ -323,8 +329,8 @@ public class EntityManager {
 						shapeRenderer.rect(x, y, w, h);
 					}
 				}
-				DungeonRoom downRoom = level.getRoom(col, row + 1);
 
+				DungeonRoom downRoom = level.getRoom(col, row + 1);
 				if (downRoom != null) {
 					if (level.isRoomVisited(col, row) || level.isRoomVisited(col, row + 1)) {
 						float x = (xOffset + (col * (renderWidth + doorLength))

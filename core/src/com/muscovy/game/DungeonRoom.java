@@ -22,13 +22,9 @@ public class DungeonRoom extends OnscreenDrawable {
 	 * Contains lists of obstacles and enemies in that room. They are passed to the entity manager when the room is
 	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
 	 * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
-	 * like they break halfway up the wall, and have some height associated with them.
-<<<<<<< HEAD
-=======
-	 *
-	 * The room is made up of 32x32 'half tiles' (used in map gen). The number of tiles in each direction is stored
-	 * in constants in {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
->>>>>>> master
+	 * like they break halfway up the wall, and have some height associated with them. The room is made up of 32x32
+	 * 'half tiles' (used in map gen). The number of tiles in each direction is stored in constants in
+	 * {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
@@ -56,7 +52,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;
 
-	
+
 	public DungeonRoom(TextureMap textureMap) {
 		this.textureMap = textureMap;
 		rand = new Random();
@@ -147,6 +143,8 @@ public class DungeonRoom extends OnscreenDrawable {
 			break;
 		}
 
+		enemy.setShotType(EnemyShotType.RANDOM_DIRECTION);
+
 		enemy.setXTiles(x);
 		enemy.setYTiles(y);
 		enemy.calculateScoreOnDeath();
@@ -154,7 +152,7 @@ public class DungeonRoom extends OnscreenDrawable {
 	}
 
 
-	public void generateRoom(LevelType levelType) {
+	public void generateRoom(DungeonRoomTemplateLoader templateLoader, LevelType levelType) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -168,169 +166,43 @@ public class DungeonRoom extends OnscreenDrawable {
 		switch (roomType) {
 		case NORMAL:
 			// Normal
-			int roomHeight = 10;
-			int roomWidth = 18;
-			int[][] tileArray = new int[roomHeight][roomWidth];
 
-			int roomChoiceCount = 10;
-			int chosenLayout = rand.nextInt(roomChoiceCount);
-
-			final int emptyTile = 0;
-			final int nonDamagingObstacle = 1;
-			final int damagingObstacle = 2;
-			final int maybeDamagingObstacle = 3;
-			final int maybeEnemy = 4;
-
-			// TODO: Load maps from file
-			switch (chosenLayout) {
-			case 0:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 1:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 2, 0, 0, 0, 2, 2, 0, 0, 0, 2, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 2, 0, 0, 0, 2, 2, 0, 0, 0, 2, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 2:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 3:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 4:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 5:
-				tileArray = new int[][] { { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 } };
-				break;
-			case 6:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 7:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 8:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			case 9:
-				tileArray = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-				break;
-			}
+			int[][] tileArray = templateLoader.getRandomTemplateOrLoad(rand);
 
 			boolean obstacleType3NonDamaging = rand.nextBoolean();
+			// final int emptyTile = 0;
+			// final int nonDamagingObstacle = 1;
+			// final int damagingObstacle = 2;
+			// final int maybeDamagingObstacle = 3;
+			// final int maybeEnemy = 4;
 
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
-					switch (tileArray[row][col]) {
-					case emptyTile:
+					int cell = tileArray[row][col];
+					switch (cell) {
+					case DungeonRoomTemplateLoader.EMPTY_TILE:
 						break;
-					case nonDamagingObstacle:
+					case DungeonRoomTemplateLoader.NON_DAMAGING_OBSTACLE:
 						createNonDamagingObstacle(col, row);
 						break;
-					case damagingObstacle:
+					case DungeonRoomTemplateLoader.DAMAGING_OBSTACLE:
 						createDamagingObstacle(col, row);
 						break;
-					case maybeDamagingObstacle:
+					case DungeonRoomTemplateLoader.MAYBE_DAMAGING_OBSTACLE:
 						if (obstacleType3NonDamaging) {
 							createNonDamagingObstacle(col, row);
 						} else if (!obstacleType3NonDamaging) {
 							createDamagingObstacle(col, row);
 						}
 						break;
-					case maybeEnemy:
+					case DungeonRoomTemplateLoader.MAYBE_ENEMY:
 						if (rand.nextInt(5) < 3) {
 							createRandomEnemy(col, row);
 						}
 						break;
 					default:
+						System.out.println("Unrecognised cell " + cell + "; location (" + col
+								+ ", " + row + ")");
 						break;
 					}
 				}
@@ -345,8 +217,10 @@ public class DungeonRoom extends OnscreenDrawable {
 			bossSprite = new Sprite(
 					textureMap.getTextureOrLoadFile("accommodationAssets/accommodationBoss.png"));
 			bossEnemy = new Enemy(textureMap, bossSprite);
-			bossEnemy.setXTiles((int) ((FLOOR_WIDTH_IN_TILES / 2) - (bossEnemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
-			bossEnemy.setYTiles((int) ((FLOOR_HEIGHT_IN_TILES / 2) - (bossEnemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
+			bossEnemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
+					- (bossEnemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
+			bossEnemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
+					- (bossEnemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
 			bossEnemy.setAttackType(AttackType.BOTH);
 			bossEnemy.setMovementType(MovementType.FOLLOW);
 			// bossEnemy.setMaxVelocity(100);

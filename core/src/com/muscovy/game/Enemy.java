@@ -39,9 +39,9 @@ public class Enemy extends Collidable {
 	private float projectileVelocity = 150;
 	private float projectileLife = projectileRange / projectileVelocity;
 	private float attackRange = 480;
+	private float viewDistance = 480;
 
 	private MovementType movementType;
-	private float viewDistance = 480;
 	private Vector2 velocity;
 	private float defaultVelocity = 200;
 	private float directionCounter = 0;
@@ -139,7 +139,7 @@ public class Enemy extends Collidable {
 			}
 			break;
 		case RANDOM_DIRECTION:
-			count = 4;
+			count = 1;
 			shootDirection.setToRandomDirection();
 			break;
 		}
