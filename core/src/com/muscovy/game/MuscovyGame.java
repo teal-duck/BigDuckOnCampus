@@ -62,7 +62,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public static final float WINDOW_WIDTH = 1280;
 	public static final float WINDOW_HEIGHT = 816; // 960;
 	public static final int TILE_SIZE = 64;
-	// public static final float HALF_TILE_SIZE = MuscovyGame.TILE_SIZE / 2; // 32
 	public static final float WORLD_HEIGHT = 768; // WINDOW_HEIGHT - TOP_GUI_SIZE; // 768
 	public static final float TOP_GUI_SIZE = MuscovyGame.WINDOW_HEIGHT - MuscovyGame.WORLD_HEIGHT; // 192; //
 													// TILE_SIZE * 3
