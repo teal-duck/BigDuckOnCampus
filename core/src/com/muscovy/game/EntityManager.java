@@ -555,7 +555,8 @@ public class EntityManager {
 	public void addNewDrawable(OnscreenDrawable drawable) {
 		renderList.add(drawable);
 	}
-	
+
+
 	public ArrayList<Item> getItems() {
 		return itemList;
 	}

@@ -156,12 +156,13 @@ public class DungeonRoom {
 		addEnemy(enemy);
 		return enemy;
 	}
-	
+
+
 	private void createHealthPack(int x, int y) {
 		Sprite sprite = new Sprite(textureMap.getTextureOrLoadFile("healthpack.png"));
 		Vector2 position = new Vector2(x, y);
 		Item healthPack = new Item(sprite, position, ItemType.HEALTH);
-		
+
 		addItem(healthPack);
 	}
 
@@ -313,11 +314,13 @@ public class DungeonRoom {
 	public ArrayList<Obstacle> getObstacleList() {
 		return obstacleList;
 	}
-	
+
+
 	public void addItem(Item item) {
 		itemList.add(item);
 	}
-	
+
+
 	public ArrayList<Item> getItemList() {
 		return itemList;
 	}
