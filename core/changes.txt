@@ -77,6 +77,8 @@ Other possible things to do:
 - Player and enemy projectiles should look different
 - Perhaps create a base MovingEntity class for enemy and player (and projectile?) to extend
 - Should split the entity manager class up as it does a lot in 1 class
+- Randomise enemies more so they don't all shoot at the same time.
+- Animations.
 
 
 Enemies spawn in bottom left/top right corner because that room is the shop or item room
