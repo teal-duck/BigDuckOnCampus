@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
+import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.RoomType;
@@ -29,6 +30,7 @@ public class DungeonRoom {
 	 */
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
+	private ArrayList<Item> itemList;
 	private Rectangle[] walls;
 	private Rectangle[] projectileWalls;
 	private RoomType roomType = RoomType.NORMAL;
@@ -152,6 +154,14 @@ public class DungeonRoom {
 		enemy.setYTiles(y);
 		enemy.calculateScoreOnDeath();
 		addEnemy(enemy);
+	}
+	
+	private void createHealthPack(int x, int y) {
+		Sprite sprite = new Sprite(textureMap.getTextureOrLoadFile("healthpack.png"));
+		Vector2 position = new Vector2(x, y);
+		Item healthPack = new Item(sprite, position, ItemType.HEALTH);
+		
+		addItem(healthPack);
 	}
 
 
@@ -344,6 +354,14 @@ public class DungeonRoom {
 
 	public ArrayList<Obstacle> getObstacleList() {
 		return obstacleList;
+	}
+	
+	public void addItem(Item item) {
+		itemList.add(item);
+	}
+	
+	public ArrayList<Item> getItemList() {
+		return itemList;
 	}
 
 

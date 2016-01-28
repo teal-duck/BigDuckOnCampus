@@ -474,6 +474,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(entityManager.getObstacles());
 		ArrayList<Enemy> enemyList = new ArrayList<Enemy>(entityManager.getEnemies());
 		ArrayList<Projectile> projectileList = new ArrayList<Projectile>(entityManager.getProjectiles());
+		ArrayList<Item> itemList = new ArrayList<Item>(entityManager.getItems());
 
 		playerCharacter.resetMaxVelocity();
 
