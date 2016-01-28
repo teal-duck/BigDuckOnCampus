@@ -69,6 +69,11 @@
 
 - Dungeon room no longer inherits from OnscreenDrawable
 	- Only inherited before to use a sprite for the background
+
+- Possibly improved performance of sorting drawables
+	- Removed unnecessary operations
+	
+- Shop and item room now only have 1 neighbour
 	
 
 Other possible things to do:
@@ -77,6 +82,8 @@ Other possible things to do:
 - Player and enemy projectiles should look different
 - Perhaps create a base MovingEntity class for enemy and player (and projectile?) to extend
 - Should split the entity manager class up as it does a lot in 1 class
+- Input handling sending messages to the player is a bit ugly
+	- Use input package from our game?
 
 
 Enemies spawn in bottom left/top right corner because that room is the shop or item room

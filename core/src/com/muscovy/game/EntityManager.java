@@ -2,8 +2,8 @@ package com.muscovy.game;
 
 
 import java.util.ArrayList;
+import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,81 +24,85 @@ public class EntityManager {
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
 	private ArrayList<Projectile> projectileList;
-	private DungeonRoom currentDungeonRoom;
-	private LevelGenerator levelGenerator;
+
+	private int maxLevels;
 	private Level[] levels;
+
 	private int currentLevelNumber;
-	private int maxLevels = 8;
-	private int roomX;
-	private int roomY;
+
+	private DungeonRoom currentDungeonRoom;
+	private int currentRoomX;
+	private int currentRoomY;
 	private float roomTimer = 0;
-	private BitmapFont list;// Testing purposes
+
+	private BitmapFont font;
 	private PlayerCharacter playerCharacter;
+
 	// TODO: Only load 1 door texture and rotate when renderering
-	private Texture northDoorTextureOpen;
-	private Texture southDoorTextureOpen;
-	private Texture eastDoorTextureOpen;
-	private Texture westDoorTextureOpen;
-	private Texture northDoorTextureClosed;
-	private Texture southDoorTextureClosed;
-	private Texture eastDoorTextureClosed;
-	private Texture westDoorTextureClosed;
+	private Texture upDoorTextureOpen;
+	private Texture downDoorTextureOpen;
+	private Texture rightDoorTextureOpen;
+	private Texture leftDoorTextureOpen;
+	private Texture upDoorTextureClosed;
+	private Texture downDoorTextureClosed;
+	private Texture rightDoorTextureClosed;
+	private Texture leftDoorTextureClosed;
 
 	private TextureMap textureMap;
-
 	private ShapeRenderer shapeRenderer;
+	private Random random;
 
 
-	public EntityManager(TextureMap textureMap) {
+	public EntityManager(Random random, TextureMap textureMap) {
+		this.random = random;
 		this.textureMap = textureMap;
-		shapeRenderer = new ShapeRenderer();
 
 		renderList = new ArrayList<OnscreenDrawable>();
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
 		projectileList = new ArrayList<Projectile>();
 
-		levelGenerator = new LevelGenerator();
-		maxLevels = 8;
-		levels = new Level[maxLevels];
+		font = new BitmapFont();
+		font.setColor(Color.WHITE);
 
-		list = new BitmapFont();
-		list.setColor(Color.WHITE);// Testing purposes
+		currentDungeonRoom = null;
 
-		currentDungeonRoom = new DungeonRoom(textureMap);
+		upDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
+		upDoorTextureClosed = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_CLOSED);
+		rightDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);
+		rightDoorTextureClosed = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_CLOSED);
+		leftDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_LEFT_OPEN);
+		leftDoorTextureClosed = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_LEFT_CLOSED);
+		downDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_DOWN_OPEN);
+		downDoorTextureClosed = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_DOWN_CLOSED);
 
-		northDoorTextureOpen = textureMap
-				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png");
-		northDoorTextureClosed = textureMap.getTextureOrLoadFile(
-				"accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png");
-		eastDoorTextureOpen = textureMap
-				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png");
-		eastDoorTextureClosed = textureMap.getTextureOrLoadFile(
-				"accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png");
-		westDoorTextureOpen = textureMap
-				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png");
-		westDoorTextureClosed = textureMap.getTextureOrLoadFile(
-				"accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png");
-		southDoorTextureOpen = textureMap
-				.getTextureOrLoadFile("accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png");
-		southDoorTextureClosed = textureMap.getTextureOrLoadFile(
-				"accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png");
+		shapeRenderer = new ShapeRenderer();
+	}
 
+
+	public void startLevel(PlayerCharacter playerCharacter) {
+		this.playerCharacter = playerCharacter;
+		Level level = getCurrentLevel();
+		currentRoomX = level.getStartX();
+		currentRoomY = level.getStartY();
+		setCurrentDungeonRoom(currentRoomX, currentRoomY);
+		level.markRoomVisited(currentRoomX, currentRoomY);
+		renderList.add(this.playerCharacter);
 	}
 
 
 	public void generateLevels() {
 		// TODO: Only generate level when player wants to play it?
-		// Game is slow to load atm
-
-		String templateFilename = "room_templates.csv";
+		maxLevels = 8;
+		levels = new Level[maxLevels];
+		String templateFilename = AssetLocations.ROOM_TEMPLATE_FILE;
 		DungeonRoomTemplateLoader templateLoader = new DungeonRoomTemplateLoader(templateFilename);
 		for (int i = 0; i < levels.length; i += 1) {
 			LevelType levelType = LevelType.fromInt(i);
 			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
 
-			DungeonRoom[][] rooms = levelGenerator.generateBuilding(textureMap, templateLoader, levelType,
-					levelParameters);
+			DungeonRoom[][] rooms = LevelGenerator.generateBuilding(levelType, levelParameters,
+					templateLoader, random, textureMap);
 			Level level = new Level(rooms, levelType, levelParameters);
 
 			levels[i] = level;
@@ -108,101 +112,122 @@ public class EntityManager {
 	}
 
 
-	public int getLevelNo() {
-		return currentLevelNumber;
+	private void setCurrentDungeonRoom(DungeonRoom dungeonRoom) {
+		roomTimer = 0;
+
+		renderList.clear();
+		obstacleList.clear();
+		projectileList.clear();
+		enemyList.clear();
+
+		currentDungeonRoom = dungeonRoom;
+		addNewObstacles(dungeonRoom.getObstacleList());
+		addNewEnemies(dungeonRoom.getEnemyList());
 	}
 
 
-	public void setLevel(int levelNumber) {
-		currentLevelNumber = levelNumber;
+	public void setCurrentDungeonRoom(int roomX, int roomY) {
+		Level currentLevel = getCurrentLevel();
+		DungeonRoom room = currentLevel.getRoom(roomX, roomY);
+		setCurrentDungeonRoom(room);
+		currentLevel.markRoomVisited(roomX, roomY);
 	}
 
 
-	public Level getCurrentLevel() {
-		return levels[currentLevelNumber];
+	public void moveToUpRoom() {
+		currentRoomY -= 1;
+		setCurrentDungeonRoom(currentRoomX, currentRoomY);
+		renderList.add(playerCharacter);
 	}
 
 
-	public Level getLevel(int levelNumber) {
-		return levels[levelNumber];
+	public void moveToRightRoom() {
+		currentRoomX += 1;
+		setCurrentDungeonRoom(currentRoomX, currentRoomY);
+		renderList.add(playerCharacter);
 	}
 
 
-	public void startLevel(PlayerCharacter playerCharacter) {
-		this.playerCharacter = playerCharacter;
-		Level level = getCurrentLevel();
-		roomX = level.getStartX();
-		roomY = level.getStartY();
-		setCurrentDungeonRoom(roomX, roomY);
-		level.markRoomVisited(roomX, roomY);
-		renderList.add(this.playerCharacter);
+	public void moveToLeftRoom() {
+		currentRoomX -= 1;
+		setCurrentDungeonRoom(currentRoomX, currentRoomY);
+		renderList.add(playerCharacter);
 	}
 
 
-	public void render(SpriteBatch batch) {
-		/**
-		 * Renders sprites in the controller so those further back are rendered first, giving a perspective
-		 * illusion
-		 */
-		roomTimer += Gdx.graphics.getDeltaTime(); // timer used to give the player a few seconds to look at a
-								// room before attacking
-		renderList.trimToSize();
-		obstacleList.trimToSize();
-		enemyList.trimToSize();
-		projectileList.trimToSize();
+	public void moveToDownRoom() {
+		currentRoomY += 1;
+		setCurrentDungeonRoom(currentRoomX, currentRoomY);
+		renderList.add(playerCharacter);
+	}
+
+
+	/**
+	 * Renders sprites in the controller so those further back are rendered first, giving a perspective illusion
+	 *
+	 * @param deltaTime
+	 * @param batch
+	 */
+	public void render(float deltaTime, SpriteBatch batch) {
+		// Timer used to give the player a few seconds to look at a room before attacking
+		roomTimer += deltaTime;
+
+		// renderList.trimToSize();
+		// obstacleList.trimToSize();
+		// enemyList.trimToSize();
+		// projectileList.trimToSize();
 
 		sortDrawables();
 
 		batch.draw(currentDungeonRoom.getBackgroundTexture(), 0, 0);
 
-		float windowWidth = MuscovyGame.WINDOW_WIDTH;
-		float windowHeight = MuscovyGame.WINDOW_HEIGHT;
-		float tileSize = MuscovyGame.TILE_SIZE;
-		float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
-		float worldHeight = windowHeight - topGuiSize;
+		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
+		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
+		final float tileSize = MuscovyGame.TILE_SIZE;
+		final float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
+		final float worldHeight = windowHeight - topGuiSize;
 
 		Texture doorTexture;
-		if (currentDungeonRoom.getUpDoor()) {
-			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? northDoorTextureOpen
-					: northDoorTextureClosed);
+		if (currentDungeonRoom.hasUpDoor()) {
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? upDoorTextureOpen
+					: upDoorTextureClosed);
 			batch.draw(doorTexture, (windowWidth - doorTexture.getWidth()) / 2,
-					currentDungeonRoom.getNorthDoor().getY()
-							+ (currentDungeonRoom.getNorthDoor().getWidth() - tileSize));
-
+					currentDungeonRoom.getUpDoor().getY()
+							+ (currentDungeonRoom.getUpDoor().getWidth() - tileSize));
 		}
-		if (currentDungeonRoom.getDownDoor()) {
-			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? southDoorTextureOpen
-					: southDoorTextureClosed);
-			batch.draw(doorTexture, (windowWidth - southDoorTextureOpen.getWidth()) / 2,
-					currentDungeonRoom.getSouthDoor().getY() + 4);
+		if (currentDungeonRoom.hasDownDoor()) {
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? downDoorTextureOpen
+					: downDoorTextureClosed);
+			batch.draw(doorTexture, (windowWidth - downDoorTextureOpen.getWidth()) / 2,
+					currentDungeonRoom.getDownDoor().getY() + 4);
 		}
-		if (currentDungeonRoom.getRightDoor()) {
-			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? eastDoorTextureOpen
-					: eastDoorTextureClosed);
+		if (currentDungeonRoom.hasRightDoor()) {
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? rightDoorTextureOpen
+					: rightDoorTextureClosed);
 			batch.draw(doorTexture,
-					currentDungeonRoom.getEastDoor().getX()
-							+ (currentDungeonRoom.getEastDoor().getWidth() - tileSize),
-					(worldHeight - eastDoorTextureOpen.getWidth()) / 2);
+					currentDungeonRoom.getRightDoor().getX()
+							+ (currentDungeonRoom.getRightDoor().getWidth() - tileSize),
+					(worldHeight - rightDoorTextureOpen.getWidth()) / 2);
 		}
-		if (currentDungeonRoom.getLeftDoor()) {
-			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? westDoorTextureOpen
-					: westDoorTextureClosed);
-			batch.draw(doorTexture, currentDungeonRoom.getWestDoor().getX() + 4,
-					(worldHeight - westDoorTextureOpen.getWidth()) / 2);
+		if (currentDungeonRoom.hasLeftDoor()) {
+			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen
+					: leftDoorTextureClosed);
+			batch.draw(doorTexture, currentDungeonRoom.getLeftDoor().getX() + 4,
+					(worldHeight - leftDoorTextureOpen.getWidth()) / 2);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
+			boolean shouldDraw = true;
+
 			if (drawable instanceof PlayerCharacter) {
-				if (((PlayerCharacter) drawable).isInvincible()) {
-					if (!(((((PlayerCharacter) drawable).getInvincibilityCounter() * 10)
-							% 2) < 0.75)) {
-						batch.draw(drawable.getSprite().getTexture(), drawable.getX(),
-								drawable.getY());
-					}
-				} else {
-					batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
+				PlayerCharacter p = (PlayerCharacter) drawable;
+				if (p.isInvincible() && (((p.getInvincibilityCounter() * 10) % 2) < 0.75)) {
+					shouldDraw = false;
+
 				}
-			} else {
+			}
+
+			if (shouldDraw) {
 				batch.draw(drawable.getSprite().getTexture(), drawable.getX(), drawable.getY());
 			}
 		}
@@ -210,12 +235,14 @@ public class EntityManager {
 		for (Projectile projectile : projectileList) {
 			batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 		}
-		if (levels[currentLevelNumber].isCompleted()) {
-			list.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
+
+		if (getCurrentLevel().isCompleted()) {
+			font.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
 					worldHeight - 69);
 		}
-		// list.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float)
-		// 450);//Testing purposes (shows number of projectiles)
+
+		// font.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float)
+		// 450); // Testing purposes (shows number of projectiles)
 	}
 
 
@@ -291,7 +318,7 @@ public class EntityManager {
 				shapeRenderer.rect(x, y, w, h);
 
 				// Render the player in the current room
-				if ((roomX == col) && (roomY == row)) {
+				if ((currentRoomX == col) && (currentRoomY == row)) {
 					w = innerRoomSize;
 					h = innerRoomSize;
 					x += (renderWidth / 2) - (w / 2);
@@ -346,71 +373,87 @@ public class EntityManager {
 		}
 
 		shapeRenderer.end();
-
 	}
 
 
-	public boolean isLevelCompleted(int levelNumber) {
-		return getLevel(levelNumber).isCompleted();
-	}
-
-
+	/**
+	 * Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the things in the
+	 * background first.
+	 *
+	 */
 	private void sortDrawables() {
-		/**
-		 * Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the things in
-		 * the background first.
-		 */
-		ArrayList<OnscreenDrawable> newList = new ArrayList<OnscreenDrawable>();
-		newList.addAll(quicksort(renderList));
-		renderList.clear();
-		renderList.addAll(newList);
+		// TODO: Optimize sortDrawables
+		// ArrayList<OnscreenDrawable> newList = new ArrayList<OnscreenDrawable>();
+		// newList.addAll(quicksort(renderList));
+		// renderList.clear();
+		// renderList.addAll(newList);
+		renderList = quicksort(renderList);
 	}
 
 
-	/** Quicksort Helper Methods */
+	/*
+	 * Quicksort Helper Methods
+	 *
+	 * @param input
+	 *
+	 * @return
+	 */
 	private ArrayList<OnscreenDrawable> quicksort(ArrayList<OnscreenDrawable> input) {
 		if (input.size() <= 1) {
 			return input;
 		}
+
 		int middle = (int) Math.ceil((double) input.size() / 2);
 		OnscreenDrawable pivot = input.get(middle);
+
 		ArrayList<OnscreenDrawable> less = new ArrayList<OnscreenDrawable>();
 		ArrayList<OnscreenDrawable> greater = new ArrayList<OnscreenDrawable>();
-		for (int i = 0; i < input.size(); i++) {
-			if (input.get(i).getY() >= pivot.getY()) {
+
+		for (int i = 0, l = input.size(); i < l; i += 1) {
+			OnscreenDrawable node = input.get(i);
+			if (node.getY() >= pivot.getY()) {
 				if (i == middle) {
 					continue;
 				}
-				less.add(input.get(i));
+				less.add(node);
 			} else {
-				greater.add(input.get(i));
+				greater.add(node);
 			}
 		}
+
 		return concatenate(quicksort(less), pivot, quicksort(greater));
 	}
 
 
 	private ArrayList<OnscreenDrawable> concatenate(ArrayList<OnscreenDrawable> less, OnscreenDrawable pivot,
 			ArrayList<OnscreenDrawable> greater) {
-		ArrayList<OnscreenDrawable> list = new ArrayList<OnscreenDrawable>();
-		for (int i = 0; i < less.size(); i++) {
-			list.add(less.get(i));
-		}
-		list.add(pivot);
-		for (int i = 0; i < greater.size(); i++) {
-			list.add(greater.get(i));
-		}
-		return list;
+		// ArrayList<OnscreenDrawable> list = new ArrayList<OnscreenDrawable>();
+		// for (int i = 0; i < less.size(); i++) {
+		// list.add(less.get(i));
+		// }
+		//
+		// list.add(pivot);
+		//
+		// for (int i = 0; i < greater.size(); i++) {
+		// list.add(greater.get(i));
+		// }
+		//
+		// return list;
+		less.add(pivot);
+		less.addAll(greater);
+		return less;
 	}
 
 
 	public void killProjectiles() {
 		ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
+
 		for (Projectile projectile : projectileList) {
-			if (projectile.lifeOver()) {
+			if (projectile.isLifeOver()) {
 				deadProjectiles.add(projectile);
 			}
 		}
+
 		for (Projectile projectile : deadProjectiles) {
 			projectileList.remove(projectile);
 		}
@@ -419,18 +462,93 @@ public class EntityManager {
 
 	public void killEnemies() {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
+
 		for (Enemy enemy : enemyList) {
 			if (enemy.lifeOver()) {
 				deadEnemies.add(enemy);
 			}
 		}
+
 		for (Enemy enemy : deadEnemies) {
 			playerCharacter.increaseScore(enemy.getScoreOnDeath());
 			renderList.remove(enemy);
 			enemyList.remove(enemy);
 			currentDungeonRoom.killEnemy(enemy);
 		}
-		checkCurrentLevelCompletion();
+	}
+
+
+	public boolean checkCurrentLevelCompletion() {
+		return checkLevelCompletion(currentLevelNumber);
+	}
+
+
+	public boolean checkLevelCompletion(int levelNumber) {
+		Level level = getLevel(levelNumber);
+		ObjectiveType objectiveType = level.getObjectiveType();
+
+		// If the level has already been completed, don't check again
+		boolean completed = level.isCompleted();
+		if (completed) {
+			return true;
+		}
+
+		switch (objectiveType) {
+		case BOSS:
+			// TODO: Implement level.getBossRoom()
+			if (currentDungeonRoom.areAllEnemiesDead()
+					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
+				completed = true;
+			}
+			break;
+		case KILL_ENEMIES:
+			// TODO: Should kill all enemies require visiting every room as well?
+			if (level.areAllEnemiesDead()) {
+				completed = true;
+			}
+			break;
+		case FIND_ITEM:
+			completed = false;
+			break;
+		}
+
+		level.setCompleted(completed);
+		return completed;
+	}
+
+
+	public DungeonRoom getCurrentDungeonRoom() {
+		return currentDungeonRoom;
+	}
+
+
+	public int getCurrentLevelNumber() {
+		return currentLevelNumber;
+	}
+
+
+	public void setLevel(int levelNumber) {
+		currentLevelNumber = levelNumber;
+	}
+
+
+	public Level getCurrentLevel() {
+		return levels[currentLevelNumber];
+	}
+
+
+	public Level getLevel(int levelNumber) {
+		return levels[levelNumber];
+	}
+
+
+	public boolean isLevelCompleted(int levelNumber) {
+		return getLevel(levelNumber).isCompleted();
+	}
+
+
+	public float getRoomTimer() {
+		return roomTimer;
 	}
 
 
@@ -492,100 +610,4 @@ public class EntityManager {
 		return projectileList;
 	}
 
-
-	public void setCurrentDungeonRoom(DungeonRoom dungeonRoom) {
-		roomTimer = 0;
-		currentDungeonRoom = dungeonRoom;
-		renderList.clear();
-		obstacleList.clear();
-		projectileList.clear();
-		addNewObstacles(dungeonRoom.getObstacleList());
-		enemyList.clear();
-		addNewEnemies(dungeonRoom.getEnemyList());
-	}
-
-
-	public void setCurrentDungeonRoom(int roomX, int roomY) {
-		Level currentLevel = getCurrentLevel();
-		DungeonRoom room = currentLevel.getRoom(roomX, roomY);
-		setCurrentDungeonRoom(room);
-		currentLevel.markRoomVisited(roomX, roomY);
-	}
-
-
-	public DungeonRoom getCurrentDungeonRoom() {
-		return currentDungeonRoom;
-	}
-
-
-	public void moveNorth() {
-		roomY--;
-		setCurrentDungeonRoom(roomX, roomY);
-		renderList.add(playerCharacter);
-	}
-
-
-	public void moveEast() {
-		roomX++;
-		setCurrentDungeonRoom(roomX, roomY);
-		renderList.add(playerCharacter);
-	}
-
-
-	public void moveWest() {
-		roomX--;
-		setCurrentDungeonRoom(roomX, roomY);
-		renderList.add(playerCharacter);
-	}
-
-
-	public void moveSouth() {
-		roomY++;
-		setCurrentDungeonRoom(roomX, roomY);
-		renderList.add(playerCharacter);
-
-	}
-
-
-	public boolean checkCurrentLevelCompletion() {
-		return checkLevelCompletion(currentLevelNumber);
-	}
-
-
-	public boolean checkLevelCompletion(int levelNumber) {
-		Level level = getLevel(levelNumber);
-		ObjectiveType objectiveType = level.getObjectiveType();
-
-		// If the level has already been completed, don't check again
-		boolean completed = level.isCompleted();
-		if (completed) {
-			return true;
-		}
-
-		switch (objectiveType) {
-		case BOSS:
-			// TODO: Implement level.getBossRoom()
-			if (currentDungeonRoom.areAllEnemiesDead()
-					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
-				completed = true;
-			}
-			break;
-		case KILL_ENEMIES:
-			if (level.areAllEnemiesDead()) {
-				completed = true;
-			}
-			break;
-		case FIND_ITEM:
-			completed = false;
-			break;
-		}
-
-		level.setCompleted(completed);
-		return completed;
-	}
-
-
-	public float getRoomTimer() {
-		return roomTimer;
-	}
 }

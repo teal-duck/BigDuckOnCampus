@@ -18,17 +18,17 @@ import com.muscovy.game.enums.ProjectileDamager;
 public class Enemy extends Collidable {
 	public static final float TOUCH_DAMAGE = 10f;
 	public static final float ATTACK_INTERVAL = 1.5f;
-	public static final float SPEED = 200;
+	public static final float MAX_SPEED = 200;
 
 	public static final float PROJECTILE_RANGE = 400;
-	public static final float PROJECTILE_VELOCITY = 150;
+	public static final float PROJECTILE_SPEED = 150;
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
 
-	private MovementType movementType = MovementType.STATIC;
 	private Vector2 velocity;
+	private float maxSpeed = Enemy.MAX_SPEED;
 	private float currentSpeed = 0;
-	private float maxSpeed = Enemy.SPEED;
+	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
 
 	private boolean collidingWithSomething;
@@ -37,13 +37,12 @@ public class Enemy extends Collidable {
 	private EnemyShotType shotType = EnemyShotType.SINGLE_TOWARDS_PLAYER;
 	private float touchDamage = Enemy.TOUCH_DAMAGE;
 
-	// MuscovyGame.java checks these and does an attack if attack timer is greater than attack interval.
 	private float attackTimer;
 	private float attackInterval = Enemy.ATTACK_INTERVAL;
 
 	private float projectileRange = Enemy.PROJECTILE_RANGE;
-	private float projectileVelocity = Enemy.PROJECTILE_VELOCITY;
-	private float projectileLife = projectileRange / projectileVelocity;
+	private float projectileSpeed = Enemy.PROJECTILE_SPEED;
+	private float projectileLife = projectileRange / projectileSpeed;
 	private float attackRange = Enemy.ATTACK_RANGE;
 	private float viewDistance = Enemy.VIEW_DISTANCE;
 
@@ -69,9 +68,9 @@ public class Enemy extends Collidable {
 
 
 	public void update(float deltaTime, PlayerCharacter player) {
-		attackTimer += deltaTime;
 		movementLogic(deltaTime, player);
 		moveEntity(deltaTime);
+		attackTimer += deltaTime;
 	}
 
 
@@ -187,7 +186,7 @@ public class Enemy extends Collidable {
 
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(bulletsToShoot, position, shootDirection, projectileRange,
-					projectileVelocity, ProjectileDamager.PLAYER, textureMap);
+					projectileSpeed, ProjectileDamager.PLAYER, textureMap);
 		} else {
 			return new ArrayList<Projectile>();
 		}
@@ -280,7 +279,7 @@ public class Enemy extends Collidable {
 
 	public void setProjectileRange(float projectileRange) {
 		this.projectileRange = projectileRange;
-		projectileLife = projectileRange / projectileVelocity;
+		projectileLife = projectileRange / projectileSpeed;
 	}
 
 
@@ -291,17 +290,17 @@ public class Enemy extends Collidable {
 
 	public void setProjectileLife(float projectileLife) {
 		this.projectileLife = projectileLife;
-		projectileRange = projectileVelocity * projectileLife;
+		projectileRange = projectileSpeed * projectileLife;
 	}
 
 
 	public float getProjectileVelocity() {
-		return projectileVelocity;
+		return projectileSpeed;
 	}
 
 
 	public void setProjectileVelocity(float projectileVelocity) {
-		this.projectileVelocity = projectileVelocity;
+		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
 	}
 

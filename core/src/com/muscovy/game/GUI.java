@@ -14,13 +14,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GUI {
 	private ArrayList<Sprite> guiElements;
 	// TODO: Should guiData be a HashMap?
+	// Though using hash map would mean they are unordered
 	// TODO: Should gui ID comparison use .equals() instead of .matches()?
 	private ArrayList<GuiData> guiData;
 
 
 	private class GuiData {
 		/**
-		 * Helper Class: guiData Structure for the text elements of the GUI. No need to access directly, getters
+		 * Helper Class: GuiData Structure for the text elements of the GUI. No need to access directly, getters
 		 * and setters are provided for the bits you might need to change.
 		 */
 		private String data;
@@ -155,12 +156,14 @@ public class GUI {
 	}
 
 
+	/**
+	 * Renders the elements so the first element you added using addElement is on the bottom, and each other is
+	 * layered on top. The data elements go on top of the sprites, so you cannot have text hidden by a GUI element.
+	 *
+	 * @param batch
+	 */
 	public void render(SpriteBatch batch) {
-		/**
-		 * Renders the elements so the first element you added using addElement is on the bottom, and each other
-		 * is layered on top. The data elements go on top of the sprites, so you cannot have text hidden by a
-		 * GUI element.
-		 */
+
 		for (Sprite sprite : guiElements) {
 			batch.draw(sprite.getTexture(), sprite.getX(), sprite.getY());
 		}

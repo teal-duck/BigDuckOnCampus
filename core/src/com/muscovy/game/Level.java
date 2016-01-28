@@ -13,27 +13,29 @@ public class Level {
 	 * Really simple container class for the room array and objective. Only 1 objective implemented atm, so it's not
 	 * used, but yeah
 	 */
+	private final ObjectiveType objectiveType;
+	private final LevelType levelType;
 	public DungeonRoom[][] levelArray;
 	public boolean[][] visitedRooms;
-	private ObjectiveType objectiveType;
-	private LevelType levelType;
 	private boolean completed = false;
 
-	private int roomsWide;
-	private int roomsHigh;
-	private int startX;
-	private int startY;
+	private final int roomsWide;
+	private final int roomsHigh;
+	private final int startX;
+	private final int startY;
+	private final int roomCount;
 
 
 	public Level(DungeonRoom[][] levelArray, LevelType levelType, LevelParameters levelParameters) {
 		this.levelArray = levelArray;
+		this.levelType = levelType;
 
 		roomsHigh = levelParameters.getRoomsHigh();
 		roomsWide = levelParameters.getRoomsWide();
 		startX = levelParameters.getStartX();
 		startY = levelParameters.getStartY();
 		objectiveType = levelParameters.getObjectiveType();
-		this.levelType = levelType;
+		roomCount = levelParameters.getRoomCount();
 
 		visitedRooms = new boolean[roomsHigh][roomsWide];
 		for (int y = 0; y < visitedRooms.length; y += 1) {
@@ -176,5 +178,10 @@ public class Level {
 
 	public int getStartY() {
 		return startY;
+	}
+
+
+	public int getRoomCount() {
+		return roomCount;
 	}
 }

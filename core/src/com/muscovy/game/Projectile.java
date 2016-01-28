@@ -3,7 +3,6 @@ package com.muscovy.game;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,80 +14,31 @@ import com.muscovy.game.enums.ProjectileDamager;
  * Created by ewh502 on 11/01/2016.
  */
 public class Projectile extends OnscreenDrawable {
-	private float damage = 10;
-	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
+	public static final float SPEED = 150f;
+	public static final float DAMAGE = 10f;
+	public static final float LIFE_TIME = 1.5f;
+
 	private Vector2 velocity;
-	private float maxVelocity = 150;
+	private float speed = Projectile.SPEED; // = 150;
+	private float damage = Projectile.DAMAGE; // = 10;
+	private float maxLifeTime = Projectile.LIFE_TIME; // = 1.5f;
 	private float lifeCounter = 0;
-	private float life = 1.5f;
+	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
 
 
-	public Projectile(Vector2 position, Vector2 direction, float life, float maxVelocity,
-			ProjectileDamager damagesWho, TextureMap textureMap) {
-		// setSprite();
-		// setPosition(position);
-		super(new Sprite(textureMap.getTextureOrLoadFile("breadBullet.png")), position);
-		this.life = life;
-		this.maxVelocity = maxVelocity;
-		velocity = direction.cpy().setLength(maxVelocity);
+	public Projectile(Vector2 position, Vector2 direction, float life, float speed, ProjectileDamager damagesWho,
+			TextureMap textureMap) {
+		super(new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.BULLET)), position);
+
+		maxLifeTime = life;
+		this.speed = speed;
 		this.damagesWho = damagesWho;
 
+		velocity = direction.cpy().setLength(speed);
 		collisionBox = new Circle((int) getX(), (int) getY(), getSprite().getRegionWidth() / 2);
 	}
 
-
-	/**
-	 * Getters and Setters
-	 */
-	public float getDamage() {
-		return damage;
-	}
-
-
-	public void setDamage(float damage) {
-		this.damage = damage;
-	}
-
-
-	public ProjectileDamager getDamagesWho() {
-		return damagesWho;
-	}
-
-
-	public void setDamagesWho(ProjectileDamager damagesWho) {
-		this.damagesWho = damagesWho;
-	}
-
-
-	public float getLife() {
-		return life;
-	}
-
-
-	public void setLife(float life) {
-		this.life = life;
-	}
-
-
-	public float getMaxVelocity() {
-		return maxVelocity;
-	}
-
-
-	public void setMaxVelocity(float maxVelocity) {
-		this.maxVelocity = maxVelocity;
-	}
-
-
-	public Circle getCollisionBox() {
-		return collisionBox;
-	}
-
-
-	// public void setCollisionBox(Circle collisionBox) {
-	// this.collisionBox = collisionBox;
-	// }
 
 	/**
 	 * X and Y setters move collision box too
@@ -116,26 +66,30 @@ public class Projectile extends OnscreenDrawable {
 	/**
 	 * Other shit, self explanatory
 	 */
-	public void update() {
-		movement();
-		lifeOver();
+	public void update(float deltaTime) {
+		movementLogic(deltaTime);
+		moveEntity(deltaTime);
+		lifeCounter += deltaTime;
 	}
 
 
-	public void movement() {
-		getPosition().mulAdd(velocity, Gdx.graphics.getDeltaTime());
+	public void movementLogic(float deltaTime) {
+	}
+
+
+	public void moveEntity(float deltaTime) {
+		getPosition().mulAdd(velocity, deltaTime);
 		updateCollisionBox();
-		lifeCounter += Gdx.graphics.getDeltaTime();
 	}
 
 
-	public void kill() {
-		life = 0;
+	public void killSelf() {
+		maxLifeTime = 0;
 	}
 
 
-	public boolean lifeOver() {
-		return (lifeCounter > life);
+	public boolean isLifeOver() {
+		return (lifeCounter > maxLifeTime);
 	}
 
 
@@ -174,5 +128,50 @@ public class Projectile extends OnscreenDrawable {
 		}
 
 		return projectiles;
+	}
+
+
+	public float getDamage() {
+		return damage;
+	}
+
+
+	public void setDamage(float damage) {
+		this.damage = damage;
+	}
+
+
+	public ProjectileDamager getDamagesWho() {
+		return damagesWho;
+	}
+
+
+	public void setDamagesWho(ProjectileDamager damagesWho) {
+		this.damagesWho = damagesWho;
+	}
+
+
+	public float getLife() {
+		return maxLifeTime;
+	}
+
+
+	public void setLife(float life) {
+		maxLifeTime = life;
+	}
+
+
+	public float getMaxVelocity() {
+		return speed;
+	}
+
+
+	public void setMaxVelocity(float maxVelocity) {
+		speed = maxVelocity;
+	}
+
+
+	public Circle getCollisionBox() {
+		return collisionBox;
 	}
 }
