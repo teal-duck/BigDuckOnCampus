@@ -465,7 +465,7 @@ public class EntityManager {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 
 		for (Enemy enemy : enemyList) {
-			if (enemy.lifeOver()) {
+			if (enemy.isLifeOver()) {
 				deadEnemies.add(enemy);
 			}
 		}

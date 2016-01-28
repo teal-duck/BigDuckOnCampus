@@ -23,4 +23,16 @@ public class Item extends Collidable {
 		this.type = type;
 	}
 
+	public ItemType getType() {
+		return this.type;
+	}
+
+	public boolean applyToPlayer(PlayerCharacter playerCharacter) {
+		switch (type) {
+		case HEALTH:
+//			if (!playerCharacter.)
+		default:
+			return false;
+		}
+	}
 }
