@@ -322,11 +322,8 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
-	public void gainHealth(float health) {
-		currentHealth += health;
-		if (currentHealth < maxHealth) {
-			currentHealth = maxHealth;
-		}
+	public boolean gainHealth(float health) {
+		if (currentHealth)
 	}
 
 

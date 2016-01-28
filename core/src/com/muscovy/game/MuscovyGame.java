@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.GameState;
+import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.ProjectileDamager;
 
@@ -84,6 +85,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public static final int KEY_SHOOT_DOWN = Keys.DOWN;
 	public static final int KEY_SHOOT_LEFT = Keys.LEFT;
 	public static final int KEY_SHOOT_RIGHT = Keys.RIGHT;
+	
+	float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
 
 
 	@Override
@@ -486,6 +491,10 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		}
 
 		playerWallCollision();
+		
+		for (Item item : itemList) {
+			playerItemCollection(item);
+		}
 
 		if (entityManager.getCurrentDungeonRoom().areAllEnemiesDead()) {
 			playerDoorCollision();
@@ -551,11 +560,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	}
 
 
-	float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
-
-
 	public void playerObstacleCollision(Obstacle obstacle) {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), obstacle.getRectangleHitbox())) {
 			playerCharacter.moveToNearestEdgeRectangle(obstacle);
@@ -565,6 +569,14 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerCharacter.takeDamage(obstacle.getTouchDamage());
 			}
 		}
+	}
+	
+	public boolean playerItemCollection(Item item) {
+		boolean applied = false;
+		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), item.getRectangleHitbox())) {
+			applied = item.applyToPlayer(playerCharacter);
+		}
+		return applied;
 	}
 
 
