@@ -357,7 +357,6 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void cleanUpDeadThings() {
 		entityManager.killEnemies();
 		entityManager.killProjectiles();
-		entityManager.killItems();
 	}
 
 
@@ -493,9 +492,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		playerWallCollision();
 
 		for (Item item : itemList) {
-			if (playerItemCollision(item)) {
-				item.setLifeOver();
-			}
+			playerItemCollection(item);
 		}
 
 		if (entityManager.getCurrentDungeonRoom().areAllEnemiesDead()) {
@@ -573,8 +570,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		}
 	}
 
-	
-	public boolean playerItemCollision(Item item) {
+
+	public boolean playerItemCollection(Item item) {
 		boolean applied = false;
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), item.getRectangleHitbox())) {
 			applied = item.applyToPlayer(playerCharacter);

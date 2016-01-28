@@ -5,9 +5,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 
-/**
- * Loads .csv files describing item locations in each room. 
- */
+
 public class DungeonRoomTemplateLoader {
 	// Constants for the values that can be in the template
 	public static final int EMPTY_TILE = 0;
@@ -21,7 +19,6 @@ public class DungeonRoomTemplateLoader {
 	 * Randomly choose whether to place an enemy here
 	 */
 	public static final int MAYBE_ENEMY = 4;
-	public static final int HEALTHPACK = 5;
 
 	private String filename;
 	private int[][][] roomTemplates;

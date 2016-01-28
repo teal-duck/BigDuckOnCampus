@@ -62,7 +62,6 @@ public class DungeonRoom {
 
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
-		itemList = new ArrayList<Item>();
 
 		initialiseWalls();
 	}
@@ -157,16 +156,14 @@ public class DungeonRoom {
 		addEnemy(enemy);
 		return enemy;
 	}
-	private Item createHealthPack(int x, int y) {
+
+
+	private void createHealthPack(int x, int y) {
 		Sprite sprite = new Sprite(textureMap.getTextureOrLoadFile("healthpack.png"));
 		Vector2 position = new Vector2(x, y);
 		Item healthPack = new Item(sprite, position, ItemType.HEALTH);
-		
-		healthPack.setXTiles(x);
-		healthPack.setYTiles(y);
+
 		addItem(healthPack);
-		
-		return healthPack;
 	}
 
 
@@ -189,34 +186,30 @@ public class DungeonRoom {
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
 					int cell = tileArray[row][col];
-					int actualRow = tileArray.length - row;
 					switch (cell) {
 					case DungeonRoomTemplateLoader.EMPTY_TILE:
 						break;
 					case DungeonRoomTemplateLoader.NON_DAMAGING_OBSTACLE:
-						createNonDamagingObstacle(col, actualRow);
+						createNonDamagingObstacle(col, row);
 						break;
 					case DungeonRoomTemplateLoader.DAMAGING_OBSTACLE:
-						createDamagingObstacle(col, actualRow);
+						createDamagingObstacle(col, row);
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_DAMAGING_OBSTACLE:
 						if (obstacleType3NonDamaging) {
-							createNonDamagingObstacle(col, actualRow);
+							createNonDamagingObstacle(col, row);
 						} else if (!obstacleType3NonDamaging) {
-							createDamagingObstacle(col, actualRow);
+							createDamagingObstacle(col, row);
 						}
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_ENEMY:
 						if (random.nextInt(5) < 3) {
-							createRandomEnemy(entityManager, col, actualRow);
+							createRandomEnemy(entityManager, col, row);
 						}
-						break;
-					case DungeonRoomTemplateLoader.HEALTHPACK:
-						createHealthPack(col, actualRow);
 						break;
 					default:
 						System.out.println("Unrecognised cell " + cell + "; location (" + col
-								+ ", " + (actualRow) + ")");
+								+ ", " + row + ")");
 						break;
 					}
 				}
