@@ -23,7 +23,7 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final float ATTACK_INTERVAL = 0.25f;
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
-	public static final float MAX_HEALTH = 100;
+	public static final int MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
 	// private Vector2 velocity;
@@ -43,8 +43,8 @@ public class PlayerCharacter extends MoveableEntity {
 	private float projectileRange = PlayerCharacter.PROJECTILE_RANGE;
 	private float projectileLife = projectileRange / projectileSpeed;
 
-	private float maxHealth = PlayerCharacter.MAX_HEALTH;
-	private float currentHealth = maxHealth;
+	private int maxHealth = PlayerCharacter.MAX_HEALTH;
+	private int currentHealth = maxHealth;
 	private boolean invincible = false;
 	private float invincibilityCounter = 0;
 	private float invincibilityDuration = PlayerCharacter.INVINCIBILITY_DURATION;
@@ -322,9 +322,14 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
-	public boolean gainHealth(float health) {
-		// if (currentHealth)
-		return false;
+	public boolean gainHealth(int health) {
+		if (currentHealth == maxHealth) {
+			return false;
+		}
+		else {
+			currentHealth = Math.min(currentHealth + health, maxHealth);
+			return true;
+		}
 	}
 
 
@@ -342,12 +347,12 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
-	public float getHealth() {
+	public int getHealth() {
 		return currentHealth;
 	}
 
 
-	public void setHealth(float newHealth) {
+	public void setHealth(int newHealth) {
 		currentHealth = newHealth;
 		if (currentHealth > maxHealth) {
 			currentHealth = maxHealth;
@@ -360,7 +365,7 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
-	public void setMaxHealth(float maxHealth) {
+	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 	}
 
