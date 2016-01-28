@@ -81,7 +81,8 @@ public class LevelGenerator {
 	 * Function is called to generate the array of rooms for our building
 	 */
 	public static DungeonRoom[][] generateBuilding(LevelType levelType, LevelParameters levelParameters,
-			DungeonRoomTemplateLoader templateLoader, Random random, TextureMap textureMap) {
+			DungeonRoomTemplateLoader templateLoader, Random random, TextureMap textureMap,
+			EntityManager entityManager) {
 		int maxRooms = levelParameters.getMaxRooms();
 		int roomsWide = levelParameters.getRoomsWide();
 		int roomsHigh = levelParameters.getRoomsHigh();
@@ -219,7 +220,8 @@ public class LevelGenerator {
 		for (int xPos = 0; xPos < roomsWide; xPos++) {
 			for (int yPos = 0; yPos < roomsHigh; yPos++) {
 				if (dungeonRoomArray[yPos][xPos] != null) {
-					dungeonRoomArray[yPos][xPos].generateRoom(templateLoader, levelType);
+					dungeonRoomArray[yPos][xPos].generateRoom(templateLoader, levelType,
+							entityManager);
 				}
 			}
 		}

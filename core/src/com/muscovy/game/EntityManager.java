@@ -102,7 +102,7 @@ public class EntityManager {
 			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
 
 			DungeonRoom[][] rooms = LevelGenerator.generateBuilding(levelType, levelParameters,
-					templateLoader, random, textureMap);
+					templateLoader, random, textureMap, this);
 			Level level = new Level(rooms, levelType, levelParameters);
 
 			levels[i] = level;
@@ -608,6 +608,11 @@ public class EntityManager {
 
 	public ArrayList<Projectile> getProjectiles() {
 		return projectileList;
+	}
+
+
+	public PlayerCharacter getPlayer() {
+		return playerCharacter;
 	}
 
 }

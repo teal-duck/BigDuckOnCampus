@@ -74,7 +74,12 @@
 	- Removed unnecessary operations
 	
 - Shop and item room now only have 1 neighbour
+
+- Created MoveableEntity class
+	- Enemy and player extend from it
+	- Should projectile extend it? It uses velocity but the collision is different
 	
+- Started to remake player movement
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

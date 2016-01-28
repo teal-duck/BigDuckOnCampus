@@ -113,18 +113,18 @@ public class DungeonRoom {
 	}
 
 
-	private Enemy createRandomEnemy(int x, int y) {
+	private Enemy createRandomEnemy(EntityManager entityManager, int x, int y) {
 		Sprite enemySprite;
 		Enemy enemy;
 		Vector2 position = new Vector2(x, y);
 
 		if (random.nextBoolean()) {
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.CLEANER));
-			enemy = new Enemy(enemySprite, position, textureMap, random);
+			enemy = new Enemy(enemySprite, position, entityManager, textureMap, random);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, position, textureMap, random);
+			enemy = new Enemy(enemySprite, position, entityManager, textureMap, random);
 			enemy.setAttackType(AttackType.RANGE);
 		}
 
@@ -156,7 +156,8 @@ public class DungeonRoom {
 	}
 
 
-	public void generateRoom(DungeonRoomTemplateLoader templateLoader, LevelType levelType) {
+	public void generateRoom(DungeonRoomTemplateLoader templateLoader, LevelType levelType,
+			EntityManager entityManager) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -192,7 +193,7 @@ public class DungeonRoom {
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_ENEMY:
 						if (random.nextInt(5) < 3) {
-							createRandomEnemy(col, row);
+							createRandomEnemy(entityManager, col, row);
 						}
 						break;
 					default:
@@ -208,14 +209,14 @@ public class DungeonRoom {
 			// Boss
 			// TODO: Change boss parameters
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), textureMap, random);
+			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
 			enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 					- (enemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
 			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
 					- (enemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
 			enemy.setAttackType(AttackType.BOTH);
 			enemy.setMovementType(MovementType.FOLLOW);
-			enemy.setSpeed(enemy.getSpeed() * 0.8f);
+			enemy.setMaxSpeed(enemy.getMaxSpeed() * 0.8f);
 			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
 			enemy.setTouchDamage(20);
 			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
@@ -230,7 +231,7 @@ public class DungeonRoom {
 			// Item
 			// TODO: Item room
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), textureMap, random);
+			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(100);
 			enemy.setYTiles(100);
@@ -240,7 +241,7 @@ public class DungeonRoom {
 		case SHOP:
 			// Shop
 			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), textureMap, random);
+			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setX(0);
 			enemy.setY(0);

@@ -15,7 +15,7 @@ import com.muscovy.game.enums.ProjectileDamager;
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-public class Enemy extends Collidable {
+public class Enemy extends MoveableEntity {
 	public static final float TOUCH_DAMAGE = 10f;
 	public static final float ATTACK_INTERVAL = 1.5f;
 	public static final float MAX_SPEED = 200;
@@ -25,9 +25,10 @@ public class Enemy extends Collidable {
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
 
-	private Vector2 velocity;
-	private float maxSpeed = Enemy.MAX_SPEED;
-	private float currentSpeed = 0;
+	// private Vector2 velocity;
+	// private float maxSpeed = Enemy.MAX_SPEED;
+	// private float currentSpeed = 0;
+
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
 
@@ -53,24 +54,29 @@ public class Enemy extends Collidable {
 
 	private Random random;
 	private TextureMap textureMap;
+	private EntityManager entityManager;
 
 
-	public Enemy(Sprite sprite, Vector2 position, TextureMap textureMap, Random random) {
+	public Enemy(Sprite sprite, Vector2 position, EntityManager entityManager, TextureMap textureMap,
+			Random random) {
 		super(sprite, position);
 		this.textureMap = textureMap;
 		this.random = random;
+		this.entityManager = entityManager;
 
-		velocity = new Vector2(1, 0).setLength(maxSpeed);
+		setMaxSpeed(Enemy.MAX_SPEED);
+		setCurrentSpeed(0);
+		setVelocity(new Vector2(1, 0).setLength(getMaxSpeed()));
 		rotateRandomDirection();
 
-		setSprite(sprite);
+		// setSprite(sprite);
 	}
 
 
-	public void update(float deltaTime, PlayerCharacter player) {
-		movementLogic(deltaTime, player);
-		moveEntity(deltaTime);
+	@Override
+	public void selfUpdate(float deltaTime) {
 		attackTimer += deltaTime;
+
 	}
 
 
@@ -84,19 +90,20 @@ public class Enemy extends Collidable {
 		} else {
 			direction = -1;
 		}
-		velocity.rotate(direction * (((maxRotation - minRotation) * random.nextFloat()) + minRotation));
+		getVelocity().rotate(direction * (((maxRotation - minRotation) * random.nextFloat()) + minRotation));
 	}
 
 
-	public void movementLogic(float deltaTime, PlayerCharacter player) {
+	@Override
+	public void movementLogic(float deltaTime) { // , PlayerCharacter player) {
 		switch (movementType) {
 		case STATIC:
-			currentSpeed = 0;
-			maxSpeed = 0;
+			setCurrentSpeed(0);
+			setMaxSpeed(0);
 			break;
 
 		case RANDOM:
-			currentSpeed = maxSpeed;
+			setSpeedToMax();
 			float timeToStayInSameDirection = 0.4f;
 
 			if (directionCounter > timeToStayInSameDirection) {
@@ -108,11 +115,12 @@ public class Enemy extends Collidable {
 			break;
 
 		case FOLLOW:
+			PlayerCharacter player = entityManager.getPlayer();
 			if (getDistanceTo(player) < viewDistance) {
-				currentSpeed = maxSpeed;
+				setSpeedToMax();
 				pointTo(player);
 			} else {
-				currentSpeed = 0;
+				setCurrentSpeed(0);
 			}
 			break;
 		}
@@ -120,26 +128,14 @@ public class Enemy extends Collidable {
 	}
 
 
-	public void setVelocityLengthToCurrentSpeed() {
-		velocity.setLength(currentSpeed);
-	}
-
-
-	public void moveEntity(float deltaTime) {
-		setVelocityLengthToCurrentSpeed();
-		getPosition().mulAdd(velocity, deltaTime);
-		updateBoxesPosition();
-	}
-
-
 	public void pointTo(Collidable collidable) {
-		float length = velocity.len();
+		float length = getVelocity().len();
 		// Set to other position
-		velocity.set(collidable.getPosition());
+		setVelocity(collidable.getPosition());
 		// Subtract current position (to get vector between objects)
-		velocity.sub(getPosition());
+		getVelocity().sub(getPosition());
 		// Reset the length of the velocity
-		velocity.setLength(length);
+		getVelocity().setLength(length);
 	}
 
 
@@ -161,7 +157,7 @@ public class Enemy extends Collidable {
 		switch (shotType) {
 		case SINGLE_MOVEMENT:
 			bulletsToShoot = 1;
-			shootDirection.set(velocity).nor();
+			shootDirection.set(getVelocity()).nor();
 			break;
 		case SINGLE_TOWARDS_PLAYER:
 			if (distanceToPlayer < attackRange) {
@@ -332,36 +328,6 @@ public class Enemy extends Collidable {
 
 	public void setScoreOnDeath(int scoreOnDeath) {
 		this.scoreOnDeath = scoreOnDeath;
-	}
-
-
-	public float getVelocityX() {
-		return velocity.x;
-	}
-
-
-	public void setVelocityX(float velocityX) {
-		velocity.x = velocityX;
-	}
-
-
-	public float getVelocityY() {
-		return velocity.y;
-	}
-
-
-	public void setVelocityY(float velocityY) {
-		velocity.y = velocityY;
-	}
-
-
-	public float getSpeed() {
-		return maxSpeed;
-	}
-
-
-	public void setSpeed(float speed) {
-		maxSpeed = speed;
 	}
 
 

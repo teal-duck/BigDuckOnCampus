@@ -315,7 +315,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void enemiesUpdate(float deltaTime) {
 		if (entityManager.getRoomTimer() > 2) {
 			for (Enemy enemy : entityManager.getEnemies()) {
-				enemy.update(deltaTime, playerCharacter);
+				enemy.update(deltaTime); // , playerCharacter);
 				if ((enemy.getAttackType() != AttackType.TOUCH) && (enemy.checkRangedAttack())) {
 					entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
 				}
@@ -383,29 +383,29 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 
 	public void playerMovement(float deltaTime) {
-		if (keyflagW) {
-			playerCharacter.goUp(deltaTime);
-			playerCharacter.movementAnimation();
-		}
-		if (!keyflagW && keyflagS) {
-			playerCharacter.goDown(deltaTime);
-			playerCharacter.movementAnimation();
-		}
-		if (keyflagD) {
-			playerCharacter.goRight(deltaTime);
-			playerCharacter.movementAnimation();
-		}
-		if (!keyflagD && keyflagA) {
-			playerCharacter.goLeft(deltaTime);
-			playerCharacter.movementAnimation();
-		}
-
-		if (!keyflagD && !keyflagA) {
-			playerCharacter.decelXToStop(deltaTime);
-		}
-		if (!keyflagW && !keyflagS) {
-			playerCharacter.decelYToStop(deltaTime);
-		}
+		// if (keyflagW) {
+		// playerCharacter.goUp(deltaTime);
+		// playerCharacter.movementAnimation();
+		// }
+		// if (!keyflagW && keyflagS) {
+		// playerCharacter.goDown(deltaTime);
+		// playerCharacter.movementAnimation();
+		// }
+		// if (keyflagD) {
+		// playerCharacter.goRight(deltaTime);
+		// playerCharacter.movementAnimation();
+		// }
+		// if (!keyflagD && keyflagA) {
+		// playerCharacter.goLeft(deltaTime);
+		// playerCharacter.movementAnimation();
+		// }
+		//
+		// if (!keyflagD && !keyflagA) {
+		// playerCharacter.decelXToStop(deltaTime);
+		// }
+		// if (!keyflagW && !keyflagS) {
+		// playerCharacter.decelYToStop(deltaTime);
+		// }
 	}
 
 
@@ -465,12 +465,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	 * Could be optimised, but at the moment, doesn't chug, even with many enemies, obstacles and projectiles
 	 */
 	public void collision() {
-
 		ArrayList<Obstacle> obstacleList = new ArrayList<Obstacle>(entityManager.getObstacles());
 		ArrayList<Enemy> enemyList = new ArrayList<Enemy>(entityManager.getEnemies());
 		ArrayList<Projectile> projectileList = new ArrayList<Projectile>(entityManager.getProjectiles());
 
-		playerCharacter.resetMaxVelocity();
+		playerCharacter.setMaxSpeed(PlayerCharacter.MAX_SPEED);
+		playerCharacter.setSpeedToMax();
 
 		for (Obstacle obstacle : obstacleList) {
 			playerObstacleCollision(obstacle);
@@ -545,10 +545,15 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	}
 
 
+	float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
+
+
 	public void playerObstacleCollision(Obstacle obstacle) {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), obstacle.getRectangleHitbox())) {
 			playerCharacter.moveToNearestEdgeRectangle(obstacle);
-			playerCharacter.setMaxVelocity(100);
+			playerCharacter.setMaxSpeed(playerObstacleCollisionSpeed);
 			dungeonGUI.editData("Collides", "Collided");
 			if (obstacle.isDamaging()) {
 				playerCharacter.takeDamage(obstacle.getTouchDamage());
@@ -615,7 +620,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	 */
 	public void playerEnemyCollision(Enemy enemy) {
 		if (playerCharacter.collides(enemy)) {
-			playerCharacter.setMaxVelocity(100);
+			playerCharacter.setMaxSpeed(playerEnemyCollisionSpeed);
 			if (enemy.isCollidingWithSomething()) {
 				playerCharacter.moveToNearestEdgeCircle(enemy);
 			} else {
@@ -632,8 +637,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	public void playerWallCollision() {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getTopWall())) {
-			playerCharacter.setYVelocity(0);
-			playerCharacter.setMaxVelocity(200);
+			playerCharacter.setVelocityY(0);
+			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getTopWall().getY()
 							- playerCharacter.getCircleHitbox().radius);
@@ -641,8 +646,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getRightWall())) {
-			playerCharacter.setXVelocity(0);
-			playerCharacter.setMaxVelocity(200);
+			playerCharacter.setVelocityX(0);
+			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(
 					entityManager.getCurrentDungeonRoom().getRightWall().getX()
 							- playerCharacter.getCircleHitbox().radius,
@@ -651,16 +656,16 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
-			playerCharacter.setXVelocity(0);
-			playerCharacter.setMaxVelocity(200);
+			playerCharacter.setVelocityX(0);
+			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(64 + playerCharacter.getCircleHitbox().radius,
 					playerCharacter.getCircleHitbox().y);
 		}
 
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getBottomWall())) {
-			playerCharacter.setYVelocity(0);
-			playerCharacter.setMaxVelocity(200);
+			playerCharacter.setVelocityY(0);
+			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
 					64 + playerCharacter.getCircleHitbox().radius);
 		}
@@ -672,8 +677,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (entityManager.getCurrentDungeonRoom().hasUpDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getUpDoor())) && keyflagW) {
-				playerCharacter.setYVelocity(0);
-				playerCharacter.setXVelocity(0);
+				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToUpRoom();
 				playerCharacter.setY(doorOffset);
 			}
@@ -682,8 +686,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (entityManager.getCurrentDungeonRoom().hasDownDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getDownDoor())) && keyflagS) {
-				playerCharacter.setYVelocity(0);
-				playerCharacter.setXVelocity(0);
+				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToDownRoom();
 				playerCharacter.setY(
 						MuscovyGame.WORLD_HEIGHT - playerCharacter.getHeight() - doorOffset);
@@ -693,8 +696,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (entityManager.getCurrentDungeonRoom().hasRightDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getRightDoor())) && keyflagD) {
-				playerCharacter.setYVelocity(0);
-				playerCharacter.setXVelocity(0);
+				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToRightRoom();
 				playerCharacter.setX(doorOffset);
 			}
@@ -703,8 +705,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 		if (entityManager.getCurrentDungeonRoom().hasLeftDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getLeftDoor())) && keyflagA) {
-				playerCharacter.setYVelocity(0);
-				playerCharacter.setXVelocity(0);
+				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToLeftRoom();
 				playerCharacter.setX(
 						MuscovyGame.WINDOW_WIDTH - playerCharacter.getWidth() - doorOffset);

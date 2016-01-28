@@ -4,6 +4,7 @@ package com.muscovy.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.PlayerShotType;
@@ -13,7 +14,7 @@ import com.muscovy.game.enums.ProjectileDamager;
 /**
  * Created by ewh502 on 04/12/2015. Good luck
  */
-public class PlayerCharacter extends Collidable {
+public class PlayerCharacter extends MoveableEntity {
 	// TODO: Possibly make a MoveableEntity class with these velocity parameters?
 	// Player and enemy extend MoveableEntity
 	public static final float MAX_SPEED = 350f;
@@ -25,12 +26,12 @@ public class PlayerCharacter extends Collidable {
 	public static final float MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
-	private Vector2 velocity;
-	private float maxSpeed = PlayerCharacter.MAX_SPEED;
-	private float currentSpeed = maxSpeed;
+	// private Vector2 velocity;
+	// private float maxSpeed = PlayerCharacter.MAX_SPEED;
+	// private float currentSpeed = maxSpeed;
 
-	private float acceleration = PlayerCharacter.ACCELERATION;
-	private float deceleration = PlayerCharacter.DECELERATION;
+	// private float acceleration = PlayerCharacter.ACCELERATION;
+	// private float deceleration = PlayerCharacter.DECELERATION;
 
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
@@ -64,8 +65,11 @@ public class PlayerCharacter extends Collidable {
 		super(playerSprite, position);
 		this.textureMap = textureMap;
 
+		setMaxSpeed(PlayerCharacter.MAX_SPEED);
+		setCurrentSpeed(getMaxSpeed());
+
 		animationCycle = 0;
-		velocity = new Vector2(0, 0);
+		// velocity = new Vector2(0, 0);
 		shotDirection = new Vector2(0, 1);
 
 		// Sprite playerSprite;
@@ -103,11 +107,8 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public void update(float deltaTime) {
-		// movementLogic(deltaTime);
-		movementLogic(deltaTime);
-		moveEntity(deltaTime);
-
+	@Override
+	public void selfUpdate(float deltaTime) {
 		if (invincible) {
 			invincibilityUpdate(deltaTime);
 		}
@@ -117,132 +118,141 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
+	@Override
 	public void movementLogic(float deltaTime) {
+		float dx = 0;
+		float dy = 0;
+
+		if (Gdx.input.isKeyPressed(Keys.W)) {
+			dy += 1;
+		}
+		if (Gdx.input.isKeyPressed(Keys.S)) {
+			dy -= 1;
+		}
+		if (Gdx.input.isKeyPressed(Keys.A)) {
+			dx -= 1;
+		}
+		if (Gdx.input.isKeyPressed(Keys.D)) {
+			dx += 1;
+		}
+
+		float dd = (dx * dx) + (dy * dy);
+		if (dd != 0) {
+			dd = (float) Math.sqrt(dd);
+
+			dx /= dd;
+			dy /= dd;
+		}
+
+		setVelocity(dx, dy);
 	}
-
-
-	/**
-	 * Changes X and Y according to velocity and time elapsed between frames
-	 *
-	 */
-	public void moveEntity(float deltaTime) {
-		getPosition().mulAdd(velocity, deltaTime);
-		updateBoxesPosition();
-	}
-
 
 	/**
 	 * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D If opposite directions are
 	 * pressed at the same time, velocity decelerated to 0 Calculates velocity based on delta time and acceleration
 	 */
 	// TODO: Why do only right and up apply deceleration?
-	public void goRight(float deltaTime) {
-		if (animationCycle > 10) {
-			animationCycle = 0;
-		}
+	// public void goRight(float deltaTime) {
+	// if (animationCycle > 10) {
+	// animationCycle = 0;
+	// }
+	//
+	// if (Gdx.input.isKeyPressed(MuscovyGame.KEY_RIGHT) && Gdx.input.isKeyPressed(MuscovyGame.KEY_LEFT)) {
+	// decelXToStop(deltaTime);
+	// } else {
+	// incrementVelocityX(acceleration * deltaTime);
+	// }
+	// }
+	//
+	//
+	// public void goLeft(float deltaTime) {
+	// if (animationCycle > 10) {
+	// animationCycle = 0;
+	// }
+	//
+	// incrementVelocityX((-acceleration) * deltaTime);
+	// }
+	//
+	//
+	// public void goUp(float deltaTime) {
+	// if (animationCycle > 6) {
+	// animationCycle = 0;
+	// }
+	//
+	// if (Gdx.input.isKeyPressed(MuscovyGame.KEY_UP) && Gdx.input.isKeyPressed(MuscovyGame.KEY_DOWN)) {
+	// decelYToStop(deltaTime);
+	// } else {
+	// incrementVelocityY(acceleration * deltaTime);
+	// }
+	// }
+	//
+	//
+	// public void goDown(float deltaTime) {
+	// if (animationCycle > 6) {
+	// animationCycle = 0;
+	// }
+	//
+	// incrementVelocityY((-acceleration) * deltaTime);
+	// }
+	//
+	//
+	// public void decelXToStop(float deltaTime) {
+	// if (getVelocityX() > 0) {
+	// if ((getVelocityX() - (deceleration * deltaTime)) < 0) {
+	// setVelocityX(0);
+	// } else {
+	// incrementVelocityX(-deceleration * deltaTime);
+	// }
+	// }
+	//
+	// if (getVelocityX() < 0) {
+	// if ((getVelocityX() + (deceleration * deltaTime)) > 0) {
+	// setVelocityX(0);
+	// } else {
+	// incrementVelocityX(deceleration * deltaTime);
+	// }
+	// }
+	//
+	// idleAnimation();
+	// }
+	//
+	//
+	// public void decelYToStop(float deltaTime) {
+	// if (getVelocityY() > 0) {
+	// if ((getVelocityY() - (deceleration * deltaTime)) < 0) {
+	// setVelocityY(0);
+	// } else {
+	// incrementVelocityY(-deceleration * deltaTime);
+	// }
+	// }
+	//
+	// if (getVelocityY() < 0) {
+	// if ((getVelocityY() + (deceleration * deltaTime)) > 0) {
+	// setVelocityY(0);
+	// } else {
+	// incrementVelocityY(deceleration * deltaTime);
+	// }
+	// }
+	//
+	// idleAnimation();
+	// }
 
-		if (Gdx.input.isKeyPressed(MuscovyGame.KEY_RIGHT) && Gdx.input.isKeyPressed(MuscovyGame.KEY_LEFT)) {
-			decelXToStop(deltaTime);
-		} else {
-			changeXVelocity(acceleration * deltaTime);
-		}
-	}
-
-
-	public void goLeft(float deltaTime) {
-		if (animationCycle > 10) {
-			animationCycle = 0;
-		}
-
-		changeXVelocity((-acceleration) * deltaTime);
-	}
-
-
-	public void goUp(float deltaTime) {
-		if (animationCycle > 6) {
-			animationCycle = 0;
-		}
-
-		if (Gdx.input.isKeyPressed(MuscovyGame.KEY_UP) && Gdx.input.isKeyPressed(MuscovyGame.KEY_DOWN)) {
-			decelYToStop(deltaTime);
-		} else {
-			changeYVelocity(acceleration * deltaTime);
-		}
-	}
-
-
-	public void goDown(float deltaTime) {
-		if (animationCycle > 6) {
-			animationCycle = 0;
-		}
-
-		changeYVelocity((-acceleration) * deltaTime);
-	}
-
-
-	public void decelXToStop(float deltaTime) {
-		if (getXVelocity() > 0) {
-			if ((getXVelocity() - (deceleration * deltaTime)) < 0) {
-				setXVelocity(0);
-			} else {
-				changeXVelocity(-deceleration * deltaTime);
-			}
-		}
-
-		if (getXVelocity() < 0) {
-			if ((getXVelocity() + (deceleration * deltaTime)) > 0) {
-				setXVelocity(0);
-			} else {
-				changeXVelocity(deceleration * deltaTime);
-			}
-		}
-
-		idleAnimation();
-	}
-
-
-	public void decelYToStop(float deltaTime) {
-		if (getYVelocity() > 0) {
-			if ((getYVelocity() - (deceleration * deltaTime)) < 0) {
-				setYVelocity(0);
-			} else {
-				changeYVelocity(-deceleration * deltaTime);
-			}
-		}
-
-		if (getYVelocity() < 0) {
-			if ((getYVelocity() + (deceleration * deltaTime)) > 0) {
-				setYVelocity(0);
-			} else {
-				changeYVelocity(deceleration * deltaTime);
-			}
-		}
-
-		idleAnimation();
-	}
-
-
-	public void changeXVelocity(float x) {
-		velocity.x += x;
-		clampVelocity();
-	}
-
-
-	public void changeYVelocity(float y) {
-		velocity.y += y;
-		clampVelocity();
-	}
-
-
-	private void clampVelocity() {
-		velocity.limit(maxSpeed);
-	}
+	//
+	// public void changeXVelocity(float x) {
+	// velocity.x += x;
+	// clampVelocity();
+	// }
+	//
+	//
+	// public void changeYVelocity(float y) {
+	// velocity.y += y;
+	// clampVelocity();
+	// }
 
 
-	public void resetMaxVelocity() {
-		maxSpeed = currentSpeed;
-	}
-
+	// public void resetMaxVelocity() {
+	// maxSpeed = currentSpeed;
+	// }
 
 	/**
 	 * Attack methods (only shots currently)
@@ -382,37 +392,36 @@ public class PlayerCharacter extends Collidable {
 	}
 
 
-	public float getXVelocity() {
-		return velocity.x;
-	}
-
-
-	public void setXVelocity(float x) {
-		velocity.x = x;
-		clampVelocity();
-	}
-
-
-	public float getYVelocity() {
-		return velocity.y;
-	}
-
-
-	public void setYVelocity(float y) {
-		velocity.y = y;
-		clampVelocity();
-	}
-
-
-	public void setMaxVelocity(float maxVelocity) {
-		maxSpeed = maxVelocity;
-	}
-
-
-	public float getMaxVelocity() {
-		return maxSpeed;
-	}
-
+	// public float getXVelocity() {
+	// return velocity.x;
+	// }
+	//
+	//
+	// public void setXVelocity(float x) {
+	// velocity.x = x;
+	// clampVelocity();
+	// }
+	//
+	//
+	// public float getYVelocity() {
+	// return velocity.y;
+	// }
+	//
+	//
+	// public void setYVelocity(float y) {
+	// velocity.y = y;
+	// clampVelocity();
+	// }
+	//
+	//
+	// public void setMaxVelocity(float maxVelocity) {
+	// maxSpeed = maxVelocity;
+	// }
+	//
+	//
+	// public float getMaxVelocity() {
+	// return maxSpeed;
+	// }
 
 	public Vector2 getShotDirection() {
 		return shotDirection;
