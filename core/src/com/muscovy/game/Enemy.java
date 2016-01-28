@@ -63,8 +63,6 @@ public class Enemy extends Collidable {
 
 		velocity = new Vector2(1, 0).setLength(maxSpeed);
 		rotateRandomDirection();
-
-		setSprite(sprite);
 	}
 
 
