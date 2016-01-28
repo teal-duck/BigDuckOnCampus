@@ -69,7 +69,17 @@
 
 - Dungeon room no longer inherits from OnscreenDrawable
 	- Only inherited before to use a sprite for the background
+
+- Possibly improved performance of sorting drawables
+	- Removed unnecessary operations
 	
+- Shop and item room now only have 1 neighbour
+
+- Created MoveableEntity class
+	- Enemy and player extend from it
+	- Should projectile extend it? It uses velocity but the collision is different
+	
+- Started to remake player movement
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side
@@ -79,6 +89,8 @@ Other possible things to do:
 - Should split the entity manager class up as it does a lot in 1 class
 - Randomise enemies more so they don't all shoot at the same time.
 - Animations.
+- Input handling sending messages to the player is a bit ugly
+	- Use input package from our game?
 
 
 Enemies spawn in bottom left/top right corner because that room is the shop or item room

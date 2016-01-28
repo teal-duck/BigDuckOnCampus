@@ -10,6 +10,7 @@ public class LevelParameters {
 	private int maxRooms;
 	private int startX;
 	private int startY;
+	private int roomCount;
 	private ObjectiveType objectiveType;
 
 
@@ -21,6 +22,7 @@ public class LevelParameters {
 		this.startX = startX;
 		this.startY = startY;
 		this.objectiveType = objectiveType;
+		roomCount = 0;
 	}
 
 
@@ -51,6 +53,16 @@ public class LevelParameters {
 
 	public ObjectiveType getObjectiveType() {
 		return objectiveType;
+	}
+
+
+	public int getRoomCount() {
+		return roomCount;
+	}
+
+
+	public void setRoomCount(int roomCount) {
+		this.roomCount = roomCount;
 	}
 
 

@@ -24,11 +24,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	private float hitboxYOffset = 0;
 
 
-	public Collidable(Sprite sprite, float x, float y) {
-		this(sprite, new Vector2(x, y));
-	}
-
-
 	public Collidable(Sprite sprite, Vector2 position) {
 		super(sprite, position);
 		initialisePosition(position);
@@ -39,7 +34,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	/**
 	 * Initialisation Methods
 	 */
-	// initialise X and Y for moving the collidable before the hitboxes are set up
+	// Initialise X and Y for moving the collidable before the hitboxes are set up
 	public void initialiseX(float x) {
 		super.setX(x);
 	}

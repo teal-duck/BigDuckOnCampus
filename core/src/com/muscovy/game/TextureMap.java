@@ -21,7 +21,6 @@ public class TextureMap {
 	 * @return
 	 */
 	private static final Texture getTextureFromFile(String filename) {
-		// System.out.println("Loading texture \"" + filename + "\"");
 		return new Texture(Gdx.files.internal(filename));
 	}
 
@@ -35,13 +34,10 @@ public class TextureMap {
 	 * @return
 	 */
 	public Texture loadTextureOverwriteOld(String textureName) {
-		// System.out.println("Loading (overwrite old) texture \"" + textureName + "\"");
-
 		Texture texture = TextureMap.getTextureFromFile(textureName);
 		Texture oldTexture = textures.put(textureName, texture);
 
 		if (oldTexture != null) {
-			// System.out.println("\tTexture \"" + textureName + "\" already existed, disposing");
 			oldTexture.dispose();
 		}
 
@@ -56,7 +52,6 @@ public class TextureMap {
 	 * @return texture associated with this name
 	 */
 	public Texture getTextureOrLoadFile(String textureName) {
-		// System.out.println("Getting texture \"" + textureName + "\"");
 		Texture texture = textures.get(textureName);
 
 		if (texture != null) {
@@ -73,14 +68,10 @@ public class TextureMap {
 	 * @param textureName
 	 */
 	public void disposeTexture(String textureName) {
-		// System.out.println("Disposing texture: \"" + textureName + "\"");
 		Texture texture = textures.remove(textureName);
 		if (texture != null) {
 			texture.dispose();
 		}
-		// else {
-		// System.out.println("\tTexture to dispose is null");
-		// }
 	}
 
 
@@ -88,7 +79,6 @@ public class TextureMap {
 	 * Disposes of all textures in the map and empties the map.
 	 */
 	public void disposeAllTextures() {
-		// System.out.println("Disposing all textures");
 		for (Texture texture : textures.values()) {
 			texture.dispose();
 		}

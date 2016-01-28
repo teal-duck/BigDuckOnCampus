@@ -13,27 +13,29 @@ public class Level {
 	 * Really simple container class for the room array and objective. Only 1 objective implemented atm, so it's not
 	 * used, but yeah
 	 */
+	private final ObjectiveType objectiveType;
+	private final LevelType levelType;
 	public DungeonRoom[][] levelArray;
 	public boolean[][] visitedRooms;
-	private ObjectiveType objectiveType;
-	private LevelType levelType;
 	private boolean completed = false;
 
-	private int roomsWide;
-	private int roomsHigh;
-	private int startX;
-	private int startY;
+	private final int roomsWide;
+	private final int roomsHigh;
+	private final int startX;
+	private final int startY;
+	private final int roomCount;
 
 
 	public Level(DungeonRoom[][] levelArray, LevelType levelType, LevelParameters levelParameters) {
 		this.levelArray = levelArray;
+		this.levelType = levelType;
 
 		roomsHigh = levelParameters.getRoomsHigh();
 		roomsWide = levelParameters.getRoomsWide();
 		startX = levelParameters.getStartX();
 		startY = levelParameters.getStartY();
 		objectiveType = levelParameters.getObjectiveType();
-		this.levelType = levelType;
+		roomCount = levelParameters.getRoomCount();
 
 		visitedRooms = new boolean[roomsHigh][roomsWide];
 		for (int y = 0; y < visitedRooms.length; y += 1) {
@@ -54,11 +56,12 @@ public class Level {
 		}
 		return true;
 	}
-	
+
+
 	public boolean areAllRoomsVisited() {
 		for (int y = 0; y < levelArray.length; y++) {
 			for (int x = 0; x < levelArray[0].length; x++) {
-				if ((getRoom(x, y) != null) && !this.isRoomVisited(x, y)) {
+				if ((getRoom(x, y) != null) && !isRoomVisited(x, y)) {
 					return false;
 				}
 			}
@@ -187,5 +190,10 @@ public class Level {
 
 	public int getStartY() {
 		return startY;
+	}
+
+
+	public int getRoomCount() {
+		return roomCount;
 	}
 }
