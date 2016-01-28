@@ -502,8 +502,7 @@ public class EntityManager {
 			}
 			break;
 		case KILL_ENEMIES:
-			// TODO: Should kill all enemies require visiting every room as well?
-			if (level.areAllEnemiesDead()) {
+			if (level.areAllEnemiesDead() && level.areAllRoomsVisited()) {
 				completed = true;
 			}
 			break;
@@ -614,5 +613,4 @@ public class EntityManager {
 	public PlayerCharacter getPlayer() {
 		return playerCharacter;
 	}
-
 }
