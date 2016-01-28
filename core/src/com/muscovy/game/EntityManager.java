@@ -571,7 +571,7 @@ public class EntityManager {
 			}
 			break;
 		case KILL_ENEMIES:
-			if (level.areAllEnemiesDead()) {
+			if (level.areAllEnemiesDead() && level.areAllRoomsVisited()) {
 				completed = true;
 			}
 			break;

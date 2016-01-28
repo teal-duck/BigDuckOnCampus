@@ -54,6 +54,17 @@ public class Level {
 		}
 		return true;
 	}
+	
+	public boolean areAllRoomsVisited() {
+		for (int y = 0; y < levelArray.length; y++) {
+			for (int x = 0; x < levelArray[0].length; x++) {
+				if ((getRoom(x, y) != null) && !this.isRoomVisited(x, y)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 
 	public void markRoomVisited(int roomX, int roomY) {
