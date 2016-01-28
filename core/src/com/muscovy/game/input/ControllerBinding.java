@@ -1,6 +1,10 @@
 package com.muscovy.game.input;
 
 
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.PovDirection;
+
+
 /**
  * Describes a binding to some action on a gamepad.
  */
