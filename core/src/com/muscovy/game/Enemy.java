@@ -251,7 +251,7 @@ public class Enemy extends MoveableEntity {
 	}
 
 
-	public boolean lifeOver() {
+	public boolean isLifeOver() {
 		return dead;
 	}
 
