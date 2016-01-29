@@ -25,16 +25,27 @@ public class ControlMapCreator {
 	 * @return the control map after changes
 	 */
 	public static ControlMap applyDefaultKeyControls(ControlMap controlMap) {
-		controlMap.addKeyForAction(Action.RIGHT, Keys.D, Keys.RIGHT);
-		controlMap.addKeyForAction(Action.LEFT, Keys.A, Keys.LEFT);
-		controlMap.addKeyForAction(Action.UP, Keys.W, Keys.UP);
-		controlMap.addKeyForAction(Action.DOWN, Keys.S, Keys.DOWN);
-		controlMap.addKeyForAction(Action.SPRINT, Keys.SHIFT_LEFT, Keys.SHIFT_RIGHT);
-		controlMap.addKeyForAction(Action.FIRE, Keys.SPACE);
-		controlMap.addKeyForAction(Action.RELOAD, Keys.R);
+		// controlMap.addKeyForAction(Action.RIGHT, Keys.D, Keys.RIGHT);
+		// controlMap.addKeyForAction(Action.LEFT, Keys.A, Keys.LEFT);
+		// controlMap.addKeyForAction(Action.UP, Keys.W, Keys.UP);
+		// controlMap.addKeyForAction(Action.DOWN, Keys.S, Keys.DOWN);
+		// controlMap.addKeyForAction(Action.SPRINT, Keys.SHIFT_LEFT, Keys.SHIFT_RIGHT);
+		// controlMap.addKeyForAction(Action.FIRE, Keys.SPACE);
+		// controlMap.addKeyForAction(Action.RELOAD, Keys.R);
+
+		controlMap.addKeyForAction(Action.WALK_UP, Keys.W);
+		controlMap.addKeyForAction(Action.WALK_RIGHT, Keys.D);
+		controlMap.addKeyForAction(Action.WALK_DOWN, Keys.S);
+		controlMap.addKeyForAction(Action.WALK_LEFT, Keys.A);
+
+		controlMap.addKeyForAction(Action.SHOOT_UP, Keys.UP);
+		controlMap.addKeyForAction(Action.SHOOT_RIGHT, Keys.RIGHT);
+		controlMap.addKeyForAction(Action.SHOOT_DOWN, Keys.DOWN);
+		controlMap.addKeyForAction(Action.SHOOT_LEFT, Keys.LEFT);
+
 		controlMap.addKeyForAction(Action.ENTER, Keys.ENTER);
-		controlMap.addKeyForAction(Action.PAUSE, Keys.ESCAPE, Keys.P);
-		controlMap.addKeyForAction(Action.BACK, Keys.BACKSPACE);
+		controlMap.addKeyForAction(Action.PAUSE, Keys.P);
+		controlMap.addKeyForAction(Action.ESCAPE, Keys.ESCAPE, Keys.BACKSPACE);
 
 		return controlMap;
 	}
@@ -49,32 +60,27 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultPs4Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default PS4 controls");
-		controlMap.addControllerForAction(Action.RIGHT, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_LEFT_X,
+		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_Y,
 				deadzone);
-		controlMap.addControllerForAction(Action.LEFT, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_X,
-				deadzone);
-		controlMap.addControllerForAction(Action.UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_Y,
-				deadzone);
-		controlMap.addControllerForAction(Action.DOWN, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_LEFT_Y,
-				deadzone);
-		controlMap.addControllerForAction(Action.SPRINT, ControllerBindingType.BUTTON, PS4.BUTTON_L1);
+		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				PS4.AXIS_LEFT_X, deadzone);
+		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				PS4.AXIS_LEFT_Y, deadzone);
+		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				PS4.AXIS_LEFT_X, deadzone);
 
-		controlMap.addControllerForAction(Action.LOOK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				PS4.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.LOOK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				PS4.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.LOOK_UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_RIGHT_Y,
-				deadzone);
-		controlMap.addControllerForAction(Action.LOOK_DOWN, ControllerBindingType.AXIS_POSITIVE,
+		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE,
 				PS4.AXIS_RIGHT_Y, deadzone);
-
-		controlMap.addControllerForAction(Action.FIRE, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_R2,
-				deadzone);
-		controlMap.addControllerForAction(Action.RELOAD, ControllerBindingType.BUTTON, PS4.BUTTON_R1);
+		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				PS4.AXIS_RIGHT_X, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				PS4.AXIS_RIGHT_Y, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				PS4.AXIS_RIGHT_X, deadzone);
 
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, PS4.BUTTON_CROSS);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, PS4.BUTTON_OPTIONS);
-		controlMap.addControllerForAction(Action.BACK, ControllerBindingType.BUTTON, PS4.BUTTON_CIRCLE);
+		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, PS4.BUTTON_CIRCLE);
 
 		return controlMap;
 	}
@@ -89,34 +95,38 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultXbox360Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default Xbox 360 controls");
-		controlMap.addControllerForAction(Action.RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_LEFT_X, deadzone);
-		controlMap.addControllerForAction(Action.LEFT, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_LEFT_X,
-				deadzone);
-		controlMap.addControllerForAction(Action.UP, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_LEFT_Y,
-				deadzone);
-		controlMap.addControllerForAction(Action.DOWN, ControllerBindingType.AXIS_POSITIVE, Xbox360.AXIS_LEFT_Y,
-				deadzone);
-		controlMap.addControllerForAction(Action.SPRINT, ControllerBindingType.BUTTON,
-				Xbox360.BUTTON_LEFT_BUMPER);
-
-		controlMap.addControllerForAction(Action.LOOK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.LOOK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.LOOK_UP, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_RIGHT_Y, deadzone);
-		controlMap.addControllerForAction(Action.LOOK_DOWN, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_RIGHT_Y, deadzone);
-
-		controlMap.addControllerForAction(Action.FIRE, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_RIGHT_TRIGGER, deadzone);
-		controlMap.addControllerForAction(Action.RELOAD, ControllerBindingType.BUTTON,
-				Xbox360.BUTTON_RIGHT_BUMPER);
-
-		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
-		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
-		controlMap.addControllerForAction(Action.BACK, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
+		// TODO: Xbox 360 controls
+		// controlMap.addControllerForAction(Action.RIGHT, ControllerBindingType.AXIS_POSITIVE,
+		// Xbox360.AXIS_LEFT_X, deadzone);
+		// controlMap.addControllerForAction(Action.LEFT, ControllerBindingType.AXIS_NEGATIVE,
+		// Xbox360.AXIS_LEFT_X,
+		// deadzone);
+		// controlMap.addControllerForAction(Action.UP, ControllerBindingType.AXIS_NEGATIVE,
+		// Xbox360.AXIS_LEFT_Y,
+		// deadzone);
+		// controlMap.addControllerForAction(Action.DOWN, ControllerBindingType.AXIS_POSITIVE,
+		// Xbox360.AXIS_LEFT_Y,
+		// deadzone);
+		// controlMap.addControllerForAction(Action.SPRINT, ControllerBindingType.BUTTON,
+		// Xbox360.BUTTON_LEFT_BUMPER);
+		//
+		// controlMap.addControllerForAction(Action.LOOK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+		// Xbox360.AXIS_RIGHT_X, deadzone);
+		// controlMap.addControllerForAction(Action.LOOK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+		// Xbox360.AXIS_RIGHT_X, deadzone);
+		// controlMap.addControllerForAction(Action.LOOK_UP, ControllerBindingType.AXIS_NEGATIVE,
+		// Xbox360.AXIS_RIGHT_Y, deadzone);
+		// controlMap.addControllerForAction(Action.LOOK_DOWN, ControllerBindingType.AXIS_POSITIVE,
+		// Xbox360.AXIS_RIGHT_Y, deadzone);
+		//
+		// controlMap.addControllerForAction(Action.FIRE, ControllerBindingType.AXIS_POSITIVE,
+		// Xbox360.AXIS_RIGHT_TRIGGER, deadzone);
+		// controlMap.addControllerForAction(Action.RELOAD, ControllerBindingType.BUTTON,
+		// Xbox360.BUTTON_RIGHT_BUMPER);
+		//
+		// controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
+		// controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
+		// controlMap.addControllerForAction(Action.BACK, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
 
 		return controlMap;
 	}

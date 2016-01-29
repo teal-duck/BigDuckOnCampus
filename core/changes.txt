@@ -81,6 +81,9 @@
 	
 - Started to remake player movement
 
+- Controls now use our control map from previous game
+
+
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side
 - Collision could maybe use our code from featherline york?
@@ -91,6 +94,7 @@ Other possible things to do:
 - Animations.
 - Input handling sending messages to the player is a bit ugly
 	- Use input package from our game?
+- Change the GameState enum to use LibGDX Screens?
 
 
 Enemies spawn in bottom left/top right corner because that room is the shop or item room
