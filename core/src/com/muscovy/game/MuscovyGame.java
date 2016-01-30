@@ -257,15 +257,9 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		// Dungeon
 		dungeonGUI = new GUI();
-		//guiDungeonSprite.setTexture(textureMap.getTextureOrLoadFile(AssetLocations.GUI_FRAME));
-		//guiDungeonSprite.setX(0);
-		//guiDungeonSprite.setY(0);
-		//dungeonGUI.addElement(guiDungeonSprite);
-		//font = new BitmapFont();
 		font = new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT), Gdx.files.internal(AssetLocations.FONT_PNG), false);
-		//font.setColor(Color.BLACK);
 
-		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT ); // 900;
+		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT ); 
 		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), font, 20,
 				dungeonGuiY - 20);
 		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), font, 20,

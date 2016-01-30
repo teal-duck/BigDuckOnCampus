@@ -185,7 +185,6 @@ public class EntityManager {
 		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
 		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
 		final float tileSize = MuscovyGame.TILE_SIZE;
-		final float worldHeight = windowHeight;
 
 		Texture doorTexture;
 		if (currentDungeonRoom.hasUpDoor()) {
@@ -207,13 +206,13 @@ public class EntityManager {
 			batch.draw(doorTexture,
 					currentDungeonRoom.getRightDoor().getX()
 							+ (currentDungeonRoom.getRightDoor().getWidth() - tileSize),
-					(worldHeight - rightDoorTextureOpen.getWidth()) / 2);
+					(windowHeight - rightDoorTextureOpen.getWidth()) / 2);
 		}
 		if (currentDungeonRoom.hasLeftDoor()) {
 			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen
 					: leftDoorTextureClosed);
 			batch.draw(doorTexture, currentDungeonRoom.getLeftDoor().getX() + 4,
-					(worldHeight - leftDoorTextureOpen.getWidth()) / 2);
+					(windowHeight - leftDoorTextureOpen.getWidth()) / 2);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
@@ -238,7 +237,7 @@ public class EntityManager {
 
 		if (getCurrentLevel().isCompleted()) {
 			font.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
-					worldHeight - 69);
+					windowHeight - 69);
 		}
 
 		// font.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float)
