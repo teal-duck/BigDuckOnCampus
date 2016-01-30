@@ -16,11 +16,15 @@ public class Item extends Collidable {
 	 */
 
 	private ItemType type;
+	private boolean lifeOver;
+	
+	private static final int HEALTHPACK_REGEN = 10;
 
 
 	public Item(Sprite sprite, Vector2 position, ItemType type) {
 		super(sprite, position);
 		this.type = type;
+		lifeOver = false;
 	}
 
 
@@ -32,9 +36,21 @@ public class Item extends Collidable {
 	public boolean applyToPlayer(PlayerCharacter playerCharacter) {
 		switch (type) {
 		case HEALTH:
-			// if (!playerCharacter.)
+			return playerCharacter.gainHealth(HEALTHPACK_REGEN);
 		default:
 			return false;
 		}
 	}
+	
+	
+	public void setLifeOver() {
+		lifeOver = true;
+	}
+
+
+	public boolean isLifeOver() {
+		return lifeOver;
+	}
+	
+	
 }
