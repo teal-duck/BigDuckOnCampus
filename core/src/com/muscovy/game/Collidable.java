@@ -104,7 +104,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
-		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE + 32);
 	}
 
 
@@ -118,7 +118,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
-		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE + 32);
 	}
 
 

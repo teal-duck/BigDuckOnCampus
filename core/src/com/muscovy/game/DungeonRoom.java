@@ -70,23 +70,20 @@ public class DungeonRoom {
 	private void initialiseWalls() {
 		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
 		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
-		final float tileSize = MuscovyGame.TILE_SIZE;
-		final float halfTileSize = tileSize / 2;
-		final float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
-		final float worldHeight = windowHeight - topGuiSize;
-
+		final float wall = MuscovyGame.WALL_WIDTH;
+		final float projectileHeight = 2 * wall / 3;
+		
 		walls = new Rectangle[4];
-		walls[0] = new Rectangle(0, 0, windowWidth, tileSize);
-		walls[1] = new Rectangle(0, 0, tileSize, windowHeight - topGuiSize);
-		walls[2] = new Rectangle(windowWidth - tileSize, 0, tileSize, windowHeight - topGuiSize);
-		walls[3] = new Rectangle(0, worldHeight - tileSize, windowWidth, tileSize);
+		walls[0] = new Rectangle(0, 0, windowWidth, wall); //bottom
+		walls[1] = new Rectangle(0, 0, wall, windowHeight); //left
+		walls[2] = new Rectangle(windowWidth - wall, 0, wall, windowHeight);  //right
+		walls[3] = new Rectangle(0, windowHeight - wall, windowWidth, wall); //top
 
 		projectileWalls = new Rectangle[4];
-		projectileWalls[0] = new Rectangle(0, 0, windowWidth, halfTileSize);
-		projectileWalls[1] = new Rectangle(0, 0, halfTileSize, windowHeight - topGuiSize);
-		projectileWalls[2] = new Rectangle(windowWidth - halfTileSize, 0, halfTileSize,
-				windowHeight - topGuiSize);
-		projectileWalls[3] = new Rectangle(0, worldHeight - halfTileSize, windowWidth, halfTileSize);
+		projectileWalls[0] = new Rectangle(0, 0, windowWidth, projectileHeight );
+		projectileWalls[1] = new Rectangle(0, 0, projectileHeight , windowHeight);
+		projectileWalls[2] = new Rectangle(windowWidth - projectileHeight , 0, projectileHeight , windowHeight);
+		projectileWalls[3] = new Rectangle(0, windowHeight - projectileHeight , windowWidth, projectileHeight);
 
 	}
 
@@ -273,17 +270,17 @@ public class DungeonRoom {
 	public void initialiseDoors() {
 		if (hasUpDoor) {
 			upDoorRect = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2,
-					MuscovyGame.WORLD_HEIGHT - doorSize, doorSize, doorSize);
+					MuscovyGame.WINDOW_HEIGHT - (doorSize + MuscovyGame.WALL_EDGE), doorSize, doorSize);
 		}
 		if (hasDownDoor) {
-			downDoorRect = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2, 0, doorSize, doorSize);
+			downDoorRect = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2, 32, doorSize, doorSize);
 		}
 		if (hasRightDoor) {
-			rightDoorRect = new Rectangle(MuscovyGame.WINDOW_WIDTH - doorSize,
-					(MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
+			rightDoorRect = new Rectangle(MuscovyGame.WINDOW_WIDTH -  (doorSize + MuscovyGame.WALL_EDGE),
+					(MuscovyGame.WINDOW_HEIGHT - doorSize) / 2, doorSize, doorSize);
 		}
 		if (hasLeftDoor) {
-			leftDoorRect = new Rectangle(0, (MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
+			leftDoorRect = new Rectangle(32, (MuscovyGame.WINDOW_HEIGHT - doorSize) / 2, doorSize, doorSize);
 		}
 	}
 

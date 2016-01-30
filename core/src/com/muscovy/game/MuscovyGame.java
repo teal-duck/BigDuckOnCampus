@@ -59,12 +59,12 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 	private BitmapFont gameOverFont;
 	private BitmapFont loading;
 
-	public static final float WINDOW_WIDTH = 1280;
-	public static final float WINDOW_HEIGHT = 816; // 960;
+	public static final float WINDOW_WIDTH = 1344;
+	public static final float WINDOW_HEIGHT = 832; 
 	public static final int TILE_SIZE = 64;
-	public static final float WORLD_HEIGHT = 768; // WINDOW_HEIGHT - TOP_GUI_SIZE; // 768
-	public static final float TOP_GUI_SIZE = MuscovyGame.WINDOW_HEIGHT - MuscovyGame.WORLD_HEIGHT; // 192; //
-													// TILE_SIZE * 3
+	public  static final int WALL_WIDTH = 96;
+	public  static final int WALL_EDGE = WALL_WIDTH - TILE_SIZE;
+
 
 	private GameState gameState;
 	private LevelType mapSelected;
@@ -142,8 +142,8 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			// These work by referencing the data you want to change with the first string you pass it
 			dungeonGUI.editData("PlayerHealth", "Health: " + MathUtils.floor(playerCharacter.getHealth()));
 			dungeonGUI.editData("PlayerScore", "Score: " + playerCharacter.getScore());
-			dungeonGUI.render(batch);
 			entityManager.render(deltaTime, batch);
+			dungeonGUI.render(batch);
 			batchEnded = true;
 			batch.end();
 			entityManager.renderMapOverlay(camera);
@@ -155,6 +155,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(),
 					playerCharacter.getY());
 			pauseGUI.render(batch);
+			dungeonGUI.render(batch);
 			batchEnded = true;
 			batch.end();
 			entityManager.renderMapOverlay(camera);
@@ -214,18 +215,19 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 
 		// Dungeon
 		dungeonGUI = new GUI();
-		guiDungeonSprite.setTexture(textureMap.getTextureOrLoadFile(AssetLocations.GUI_FRAME));
-		guiDungeonSprite.setX(0);
-		guiDungeonSprite.setY(0);
-		dungeonGUI.addElement(guiDungeonSprite);
-		font = new BitmapFont();
-		font.setColor(Color.BLACK);
+		//guiDungeonSprite.setTexture(textureMap.getTextureOrLoadFile(AssetLocations.GUI_FRAME));
+		//guiDungeonSprite.setX(0);
+		//guiDungeonSprite.setY(0);
+		//dungeonGUI.addElement(guiDungeonSprite);
+		//font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT), Gdx.files.internal(AssetLocations.FONT_PNG), false);
+		//font.setColor(Color.BLACK);
 
-		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT - 16); // 900;
-		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), font, 400,
-				dungeonGuiY);
-		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), font, 650,
-				dungeonGuiY);
+		int dungeonGuiY = (int) (MuscovyGame.WINDOW_HEIGHT ); // 900;
+		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), font, 20,
+				dungeonGuiY - 20);
+		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), font, 20,
+				dungeonGuiY - 50);
 
 		// GameOver
 		gameOverFont = new BitmapFont();
@@ -676,7 +678,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
 			playerCharacter.setVelocityX(0);
 			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
-			playerCharacter.setHitboxCentre(64 + playerCharacter.getCircleHitbox().radius,
+			playerCharacter.setHitboxCentre(WALL_WIDTH + playerCharacter.getCircleHitbox().radius,
 					playerCharacter.getCircleHitbox().y);
 		}
 
@@ -685,7 +687,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 			playerCharacter.setVelocityY(0);
 			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
-					64 + playerCharacter.getCircleHitbox().radius);
+					WALL_WIDTH + playerCharacter.getCircleHitbox().radius);
 		}
 	}
 
@@ -707,7 +709,7 @@ public class MuscovyGame extends ApplicationAdapter implements ApplicationListen
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToDownRoom();
 				playerCharacter.setY(
-						MuscovyGame.WORLD_HEIGHT - playerCharacter.getHeight() - doorOffset);
+						MuscovyGame.WINDOW_HEIGHT - playerCharacter.getHeight() - doorOffset);
 			}
 		}
 

@@ -185,8 +185,7 @@ public class EntityManager {
 		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
 		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
 		final float tileSize = MuscovyGame.TILE_SIZE;
-		final float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
-		final float worldHeight = windowHeight - topGuiSize;
+		final float worldHeight = windowHeight;
 
 		Texture doorTexture;
 		if (currentDungeonRoom.hasUpDoor()) {

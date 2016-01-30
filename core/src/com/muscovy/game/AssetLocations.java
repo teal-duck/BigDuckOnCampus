@@ -36,6 +36,10 @@ public class AssetLocations {
 	public static final String HES_EAST_MAP = "hesEastMap.png";
 
 	public static final String BULLET = "breadBullet.png";
+	
+	public static final String FONT_FNT = "Fonts/gamefont.fnt";
+	public static final String FONT_PNG = "Fonts/gamefont.png";
+	
 
 
 	public static String getLevelBackground(LevelType levelType) {
