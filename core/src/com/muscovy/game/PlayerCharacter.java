@@ -3,12 +3,13 @@ package com.muscovy.game;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.input.Action;
+import com.muscovy.game.input.ControlMap;
 
 
 /**
@@ -60,10 +61,18 @@ public class PlayerCharacter extends MoveableEntity {
 	// private ArrayList<Texture> rightWalkCycle;
 	// private ArrayList<Texture> upWalkCycle;
 
+	private ControlMap controlMap;
+	private Controller controller;
 
-	public PlayerCharacter(Sprite playerSprite, Vector2 position, TextureMap textureMap) {
+	private boolean firing = false;
+
+
+	public PlayerCharacter(Sprite playerSprite, Vector2 position, TextureMap textureMap, ControlMap controlMap,
+			Controller controller) {
 		super(playerSprite, position);
 		this.textureMap = textureMap;
+		this.controlMap = controlMap;
+		this.controller = controller;
 
 		setMaxSpeed(PlayerCharacter.MAX_SPEED);
 		setCurrentSpeed(getMaxSpeed());
@@ -107,11 +116,22 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	public boolean isFiring() {
+		return firing;
+	}
+
+
+	public void setFiring(boolean firing) {
+		this.firing = firing;
+	}
+
+
 	@Override
 	public void selfUpdate(float deltaTime) {
 		if (invincible) {
 			invincibilityUpdate(deltaTime);
 		}
+
 		if (currentHealth > maxHealth) {
 			currentHealth = maxHealth;
 		}
@@ -120,31 +140,47 @@ public class PlayerCharacter extends MoveableEntity {
 
 	@Override
 	public void movementLogic(float deltaTime) {
-		float dx = 0;
-		float dy = 0;
+		float rightState = controlMap.getStateForAction(Action.WALK_RIGHT, controller);
+		float leftState = controlMap.getStateForAction(Action.WALK_LEFT, controller);
+		float upState = controlMap.getStateForAction(Action.WALK_UP, controller);
+		float downState = controlMap.getStateForAction(Action.WALK_DOWN, controller);
 
-		if (Gdx.input.isKeyPressed(Keys.W)) {
-			dy += 1;
-		}
-		if (Gdx.input.isKeyPressed(Keys.S)) {
-			dy -= 1;
-		}
-		if (Gdx.input.isKeyPressed(Keys.A)) {
-			dx -= 1;
-		}
-		if (Gdx.input.isKeyPressed(Keys.D)) {
-			dx += 1;
+		float dx = rightState - leftState;
+		float dy = upState - downState;
+
+		Vector2 velocity = new Vector2(dx, dy);
+		velocity.limit(1);
+		setVelocity(velocity);
+
+		float shootRightState = controlMap.getStateForAction(Action.SHOOT_RIGHT, controller);
+		float shootLeftState = controlMap.getStateForAction(Action.SHOOT_LEFT, controller);
+		float shootUpState = controlMap.getStateForAction(Action.SHOOT_UP, controller);
+		float shootDownState = controlMap.getStateForAction(Action.SHOOT_DOWN, controller);
+
+		System.out.println("Shoot: up/down: (" + shootUpState + ", " + shootDownState + "); left/right: ("
+				+ shootLeftState + ", " + shootRightState + ")");
+
+		float shootDX = shootRightState - shootLeftState;
+		float shootDY = shootUpState - shootDownState;
+
+		int sx = 0;
+		int sy = 0;
+
+		if (Math.abs(shootDX) > Math.abs(shootDY)) {
+			sx = (int) Math.signum(shootDX);
+			sy = 0;
+		} else {
+			sx = 0;
+			sy = (int) Math.signum(shootDY);
 		}
 
-		float dd = (dx * dx) + (dy * dy);
-		if (dd != 0) {
-			dd = (float) Math.sqrt(dd);
-
-			dx /= dd;
-			dy /= dd;
+		if ((sx != 0) || (sy != 0)) {
+			setFiring(true);
+			setShotDirection(sx, sy);
+		} else {
+			setFiring(false);
 		}
 
-		setVelocity(dx, dy);
 	}
 
 	/**

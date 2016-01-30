@@ -38,7 +38,7 @@ public class EntityManager {
 	private BitmapFont font;
 	private PlayerCharacter playerCharacter;
 
-	// TODO: Only load 1 door texture and rotate when renderering
+	// TODO: Only load 1 door texture and rotate when rendering
 	private Texture upDoorTextureOpen;
 	private Texture downDoorTextureOpen;
 	private Texture rightDoorTextureOpen;

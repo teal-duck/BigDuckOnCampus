@@ -47,7 +47,7 @@ public class LevelGenerator {
 
 
 	private static DungeonRoom[][] setRandomRoomTo(DungeonRoom[][] dungeonRoomArray, int roomsWide, int roomsHigh,
-			RoomType roomType, int maxNeighbours, Random random) {
+			RoomType roomType, int maxNeighbours, Random random, LevelType levelType) {
 		ArrayList<Vector2> potentialBossRooms = new ArrayList<Vector2>();
 		for (int xPos = 0; xPos < roomsWide; xPos++) {
 			for (int yPos = 0; yPos < roomsHigh; yPos++) {
@@ -70,7 +70,7 @@ public class LevelGenerator {
 			int y = (int) randomPosition.y;
 			dungeonRoomArray[y][x].setRoomType(roomType);
 		} else {
-			System.out.println("No space to place room of type " + roomType);
+			System.out.println("No space to place room of type " + roomType + " in level " + levelType);
 		}
 
 		return dungeonRoomArray;
@@ -173,12 +173,14 @@ public class LevelGenerator {
 
 		// Place the boss room if the objective wants it
 		if (levelParameters.getObjectiveType() == ObjectiveType.BOSS) {
-			LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.BOSS, 1,
-					random);
+			LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.BOSS, 1, random,
+					levelType);
 		}
 
-		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.ITEM, 1, random);
-		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.SHOP, 1, random);
+		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.ITEM, 1, random,
+				levelType);
+		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.SHOP, 1, random,
+				levelType);
 
 		// // Place the item room
 		// boolean itemSet = false;

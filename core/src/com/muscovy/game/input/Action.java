@@ -5,5 +5,7 @@ package com.muscovy.game.input;
  * The possible actions that require binding to some input event.
  */
 public enum Action {
-	UP, DOWN, LEFT, RIGHT, SPRINT, ENTER, PAUSE, LOOK_UP, LOOK_DOWN, LOOK_LEFT, LOOK_RIGHT, FIRE, RELOAD, BACK;
+	WALK_UP, WALK_RIGHT, WALK_DOWN, WALK_LEFT, //
+	SHOOT_UP, SHOOT_RIGHT, SHOOT_DOWN, SHOOT_LEFT, //
+	PAUSE, ENTER, ESCAPE;
 }
