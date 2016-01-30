@@ -120,6 +120,7 @@ public class EntityManager {
 		obstacleList.clear();
 		projectileList.clear();
 		enemyList.clear();
+		itemList.clear();
 
 		currentDungeonRoom = dungeonRoom;
 		addNewObstacles(dungeonRoom.getObstacleList());
