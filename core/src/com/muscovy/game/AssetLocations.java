@@ -1,6 +1,8 @@
 package com.muscovy.game;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.muscovy.game.enums.LevelType;
 
 
@@ -43,6 +45,9 @@ public class AssetLocations {
 	public static final String TFTV_BACKGROUND = "accommodationAssets/tftvBackground.png";
 	public static final String COMPSCI_BACKGROUND = "accommodationAssets/csBackground.png";
 	public static final String RCH_BACKGROUND = "accommodationAssets/rchBackground.png";
+
+	public static final String FONT_FNT = "fonts/gamefont.fnt";
+	public static final String FONT_PNG = "fonts/gamefont.png";
 
 
 	public static String getLevelBackground(LevelType levelType) {
@@ -109,6 +114,12 @@ public class AssetLocations {
 		textureMap.getTextureOrLoadFile(AssetLocations.RCH_BACKGROUND);
 
 		return textureMap;
+	}
+
+
+	public static BitmapFont newFont() {
+		return new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT),
+				Gdx.files.internal(AssetLocations.FONT_PNG), false);
 	}
 
 

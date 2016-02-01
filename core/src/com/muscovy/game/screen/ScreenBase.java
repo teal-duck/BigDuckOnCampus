@@ -150,12 +150,12 @@ public abstract class ScreenBase implements Screen {
 	}
 
 
-	public int getWorldHeight() {
-		return game.getWorldHeight();
+	public int getWallWidth() {
+		return game.getWallWidth();
 	}
 
 
-	public int getTopGuiSize() {
-		return game.getTopGuiSize();
+	public int getWallEdge() {
+		return game.getWallEdge();
 	}
 }

@@ -16,7 +16,7 @@ public class LoadingScreen extends ScreenBase {
 
 	public LoadingScreen(MuscovyGame game) {
 		super(game);
-		font = new BitmapFont();
+		font = AssetLocations.newFont();
 		font.setColor(Color.WHITE);
 	}
 
@@ -47,7 +47,7 @@ public class LoadingScreen extends ScreenBase {
 		updateAndSetCamera();
 
 		batch.begin();
-		font.draw(batch, "RANDOMLY GENERATING LEVELS", (getWindowWidth() / 2) - 150, getWindowHeight() / 2);
+		font.draw(batch, "RANDOMLY GENERATING LEVELS", (getWindowWidth() / 2) - 250, getWindowHeight() / 2);
 		batch.end();
 	}
 

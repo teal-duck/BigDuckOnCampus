@@ -41,6 +41,10 @@ public class GameScreen extends ScreenBase {
 
 	private boolean pauseJustPressed = true;
 
+	private float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
+	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
+
 
 	public GameScreen(MuscovyGame game, Level level) {
 		super(game);
@@ -60,7 +64,7 @@ public class GameScreen extends ScreenBase {
 		guiDungeonSprite.setY(0);
 		dungeonGUI.addElement(guiDungeonSprite);
 
-		guiFont = new BitmapFont();
+		guiFont = AssetLocations.newFont();
 		guiFont.setColor(Color.BLACK);
 
 		int dungeonGuiY = getWindowHeight() - 16; // 900;
@@ -69,7 +73,7 @@ public class GameScreen extends ScreenBase {
 		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont, 650,
 				dungeonGuiY);
 
-		pauseFont = new BitmapFont();
+		pauseFont = AssetLocations.newFont();
 		pauseFont.setColor(Color.RED);
 		pauseGUI = new GUI();
 		pauseGUI.addData("Pause", "PAUSE", pauseFont, getWindowWidth() / 2, 720 / 2);
@@ -87,7 +91,7 @@ public class GameScreen extends ScreenBase {
 		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 
 		float playerStartX = getWindowWidth() / 2;
-		float playerStartY = getWorldHeight() / 2;
+		float playerStartY = getWindowHeight() / 2;
 
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
 		playerCharacter = new PlayerCharacter(getGame(), playerSprite, playerStartPosition, getControlMap(),
@@ -225,11 +229,6 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 	}
-
-
-	private float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
 
 
 	/**
@@ -448,7 +447,7 @@ public class GameScreen extends ScreenBase {
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
 			playerCharacter.setVelocityX(0);
 			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
-			playerCharacter.setHitboxCentre(64 + playerCharacter.getCircleHitbox().radius,
+			playerCharacter.setHitboxCentre(getWallWidth() + playerCharacter.getCircleHitbox().radius,
 					playerCharacter.getCircleHitbox().y);
 		}
 
@@ -457,7 +456,7 @@ public class GameScreen extends ScreenBase {
 			playerCharacter.setVelocityY(0);
 			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
-					64 + playerCharacter.getCircleHitbox().radius);
+					getWallWidth() + playerCharacter.getCircleHitbox().radius);
 		}
 	}
 
@@ -482,7 +481,7 @@ public class GameScreen extends ScreenBase {
 					&& (getStateForAction(Action.WALK_DOWN) > 0)) {
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToDownRoom();
-				playerCharacter.setY(getWorldHeight() - playerCharacter.getHeight() - doorOffset);
+				playerCharacter.setY(getWindowHeight() - playerCharacter.getHeight() - doorOffset);
 			}
 		}
 

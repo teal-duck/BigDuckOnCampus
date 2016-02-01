@@ -64,7 +64,7 @@ public class EntityManager {
 		projectileList = new ArrayList<Projectile>();
 		itemList = new ArrayList<Item>();
 
-		levelCompleteFont = new BitmapFont();
+		levelCompleteFont = AssetLocations.newFont();
 		levelCompleteFont.setColor(Color.WHITE);
 
 		currentDungeonRoom = null;
@@ -157,8 +157,8 @@ public class EntityManager {
 		batch.draw(currentDungeonRoom.getBackgroundTexture(), 0, 0);
 
 		final int windowWidth = game.getWindowWidth();
+		final int windowHeight = game.getWindowHeight();
 		final int tileSize = game.getTileSize();
-		final int worldHeight = game.getWorldHeight();
 
 		Texture doorTexture;
 		if (currentDungeonRoom.hasUpDoor()) {
@@ -182,14 +182,14 @@ public class EntityManager {
 			batch.draw(doorTexture,
 					currentDungeonRoom.getRightDoor().getX()
 							+ (currentDungeonRoom.getRightDoor().getWidth() - tileSize),
-					(worldHeight - rightDoorTextureOpen.getWidth()) / 2);
+					(windowHeight - rightDoorTextureOpen.getWidth()) / 2);
 		}
 
 		if (currentDungeonRoom.hasLeftDoor()) {
 			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen
 					: leftDoorTextureClosed);
 			batch.draw(doorTexture, currentDungeonRoom.getLeftDoor().getX() + 4,
-					(worldHeight - leftDoorTextureOpen.getWidth()) / 2);
+					(windowHeight - leftDoorTextureOpen.getWidth()) / 2);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
@@ -214,7 +214,7 @@ public class EntityManager {
 
 		if (level.isCompleted()) {
 			levelCompleteFont.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",
-					(windowWidth / 2) - 200, worldHeight - 69);
+					(windowWidth / 2) - 200, windowHeight - 69);
 		}
 	}
 

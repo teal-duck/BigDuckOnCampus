@@ -21,17 +21,18 @@ public class MuscovyGame extends Game {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private TextureMap textureMap;
+
 	private Levels levels;
 	private Random random;
 
 	private ControlMap controlMap;
 	private Controller controller;
 
-	private static final int WINDOW_WIDTH = 1280;
-	private static final int WINDOW_HEIGHT = 816; // 960;
+	private static final int WINDOW_WIDTH = 1344; // 1280;
+	private static final int WINDOW_HEIGHT = 832; // 816; // 960;
 	private static final int TILE_SIZE = 64;
-	private static final int WORLD_HEIGHT = 768; // WINDOW_HEIGHT - TOP_GUI_SIZE; // 768
-	private static final int TOP_GUI_SIZE = MuscovyGame.WINDOW_HEIGHT - MuscovyGame.WORLD_HEIGHT; // 192;
+	private static final int WALL_EDGE = 32; // WALL_WIDTH - TILE_SIZE;
+	private static final int WALL_WIDTH = MuscovyGame.TILE_SIZE + MuscovyGame.WALL_EDGE; // 96;
 
 
 	@Override
@@ -134,12 +135,12 @@ public class MuscovyGame extends Game {
 	}
 
 
-	public int getWorldHeight() {
-		return MuscovyGame.WORLD_HEIGHT;
+	public int getWallWidth() {
+		return MuscovyGame.WALL_WIDTH;
 	}
 
 
-	public int getTopGuiSize() {
-		return MuscovyGame.TOP_GUI_SIZE;
+	public int getWallEdge() {
+		return MuscovyGame.WALL_EDGE;
 	}
 }

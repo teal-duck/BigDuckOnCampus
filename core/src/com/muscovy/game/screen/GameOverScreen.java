@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.muscovy.game.AssetLocations;
 import com.muscovy.game.GUI;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.input.Action;
@@ -25,7 +26,7 @@ public class GameOverScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
-		gameOverFont = new BitmapFont();
+		gameOverFont = AssetLocations.newFont();
 		gameOverFont.setColor(Color.RED);
 
 		gui = new GUI();

@@ -73,23 +73,26 @@ public class DungeonRoom {
 	private void initialiseWalls() {
 		final int windowWidth = game.getWindowWidth();
 		final int windowHeight = game.getWindowHeight();
-		final int tileSize = game.getTileSize();
-		final float halfTileSize = tileSize / 2f;
-		final int topGuiSize = game.getTopGuiSize();
-		final int worldHeight = game.getWorldHeight();
+		// final int tileSize = game.getTileSize();
+		// final float halfTileSize = tileSize / 2f;
+		// final int topGuiSize = game.getTopGuiSize();
+		// final int worldHeight = game.getWorldHeight();
+		final int wallWidth = game.getWallWidth();
+		final int projectileWallWidth = (2 * wallWidth) / 3;
 
 		walls = new Rectangle[4];
-		walls[0] = new Rectangle(0, 0, windowWidth, tileSize);
-		walls[1] = new Rectangle(0, 0, tileSize, windowHeight - topGuiSize);
-		walls[2] = new Rectangle(windowWidth - tileSize, 0, tileSize, windowHeight - topGuiSize);
-		walls[3] = new Rectangle(0, worldHeight - tileSize, windowWidth, tileSize);
+		walls[0] = new Rectangle(0, 0, windowWidth, wallWidth); // bottom
+		walls[1] = new Rectangle(0, 0, wallWidth, windowHeight); // left
+		walls[2] = new Rectangle(windowWidth - wallWidth, 0, wallWidth, windowHeight); // right
+		walls[3] = new Rectangle(0, windowHeight - wallWidth, windowWidth, wallWidth); // top
 
 		projectileWalls = new Rectangle[4];
-		projectileWalls[0] = new Rectangle(0, 0, windowWidth, halfTileSize);
-		projectileWalls[1] = new Rectangle(0, 0, halfTileSize, windowHeight - topGuiSize);
-		projectileWalls[2] = new Rectangle(windowWidth - halfTileSize, 0, halfTileSize,
-				windowHeight - topGuiSize);
-		projectileWalls[3] = new Rectangle(0, worldHeight - halfTileSize, windowWidth, halfTileSize);
+		projectileWalls[0] = new Rectangle(0, 0, windowWidth, projectileWallWidth);
+		projectileWalls[1] = new Rectangle(0, 0, projectileWallWidth, windowHeight);
+		projectileWalls[2] = new Rectangle(windowWidth - projectileWallWidth, 0, projectileWallWidth,
+				windowHeight);
+		projectileWalls[3] = new Rectangle(0, windowHeight - projectileWallWidth, windowWidth,
+				projectileWallWidth);
 	}
 
 
@@ -292,24 +295,26 @@ public class DungeonRoom {
 
 
 	private void createUpDoorRect() {
-		upDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, game.getWorldHeight() - doorSize,
-				doorSize, doorSize);
+		upDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2,
+				game.getWindowHeight() - (doorSize + game.getWallEdge()), doorSize, doorSize);
 	}
 
 
 	private void createDownDoorRect() {
-		downDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, 0, doorSize, doorSize);
+		downDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, game.getWallEdge(), doorSize,
+				doorSize);
 	}
 
 
 	private void createRightDoorRect() {
-		rightDoorRect = new Rectangle(game.getWindowWidth() - doorSize, (game.getWorldHeight() - doorSize) / 2,
-				doorSize, doorSize);
+		rightDoorRect = new Rectangle(game.getWindowWidth() - (doorSize + game.getWallEdge()),
+				(game.getWindowHeight() - doorSize) / 2, doorSize, doorSize);
 	}
 
 
 	private void createLeftDoorRect() {
-		leftDoorRect = new Rectangle(0, (game.getWorldHeight() - doorSize) / 2, doorSize, doorSize);
+		leftDoorRect = new Rectangle(game.getWallEdge(), (game.getWindowHeight() - doorSize) / 2, doorSize,
+				doorSize);
 	}
 
 
