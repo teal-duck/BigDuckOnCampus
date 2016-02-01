@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -59,7 +58,6 @@ public class EntityManager {
 	private Texture leftDoorTextureClosed;
 
 	private ShapeRenderer shapeRenderer;
-	private BitmapFont levelCompleteFont;
 
 
 	public EntityManager(MuscovyGame game, Level level) {
@@ -71,9 +69,6 @@ public class EntityManager {
 		enemyList = new ArrayList<Enemy>();
 		projectileList = new ArrayList<Projectile>();
 		itemList = new ArrayList<Item>();
-
-		levelCompleteFont = AssetLocations.newFont();
-		levelCompleteFont.setColor(Color.WHITE);
 
 		currentDungeonRoom = null;
 		previousDungeonRoom = null;
@@ -211,11 +206,6 @@ public class EntityManager {
 				batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 			}
 		}
-
-		if (level.isCompleted()) {
-			levelCompleteFont.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",
-					(game.getWindowWidth() / 2) - 410, game.getWindowHeight() - 4);
-		}
 	}
 
 
@@ -232,25 +222,25 @@ public class EntityManager {
 		if (dungeonRoom.hasUpDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? upDoorTextureOpen : upDoorTextureClosed);
 			doorRectangle = dungeonRoom.getUpDoor();
-			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, scale, 1f);
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY + 1, scale, 1f);
 		}
 
 		if (dungeonRoom.hasDownDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? downDoorTextureOpen : downDoorTextureClosed);
 			doorRectangle = dungeonRoom.getDownDoor();
-			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, scale, 1f);
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY - 1, scale, 1f);
 		}
 
 		if (dungeonRoom.hasRightDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? rightDoorTextureOpen : rightDoorTextureClosed);
 			doorRectangle = dungeonRoom.getRightDoor();
-			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, 1f, scale);
+			renderDoor(batch, doorTexture, doorRectangle, translateX + 1, translateY, 1f, scale);
 		}
 
 		if (dungeonRoom.hasLeftDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen : leftDoorTextureClosed);
 			doorRectangle = dungeonRoom.getLeftDoor();
-			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, 1f, scale);
+			renderDoor(batch, doorTexture, doorRectangle, translateX - 1, translateY, 1f, scale);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
@@ -580,11 +570,6 @@ public class EntityManager {
 
 		level.setCompleted(completed);
 		return completed;
-	}
-
-
-	public void dispose() {
-		levelCompleteFont.dispose();
 	}
 
 

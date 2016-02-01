@@ -102,7 +102,7 @@ public class GUI {
 
 
 	/**
-	 * @param ID
+	 * @param id
 	 *                the ID you will use to refer to this particular piece of text when editing using editData,
 	 *                moveData, changeDataFont
 	 * @param data
@@ -114,27 +114,27 @@ public class GUI {
 	 * @param y
 	 *                Y location
 	 */
-	public void addData(String ID, String data, BitmapFont font, int x, int y) {
+	public void addData(String id, String data, BitmapFont font, int x, int y) {
 		/**
 		 * ID is used to identify the text you want to change using editData, so use something memorable (works
 		 * like a variable name)
 		 */
-		guiData.add(new GuiData(ID, font, data, x, y));
+		guiData.add(new GuiData(id, font, data, x, y));
 	}
 
 
-	public void editData(String ID, String newData) {
+	public void editData(String id, String newData) {
 		for (GuiData data : guiData) {
-			if (data.getID().matches(ID)) {
+			if (data.getID().matches(id)) {
 				data.setData(newData);
 			}
 		}
 	}
 
 
-	public void moveData(String ID, int x, int y) {
+	public void moveData(String id, int x, int y) {
 		for (GuiData data : guiData) {
-			if (data.getID().matches(ID)) {
+			if (data.getID().matches(id)) {
 				data.setX(x);
 				data.setY(y);
 			}
@@ -142,9 +142,9 @@ public class GUI {
 	}
 
 
-	public void changeDataFont(String ID, BitmapFont font) {
+	public void changeDataFont(String id, BitmapFont font) {
 		for (GuiData data : guiData) {
-			if (data.getID().matches(ID)) {
+			if (data.getID().matches(id)) {
 				data.setFont(font);
 			}
 		}
@@ -153,6 +153,26 @@ public class GUI {
 
 	public void addElement(Sprite sprite) {
 		guiElements.add(sprite);
+	}
+
+
+	public int getDataX(String id) {
+		for (GuiData data : guiData) {
+			if (data.getID().matches(id)) {
+				return data.getX();
+			}
+		}
+		return 0;
+	}
+
+
+	public int getDataY(String id) {
+		for (GuiData data : guiData) {
+			if (data.getID().matches(id)) {
+				return data.getY();
+			}
+		}
+		return 0;
 	}
 
 

@@ -100,6 +100,10 @@
 
 - For debug, render a grid over the world
 	- Shows that entities aren't spawning on tile coordinates correctly
+	- Fixed that bug
+	- Doors also weren't in the middle of the walls
+	
+- Put level name and objective on the screen
 
 
 Other possible things to do:

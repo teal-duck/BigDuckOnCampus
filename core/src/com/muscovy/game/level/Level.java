@@ -196,4 +196,14 @@ public class Level {
 	public int getRoomCount() {
 		return roomCount;
 	}
+
+
+	public String getName() {
+		return LevelType.getName(levelType);
+	}
+
+
+	public String getObjectiveName() {
+		return ObjectiveType.getName(objectiveType);
+	}
 }
