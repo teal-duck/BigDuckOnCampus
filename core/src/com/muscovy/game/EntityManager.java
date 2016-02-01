@@ -46,6 +46,8 @@ public class EntityManager {
 	private float MAX_TRANSITION_TIME = 0.3f;
 	private ArrayList<OnscreenDrawable> previousRenderList;
 	private Vector2 transitionDirection;
+	private int previousRoomX;
+	private int previousRoomY;
 
 	// TODO: Only load 1 door texture and rotate when rendering
 	private Texture upDoorTextureOpen;
@@ -122,6 +124,8 @@ public class EntityManager {
 			transitionTime = MAX_TRANSITION_TIME;
 			this.transitionDirection.set(transitionDirection);
 			previousDungeonRoom = currentDungeonRoom;
+			previousRoomX = currentRoomX;
+			previousRoomY = currentRoomY;
 		}
 
 		renderList.clear();
@@ -150,29 +154,33 @@ public class EntityManager {
 
 
 	public void moveToUpRoom() {
-		currentRoomY -= 1;
-		setCurrentDungeonRoom(currentRoomX, currentRoomY, new Vector2(0, 1));
+		int newY = currentRoomY - 1;
+		setCurrentDungeonRoom(currentRoomX, newY, new Vector2(0, 1));
+		currentRoomY = newY;
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveToRightRoom() {
-		currentRoomX += 1;
-		setCurrentDungeonRoom(currentRoomX, currentRoomY, new Vector2(1, 0));
+		int newX = currentRoomX + 1;
+		setCurrentDungeonRoom(newX, currentRoomY, new Vector2(1, 0));
+		currentRoomX = newX;
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveToLeftRoom() {
-		currentRoomX -= 1;
-		setCurrentDungeonRoom(currentRoomX, currentRoomY, new Vector2(-1, 0));
+		int newX = currentRoomX - 1;
+		setCurrentDungeonRoom(newX, currentRoomY, new Vector2(-1, 0));
+		currentRoomX = newX;
 		renderList.add(playerCharacter);
 	}
 
 
 	public void moveToDownRoom() {
-		currentRoomY += 1;
-		setCurrentDungeonRoom(currentRoomX, currentRoomY, new Vector2(0, -1));
+		int newY = currentRoomY + 1;
+		setCurrentDungeonRoom(currentRoomX, newY, new Vector2(0, -1));
+		currentRoomY = newY;
 		renderList.add(playerCharacter);
 	}
 
@@ -197,18 +205,19 @@ public class EntityManager {
 				float translateX = game.getWindowWidth() * transitionAmount * transitionDirection.x;
 				float translateY = game.getWindowHeight() * transitionAmount * transitionDirection.y;
 
-				renderDungeonRoom(batch, currentDungeonRoom, renderList, translateX, translateY);
+				renderDungeonRoom(batch, currentDungeonRoom, currentRoomX, currentRoomY, renderList,
+						translateX, translateY);
 				translateX -= transitionDirection.x * game.getWindowWidth();
 				translateY -= transitionDirection.y * game.getWindowHeight();
-				renderDungeonRoom(batch, previousDungeonRoom, previousRenderList, translateX,
-						translateY);
+				renderDungeonRoom(batch, previousDungeonRoom, previousRoomX, previousRoomY,
+						previousRenderList, translateX, translateY);
 			}
 		}
 
 		if (!isTransitioning()) {
 			// Timer used to give the player a few seconds to look at a room before attacking
 			roomTimer += deltaTime;
-			renderDungeonRoom(batch, currentDungeonRoom, renderList, 0, 0);
+			renderDungeonRoom(batch, currentDungeonRoom, currentRoomX, currentRoomY, renderList, 0, 0);
 
 			for (Projectile projectile : projectileList) {
 				batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
@@ -217,7 +226,7 @@ public class EntityManager {
 	}
 
 
-	private void renderDungeonRoom(SpriteBatch batch, DungeonRoom dungeonRoom,
+	private void renderDungeonRoom(SpriteBatch batch, DungeonRoom dungeonRoom, int roomX, int roomY,
 			ArrayList<OnscreenDrawable> renderList, float translateX, float translateY) {
 		renderList = sortDrawables(renderList);
 
@@ -225,62 +234,63 @@ public class EntityManager {
 
 		Texture doorTexture;
 		Rectangle doorRectangle;
-		final float scale = 1.8f;
+		final float doorScale = 1.8f;
 
 		if (dungeonRoom.hasUpDoor()) {
-			try {
-				if (dungeonRoom.areAllEnemiesDead() && level.getUpRoom(currentRoomX, currentRoomY).getRoomType().equals(RoomType.BOSS)) 
-					doorTexture = upDoorTextureBoss;
-				else if (dungeonRoom.areAllEnemiesDead()) 
-					doorTexture = upDoorTextureOpen;
-				else 
-					doorTexture = upDoorTextureClosed;
-			
-				doorRectangle = dungeonRoom.getUpDoor();
-				renderDoor(batch, doorTexture, doorRectangle, translateX, translateY + 1, scale, 1f);
-			} catch (NullPointerException e) {}
+			if (dungeonRoom.areAllEnemiesDead()
+					&& level.getUpRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)) {
+				doorTexture = upDoorTextureBoss;
+			} else if (dungeonRoom.areAllEnemiesDead()) {
+				doorTexture = upDoorTextureOpen;
+			} else {
+				doorTexture = upDoorTextureClosed;
+			}
+
+			doorRectangle = dungeonRoom.getUpDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY + 1, doorScale, 1f);
 		}
 
 		if (dungeonRoom.hasDownDoor()) {
-			try {
-				if (dungeonRoom.areAllEnemiesDead() && level.getDownRoom(currentRoomX, currentRoomY).getRoomType().equals(RoomType.BOSS)) 
-					doorTexture = downDoorTextureBoss;
-				else if (dungeonRoom.areAllEnemiesDead()) 
-					doorTexture = downDoorTextureOpen;
-				else 
-					doorTexture = downDoorTextureClosed;
-				
-				doorRectangle = dungeonRoom.getDownDoor();
-				renderDoor(batch, doorTexture, doorRectangle, translateX, translateY - 1, scale, 1f);
-			} catch (NullPointerException e) {}
+			if (dungeonRoom.areAllEnemiesDead()
+					&& level.getDownRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)) {
+				doorTexture = downDoorTextureBoss;
+			} else if (dungeonRoom.areAllEnemiesDead()) {
+				doorTexture = downDoorTextureOpen;
+			} else {
+				doorTexture = downDoorTextureClosed;
+			}
+
+			doorRectangle = dungeonRoom.getDownDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY - 1, doorScale, 1f);
 		}
 
 		if (dungeonRoom.hasRightDoor()) {
-			try {
-				if (dungeonRoom.areAllEnemiesDead() && level.getRightRoom(currentRoomX, currentRoomY).getRoomType().equals(RoomType.BOSS)) 
-					doorTexture = rightDoorTextureBoss;
-				else if (dungeonRoom.areAllEnemiesDead()) 
-					doorTexture = rightDoorTextureOpen;
-				else 
-					doorTexture = rightDoorTextureClosed;
-				
-				doorRectangle = dungeonRoom.getRightDoor();
-				renderDoor(batch, doorTexture, doorRectangle, translateX + 1, translateY, 1f, scale);
-			} catch (NullPointerException e) {}
+			if (dungeonRoom.areAllEnemiesDead()
+					&& level.getRightRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)) {
+				doorTexture = rightDoorTextureBoss;
+			} else if (dungeonRoom.areAllEnemiesDead()) {
+				doorTexture = rightDoorTextureOpen;
+			} else {
+				doorTexture = rightDoorTextureClosed;
+			}
+
+			doorRectangle = dungeonRoom.getRightDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX + 1, translateY, 1f, doorScale);
 		}
 
 		if (dungeonRoom.hasLeftDoor()) {
-			try {
-				if (dungeonRoom.areAllEnemiesDead() && level.getLeftRoom(currentRoomX, currentRoomY).getRoomType().equals(RoomType.BOSS)) 
-					doorTexture = leftDoorTextureBoss;
-				else if (dungeonRoom.areAllEnemiesDead()) 
-					doorTexture = leftDoorTextureOpen;
-				else 
-					doorTexture = leftDoorTextureClosed;
-	
-				doorRectangle = dungeonRoom.getLeftDoor();
-				renderDoor(batch, doorTexture, doorRectangle, translateX - 1, translateY, 1f, scale);
-			} catch (NullPointerException e) {}
+			if (dungeonRoom.areAllEnemiesDead()
+					&& level.getLeftRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)) {
+				doorTexture = leftDoorTextureBoss;
+			} else if (dungeonRoom.areAllEnemiesDead()) {
+				doorTexture = leftDoorTextureOpen;
+			} else {
+				doorTexture = leftDoorTextureClosed;
+			}
+
+			doorRectangle = dungeonRoom.getLeftDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX - 1, translateY, 1f, doorScale);
+
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
