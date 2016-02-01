@@ -95,6 +95,11 @@
 	- MuscovyGame instance gets passed around a lot
 		- Has getters for a lot of data
 	- Makes it easier to add more screens for e.g. settings menu
+	
+- Added transition animation between screens
+
+- For debug, render a grid over the world
+	- Shows that entities aren't spawning on tile coordinates correctly
 
 
 Other possible things to do:

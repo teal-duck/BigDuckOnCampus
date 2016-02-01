@@ -63,8 +63,8 @@ public abstract class Collidable extends OnscreenDrawable {
 		float width = getWidth();
 		float height = getHeight();
 
-		widthTiles = (int) Collidable.floorDiv((long) width, game.getTileSize()) + 1;
-		heightTiles = (int) Collidable.floorDiv((long) height, game.getTileSize()) + 1;
+		widthTiles = (int) Collidable.floorDiv((long) width, game.getTileSize());
+		heightTiles = (int) Collidable.floorDiv((long) height, game.getTileSize());
 		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}
@@ -102,11 +102,11 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * @param xTiles
 	 */
 	public void setXTiles(int xTiles) {
-
 		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
-		setX((xTiles * (game.getTileSize() + 1)) + game.getTileSize() + game.getWallEdge());
+
+		setX(((xTiles + 1) * game.getTileSize()) + game.getWallEdge());
 	}
 
 
@@ -116,11 +116,11 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * @param yTiles
 	 */
 	public void setYTiles(int yTiles) {
-
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
-		setY((yTiles * (game.getTileSize() + 1)) + game.getTileSize() + game.getWallEdge());
+
+		setY(((yTiles + 1) * game.getTileSize()) + game.getWallEdge());
 	}
 
 

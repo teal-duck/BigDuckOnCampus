@@ -191,25 +191,28 @@ public class DungeonRoom {
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
 					int cell = tileArray[row][col];
+
+					int fixedY = tileArray.length - row - 1;
+
 					switch (cell) {
 					case DungeonRoomTemplateLoader.EMPTY_TILE:
 						break;
 					case DungeonRoomTemplateLoader.NON_DAMAGING_OBSTACLE:
-						createNonDamagingObstacle(col, row);
+						createNonDamagingObstacle(col, fixedY);
 						break;
 					case DungeonRoomTemplateLoader.DAMAGING_OBSTACLE:
-						createDamagingObstacle(col, row);
+						createDamagingObstacle(col, fixedY);
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_DAMAGING_OBSTACLE:
 						if (obstacleType3NonDamaging) {
-							createNonDamagingObstacle(col, row);
+							createNonDamagingObstacle(col, fixedY);
 						} else if (!obstacleType3NonDamaging) {
-							createDamagingObstacle(col, row);
+							createDamagingObstacle(col, fixedY);
 						}
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_ENEMY:
 						if (game.getRandom().nextInt(5) < 3) {
-							createRandomEnemy(col, row);
+							createRandomEnemy(col, fixedY);
 						}
 						break;
 					default:
@@ -250,8 +253,8 @@ public class DungeonRoom {
 			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
 			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
-			enemy.setXTiles(100);
-			enemy.setYTiles(100);
+			enemy.setXTiles(DungeonRoom.FLOOR_WIDTH_IN_TILES - 1);
+			enemy.setYTiles(DungeonRoom.FLOOR_HEIGHT_IN_TILES - 1);
 			addEnemy(enemy);
 			break;
 
@@ -261,8 +264,8 @@ public class DungeonRoom {
 			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
 			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
-			enemy.setX(0);
-			enemy.setY(0);
+			enemy.setXTiles(0);
+			enemy.setYTiles(0);
 			addEnemy(enemy);
 			break;
 

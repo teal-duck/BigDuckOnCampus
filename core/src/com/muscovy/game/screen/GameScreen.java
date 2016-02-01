@@ -45,6 +45,8 @@ public class GameScreen extends ScreenBase {
 	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
 	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
 
+	private boolean renderDebugGrid = false;
+
 
 	public GameScreen(MuscovyGame game, Level level) {
 		super(game);
@@ -105,6 +107,9 @@ public class GameScreen extends ScreenBase {
 
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
+
+		playerStartX -= playerSprite.getRegionWidth() / 2;
+		playerStartY -= playerSprite.getRegionHeight() / 2;
 
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
 		playerCharacter = new PlayerCharacter(getGame(), playerSprite, playerStartPosition, getControlMap(),
@@ -167,7 +172,9 @@ public class GameScreen extends ScreenBase {
 
 		entityManager.renderMapOverlay();
 
-		entityManager.renderGridOverlay();
+		if (renderDebugGrid) {
+			entityManager.renderGridOverlay();
+		}
 	}
 
 

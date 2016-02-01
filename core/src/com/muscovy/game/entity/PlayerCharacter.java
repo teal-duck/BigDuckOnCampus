@@ -28,6 +28,9 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final float MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
+	public static final float HITBOX_Y_OFFSET = -6;
+	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
+
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
 
@@ -98,8 +101,9 @@ public class PlayerCharacter extends MoveableEntity {
 		// rightWalkCycle.add(tempTexture);
 		// }
 
-		setHitboxYOffset(-6); // Just to get the hitbox in line with that fat fuck of a duck's body
-		setHitboxRadius((74 / 2) - 2);
+		setHitboxYOffset(PlayerCharacter.HITBOX_Y_OFFSET); // Just to get the hitbox in line with that fat fuck
+									// of a duck's body
+		setHitboxRadius(PlayerCharacter.HITBOX_RADIUS);
 	}
 
 

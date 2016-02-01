@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Item;
@@ -178,25 +179,29 @@ public class EntityManager {
 	 * @param batch
 	 */
 	public void render(float deltaTime, SpriteBatch batch) {
-		// Timer used to give the player a few seconds to look at a room before attacking
 		if (isTransitioning()) {
 			transitionTime -= deltaTime;
+
 			if (transitionTime < 0f) {
-				// Stop transitioning
 				transitionTime = 0f;
-				// renderList.add(playerCharacter);
+				previousDungeonRoom = null;
+				previousRenderList.clear();
+			} else {
+
+				float transitionAmount = transitionTime / MAX_TRANSITION_TIME;
+				float translateX = game.getWindowWidth() * transitionAmount * transitionDirection.x;
+				float translateY = game.getWindowHeight() * transitionAmount * transitionDirection.y;
+
+				renderDungeonRoom(batch, currentDungeonRoom, renderList, translateX, translateY);
+				translateX -= transitionDirection.x * game.getWindowWidth();
+				translateY -= transitionDirection.y * game.getWindowHeight();
+				renderDungeonRoom(batch, previousDungeonRoom, previousRenderList, translateX,
+						translateY);
 			}
+		}
 
-			float transitionAmount = transitionTime / MAX_TRANSITION_TIME;
-			float translateX = game.getWindowWidth() * transitionAmount * transitionDirection.x;
-			float translateY = game.getWindowHeight() * transitionAmount * transitionDirection.y;
-
-			renderDungeonRoom(batch, currentDungeonRoom, renderList, translateX, translateY);
-			translateX -= transitionDirection.x * game.getWindowWidth();
-			translateY -= transitionDirection.y * game.getWindowHeight();
-			renderDungeonRoom(batch, previousDungeonRoom, previousRenderList, translateX, translateY);
-
-		} else {
+		if (!isTransitioning()) {
+			// Timer used to give the player a few seconds to look at a room before attacking
 			roomTimer += deltaTime;
 			renderDungeonRoom(batch, currentDungeonRoom, renderList, 0, 0);
 
@@ -218,36 +223,32 @@ public class EntityManager {
 
 		batch.draw(dungeonRoom.getBackgroundTexture(), translateX, translateY);
 
-		final int windowWidth = game.getWindowWidth();
-		final int windowHeight = game.getWindowHeight();
-		final int tileSize = game.getTileSize();
-
 		Texture doorTexture;
+		Rectangle doorRectangle;
+		final float scale = 1.8f;
+
 		if (dungeonRoom.hasUpDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? upDoorTextureOpen : upDoorTextureClosed);
-			batch.draw(doorTexture, translateX + ((windowWidth - doorTexture.getWidth()) / 2),
-					translateY + dungeonRoom.getUpDoor().getY()
-							+ (dungeonRoom.getUpDoor().getWidth() - tileSize));
+			doorRectangle = dungeonRoom.getUpDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, scale, 1f);
 		}
 
 		if (dungeonRoom.hasDownDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? downDoorTextureOpen : downDoorTextureClosed);
-			batch.draw(doorTexture, translateX + ((windowWidth - downDoorTextureOpen.getWidth()) / 2),
-					translateY + dungeonRoom.getDownDoor().getY() + 4);
+			doorRectangle = dungeonRoom.getDownDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, scale, 1f);
 		}
 
 		if (dungeonRoom.hasRightDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? rightDoorTextureOpen : rightDoorTextureClosed);
-			batch.draw(doorTexture,
-					translateX + dungeonRoom.getRightDoor().getX()
-							+ (dungeonRoom.getRightDoor().getWidth() - tileSize),
-					translateY + ((windowHeight - rightDoorTextureOpen.getWidth()) / 2));
+			doorRectangle = dungeonRoom.getRightDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, 1f, scale);
 		}
 
 		if (dungeonRoom.hasLeftDoor()) {
 			doorTexture = (dungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen : leftDoorTextureClosed);
-			batch.draw(doorTexture, translateX + dungeonRoom.getLeftDoor().getX() + 4,
-					translateY + ((windowHeight - leftDoorTextureOpen.getWidth()) / 2));
+			doorRectangle = dungeonRoom.getLeftDoor();
+			renderDoor(batch, doorTexture, doorRectangle, translateX, translateY, 1f, scale);
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
@@ -266,6 +267,19 @@ public class EntityManager {
 						translateY + drawable.getY());
 			}
 		}
+	}
+
+
+	private void renderDoor(SpriteBatch batch, Texture doorTexture, Rectangle doorRectangle, float translateX,
+			float translateY, float scaleX, float scaleY) {
+		float width = doorRectangle.width;
+		float height = doorRectangle.height;
+		float scaledWidth = width * scaleX;
+		float scaledHeight = height * scaleY;
+
+		batch.draw(doorTexture, (translateX + doorRectangle.x) - ((scaledWidth - width) / 2),
+				(translateY + doorRectangle.y) - ((scaledHeight - height) / 2), scaledWidth,
+				scaledHeight);
 	}
 
 
@@ -400,17 +414,33 @@ public class EntityManager {
 	public void renderGridOverlay() {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
 		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLACK);
 
-		int gridSize = 64;
-		int renderWidth = game.getWindowWidth();
-		int renderHeight = game.getWindowHeight();
-		int columns = renderWidth / gridSize;
-		int rows = renderHeight / gridSize;
+		int gridSize = game.getTileSize();
+		int startX = game.getWallEdge();
+		int startY = game.getWallEdge();
+		int endX = game.getWindowWidth() - game.getWallEdge();
+		int endY = game.getWindowHeight() - game.getWallEdge();
+
+		int renderWidth = endX - startX;
+		int renderHeight = endY - startY;
+
+		int columns = (renderWidth / gridSize) + 1;
+		int rows = (renderHeight / gridSize) + 1;
+
+		int gridX = 0;
+		int gy = 0;
 
 		for (int x = 0; x < columns; x += 1) {
-			for (int y = 0; y < rows; y += 1) {
+			gridX = startX + (x * gridSize);
+			gy = startY + (0 * gridSize);
+			shapeRenderer.line(gridX, gy, gridX, gy + renderHeight);
 
-			}
+		}
+		for (int y = 0; y < rows; y += 1) {
+			gridX = startX + (0 * gridSize);
+			gy = startY + (y * gridSize);
+			shapeRenderer.line(gridX, gy, gridX + renderWidth, gy);
 		}
 
 		shapeRenderer.end();
