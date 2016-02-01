@@ -26,6 +26,11 @@ public class AssetLocations {
 	public static final String DOOR_RIGHT_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png";
 	public static final String DOOR_DOWN_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png";
 	public static final String DOOR_LEFT_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png";
+	
+	public static final String DOOR_UP_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorUpClosed.png";
+	public static final String DOOR_RIGHT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorRightClosed.png";
+	public static final String DOOR_DOWN_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorDownClosed.png";
+	public static final String DOOR_LEFT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorLeftClosed.png";
 
 	public static final String MAIN_MENU = "mainMenu.png";
 	public static final String START_GAME_BUTTON = "startGameButton.png";
