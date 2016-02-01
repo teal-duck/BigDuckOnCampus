@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
@@ -29,26 +30,37 @@ public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
 	private static final float ROOM_START_TIME = 1f; // 1.5f;
 
-	private boolean paused = false;
-
 	private EntityManager entityManager;
 	private PlayerCharacter playerCharacter;
+	private Level level;
 
 	private BitmapFont guiFont;
 	private BitmapFont pauseFont;
-	private GUI dungeonGUI;
-	private GUI pauseGUI;
+	private GUI dungeonGui;
+	private GUI pauseGui;
 
+	private boolean paused = false;
 	private boolean pauseJustPressed = true;
 
 	private float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
 	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
 	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
 
+	private boolean renderDebugGrid = false;
+	private boolean hasCompletedLevel = false;
+
+	private static final String HEALTH_ID = "Health";
+	private static final String SCORE_ID = "Score";
+	private static final String LEVEL_NAME = "Objective";
+	private static final String OBJECTIVE_ID = "Objective";
+	private static final String PAUSE_ID = "Pause";
+	private static final int TEXT_EDGE_OFFSET = 10;
+
 
 	public GameScreen(MuscovyGame game, Level level) {
 		super(game);
 
+		this.level = level;
 		entityManager = new EntityManager(getGame(), level);
 		initialisePlayerCharacter();
 		initialiseGui();
@@ -57,38 +69,34 @@ public class GameScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
-		dungeonGUI = new GUI();
-		// Sprite guiDungeonSprite = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.GUI_FRAME));
-		// guiDungeonSprite.setX(0);
-		// guiDungeonSprite.setY(0);
-		// dungeonGUI.addElement(guiDungeonSprite);
+		dungeonGui = new GUI();
 
 		guiFont = AssetLocations.newFont();
-		guiFont.setColor(Color.BLACK);
+		guiFont.setColor(Color.WHITE); // Color.BLACK
 
-		int dungeonGuiX = 10;
+		int dungeonGuiX = GameScreen.TEXT_EDGE_OFFSET;
 		int dungeonGuiY = getWindowHeight();
 		int dungeonGuiTop = 4;
 		int dungeonGuiYSeparator = 30;
 
 		dungeonGuiY -= dungeonGuiTop;
-		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), guiFont,
-				dungeonGuiX, dungeonGuiY);
+		dungeonGui.addData(GameScreen.HEALTH_ID, "Health: " + String.valueOf(playerCharacter.getHealth()),
+				guiFont, dungeonGuiX, dungeonGuiY);
 		dungeonGuiY -= dungeonGuiYSeparator;
-		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
+		dungeonGui.addData(GameScreen.SCORE_ID, "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
 				dungeonGuiX, dungeonGuiY);
 
-		// int dungeonGuiY = getWindowHeight() - 16; // 900;
-		// dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), guiFont,
-		// 400, dungeonGuiY);
-		// dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
-		// 650,
-		// dungeonGuiY);
+		dungeonGuiY = 26;
+		dungeonGui.addData(GameScreen.LEVEL_NAME, level.getName(), guiFont, dungeonGuiX, dungeonGuiY);
+
+		String objectiveText = level.getObjectiveName();
+		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
+		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
 
 		pauseFont = AssetLocations.newFont();
 		pauseFont.setColor(Color.RED);
-		pauseGUI = new GUI();
-		pauseGUI.addData("Pause", "PAUSE", pauseFont, (getWindowWidth() / 2) - 50,
+		pauseGui = new GUI();
+		pauseGui.addData(GameScreen.PAUSE_ID, "PAUSED", pauseFont, (getWindowWidth() / 2) - 50,
 				(getWindowHeight() / 2) + 20);
 	}
 
@@ -106,9 +114,18 @@ public class GameScreen extends ScreenBase {
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
 
+		playerStartX -= playerSprite.getRegionWidth() / 2;
+		playerStartY -= playerSprite.getRegionHeight() / 2;
+
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
 		playerCharacter = new PlayerCharacter(getGame(), playerSprite, playerStartPosition, getControlMap(),
 				getController());
+	}
+
+
+	private int getTextWidth(BitmapFont font, String text) {
+		GlyphLayout glyphLayout = new GlyphLayout(font, text);
+		return (int) glyphLayout.width;
 	}
 
 
@@ -125,7 +142,7 @@ public class GameScreen extends ScreenBase {
 
 		if (paused) {
 			if (getStateForAction(Action.ESCAPE) > 0) {
-				setScreen(new LevelSelectScreen(getGame()));
+				setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
 			}
 
 		} else {
@@ -143,7 +160,18 @@ public class GameScreen extends ScreenBase {
 				playerCollision();
 				cleanUpDeadThings();
 
-				entityManager.checkLevelCompletion();
+				boolean completed = entityManager.checkLevelCompletion();
+				if (completed && !hasCompletedLevel) {
+					hasCompletedLevel = true;
+					String levelCompleteText = "Level Complete!";
+					int x = getWindowWidth() - GameScreen.TEXT_EDGE_OFFSET
+							- getTextWidth(guiFont, levelCompleteText);
+					dungeonGui.editData(GameScreen.OBJECTIVE_ID, levelCompleteText);
+					dungeonGui.moveData(GameScreen.OBJECTIVE_ID, x,
+							dungeonGui.getDataY(GameScreen.OBJECTIVE_ID));
+
+				}
+
 			}
 		}
 	}
@@ -154,20 +182,22 @@ public class GameScreen extends ScreenBase {
 		clearScreen();
 		updateAndSetCamera();
 
-		dungeonGUI.editData("PlayerHealth", "Health: " + MathUtils.floor(playerCharacter.getHealth()));
-		dungeonGUI.editData("PlayerScore", "Score: " + playerCharacter.getScore());
+		dungeonGui.editData(GameScreen.HEALTH_ID, "Health: " + MathUtils.floor(playerCharacter.getHealth()));
+		dungeonGui.editData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore());
 
 		batch.begin();
 		entityManager.render(deltaTime, batch);
-		dungeonGUI.render(batch);
+		dungeonGui.render(batch);
 		if (paused) {
-			pauseGUI.render(batch);
+			pauseGui.render(batch);
 		}
 		batch.end();
 
 		entityManager.renderMapOverlay();
 
-		entityManager.renderGridOverlay();
+		if (renderDebugGrid) {
+			entityManager.renderGridOverlay();
+		}
 	}
 
 
@@ -185,7 +215,7 @@ public class GameScreen extends ScreenBase {
 		super.dispose();
 		guiFont.dispose();
 		pauseFont.dispose();
-		entityManager.dispose();
+		// entityManager.dispose();
 	}
 
 
@@ -361,7 +391,7 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), item.getRectangleHitbox())) {
 			applied = item.applyToPlayer(playerCharacter);
 		}
-		
+
 		if (applied) {
 			item.setLifeOver();
 		}

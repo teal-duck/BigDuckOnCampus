@@ -30,8 +30,9 @@ public class GameOverScreen extends ScreenBase {
 		gameOverFont.setColor(Color.RED);
 
 		gui = new GUI();
-		gui.addData("Gameover", "Game Over", gameOverFont, 640, 150);
-		gui.addData("Gameover", "Press ENTER to restart and ESC to quit", gameOverFont, 640, 130);
+		gui.addData("Gameover", "Game Over", gameOverFont, (getWindowWidth() / 2) - 80, 150);
+		gui.addData("Gameover", "Press ENTER to restart and ESC to quit", gameOverFont,
+				(getWindowWidth() / 2) - 350, 120);
 	}
 
 

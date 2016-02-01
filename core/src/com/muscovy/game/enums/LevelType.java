@@ -39,8 +39,8 @@ public enum LevelType {
 	// public static final int START_ROOM_X = 3;
 	// public static final int START_ROOM_Y = 3;
 
-	public static LevelParameters getParametersForLevel(LevelType level) {
-		switch (level) {
+	public static LevelParameters getParametersForLevel(LevelType levelType) {
+		switch (levelType) {
 		case CONSTANTINE:
 			return new LevelParameters(5, 5, 6, 2, 2, ObjectiveType.BOSS);
 		case LANGWITH:
@@ -48,5 +48,28 @@ public enum LevelType {
 		default:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		}
+	}
+
+
+	public static String getName(LevelType levelType) {
+		switch (levelType) {
+		case CONSTANTINE:
+			return "Constantine College";
+		case LANGWITH:
+			return "Langwith College";
+		case GOODRICKE:
+			return "Goodricke College";
+		case LMB:
+			return "Law and Management Building";
+		case CATALYST:
+			return "Catalyst";
+		case TFTV:
+			return "Theatre, Film and Television";
+		case COMP_SCI:
+			return "Computer Science";
+		case RCH:
+			return "Ron-Cooke Hub";
+		}
+		return "";
 	}
 }

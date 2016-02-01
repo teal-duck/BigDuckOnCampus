@@ -32,9 +32,14 @@ public class LevelSelectScreen extends ScreenBase {
 
 
 	public LevelSelectScreen(MuscovyGame game) {
+		this(game, LevelType.CONSTANTINE);
+	}
+
+
+	public LevelSelectScreen(MuscovyGame game, LevelType selectedLevel) {
 		super(game);
 
-		mapSelected = LevelType.CONSTANTINE;
+		mapSelected = selectedLevel;
 		initialiseGui();
 		cursorUpdate();
 	}

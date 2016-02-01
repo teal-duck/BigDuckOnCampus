@@ -28,6 +28,9 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final int MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
+	public static final float HITBOX_Y_OFFSET = -6;
+	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
+
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
 
@@ -98,8 +101,9 @@ public class PlayerCharacter extends MoveableEntity {
 		// rightWalkCycle.add(tempTexture);
 		// }
 
-		setHitboxYOffset(-6); // Just to get the hitbox in line with that fat fuck of a duck's body
-		setHitboxRadius((74 / 2) - 2);
+		setHitboxYOffset(PlayerCharacter.HITBOX_Y_OFFSET); // Just to get the hitbox in line with that fat fuck
+									// of a duck's body
+		setHitboxRadius(PlayerCharacter.HITBOX_RADIUS);
 	}
 
 
@@ -238,8 +242,7 @@ public class PlayerCharacter extends MoveableEntity {
 	public boolean gainHealth(int health) {
 		if (currentHealth == maxHealth) {
 			return false;
-		}
-		else {
+		} else {
 			currentHealth = Math.min(currentHealth + health, maxHealth);
 			return true;
 		}
@@ -307,37 +310,6 @@ public class PlayerCharacter extends MoveableEntity {
 		return score;
 	}
 
-
-	// public float getXVelocity() {
-	// return velocity.x;
-	// }
-	//
-	//
-	// public void setXVelocity(float x) {
-	// velocity.x = x;
-	// clampVelocity();
-	// }
-	//
-	//
-	// public float getYVelocity() {
-	// return velocity.y;
-	// }
-	//
-	//
-	// public void setYVelocity(float y) {
-	// velocity.y = y;
-	// clampVelocity();
-	// }
-	//
-	//
-	// public void setMaxVelocity(float maxVelocity) {
-	// maxSpeed = maxVelocity;
-	// }
-	//
-	//
-	// public float getMaxVelocity() {
-	// return maxSpeed;
-	// }
 
 	public Vector2 getShotDirection() {
 		return shotDirection;
