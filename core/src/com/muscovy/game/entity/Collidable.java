@@ -116,7 +116,8 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * @param yTiles
 	 */
 	public void setYTiles(int yTiles) {
-
+		yTiles -= heightTiles;
+		
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
