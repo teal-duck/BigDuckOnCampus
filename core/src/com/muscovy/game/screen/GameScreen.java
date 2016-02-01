@@ -57,26 +57,39 @@ public class GameScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
-		Sprite guiDungeonSprite = new Sprite();
 		dungeonGUI = new GUI();
-		guiDungeonSprite.setTexture(getTextureMap().getTextureOrLoadFile(AssetLocations.GUI_FRAME));
-		guiDungeonSprite.setX(0);
-		guiDungeonSprite.setY(0);
-		dungeonGUI.addElement(guiDungeonSprite);
+		// Sprite guiDungeonSprite = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.GUI_FRAME));
+		// guiDungeonSprite.setX(0);
+		// guiDungeonSprite.setY(0);
+		// dungeonGUI.addElement(guiDungeonSprite);
 
 		guiFont = AssetLocations.newFont();
 		guiFont.setColor(Color.BLACK);
 
-		int dungeonGuiY = getWindowHeight() - 16; // 900;
+		int dungeonGuiX = 10;
+		int dungeonGuiY = getWindowHeight();
+		int dungeonGuiTop = 4;
+		int dungeonGuiYSeparator = 30;
+
+		dungeonGuiY -= dungeonGuiTop;
 		dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), guiFont,
-				400, dungeonGuiY);
-		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont, 650,
-				dungeonGuiY);
+				dungeonGuiX, dungeonGuiY);
+		dungeonGuiY -= dungeonGuiYSeparator;
+		dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
+				dungeonGuiX, dungeonGuiY);
+
+		// int dungeonGuiY = getWindowHeight() - 16; // 900;
+		// dungeonGUI.addData("PlayerHealth", "Health: " + String.valueOf(playerCharacter.getHealth()), guiFont,
+		// 400, dungeonGuiY);
+		// dungeonGUI.addData("PlayerScore", "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
+		// 650,
+		// dungeonGuiY);
 
 		pauseFont = AssetLocations.newFont();
 		pauseFont.setColor(Color.RED);
 		pauseGUI = new GUI();
-		pauseGUI.addData("Pause", "PAUSE", pauseFont, getWindowWidth() / 2, 720 / 2);
+		pauseGUI.addData("Pause", "PAUSE", pauseFont, (getWindowWidth() / 2) - 50,
+				(getWindowHeight() / 2) + 20);
 	}
 
 
@@ -116,20 +129,22 @@ public class GameScreen extends ScreenBase {
 			}
 
 		} else {
-			playerUpdate(deltaTime);
-			playerCharacter.update(deltaTime);
-			projectilesUpdate(deltaTime);
-			enemiesUpdate(deltaTime);
+			if (!entityManager.isTransitioning()) {
+				playerUpdate(deltaTime);
+				playerCharacter.update(deltaTime);
+				projectilesUpdate(deltaTime);
+				enemiesUpdate(deltaTime);
 
-			if (playerCharacter.getHealth() <= 0) {
-				setScreen(new GameOverScreen(getGame()));
-				return;
+				if (playerCharacter.getHealth() <= 0) {
+					setScreen(new GameOverScreen(getGame()));
+					return;
+				}
+
+				playerCollision();
+				cleanUpDeadThings();
+
+				entityManager.checkLevelCompletion();
 			}
-
-			playerCollision();
-			cleanUpDeadThings();
-
-			entityManager.checkLevelCompletion();
 		}
 	}
 
@@ -143,14 +158,16 @@ public class GameScreen extends ScreenBase {
 		dungeonGUI.editData("PlayerScore", "Score: " + playerCharacter.getScore());
 
 		batch.begin();
-		dungeonGUI.render(batch);
 		entityManager.render(deltaTime, batch);
+		dungeonGUI.render(batch);
 		if (paused) {
 			pauseGUI.render(batch);
 		}
 		batch.end();
 
 		entityManager.renderMapOverlay();
+
+		entityManager.renderGridOverlay();
 	}
 
 
