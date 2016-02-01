@@ -65,6 +65,7 @@ public class DungeonRoom {
 
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
+		itemList = new ArrayList<Item>();
 
 		initialiseWalls();
 	}
@@ -163,12 +164,13 @@ public class DungeonRoom {
 	}
 
 
-	@SuppressWarnings("unused")
 	private void createHealthPack(int x, int y) {
 		Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile("healthpack.png"));
 		Vector2 position = new Vector2(x, y);
 		Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
 
+		healthPack.setXTiles(x);
+		healthPack.setYTiles(y);
 		addItem(healthPack);
 	}
 
@@ -191,7 +193,6 @@ public class DungeonRoom {
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
 					int cell = tileArray[row][col];
-
 					int fixedY = tileArray.length - row - 1;
 
 					switch (cell) {
@@ -215,9 +216,12 @@ public class DungeonRoom {
 							createRandomEnemy(col, fixedY);
 						}
 						break;
+					case DungeonRoomTemplateLoader.HEALTHPACK:
+						createHealthPack(col, fixedY);
+						break;
 					default:
 						System.out.println("Unrecognised cell " + cell + "; location (" + col
-								+ ", " + row + ")");
+								+ ", " + cell + ") (fixed y: " + fixedY + ")");
 						break;
 					}
 				}

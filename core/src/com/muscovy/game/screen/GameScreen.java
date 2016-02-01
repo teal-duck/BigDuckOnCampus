@@ -234,6 +234,7 @@ public class GameScreen extends ScreenBase {
 	public void cleanUpDeadThings() {
 		entityManager.killEnemies();
 		entityManager.killProjectiles();
+		entityManager.killItems();
 	}
 
 
@@ -366,6 +367,10 @@ public class GameScreen extends ScreenBase {
 
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), item.getRectangleHitbox())) {
 			applied = item.applyToPlayer(playerCharacter);
+		}
+
+		if (applied) {
+			item.setLifeOver();
 		}
 
 		return applied;

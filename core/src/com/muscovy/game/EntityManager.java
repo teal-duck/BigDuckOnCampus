@@ -125,10 +125,12 @@ public class EntityManager {
 		obstacleList.clear();
 		projectileList.clear();
 		enemyList.clear();
+		itemList.clear();
 
 		currentDungeonRoom = dungeonRoom;
 		addNewObstacles(dungeonRoom.getObstacleList());
 		addNewEnemies(dungeonRoom.getEnemyList());
+		addNewItems(dungeonRoom.getItemList());
 	}
 
 
@@ -515,6 +517,22 @@ public class EntityManager {
 	}
 
 
+	public void killItems() {
+		ArrayList<Item> deadItems = new ArrayList<Item>();
+
+		for (Item item : itemList) {
+			if (item.isLifeOver()) {
+				deadItems.add(item);
+			}
+		}
+
+		for (Item item : deadItems) {
+			renderList.remove(item);
+			itemList.remove(item);
+		}
+	}
+
+
 	public void killEnemies() {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 
@@ -619,6 +637,12 @@ public class EntityManager {
 	}
 
 
+	public void addNewItems(ArrayList<Item> items) {
+		renderList.addAll(items);
+		itemList.addAll(items);
+	}
+
+
 	public void addNewProjectile(Projectile projectile) {
 		projectileList.add(projectile);
 	}
@@ -648,3 +672,4 @@ public class EntityManager {
 		return playerCharacter;
 	}
 }
+// >>>>>>> master
