@@ -1,15 +1,17 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.screen.GameScreen;
 
 
 /**
@@ -24,10 +26,6 @@ public class Enemy extends MoveableEntity {
 	public static final float PROJECTILE_SPEED = 150;
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
-
-	// private Vector2 velocity;
-	// private float maxSpeed = Enemy.MAX_SPEED;
-	// private float currentSpeed = 0;
 
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
@@ -52,17 +50,9 @@ public class Enemy extends MoveableEntity {
 
 	private boolean dead = false;
 
-	private Random random;
-	private TextureMap textureMap;
-	private EntityManager entityManager;
 
-
-	public Enemy(Sprite sprite, Vector2 position, EntityManager entityManager, TextureMap textureMap,
-			Random random) {
-		super(sprite, position);
-		this.textureMap = textureMap;
-		this.random = random;
-		this.entityManager = entityManager;
+	public Enemy(MuscovyGame game, Sprite sprite, Vector2 position) {
+		super(game, sprite, position);
 
 		setMaxSpeed(Enemy.MAX_SPEED);
 		setCurrentSpeed(0);
@@ -74,7 +64,6 @@ public class Enemy extends MoveableEntity {
 	@Override
 	public void selfUpdate(float deltaTime) {
 		attackTimer += deltaTime;
-
 	}
 
 
@@ -83,17 +72,19 @@ public class Enemy extends MoveableEntity {
 		float maxRotation = 80;
 
 		int direction = 0;
-		if (random.nextBoolean()) {
+		if (game.getRandom().nextBoolean()) {
 			direction = 1;
 		} else {
 			direction = -1;
 		}
-		getVelocity().rotate(direction * (((maxRotation - minRotation) * random.nextFloat()) + minRotation));
+
+		getVelocity().rotate(direction
+				* (((maxRotation - minRotation) * game.getRandom().nextFloat()) + minRotation));
 	}
 
 
 	@Override
-	public void movementLogic(float deltaTime) { // , PlayerCharacter player) {
+	public void movementLogic(float deltaTime) {
 		switch (movementType) {
 		case STATIC:
 			setCurrentSpeed(0);
@@ -113,16 +104,30 @@ public class Enemy extends MoveableEntity {
 			break;
 
 		case FOLLOW:
-			PlayerCharacter player = entityManager.getPlayer();
-			if (getDistanceTo(player) < viewDistance) {
+			PlayerCharacter player = getPlayer();
+
+			if ((player != null) && (getDistanceTo(player) < viewDistance)) {
 				setSpeedToMax();
 				pointTo(player);
 			} else {
 				setCurrentSpeed(0);
 			}
+
 			break;
 		}
 
+	}
+
+
+	public PlayerCharacter getPlayer() {
+		// TODO: Make Enemy.getPlayer() nicer
+		Screen screen = game.getScreen();
+
+		if (screen instanceof GameScreen) {
+			return ((GameScreen) screen).getPlayer();
+		} else {
+			return null;
+		}
 	}
 
 
@@ -179,8 +184,8 @@ public class Enemy extends MoveableEntity {
 		}
 
 		if (bulletsToShoot > 0) {
-			return Projectile.shootProjectiles(bulletsToShoot, position, shootDirection, projectileRange,
-					projectileSpeed, ProjectileDamager.PLAYER, textureMap);
+			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
+					projectileRange, projectileSpeed, ProjectileDamager.PLAYER);
 		} else {
 			return new ArrayList<Projectile>();
 		}

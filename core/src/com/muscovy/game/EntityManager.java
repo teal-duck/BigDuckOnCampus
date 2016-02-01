@@ -2,41 +2,43 @@ package com.muscovy.game;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.muscovy.game.enums.LevelType;
+import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.entity.Item;
+import com.muscovy.game.entity.Obstacle;
+import com.muscovy.game.entity.OnscreenDrawable;
+import com.muscovy.game.entity.PlayerCharacter;
+import com.muscovy.game.entity.Projectile;
 import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
+import com.muscovy.game.level.DungeonRoom;
+import com.muscovy.game.level.Level;
 
 
 /**
  * Created by ewh502 on 04/12/2015.
  */
 public class EntityManager {
+	private MuscovyGame game;
+	private Level level;
+	private PlayerCharacter playerCharacter;
+
 	private ArrayList<OnscreenDrawable> renderList;
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
 	private ArrayList<Projectile> projectileList;
 	private ArrayList<Item> itemList;
-	private int maxLevels;
-	private Level[] levels;
-
-	private int currentLevelNumber;
 
 	private DungeonRoom currentDungeonRoom;
 	private int currentRoomX;
 	private int currentRoomY;
 	private float roomTimer = 0;
-
-	private BitmapFont font;
-	private PlayerCharacter playerCharacter;
 
 	// TODO: Only load 1 door texture and rotate when rendering
 	private Texture upDoorTextureOpen;
@@ -48,14 +50,13 @@ public class EntityManager {
 	private Texture rightDoorTextureClosed;
 	private Texture leftDoorTextureClosed;
 
-	private TextureMap textureMap;
 	private ShapeRenderer shapeRenderer;
-	private Random random;
+	private BitmapFont levelCompleteFont;
 
 
-	public EntityManager(Random random, TextureMap textureMap) {
-		this.random = random;
-		this.textureMap = textureMap;
+	public EntityManager(MuscovyGame game, Level level) {
+		this.game = game;
+		this.level = level;
 
 		renderList = new ArrayList<OnscreenDrawable>();
 		obstacleList = new ArrayList<Obstacle>();
@@ -63,11 +64,12 @@ public class EntityManager {
 		projectileList = new ArrayList<Projectile>();
 		itemList = new ArrayList<Item>();
 
-		font = new BitmapFont();
-		font.setColor(Color.WHITE);
+		levelCompleteFont = new BitmapFont();
+		levelCompleteFont.setColor(Color.WHITE);
 
 		currentDungeonRoom = null;
 
+		TextureMap textureMap = game.getTextureMap();
 		upDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
 		upDoorTextureClosed = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_CLOSED);
 		rightDoorTextureOpen = textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);
@@ -83,33 +85,11 @@ public class EntityManager {
 
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
-		Level level = getCurrentLevel();
 		currentRoomX = level.getStartX();
 		currentRoomY = level.getStartY();
 		setCurrentDungeonRoom(currentRoomX, currentRoomY);
 		level.markRoomVisited(currentRoomX, currentRoomY);
 		renderList.add(this.playerCharacter);
-	}
-
-
-	public void generateLevels() {
-		// TODO: Only generate level when player wants to play it?
-		maxLevels = 8;
-		levels = new Level[maxLevels];
-		String templateFilename = AssetLocations.ROOM_TEMPLATE_FILE;
-		DungeonRoomTemplateLoader templateLoader = new DungeonRoomTemplateLoader(templateFilename);
-		for (int i = 0; i < levels.length; i += 1) {
-			LevelType levelType = LevelType.fromInt(i);
-			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
-
-			DungeonRoom[][] rooms = LevelGenerator.generateBuilding(levelType, levelParameters,
-					templateLoader, random, textureMap, this);
-			Level level = new Level(rooms, levelType, levelParameters);
-
-			levels[i] = level;
-
-		}
-		templateLoader.dispose();
 	}
 
 
@@ -128,10 +108,9 @@ public class EntityManager {
 
 
 	public void setCurrentDungeonRoom(int roomX, int roomY) {
-		Level currentLevel = getCurrentLevel();
-		DungeonRoom room = currentLevel.getRoom(roomX, roomY);
+		DungeonRoom room = level.getRoom(roomX, roomY);
 		setCurrentDungeonRoom(room);
-		currentLevel.markRoomVisited(roomX, roomY);
+		level.markRoomVisited(roomX, roomY);
 	}
 
 
@@ -173,20 +152,13 @@ public class EntityManager {
 		// Timer used to give the player a few seconds to look at a room before attacking
 		roomTimer += deltaTime;
 
-		// renderList.trimToSize();
-		// obstacleList.trimToSize();
-		// enemyList.trimToSize();
-		// projectileList.trimToSize();
-
 		sortDrawables();
 
 		batch.draw(currentDungeonRoom.getBackgroundTexture(), 0, 0);
 
-		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
-		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
-		final float tileSize = MuscovyGame.TILE_SIZE;
-		final float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
-		final float worldHeight = windowHeight - topGuiSize;
+		final int windowWidth = game.getWindowWidth();
+		final int tileSize = game.getTileSize();
+		final int worldHeight = game.getWorldHeight();
 
 		Texture doorTexture;
 		if (currentDungeonRoom.hasUpDoor()) {
@@ -196,12 +168,14 @@ public class EntityManager {
 					currentDungeonRoom.getUpDoor().getY()
 							+ (currentDungeonRoom.getUpDoor().getWidth() - tileSize));
 		}
+
 		if (currentDungeonRoom.hasDownDoor()) {
 			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? downDoorTextureOpen
 					: downDoorTextureClosed);
 			batch.draw(doorTexture, (windowWidth - downDoorTextureOpen.getWidth()) / 2,
 					currentDungeonRoom.getDownDoor().getY() + 4);
 		}
+
 		if (currentDungeonRoom.hasRightDoor()) {
 			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? rightDoorTextureOpen
 					: rightDoorTextureClosed);
@@ -210,6 +184,7 @@ public class EntityManager {
 							+ (currentDungeonRoom.getRightDoor().getWidth() - tileSize),
 					(worldHeight - rightDoorTextureOpen.getWidth()) / 2);
 		}
+
 		if (currentDungeonRoom.hasLeftDoor()) {
 			doorTexture = (currentDungeonRoom.areAllEnemiesDead() ? leftDoorTextureOpen
 					: leftDoorTextureClosed);
@@ -237,20 +212,15 @@ public class EntityManager {
 			batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 		}
 
-		if (getCurrentLevel().isCompleted()) {
-			font.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER", (windowWidth / 2) - 200,
-					worldHeight - 69);
+		if (level.isCompleted()) {
+			levelCompleteFont.draw(batch, "LEVEL COMPLETED, PRESS P AND ESC TO CHOOSE ANOTHER",
+					(windowWidth / 2) - 200, worldHeight - 69);
 		}
-
-		// font.draw(batch, "no of projectiles in controller = " + projectileList.size(), (float) 250, (float)
-		// 450); // Testing purposes (shows number of projectiles)
 	}
 
 
-	public void renderMapOverlay(OrthographicCamera camera) {
-		Level level = levels[currentLevelNumber];
-
-		shapeRenderer.setProjectionMatrix(camera.combined);
+	public void renderMapOverlay() {
+		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
 		shapeRenderer.begin(ShapeType.Filled);
 
 		float renderWidth = 25;
@@ -264,9 +234,9 @@ public class EntityManager {
 		// How thick the doors are
 		float doorWidth = 5;
 
-		float xOffset = (MuscovyGame.WINDOW_WIDTH - ((renderWidth + doorLength) * level.getRoomsWide()))
+		float xOffset = (game.getWindowWidth() - ((renderWidth + doorLength) * level.getRoomsWide()))
 				+ doorLength;
-		float yOffset = MuscovyGame.WINDOW_HEIGHT - renderHeight;
+		float yOffset = game.getWindowHeight() - renderHeight;
 
 		float windowEdgeOffset = 0;
 		xOffset -= windowEdgeOffset;
@@ -383,11 +353,7 @@ public class EntityManager {
 	 *
 	 */
 	private void sortDrawables() {
-		// TODO: Optimize sortDrawables
-		// ArrayList<OnscreenDrawable> newList = new ArrayList<OnscreenDrawable>();
-		// newList.addAll(quicksort(renderList));
-		// renderList.clear();
-		// renderList.addAll(newList);
+		// TODO: Optimise sortDrawables
 		renderList = quicksort(renderList);
 	}
 
@@ -428,18 +394,6 @@ public class EntityManager {
 
 	private ArrayList<OnscreenDrawable> concatenate(ArrayList<OnscreenDrawable> less, OnscreenDrawable pivot,
 			ArrayList<OnscreenDrawable> greater) {
-		// ArrayList<OnscreenDrawable> list = new ArrayList<OnscreenDrawable>();
-		// for (int i = 0; i < less.size(); i++) {
-		// list.add(less.get(i));
-		// }
-		//
-		// list.add(pivot);
-		//
-		// for (int i = 0; i < greater.size(); i++) {
-		// list.add(greater.get(i));
-		// }
-		//
-		// return list;
 		less.add(pivot);
 		less.addAll(greater);
 		return less;
@@ -479,13 +433,7 @@ public class EntityManager {
 	}
 
 
-	public boolean checkCurrentLevelCompletion() {
-		return checkLevelCompletion(currentLevelNumber);
-	}
-
-
-	public boolean checkLevelCompletion(int levelNumber) {
-		Level level = getLevel(levelNumber);
+	public boolean checkLevelCompletion() {
 		ObjectiveType objectiveType = level.getObjectiveType();
 
 		// If the level has already been completed, don't check again
@@ -517,33 +465,13 @@ public class EntityManager {
 	}
 
 
+	public void dispose() {
+		levelCompleteFont.dispose();
+	}
+
+
 	public DungeonRoom getCurrentDungeonRoom() {
 		return currentDungeonRoom;
-	}
-
-
-	public int getCurrentLevelNumber() {
-		return currentLevelNumber;
-	}
-
-
-	public void setLevel(int levelNumber) {
-		currentLevelNumber = levelNumber;
-	}
-
-
-	public Level getCurrentLevel() {
-		return levels[currentLevelNumber];
-	}
-
-
-	public Level getLevel(int levelNumber) {
-		return levels[levelNumber];
-	}
-
-
-	public boolean isLevelCompleted(int levelNumber) {
-		return getLevel(levelNumber).isCompleted();
 	}
 
 

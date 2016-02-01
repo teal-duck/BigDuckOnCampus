@@ -1,7 +1,7 @@
 package com.muscovy.game.enums;
 
 
-import com.muscovy.game.LevelParameters;
+import com.muscovy.game.level.LevelParameters;
 
 
 public enum LevelType {
@@ -9,13 +9,12 @@ public enum LevelType {
 	// TFTV, 6 = Computer Science, 7 = Ron Cooke Hub
 	CONSTANTINE, LANGWITH, GOODRICKE, LMB, CATALYST, TFTV, COMP_SCI, RCH;
 
-	public static final int LEVEL_COUNT = RCH.ordinal();
-
-	private static final LevelType[] levelValues = LevelType.values();
+	private static final LevelType[] LEVEL_VALUES = LevelType.values();
+	public static final int LEVEL_COUNT = LevelType.LEVEL_VALUES.length;
 
 
 	public static LevelType fromInt(int i) {
-		return LevelType.levelValues[i];
+		return LevelType.LEVEL_VALUES[i];
 	}
 
 
@@ -30,7 +29,7 @@ public enum LevelType {
 			nextLevel += LevelType.LEVEL_COUNT;
 		}
 
-		return LevelType.levelValues[nextLevel];
+		return LevelType.LEVEL_VALUES[nextLevel];
 	}
 
 

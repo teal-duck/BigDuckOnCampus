@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
 import com.muscovy.game.input.Action;
@@ -27,13 +28,6 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final float MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
-	// private Vector2 velocity;
-	// private float maxSpeed = PlayerCharacter.MAX_SPEED;
-	// private float currentSpeed = maxSpeed;
-
-	// private float acceleration = PlayerCharacter.ACCELERATION;
-	// private float deceleration = PlayerCharacter.DECELERATION;
-
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
 
@@ -52,8 +46,6 @@ public class PlayerCharacter extends MoveableEntity {
 
 	private int score = 0;
 
-	private TextureMap textureMap;
-
 	private int animationCycle;
 	private int animationCounter;
 	// private ArrayList<Texture> downWalkCycle;
@@ -67,10 +59,9 @@ public class PlayerCharacter extends MoveableEntity {
 	private boolean firing = false;
 
 
-	public PlayerCharacter(Sprite playerSprite, Vector2 position, TextureMap textureMap, ControlMap controlMap,
+	public PlayerCharacter(MuscovyGame game, Sprite playerSprite, Vector2 position, ControlMap controlMap,
 			Controller controller) {
-		super(playerSprite, position);
-		this.textureMap = textureMap;
+		super(game, playerSprite, position);
 		this.controlMap = controlMap;
 		this.controller = controller;
 
@@ -78,7 +69,6 @@ public class PlayerCharacter extends MoveableEntity {
 		setCurrentSpeed(getMaxSpeed());
 
 		animationCycle = 0;
-		// velocity = new Vector2(0, 0);
 		shotDirection = new Vector2(0, 1);
 
 		// Sprite playerSprite;
@@ -108,21 +98,8 @@ public class PlayerCharacter extends MoveableEntity {
 		// rightWalkCycle.add(tempTexture);
 		// }
 
-		// playerSprite = new Sprite();
-		// playerSprite.setRegion(textureMap.getTextureOrLoadFile("duck.png"));
-		// setSprite(playerSprite);
 		setHitboxYOffset(-6); // Just to get the hitbox in line with that fat fuck of a duck's body
 		setHitboxRadius((74 / 2) - 2);
-	}
-
-
-	public boolean isFiring() {
-		return firing;
-	}
-
-
-	public void setFiring(boolean firing) {
-		this.firing = firing;
 	}
 
 
@@ -157,9 +134,6 @@ public class PlayerCharacter extends MoveableEntity {
 		float shootUpState = controlMap.getStateForAction(Action.SHOOT_UP, controller);
 		float shootDownState = controlMap.getStateForAction(Action.SHOOT_DOWN, controller);
 
-		System.out.println("Shoot: up/down: (" + shootUpState + ", " + shootDownState + "); left/right: ("
-				+ shootLeftState + ", " + shootRightState + ")");
-
 		float shootDX = shootRightState - shootLeftState;
 		float shootDY = shootUpState - shootDownState;
 
@@ -180,115 +154,8 @@ public class PlayerCharacter extends MoveableEntity {
 		} else {
 			setFiring(false);
 		}
-
 	}
 
-	/**
-	 * Movement methods. Called when the gamestate is 2 and the listener hears W A S or D If opposite directions are
-	 * pressed at the same time, velocity decelerated to 0 Calculates velocity based on delta time and acceleration
-	 */
-	// TODO: Why do only right and up apply deceleration?
-	// public void goRight(float deltaTime) {
-	// if (animationCycle > 10) {
-	// animationCycle = 0;
-	// }
-	//
-	// if (Gdx.input.isKeyPressed(MuscovyGame.KEY_RIGHT) && Gdx.input.isKeyPressed(MuscovyGame.KEY_LEFT)) {
-	// decelXToStop(deltaTime);
-	// } else {
-	// incrementVelocityX(acceleration * deltaTime);
-	// }
-	// }
-	//
-	//
-	// public void goLeft(float deltaTime) {
-	// if (animationCycle > 10) {
-	// animationCycle = 0;
-	// }
-	//
-	// incrementVelocityX((-acceleration) * deltaTime);
-	// }
-	//
-	//
-	// public void goUp(float deltaTime) {
-	// if (animationCycle > 6) {
-	// animationCycle = 0;
-	// }
-	//
-	// if (Gdx.input.isKeyPressed(MuscovyGame.KEY_UP) && Gdx.input.isKeyPressed(MuscovyGame.KEY_DOWN)) {
-	// decelYToStop(deltaTime);
-	// } else {
-	// incrementVelocityY(acceleration * deltaTime);
-	// }
-	// }
-	//
-	//
-	// public void goDown(float deltaTime) {
-	// if (animationCycle > 6) {
-	// animationCycle = 0;
-	// }
-	//
-	// incrementVelocityY((-acceleration) * deltaTime);
-	// }
-	//
-	//
-	// public void decelXToStop(float deltaTime) {
-	// if (getVelocityX() > 0) {
-	// if ((getVelocityX() - (deceleration * deltaTime)) < 0) {
-	// setVelocityX(0);
-	// } else {
-	// incrementVelocityX(-deceleration * deltaTime);
-	// }
-	// }
-	//
-	// if (getVelocityX() < 0) {
-	// if ((getVelocityX() + (deceleration * deltaTime)) > 0) {
-	// setVelocityX(0);
-	// } else {
-	// incrementVelocityX(deceleration * deltaTime);
-	// }
-	// }
-	//
-	// idleAnimation();
-	// }
-	//
-	//
-	// public void decelYToStop(float deltaTime) {
-	// if (getVelocityY() > 0) {
-	// if ((getVelocityY() - (deceleration * deltaTime)) < 0) {
-	// setVelocityY(0);
-	// } else {
-	// incrementVelocityY(-deceleration * deltaTime);
-	// }
-	// }
-	//
-	// if (getVelocityY() < 0) {
-	// if ((getVelocityY() + (deceleration * deltaTime)) > 0) {
-	// setVelocityY(0);
-	// } else {
-	// incrementVelocityY(deceleration * deltaTime);
-	// }
-	// }
-	//
-	// idleAnimation();
-	// }
-
-	//
-	// public void changeXVelocity(float x) {
-	// velocity.x += x;
-	// clampVelocity();
-	// }
-	//
-	//
-	// public void changeYVelocity(float y) {
-	// velocity.y += y;
-	// clampVelocity();
-	// }
-
-
-	// public void resetMaxVelocity() {
-	// maxSpeed = currentSpeed;
-	// }
 
 	/**
 	 * Attack methods (only shots currently)
@@ -321,7 +188,7 @@ public class PlayerCharacter extends MoveableEntity {
 		 */
 		float x = ((getX() + (getWidth() / 2)) - 8);
 		// TODO: This should get player's height, not tile size
-		float y = ((getY() + getHeight()) - (MuscovyGame.TILE_SIZE / 2));
+		float y = ((getY() + getHeight()) - (game.getTileSize() / 2));
 
 		Vector2 position = new Vector2(x, y);
 		Vector2 direction = shotDirection.cpy();
@@ -340,8 +207,18 @@ public class PlayerCharacter extends MoveableEntity {
 		}
 		count = 3;
 
-		return Projectile.shootProjectiles(count, position, direction, projectileLife, projectileSpeed,
-				ProjectileDamager.ENEMY, textureMap);
+		return Projectile.shootProjectiles(game, count, position, direction, projectileLife, projectileSpeed,
+				ProjectileDamager.ENEMY);
+	}
+
+
+	public boolean isFiring() {
+		return firing;
+	}
+
+
+	public void setFiring(boolean firing) {
+		this.firing = firing;
 	}
 
 

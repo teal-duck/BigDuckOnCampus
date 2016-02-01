@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.level;
 
 
 import com.muscovy.game.enums.LevelType;
@@ -163,7 +163,7 @@ public class Level {
 	}
 
 
-	public LevelType getLevel() {
+	public LevelType getLevelType() {
 		return levelType;
 	}
 

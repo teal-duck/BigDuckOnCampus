@@ -95,7 +95,27 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultXbox360Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default Xbox 360 controls");
-		// TODO: Xbox 360 controls
+		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360.AXIS_LEFT_Y, deadzone);
+		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360.AXIS_LEFT_X, deadzone);
+		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360.AXIS_LEFT_Y, deadzone);
+		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360.AXIS_LEFT_X, deadzone);
+
+		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360.AXIS_RIGHT_Y, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360.AXIS_RIGHT_X, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360.AXIS_RIGHT_Y, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360.AXIS_RIGHT_X, deadzone);
+
+		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
+		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
+		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
 		// controlMap.addControllerForAction(Action.RIGHT, ControllerBindingType.AXIS_POSITIVE,
 		// Xbox360.AXIS_LEFT_X, deadzone);
 		// controlMap.addControllerForAction(Action.LEFT, ControllerBindingType.AXIS_NEGATIVE,

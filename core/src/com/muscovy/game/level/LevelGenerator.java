@@ -1,10 +1,11 @@
-package com.muscovy.game;
+package com.muscovy.game.level;
 
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
@@ -80,9 +81,8 @@ public class LevelGenerator {
 	/*
 	 * Function is called to generate the array of rooms for our building
 	 */
-	public static DungeonRoom[][] generateBuilding(LevelType levelType, LevelParameters levelParameters,
-			DungeonRoomTemplateLoader templateLoader, Random random, TextureMap textureMap,
-			EntityManager entityManager) {
+	public static DungeonRoom[][] generateBuilding(MuscovyGame game, LevelType levelType,
+			LevelParameters levelParameters) {
 		int maxRooms = levelParameters.getMaxRooms();
 		int roomsWide = levelParameters.getRoomsWide();
 		int roomsHigh = levelParameters.getRoomsHigh();
@@ -90,12 +90,13 @@ public class LevelGenerator {
 		int startY = levelParameters.getStartY();
 
 		DungeonRoom[][] dungeonRoomArray = new DungeonRoom[roomsHigh][roomsWide];
-		DungeonRoom startRoom = new DungeonRoom(random, textureMap);
+		DungeonRoom startRoom = new DungeonRoom(game);
 		startRoom.setRoomType(RoomType.START);
 		dungeonRoomArray[startY][startX] = startRoom;
 
 		int currentRooms = 1;
 		int randomInteger = 0;
+		Random random = game.getRandom();
 
 		/* continue until we have the required number of rooms +/- 1 */
 		while (currentRooms < maxRooms) {
@@ -112,7 +113,7 @@ public class LevelGenerator {
 											yPos - 1) <= 1)) {
 								/* place room above current */
 								dungeonRoomArray[yPos - 1][xPos] = new DungeonRoom(
-										random, textureMap);
+										game);
 								dungeonRoomArray[yPos - 1][xPos].setHasDownDoor(true);
 								dungeonRoomArray[yPos][xPos].setHasUpDoor(true);
 								currentRooms += 1;
@@ -128,7 +129,7 @@ public class LevelGenerator {
 											yPos) <= 1)) {
 								/* place room right of current */
 								dungeonRoomArray[yPos][xPos + 1] = new DungeonRoom(
-										random, textureMap);
+										game);
 								dungeonRoomArray[yPos][xPos + 1].setHasLeftDoor(true);
 								dungeonRoomArray[yPos][xPos].setHasRightDoor(true);
 								currentRooms += 1;
@@ -144,7 +145,7 @@ public class LevelGenerator {
 											yPos + 1) <= 1)) {
 								/* place room below current */
 								dungeonRoomArray[yPos + 1][xPos] = new DungeonRoom(
-										random, textureMap);
+										game);
 								dungeonRoomArray[yPos + 1][xPos].setHasUpDoor(true);
 								dungeonRoomArray[yPos][xPos].setHasDownDoor(true);
 								currentRooms += 1;
@@ -160,7 +161,7 @@ public class LevelGenerator {
 											yPos) <= 1)) {
 								/* place room left of current */
 								dungeonRoomArray[yPos][xPos - 1] = new DungeonRoom(
-										random, textureMap);
+										game);
 								dungeonRoomArray[yPos][xPos - 1].setHasRightDoor(true);
 								dungeonRoomArray[yPos][xPos].setHasLeftDoor(true);
 								currentRooms += 1;
@@ -182,54 +183,23 @@ public class LevelGenerator {
 		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.SHOP, 1, random,
 				levelType);
 
-		// // Place the item room
-		// boolean itemSet = false;
-		// for (int xPos = 0; xPos < roomsWide; xPos++) {
-		// for (int yPos = 0; yPos < roomsHigh; yPos++) {
-		// if (!itemSet) {
-		// if ((dungeonRoomArray[yPos][xPos] != null)
-		// && (dungeonRoomArray[yPos][xPos]
-		// .getRoomType() == RoomType.NORMAL)
-		// && (LevelGenerator.numberOfAdjacentRooms(dungeonRoomArray, xPos,
-		// yPos) == 1)) {
-		// dungeonRoomArray[yPos][xPos].setRoomType(RoomType.ITEM);
-		// itemSet = true;
-		// break;
-		// }
-		// }
-		// }
-		// }
-		//
-		// // Place the shop room
-		// boolean shopSet = false;
-		// for (int xPos = 0; xPos < roomsWide; xPos++) {
-		// for (int yPos = 0; yPos < roomsHigh; yPos++) {
-		// if (!shopSet) {
-		// if ((dungeonRoomArray[yPos][xPos] != null)
-		// && (dungeonRoomArray[yPos][xPos]
-		// .getRoomType() == RoomType.NORMAL)
-		// && (LevelGenerator.numberOfAdjacentRooms(dungeonRoomArray, xPos,
-		// xPos) == 1)) {
-		// dungeonRoomArray[yPos][xPos].setRoomType(RoomType.SHOP);
-		// shopSet = true;
-		// break;
-		// }
-		// }
-		// }
-		// }
+		levelParameters.setRoomCount(currentRooms);
+		return dungeonRoomArray;
+	}
 
+
+	public static void generateRoomContents(DungeonRoom[][] dungeonRoomArray, LevelType levelType,
+			DungeonRoomTemplateLoader templateLoader) {
 		// Generate the contents inside each room
-		for (int xPos = 0; xPos < roomsWide; xPos++) {
-			for (int yPos = 0; yPos < roomsHigh; yPos++) {
+		int roomsHigh = dungeonRoomArray.length;
+		int roomsWide = dungeonRoomArray[0].length;
+		for (int yPos = 0; yPos < roomsHigh; yPos++) {
+			for (int xPos = 0; xPos < roomsWide; xPos++) {
 				if (dungeonRoomArray[yPos][xPos] != null) {
-					dungeonRoomArray[yPos][xPos].generateRoom(templateLoader, levelType,
-							entityManager);
+					dungeonRoomArray[yPos][xPos].generateRoom(levelType, templateLoader);
 				}
 			}
 		}
-
-		levelParameters.setRoomCount(currentRooms);
-		return dungeonRoomArray;
 	}
 
 

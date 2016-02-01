@@ -1,9 +1,10 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 
 
 /**
@@ -14,16 +15,18 @@ public abstract class OnscreenDrawable {
 	 * Basically just a wrapper class for a sprite, but in such a way so I can extend from it and know what I'm
 	 * getting myself into, innit
 	 */
+	public final MuscovyGame game;
 	private Sprite sprite;
 	private Vector2 position;
 
 
-	public OnscreenDrawable(Sprite sprite) {
-		this(sprite, new Vector2(0, 0));
+	public OnscreenDrawable(MuscovyGame game, Sprite sprite) {
+		this(game, sprite, new Vector2(0, 0));
 	}
 
 
-	public OnscreenDrawable(Sprite sprite, Vector2 position) {
+	public OnscreenDrawable(MuscovyGame game, Sprite sprite, Vector2 position) {
+		this.game = game;
 		this.sprite = sprite;
 		this.position = position;
 	}

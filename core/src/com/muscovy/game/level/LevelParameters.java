@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.level;
 
 
 import com.muscovy.game.enums.ObjectiveType;

@@ -1,8 +1,9 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
 
 
@@ -18,8 +19,8 @@ public class Item extends Collidable {
 	private ItemType type;
 
 
-	public Item(Sprite sprite, Vector2 position, ItemType type) {
-		super(sprite, position);
+	public Item(MuscovyGame game, Sprite sprite, Vector2 position, ItemType type) {
+		super(game, sprite, position);
 		this.type = type;
 	}
 

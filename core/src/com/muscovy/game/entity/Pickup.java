@@ -1,8 +1,9 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 
 
 /**
@@ -13,7 +14,7 @@ public class Pickup extends Collidable {
 	 * This will be for stuff like health pickups, not items which change your stats
 	 */
 
-	public Pickup(Sprite sprite, Vector2 position) {
-		super(sprite, position);
+	public Pickup(MuscovyGame game, Sprite sprite, Vector2 position) {
+		super(game, sprite, position);
 	}
 }

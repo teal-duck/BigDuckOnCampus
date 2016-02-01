@@ -83,18 +83,30 @@
 
 - Controls now use our control map from previous game
 
+- Replaced GameState enum with LibGDX screens
+	- Very big change
+	- Switch statements in MuscovyGame replaced with polymorphism
+	- Gui instances owned by the relevant screens
+	- Entity manager and player are created/owned by game screen
+		- Need to be able to pass player stats to game screen
+		- As player gets recreated each time game screen gets entered, stats are reset
+	- Input moved to screens
+		- MuscovyGame no longer implements InputProcessor
+	- MuscovyGame instance gets passed around a lot
+		- Has getters for a lot of data
+	- Makes it easier to add more screens for e.g. settings menu
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side
 - Collision could maybe use our code from featherline york?
 - Player and enemy projectiles should look different
-- Perhaps create a base MovingEntity class for enemy and player (and projectile?) to extend
 - Should split the entity manager class up as it does a lot in 1 class
-- Randomise enemies more so they don't all shoot at the same time.
-- Animations.
-- Input handling sending messages to the player is a bit ugly
-	- Use input package from our game?
-- Change the GameState enum to use LibGDX Screens?
-
-
-Enemies spawn in bottom left/top right corner because that room is the shop or item room
+- Randomise enemies more so they don't all shoot at the same time
+- Animations
+- GameScreen needs to know about the player statistics (e.g. health and abilities) when creating the player instance
+- Should it be possible for ranged enemies to only do damage via bullets?
+	- Or should it be merged with AttackType.BOTH?
+	- And should static enemies be able to be pushed around by the player?
+- DungeonRoom.setHasUpDoor etc should maybe generate the door rect?
+- In GameScreen.enemiesUpdate(), the collision functions get called twice

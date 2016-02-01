@@ -1,8 +1,9 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
 
 
 public abstract class MoveableEntity extends Collidable {
@@ -11,8 +12,13 @@ public abstract class MoveableEntity extends Collidable {
 	private float currentSpeed = 0;
 
 
-	public MoveableEntity(Sprite sprite, Vector2 position) {
-		super(sprite, position);
+	public MoveableEntity(MuscovyGame game, Sprite sprite) {
+		this(game, sprite, new Vector2(0, 0));
+	}
+
+
+	public MoveableEntity(MuscovyGame game, Sprite sprite, Vector2 position) {
+		super(game, sprite, position);
 		velocity = new Vector2(0, 0);
 	}
 
@@ -42,19 +48,13 @@ public abstract class MoveableEntity extends Collidable {
 	}
 
 
-	// public void clampVelocity() {
-	// velocity.limit(maxSpeed);
-	// }
-
 	public void incrementVelocityX(float dx) {
 		velocity.x += dx;
-		// clampVelocity();
 	}
 
 
 	public void incrementVelocityY(float dy) {
 		velocity.y += dy;
-		// clampVelocity();
 	}
 
 
@@ -75,7 +75,6 @@ public abstract class MoveableEntity extends Collidable {
 
 	public void setVelocityX(float velocityX) {
 		velocity.x = velocityX;
-		// clampVelocity();
 	}
 
 
@@ -86,7 +85,6 @@ public abstract class MoveableEntity extends Collidable {
 
 	public void setVelocityY(float velocityY) {
 		velocity.y = velocityY;
-		// clampVelocity();
 	}
 
 
@@ -97,13 +95,11 @@ public abstract class MoveableEntity extends Collidable {
 
 	public void setVelocity(Vector2 velocity) {
 		this.velocity.set(velocity);
-		// clampVelocity();
 	}
 
 
 	public void setVelocity(float x, float y) {
 		velocity.set(x, y);
-		// clampVelocity();
 	}
 
 
@@ -117,7 +113,6 @@ public abstract class MoveableEntity extends Collidable {
 		if (currentSpeed > maxSpeed) {
 			currentSpeed = maxSpeed;
 		}
-		// clampVelocity();
 	}
 
 
@@ -131,7 +126,6 @@ public abstract class MoveableEntity extends Collidable {
 		if (currentSpeed > maxSpeed) {
 			currentSpeed = maxSpeed;
 		}
-		// clampVelocity();
 	}
 
 

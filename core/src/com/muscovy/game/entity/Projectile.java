@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.AssetLocations;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ProjectileDamager;
 
 
@@ -19,17 +21,17 @@ public class Projectile extends OnscreenDrawable {
 	public static final float LIFE_TIME = 1.5f;
 
 	private Vector2 velocity;
-	private float speed = Projectile.SPEED; // = 150;
-	private float damage = Projectile.DAMAGE; // = 10;
-	private float maxLifeTime = Projectile.LIFE_TIME; // = 1.5f;
+	private float speed = Projectile.SPEED;
+	private float damage = Projectile.DAMAGE;
+	private float maxLifeTime = Projectile.LIFE_TIME;
 	private float lifeCounter = 0;
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
 
 
-	public Projectile(Vector2 position, Vector2 direction, float life, float speed, ProjectileDamager damagesWho,
-			TextureMap textureMap) {
-		super(new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.BULLET)), position);
+	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
+			ProjectileDamager damagesWho) {
+		super(game, new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET)), position);
 
 		maxLifeTime = life;
 		this.speed = speed;
@@ -93,8 +95,8 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
-	public static ArrayList<Projectile> shootProjectiles(int count, Vector2 position, Vector2 direction, float life,
-			float maxVelocity, ProjectileDamager damagesWho, TextureMap textureMap) {
+	public static ArrayList<Projectile> shootProjectiles(MuscovyGame game, int count, Vector2 position,
+			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 		float maxSpread = 0;
@@ -122,8 +124,8 @@ public class Projectile extends OnscreenDrawable {
 		float spreadAngle = -maxSpread;
 
 		for (int i = 0; i < count; i += 1) {
-			projectiles.add(new Projectile(position.cpy(), direction.cpy().rotateRad(spreadAngle), life,
-					maxVelocity, damagesWho, textureMap));
+			projectiles.add(new Projectile(game, position.cpy(), direction.cpy().rotateRad(spreadAngle),
+					life, maxVelocity, damagesWho));
 			spreadAngle += spreadDelta;
 		}
 

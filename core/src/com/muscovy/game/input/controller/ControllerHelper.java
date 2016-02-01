@@ -17,7 +17,7 @@ public class ControllerHelper extends ControllerAdapter {
 	 * @param controller
 	 * @return
 	 */
-	public int indexOf(Controller controller) {
+	public static int indexOf(Controller controller) {
 		return Controllers.getControllers().indexOf(controller, true);
 	}
 
@@ -115,4 +115,28 @@ public class ControllerHelper extends ControllerAdapter {
 		return controller;
 	}
 
+
+	/**
+	 * Gets the name for a controller, or null if the controller is null.
+	 *
+	 * @param controller
+	 * @return name of controller or null is null
+	 */
+	public static String getControllerName(Controller controller) {
+		if (controller == null) {
+			return null;
+		} else {
+			return controller.getName();
+		}
+	}
+
+
+	/**
+	 *
+	 */
+	public static void setupControllers() {
+		ControllerHelper controllerHelper = new ControllerHelper();
+		Controllers.addListener(controllerHelper);
+		ControllerHelper.printControllers();
+	}
 }

@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.level.DungeonRoom;
 
 
 /**
@@ -24,8 +26,8 @@ public abstract class Collidable extends OnscreenDrawable {
 	private float hitboxYOffset = 0;
 
 
-	public Collidable(Sprite sprite, Vector2 position) {
-		super(sprite, position);
+	public Collidable(MuscovyGame game, Sprite sprite, Vector2 position) {
+		super(game, sprite, position);
 		initialisePosition(position);
 		setUpBoxes();
 	}
@@ -61,8 +63,8 @@ public abstract class Collidable extends OnscreenDrawable {
 		float width = getWidth();
 		float height = getHeight();
 
-		widthTiles = (int) Collidable.floorDiv((long) width, MuscovyGame.TILE_SIZE) + 1;
-		heightTiles = (int) Collidable.floorDiv((long) height, MuscovyGame.TILE_SIZE) + 1;
+		widthTiles = (int) Collidable.floorDiv((long) width, game.getTileSize()) + 1;
+		heightTiles = (int) Collidable.floorDiv((long) height, game.getTileSize()) + 1;
 		circleHitbox = new Circle(x + (width / 2), y + (height / 2) + hitboxYOffset, width / 2);
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}
@@ -104,7 +106,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (xTiles > (DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles)) {
 			xTiles = DungeonRoom.FLOOR_WIDTH_IN_TILES - widthTiles;
 		}
-		setX((xTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setX((xTiles * (game.getTileSize() + 1)) + game.getTileSize());
 	}
 
 
@@ -118,7 +120,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		if (yTiles > (DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles)) {
 			yTiles = DungeonRoom.FLOOR_HEIGHT_IN_TILES - heightTiles;
 		}
-		setY((yTiles * (MuscovyGame.TILE_SIZE + 1)) + MuscovyGame.TILE_SIZE);
+		setY((yTiles * (game.getTileSize() + 1)) + game.getTileSize());
 	}
 
 
@@ -220,36 +222,42 @@ public abstract class Collidable extends OnscreenDrawable {
 				&& (thisY > thatY)) {
 			y = collidable.getY() + collidable.getRectangleHitbox().getHeight() + circleHitbox.radius + 1;
 			setHitboxCentre(thisX, y);
+
 		} else if ((thisX > collidable.getX()) && (thisX < (collidable.getX() + collidable.getWidth()))
 				&& (thisY < thatY)) {
 			y = collidable.getY() - circleHitbox.radius;
 			setHitboxCentre(thisX, y);
+
 		} else if ((thisY > collidable.getY()) && (thisY < (collidable.getY() + collidable.getHeight()))
 				&& (thisX > thatX)) {
 			x = collidable.getRectangleHitbox().getX() + collidable.getRectangleHitbox().getWidth()
 					+ circleHitbox.radius;
 			setHitboxCentre(x, thisY);
+
 		} else if ((thisY > collidable.getY()) && (thisY < (collidable.getY() + collidable.getHeight()))
 				&& (thisX < thatX)) {
 			x = collidable.getRectangleHitbox().getX() - circleHitbox.radius;
 			setHitboxCentre(x, thisY);
+
 		} else if ((thisY < collidable.getRectangleHitbox().getY())
 				&& (thisX < collidable.getRectangleHitbox().getX())) {
 			angle = (float) Math.atan((thisY - collidable.getRectangleHitbox().getY())
 					/ (thisX - collidable.getRectangleHitbox().getX()));
-			y = collidable.getRectangleHitbox().getY() - (float) (circleHitbox.radius * Math.sin(angle));
-			x = collidable.getRectangleHitbox().getX() - (float) (circleHitbox.radius * Math.cos(angle));
+			y = collidable.getRectangleHitbox().getY() - (circleHitbox.radius * MathUtils.sin(angle));
+			x = collidable.getRectangleHitbox().getX() - (circleHitbox.radius * MathUtils.cos(angle));
 			setHitboxCentre(x, y);
+
 		} else if ((thisY < collidable.getRectangleHitbox().getY())
 				&& (thisX > (collidable.getRectangleHitbox().getX()
 						+ collidable.getRectangleHitbox().getWidth()))) {
 			angle = (float) Math.atan((collidable.getRectangleHitbox().getY() - thisY)
 					/ (thisX - (collidable.getRectangleHitbox().getX()
 							+ collidable.getRectangleHitbox().getWidth())));
-			y = collidable.getRectangleHitbox().getY() - (float) (circleHitbox.radius * Math.sin(angle));
+			y = collidable.getRectangleHitbox().getY() - (circleHitbox.radius * MathUtils.sin(angle));
 			x = collidable.getRectangleHitbox().getX() + collidable.getRectangleHitbox().getWidth()
-					+ (float) (circleHitbox.radius * Math.cos(angle));
+					+ (circleHitbox.radius * MathUtils.cos(angle));
 			setHitboxCentre(x, y);
+
 		} else if ((thisY > (collidable.getRectangleHitbox().getY()
 				+ collidable.getRectangleHitbox().getHeight()))
 				&& (thisX > (collidable.getRectangleHitbox().getX()
@@ -259,10 +267,11 @@ public abstract class Collidable extends OnscreenDrawable {
 					/ (thisX - (collidable.getRectangleHitbox().getX()
 							+ collidable.getRectangleHitbox().getWidth())));
 			y = collidable.getRectangleHitbox().getY() + collidable.getRectangleHitbox().getHeight()
-					+ (float) (circleHitbox.radius * Math.sin(angle));
+					+ (circleHitbox.radius * MathUtils.sin(angle));
 			x = collidable.getRectangleHitbox().getX() + collidable.getRectangleHitbox().getWidth()
-					+ (float) (circleHitbox.radius * Math.cos(angle));
+					+ (circleHitbox.radius * MathUtils.cos(angle));
 			setHitboxCentre(x, y);
+
 		} else if ((thisY > (collidable.getRectangleHitbox().getY()
 				+ collidable.getRectangleHitbox().getHeight()))
 				&& (thisX < collidable.getRectangleHitbox().getX())) {
@@ -270,8 +279,8 @@ public abstract class Collidable extends OnscreenDrawable {
 					+ collidable.getRectangleHitbox().getHeight()))
 					/ (collidable.getRectangleHitbox().getX() - thisX));
 			y = collidable.getRectangleHitbox().getY() + collidable.getRectangleHitbox().getHeight()
-					+ (float) (circleHitbox.radius * Math.sin(angle));
-			x = collidable.getRectangleHitbox().getX() - (float) (circleHitbox.radius * Math.cos(angle));
+					+ (circleHitbox.radius * MathUtils.sin(angle));
+			x = collidable.getRectangleHitbox().getX() - (circleHitbox.radius * MathUtils.cos(angle));
 			setHitboxCentre(x, y);
 		}
 	}
@@ -286,6 +295,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		float x = (getCircleHitbox().x - collidable.getCircleHitbox().x);
 		float y = (getCircleHitbox().y - collidable.getCircleHitbox().y);
 		float angle = (float) Math.atan(x / y); // MathUtils.atan2(y, x)
+
 		if (x >= 0) {
 			if (y >= 0) {
 				return angle;
@@ -299,6 +309,7 @@ public abstract class Collidable extends OnscreenDrawable {
 				return (float) (Math.PI + angle);
 			}
 		}
+
 		return angle;
 	}
 
@@ -307,6 +318,7 @@ public abstract class Collidable extends OnscreenDrawable {
 		float x = (collidable.getCircleHitbox().x - circleHitbox.x);
 		float y = (collidable.getCircleHitbox().y - circleHitbox.y);
 		float angle = (float) Math.atan(x / y); // MathUtils.atan2(y, x);
+
 		if (x >= 0) {
 			if (y >= 0) {
 				return angle;
@@ -320,6 +332,7 @@ public abstract class Collidable extends OnscreenDrawable {
 				return (float) (Math.PI + angle);
 			}
 		}
+
 		return angle;
 	}
 

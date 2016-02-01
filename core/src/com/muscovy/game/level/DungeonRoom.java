@@ -1,13 +1,17 @@
-package com.muscovy.game;
+package com.muscovy.game.level;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.AssetLocations;
+import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.entity.Item;
+import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.ItemType;
@@ -51,14 +55,13 @@ public class DungeonRoom {
 
 	private boolean allEnemiesDead;
 
-	private Random random;
-	private TextureMap textureMap;
 	private Texture backgroundTexture;
 
+	private MuscovyGame game;
 
-	public DungeonRoom(Random random, TextureMap textureMap) {
-		this.random = random;
-		this.textureMap = textureMap;
+
+	public DungeonRoom(MuscovyGame game) {
+		this.game = game;
 
 		obstacleList = new ArrayList<Obstacle>();
 		enemyList = new ArrayList<Enemy>();
@@ -68,12 +71,12 @@ public class DungeonRoom {
 
 
 	private void initialiseWalls() {
-		final float windowWidth = MuscovyGame.WINDOW_WIDTH;
-		final float windowHeight = MuscovyGame.WINDOW_HEIGHT;
-		final float tileSize = MuscovyGame.TILE_SIZE;
-		final float halfTileSize = tileSize / 2;
-		final float topGuiSize = MuscovyGame.TOP_GUI_SIZE;
-		final float worldHeight = windowHeight - topGuiSize;
+		final int windowWidth = game.getWindowWidth();
+		final int windowHeight = game.getWindowHeight();
+		final int tileSize = game.getTileSize();
+		final float halfTileSize = tileSize / 2f;
+		final int topGuiSize = game.getTopGuiSize();
+		final int worldHeight = game.getWorldHeight();
 
 		walls = new Rectangle[4];
 		walls[0] = new Rectangle(0, 0, windowWidth, tileSize);
@@ -87,13 +90,12 @@ public class DungeonRoom {
 		projectileWalls[2] = new Rectangle(windowWidth - halfTileSize, 0, halfTileSize,
 				windowHeight - topGuiSize);
 		projectileWalls[3] = new Rectangle(0, worldHeight - halfTileSize, windowWidth, halfTileSize);
-
 	}
 
 
 	private Obstacle createNonDamagingObstacle(int x, int y) {
-		Sprite rockSprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.RECYLING_BIN));
-		Obstacle obstacle = new Obstacle(rockSprite, new Vector2(x, y));
+		Sprite rockSprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.RECYLING_BIN));
+		Obstacle obstacle = new Obstacle(game, rockSprite, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
 		addObstacle(obstacle);
@@ -102,8 +104,8 @@ public class DungeonRoom {
 
 
 	private Obstacle createDamagingObstacle(int x, int y) {
-		Sprite spikeSprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.WASTE_BIN));
-		Obstacle obstacle = new Obstacle(spikeSprite, new Vector2(x, y));
+		Sprite spikeSprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.WASTE_BIN));
+		Obstacle obstacle = new Obstacle(game, spikeSprite, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
 
@@ -115,22 +117,22 @@ public class DungeonRoom {
 	}
 
 
-	private Enemy createRandomEnemy(EntityManager entityManager, int x, int y) {
+	private Enemy createRandomEnemy(int x, int y) {
 		Sprite enemySprite;
 		Enemy enemy;
 		Vector2 position = new Vector2(x, y);
 
-		if (random.nextBoolean()) {
-			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.CLEANER));
-			enemy = new Enemy(enemySprite, position, entityManager, textureMap, random);
+		if (game.getRandom().nextBoolean()) {
+			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.CLEANER));
+			enemy = new Enemy(game, enemySprite, position);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
-			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, position, entityManager, textureMap, random);
+			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			enemy = new Enemy(game, enemySprite, position);
 			enemy.setAttackType(AttackType.RANGE);
 		}
 
-		switch (random.nextInt(3)) {
+		switch (game.getRandom().nextInt(3)) {
 		case 0:
 			enemy.setShotType(EnemyShotType.SINGLE_TOWARDS_PLAYER);
 			enemy.setMovementType(MovementType.RANDOM);
@@ -158,17 +160,17 @@ public class DungeonRoom {
 	}
 
 
+	@SuppressWarnings("unused")
 	private void createHealthPack(int x, int y) {
-		Sprite sprite = new Sprite(textureMap.getTextureOrLoadFile("healthpack.png"));
+		Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile("healthpack.png"));
 		Vector2 position = new Vector2(x, y);
-		Item healthPack = new Item(sprite, position, ItemType.HEALTH);
+		Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
 
 		addItem(healthPack);
 	}
 
 
-	public void generateRoom(DungeonRoomTemplateLoader templateLoader, LevelType levelType,
-			EntityManager entityManager) {
+	public void generateRoom(LevelType levelType, DungeonRoomTemplateLoader templateLoader) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
 		 * obstacle. Tile array is based on a grid where each tile is 64x64. Represents the room. 0 = empty
@@ -180,8 +182,8 @@ public class DungeonRoom {
 
 		switch (roomType) {
 		case NORMAL:
-			int[][] tileArray = templateLoader.getRandomTemplateOrLoad(random);
-			boolean obstacleType3NonDamaging = random.nextBoolean();
+			int[][] tileArray = templateLoader.getRandomTemplateOrLoad(game.getRandom());
+			boolean obstacleType3NonDamaging = game.getRandom().nextBoolean();
 
 			for (int row = 0; row < tileArray.length; row++) {
 				for (int col = 0; col < tileArray[row].length; col++) {
@@ -203,8 +205,8 @@ public class DungeonRoom {
 						}
 						break;
 					case DungeonRoomTemplateLoader.MAYBE_ENEMY:
-						if (random.nextInt(5) < 3) {
-							createRandomEnemy(entityManager, col, row);
+						if (game.getRandom().nextInt(5) < 3) {
+							createRandomEnemy(col, row);
 						}
 						break;
 					default:
@@ -219,12 +221,13 @@ public class DungeonRoom {
 		case BOSS:
 			// Boss
 			// TODO: Change boss parameters
-			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
+			enemySprite = new Sprite(
+					game.getTextureMap().getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
+			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
-					- (enemy.getWidth() / MuscovyGame.TILE_SIZE / 2)));
+					- (enemy.getWidth() / game.getTileSize() / 2)));
 			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
-					- (enemy.getHeight() / MuscovyGame.TILE_SIZE / 2)));
+					- (enemy.getHeight() / game.getTileSize() / 2)));
 			enemy.setAttackType(AttackType.BOTH);
 			enemy.setMovementType(MovementType.FOLLOW);
 			enemy.setMaxSpeed(enemy.getMaxSpeed() * 0.8f);
@@ -241,8 +244,8 @@ public class DungeonRoom {
 		case ITEM:
 			// Item
 			// TODO: Item room
-			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
+			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(100);
 			enemy.setYTiles(100);
@@ -251,8 +254,9 @@ public class DungeonRoom {
 
 		case SHOP:
 			// Shop
-			enemySprite = new Sprite(textureMap.getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(enemySprite, new Vector2(0, 0), entityManager, textureMap, random);
+			// TODO: Shop room
+			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setX(0);
 			enemy.setY(0);
@@ -264,33 +268,54 @@ public class DungeonRoom {
 			break;
 		}
 
-		Texture texture = textureMap.getTextureOrLoadFile(AssetLocations.getLevelBackground(levelType));
-		setBackgroundTexture(texture);
+		Texture backgroundTexture = game.getTextureMap()
+				.getTextureOrLoadFile(AssetLocations.getLevelBackground(levelType));
+		setBackgroundTexture(backgroundTexture);
 		initialiseDoors();
 	}
 
 
 	public void initialiseDoors() {
 		if (hasUpDoor) {
-			upDoorRect = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2,
-					MuscovyGame.WORLD_HEIGHT - doorSize, doorSize, doorSize);
+			createUpDoorRect();
 		}
 		if (hasDownDoor) {
-			downDoorRect = new Rectangle((MuscovyGame.WINDOW_WIDTH - doorSize) / 2, 0, doorSize, doorSize);
+			createDownDoorRect();
 		}
 		if (hasRightDoor) {
-			rightDoorRect = new Rectangle(MuscovyGame.WINDOW_WIDTH - doorSize,
-					(MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
+			createRightDoorRect();
 		}
 		if (hasLeftDoor) {
-			leftDoorRect = new Rectangle(0, (MuscovyGame.WORLD_HEIGHT - doorSize) / 2, doorSize, doorSize);
+			createLeftDoorRect();
 		}
 	}
 
 
+	private void createUpDoorRect() {
+		upDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, game.getWorldHeight() - doorSize,
+				doorSize, doorSize);
+	}
+
+
+	private void createDownDoorRect() {
+		downDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, 0, doorSize, doorSize);
+	}
+
+
+	private void createRightDoorRect() {
+		rightDoorRect = new Rectangle(game.getWindowWidth() - doorSize, (game.getWorldHeight() - doorSize) / 2,
+				doorSize, doorSize);
+	}
+
+
+	private void createLeftDoorRect() {
+		leftDoorRect = new Rectangle(0, (game.getWorldHeight() - doorSize) / 2, doorSize, doorSize);
+	}
+
+
 	public void addEnemy(Enemy enemy) {
-		enemyList.add(enemy);
 		// TODO: Add enemy should set allEnemiesDead = false
+		enemyList.add(enemy);
 	}
 
 
@@ -409,6 +434,7 @@ public class DungeonRoom {
 	}
 
 
+	// TODO: Setting has a door should generate the door?
 	public void setHasUpDoor(boolean upDoor) {
 		hasUpDoor = upDoor;
 	}
@@ -448,25 +474,6 @@ public class DungeonRoom {
 		return leftDoorRect;
 	}
 
-
-	// public void setUpDoor(Rectangle northDoor) {
-	// this.upDoorRect = northDoor;
-	// }
-	//
-	//
-	// public void setRightDoor(Rectangle eastDoor) {
-	// this.rightDoorRect = eastDoor;
-	// }
-	//
-	//
-	// public void setDownDoor(Rectangle southDoor) {
-	// this.downDoorRect = southDoor;
-	// }
-	//
-	//
-	// public void setLeftDoor(Rectangle westDoor) {
-	// this.leftDoorRect = westDoor;
-	// }
 
 	public void setBackgroundTexture(Texture backgroundTexture) {
 		this.backgroundTexture = backgroundTexture;
