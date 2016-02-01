@@ -27,10 +27,10 @@ public class AssetLocations {
 	public static final String DOOR_DOWN_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png";
 	public static final String DOOR_LEFT_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png";
 	
-	public static final String DOOR_UP_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorUpClosed.png";
-	public static final String DOOR_RIGHT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorRightClosed.png";
-	public static final String DOOR_DOWN_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorDownClosed.png";
-	public static final String DOOR_LEFT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationDoorLeftClosed.png";
+	public static final String DOOR_UP_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorUp.png";
+	public static final String DOOR_RIGHT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorRight.png";
+	public static final String DOOR_DOWN_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorDown.png";
+	public static final String DOOR_LEFT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorLeft.png";
 
 	public static final String MAIN_MENU = "mainMenu.png";
 	public static final String START_GAME_BUTTON = "startGameButton.png";
@@ -100,6 +100,12 @@ public class AssetLocations {
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_CLOSED);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_DOWN_CLOSED);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_LEFT_CLOSED);
+		
+		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_BOSS);
+		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_BOSS);
+		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_DOWN_BOSS);
+		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_LEFT_BOSS);
+
 
 		textureMap.getTextureOrLoadFile(AssetLocations.MAIN_MENU);
 		textureMap.getTextureOrLoadFile(AssetLocations.START_GAME_BUTTON);
