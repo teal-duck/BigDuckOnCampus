@@ -28,6 +28,7 @@ public class Projectile extends OnscreenDrawable {
 	private float lifeCounter = 0;
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
+	@SuppressWarnings("unused")
 	private ProjectileType projectileType = ProjectileType.STANDARD;
 
 
@@ -99,7 +100,8 @@ public class Projectile extends OnscreenDrawable {
 
 
 	public static ArrayList<Projectile> shootProjectiles(MuscovyGame game, int count, Vector2 position,
-			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho, ProjectileType projectileType) {
+			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho,
+			ProjectileType projectileType) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 		float maxSpread = 0;

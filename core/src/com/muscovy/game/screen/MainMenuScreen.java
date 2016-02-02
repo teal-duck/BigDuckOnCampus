@@ -30,22 +30,25 @@ public class MainMenuScreen extends ScreenBase {
 		startButton.setCenter(getWindowWidth(), getWindowHeight());
 		startButton.setX((getWindowWidth() - 392) / 2);
 		startButton.setY(getWindowHeight() / 2);
-		
-		/* Sprite loadButton = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.LOAD_GAME_BUTTON));
-		loadButton.setCenter(getWindowWidth(), getWindowHeight());
-		loadButton.setX((getWindowWidth() - 392) / 2);
-		loadButton.setY((getWindowHeight() / 2) - 120);
-		
-		Sprite settingsButton = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.SETTINGS_BUTTON));
-		settingsButton.setCenter(getWindowWidth(), getWindowHeight());
-		settingsButton.setX((getWindowWidth() - 392) / 2);
-		settingsButton.setY((getWindowHeight() / 2) - 240); */
+
+		/*
+		 * Sprite loadButton = new
+		 * Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.LOAD_GAME_BUTTON));
+		 * loadButton.setCenter(getWindowWidth(), getWindowHeight()); loadButton.setX((getWindowWidth() - 392) /
+		 * 2); loadButton.setY((getWindowHeight() / 2) - 120);
+		 *
+		 * Sprite settingsButton = new
+		 * Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.SETTINGS_BUTTON));
+		 * settingsButton.setCenter(getWindowWidth(), getWindowHeight()); settingsButton.setX((getWindowWidth()
+		 * - 392) / 2); settingsButton.setY((getWindowHeight() / 2) - 240);
+		 */
 
 		gui = new GUI();
 		gui.addElement(background);
 		gui.addElement(startButton);
-		/*gui.addElement(loadButton);
-		gui.addElement(settingsButton);*/
+		/*
+		 * gui.addElement(loadButton); gui.addElement(settingsButton);
+		 */
 	}
 
 

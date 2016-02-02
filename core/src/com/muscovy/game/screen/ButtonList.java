@@ -1,5 +1,6 @@
 package com.muscovy.game.screen;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
@@ -264,7 +265,7 @@ public class ButtonList {
 	 *
 	 * @param batch
 	 */
-	//TODO rewrite render to display sprites
+	// TODO rewrite render to display sprites
 	public void render(SpriteBatch batch) {
 		shapeRenderer.setProjectionMatrix(guiCamera.combined);
 		shapeRenderer.begin(ShapeType.Filled);

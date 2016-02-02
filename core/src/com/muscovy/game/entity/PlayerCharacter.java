@@ -193,7 +193,7 @@ public class PlayerCharacter extends MoveableEntity {
 		 */
 		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
-		float y = getY() + (getHeight()/2);
+		float y = getY() + (getHeight() / 2);
 
 		Vector2 position = new Vector2(x, y);
 		Vector2 direction = shotDirection.cpy();
@@ -367,7 +367,8 @@ public class PlayerCharacter extends MoveableEntity {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
 	}
-	
+
+
 	public void setShotType(PlayerShotType type) {
 		shotType = type;
 	}

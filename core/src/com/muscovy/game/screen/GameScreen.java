@@ -450,7 +450,7 @@ public class GameScreen extends ScreenBase {
 					+ enemy.getCircleHitbox().radius);
 			enemy.setCollidingWithSomething(true);
 		}
-		
+
 		// enemy.setCollidingWithSomething(false);
 	}
 
@@ -513,10 +513,10 @@ public class GameScreen extends ScreenBase {
 					getWallWidth() + playerCharacter.getCircleHitbox().radius);
 		}
 	}
-	
-	
+
+
 	public void entityWallCollision(MoveableEntity entity) {
-		
+
 	}
 
 
