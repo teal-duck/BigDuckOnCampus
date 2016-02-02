@@ -18,6 +18,16 @@ public class Levels {
 	}
 
 
+	public void setLevels(Level[] levels) {
+		this.levels = levels;
+	}
+
+
+	public Level[] getLevels() {
+		return levels;
+	}
+
+
 	/**
 	 * @param game
 	 * @param random

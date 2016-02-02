@@ -51,7 +51,7 @@ public class DungeonRoom {
 	private Rectangle rightDoorRect;
 	private Rectangle downDoorRect;
 	private Rectangle leftDoorRect;
-	private float doorSize = 65;
+	private final float doorSize = 65;
 
 	private boolean allEnemiesDead;
 

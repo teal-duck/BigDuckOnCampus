@@ -258,6 +258,11 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	public EnemyShotType getShotType() {
+		return shotType;
+	}
+
+
 	public boolean isLifeOver() {
 		return dead;
 	}

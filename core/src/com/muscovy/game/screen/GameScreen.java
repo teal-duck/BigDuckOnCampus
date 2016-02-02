@@ -51,7 +51,7 @@ public class GameScreen extends ScreenBase {
 
 	private static final String HEALTH_ID = "Health";
 	private static final String SCORE_ID = "Score";
-	private static final String LEVEL_NAME = "Objective";
+	private static final String LEVEL_NAME = "LevelName";
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final int TEXT_EDGE_OFFSET = 10;

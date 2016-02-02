@@ -56,11 +56,11 @@ public class LoadingScreen extends ScreenBase {
 		String json = saveGame.getSaveString(saveData);
 		System.out.println(json);
 
-		System.out.println("");
+		// System.out.println("");
 
-		SaveData loadedData = saveGame.loadFromSaveString(json);
-		System.out.println(loadedData.getPlayer().getPosition());
-		System.out.println(loadedData.getPlayer().getScore());
+		// SaveData loadedData = saveGame.loadFromSaveString(json);
+		// System.out.println(loadedData.getPlayer().getPosition());
+		// System.out.println(loadedData.getPlayer().getScore());
 	}
 
 

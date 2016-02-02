@@ -9,6 +9,10 @@ public class SaveData {
 	private final PlayerCharacter player;
 	private final Levels levels;
 
+	// private final int currentLevel;
+	// private final int currentDungeonRoomX;
+	// private final int currentDungeonRoomY;
+
 
 	public SaveData(PlayerCharacter player, Levels levels) {
 		this.player = player;

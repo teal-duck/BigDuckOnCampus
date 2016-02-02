@@ -28,7 +28,6 @@ public class SaveDataSerializer implements Json.Serializer<SaveData> {
 
 		PlayerCharacter player = json.getSerializer(PlayerCharacter.class).read(json, playerValue, type);
 		Levels levels = json.getSerializer(Levels.class).read(json, levelsValue, type);
-		;
 
 		SaveData saveData = new SaveData(player, levels);
 		return saveData;
