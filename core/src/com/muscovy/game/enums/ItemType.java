@@ -2,5 +2,5 @@ package com.muscovy.game.enums;
 
 
 public enum ItemType {
-	HEALTH, COIN;
+	HEALTH, COIN, TRIPLE_SHOT;
 }

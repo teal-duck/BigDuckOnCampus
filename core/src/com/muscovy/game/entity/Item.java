@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
+import com.muscovy.game.enums.PlayerShotType;
 
 
 /**
@@ -38,6 +39,9 @@ public class Item extends Collidable {
 		switch (type) {
 		case HEALTH:
 			return playerCharacter.gainHealth(Item.HEALTHPACK_REGEN);
+		case TRIPLE_SHOT:
+			playerCharacter.setShotType(PlayerShotType.TRIPLE);
+			return true;
 		default:
 			return false;
 		}

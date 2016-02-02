@@ -11,6 +11,7 @@ import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.screen.GameScreen;
 
 
@@ -185,7 +186,7 @@ public class Enemy extends MoveableEntity {
 
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
-					projectileRange, projectileSpeed, ProjectileDamager.PLAYER);
+					projectileRange, projectileSpeed, ProjectileDamager.PLAYER, ProjectileType.STANDARD);
 		} else {
 			return new ArrayList<Projectile>();
 		}

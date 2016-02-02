@@ -16,6 +16,10 @@ public class AssetLocations {
 
 	public static final String PLAYER = "duck.png";
 	public static final String BULLET = "breadBullet.png";
+	public static final String ENEMY_BULLET = "enemyBullet.png";
+	
+	public static final String HEALTHPACK = "healthpack.png";
+	public static final String TRIPLE_SHOT = "triple_shot.png";
 
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
 	public static final String DOOR_RIGHT_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png";
@@ -34,8 +38,12 @@ public class AssetLocations {
 
 	public static final String MAIN_MENU = "mainMenu.png";
 	public static final String START_GAME_BUTTON = "startGameButton.png";
-	public static final String GUI_FRAME = "guiFrame.png";
-
+	public static final String LOAD_GAME_BUTTON = "loadGameButton.png";
+	public static final String SETTINGS_BUTTON = "settingsGameButton.png";
+	public static final String START_GAME_SELECT = "startGameClick.png";
+	public static final String LOAD_GAME_SELECT = "loadGameClick.png";
+	public static final String SETTINGS_SELECT = "settingsGameClick.png";
+	
 	public static final String SELECTOR = "selector.png";
 	public static final String BAD_SELECTOR = "badselector.png";
 	public static final String HES_EAST_MAP = "hesEastMap.png";
@@ -90,6 +98,10 @@ public class AssetLocations {
 
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER);
 		textureMap.getTextureOrLoadFile(AssetLocations.BULLET);
+		textureMap.getTextureOrLoadFile(AssetLocations.ENEMY_BULLET);
+		
+		textureMap.getTextureOrLoadFile(AssetLocations.HEALTHPACK);
+		textureMap.getTextureOrLoadFile(AssetLocations.TRIPLE_SHOT);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);
@@ -108,7 +120,6 @@ public class AssetLocations {
 
 		textureMap.getTextureOrLoadFile(AssetLocations.MAIN_MENU);
 		textureMap.getTextureOrLoadFile(AssetLocations.START_GAME_BUTTON);
-		textureMap.getTextureOrLoadFile(AssetLocations.GUI_FRAME);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.SELECTOR);
 		textureMap.getTextureOrLoadFile(AssetLocations.BAD_SELECTOR);

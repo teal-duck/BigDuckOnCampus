@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.enums.ProjectileType;
 
 
 /**
@@ -27,15 +28,17 @@ public class Projectile extends OnscreenDrawable {
 	private float lifeCounter = 0;
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
+	private ProjectileType projectileType = ProjectileType.STANDARD;
 
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
-			ProjectileDamager damagesWho) {
+			ProjectileDamager damagesWho, ProjectileType projectileType) {
 		super(game, new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET)), position);
 
 		maxLifeTime = life;
 		this.speed = speed;
 		this.damagesWho = damagesWho;
+		this.projectileType = projectileType;
 
 		velocity = direction.cpy().setLength(speed);
 		collisionBox = new Circle((int) getX(), (int) getY(), getSprite().getRegionWidth() / 2);
@@ -96,7 +99,7 @@ public class Projectile extends OnscreenDrawable {
 
 
 	public static ArrayList<Projectile> shootProjectiles(MuscovyGame game, int count, Vector2 position,
-			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho) {
+			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho, ProjectileType projectileType) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 		float maxSpread = 0;
@@ -106,6 +109,7 @@ public class Projectile extends OnscreenDrawable {
 		case 1:
 			maxSpread = 0;
 			spreadDelta = 0;
+			break;
 		case 2:
 			maxSpread = MathUtils.PI / 24;
 			spreadDelta = maxSpread * 2;
@@ -125,7 +129,7 @@ public class Projectile extends OnscreenDrawable {
 
 		for (int i = 0; i < count; i += 1) {
 			projectiles.add(new Projectile(game, position.cpy(), direction.cpy().rotateRad(spreadAngle),
-					life, maxVelocity, damagesWho));
+					life, maxVelocity, damagesWho, ProjectileType.STANDARD));
 			spreadAngle += spreadDelta;
 		}
 

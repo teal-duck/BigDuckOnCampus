@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
@@ -190,9 +191,9 @@ public class PlayerCharacter extends MoveableEntity {
 		 * Returns a different projectile array list depending on the shot type, so that needs to be given
 		 * directly to the entity manager
 		 */
-		float x = ((getX() + (getWidth() / 2)) - 8);
+		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
-		float y = ((getY() + getHeight()) - (game.getTileSize() / 2));
+		float y = getY() + (getHeight()/2);
 
 		Vector2 position = new Vector2(x, y);
 		Vector2 direction = shotDirection.cpy();
@@ -209,10 +210,9 @@ public class PlayerCharacter extends MoveableEntity {
 			count = 3;
 			break;
 		}
-		count = 3;
 
 		return Projectile.shootProjectiles(game, count, position, direction, projectileLife, projectileSpeed,
-				ProjectileDamager.ENEMY);
+				ProjectileDamager.ENEMY, ProjectileType.STANDARD);
 	}
 
 
@@ -366,6 +366,10 @@ public class PlayerCharacter extends MoveableEntity {
 	public void setProjectileVelocity(float projectileVelocity) {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
+	}
+	
+	public void setShotType(PlayerShotType type) {
+		shotType = type;
 	}
 
 
