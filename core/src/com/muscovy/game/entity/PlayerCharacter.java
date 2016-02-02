@@ -210,7 +210,6 @@ public class PlayerCharacter extends MoveableEntity {
 			count = 3;
 			break;
 		}
-		count = 3;
 
 		return Projectile.shootProjectiles(game, count, position, direction, projectileLife, projectileSpeed,
 				ProjectileDamager.ENEMY, ProjectileType.STANDARD);
@@ -367,6 +366,10 @@ public class PlayerCharacter extends MoveableEntity {
 	public void setProjectileVelocity(float projectileVelocity) {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
+	}
+	
+	public void setShotType(PlayerShotType type) {
+		shotType = type;
 	}
 
 

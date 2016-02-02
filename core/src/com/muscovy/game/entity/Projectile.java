@@ -109,6 +109,7 @@ public class Projectile extends OnscreenDrawable {
 		case 1:
 			maxSpread = 0;
 			spreadDelta = 0;
+			break;
 		case 2:
 			maxSpread = MathUtils.PI / 24;
 			spreadDelta = maxSpread * 2;

@@ -234,8 +234,6 @@ public class GameScreen extends ScreenBase {
 
 			playerEnemyCollision(enemy);
 			enemyWallCollision(enemy);
-//			playerEnemyCollision(enemy);
-//			enemyWallCollision(enemy);
 		}
 	}
 
