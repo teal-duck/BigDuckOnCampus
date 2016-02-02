@@ -17,6 +17,7 @@ import com.muscovy.game.GUI;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Item;
+import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.entity.Projectile;
@@ -233,8 +234,8 @@ public class GameScreen extends ScreenBase {
 
 			playerEnemyCollision(enemy);
 			enemyWallCollision(enemy);
-			playerEnemyCollision(enemy);
-			enemyWallCollision(enemy);
+//			playerEnemyCollision(enemy);
+//			enemyWallCollision(enemy);
 		}
 	}
 
@@ -417,7 +418,8 @@ public class GameScreen extends ScreenBase {
 		enemy.setCollidingWithSomething(false);
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopWall())) {
-			enemy.setVelocityY(0);
+			enemy.setVelocityY(-1 * Math.abs(enemy.getVelocityY()));
+			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getTopWall().getY()
 							- enemy.getCircleHitbox().radius);
@@ -426,7 +428,8 @@ public class GameScreen extends ScreenBase {
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getRightWall())) {
-			enemy.setVelocityX(0);
+			enemy.setVelocityX(-1 * Math.abs(enemy.getVelocityX()));
+			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightWall().getX()
 					- enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
 			enemy.setCollidingWithSomething(true);
@@ -434,7 +437,8 @@ public class GameScreen extends ScreenBase {
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
-			enemy.setVelocityX(0);
+			enemy.setVelocityX(1 * Math.abs(enemy.getVelocityX()));
+			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getLeftWall().getX()
 					+ entityManager.getCurrentDungeonRoom().getLeftWall().getWidth()
 					+ enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
@@ -443,13 +447,16 @@ public class GameScreen extends ScreenBase {
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getBottomWall())) {
-			enemy.setVelocityY(0);
+			enemy.setVelocityY(1 * Math.abs(enemy.getVelocityY()));
+			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getBottomWall().getY() + entityManager
 							.getCurrentDungeonRoom().getBottomWall().getHeight()
 					+ enemy.getCircleHitbox().radius);
 			enemy.setCollidingWithSomething(true);
 		}
+		
+		// enemy.setCollidingWithSomething(false);
 	}
 
 
@@ -510,6 +517,11 @@ public class GameScreen extends ScreenBase {
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
 					getWallWidth() + playerCharacter.getCircleHitbox().radius);
 		}
+	}
+	
+	
+	public void entityWallCollision(MoveableEntity entity) {
+		
 	}
 
 
