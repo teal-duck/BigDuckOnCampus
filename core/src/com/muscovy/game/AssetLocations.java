@@ -17,6 +17,9 @@ public class AssetLocations {
 	public static final String PLAYER = "duck.png";
 	public static final String BULLET = "breadBullet.png";
 	public static final String ENEMY_BULLET = "enemyBullet.png";
+	
+	public static final String HEALTHPACK = "healthpack.png";
+	public static final String TRIPLE_SHOT = "triple_shot.png";
 
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
 	public static final String DOOR_RIGHT_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png";
@@ -92,6 +95,9 @@ public class AssetLocations {
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER);
 		textureMap.getTextureOrLoadFile(AssetLocations.BULLET);
 		textureMap.getTextureOrLoadFile(AssetLocations.ENEMY_BULLET);
+		
+		textureMap.getTextureOrLoadFile(AssetLocations.HEALTHPACK);
+		textureMap.getTextureOrLoadFile(AssetLocations.TRIPLE_SHOT);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);
