@@ -1,11 +1,10 @@
 package com.muscovy.game.input;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.muscovy.game.input.controller.PS4;
 import com.muscovy.game.input.controller.Xbox360;
-
+import com.muscovy.game.input.controller.Xbox360Windows;
 
 /**
  * Helper class for creating new control maps.
@@ -14,9 +13,7 @@ public class ControlMapCreator {
 	private ControlMapCreator() {
 	};
 
-
 	public static final float DEFAULT_DEADZONE = 0.2f;
-
 
 	/**
 	 * Applies the default keyboard control scheme to a control map.
@@ -29,7 +26,8 @@ public class ControlMapCreator {
 		// controlMap.addKeyForAction(Action.LEFT, Keys.A, Keys.LEFT);
 		// controlMap.addKeyForAction(Action.UP, Keys.W, Keys.UP);
 		// controlMap.addKeyForAction(Action.DOWN, Keys.S, Keys.DOWN);
-		// controlMap.addKeyForAction(Action.SPRINT, Keys.SHIFT_LEFT, Keys.SHIFT_RIGHT);
+		// controlMap.addKeyForAction(Action.SPRINT, Keys.SHIFT_LEFT,
+		// Keys.SHIFT_RIGHT);
 		// controlMap.addKeyForAction(Action.FIRE, Keys.SPACE);
 		// controlMap.addKeyForAction(Action.RELOAD, Keys.R);
 
@@ -50,7 +48,6 @@ public class ControlMapCreator {
 		return controlMap;
 	}
 
-
 	/**
 	 * Applies the default PS4 control scheme to a control map.
 	 *
@@ -62,21 +59,21 @@ public class ControlMapCreator {
 		Gdx.app.log("Controls", "Applying default PS4 controls");
 		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_Y,
 				deadzone);
-		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				PS4.AXIS_LEFT_X, deadzone);
-		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE,
-				PS4.AXIS_LEFT_Y, deadzone);
-		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				PS4.AXIS_LEFT_X, deadzone);
+		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_LEFT_X,
+				deadzone);
+		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_LEFT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_X,
+				deadzone);
 
-		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE,
-				PS4.AXIS_RIGHT_Y, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				PS4.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE,
-				PS4.AXIS_RIGHT_Y, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				PS4.AXIS_RIGHT_X, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_RIGHT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_RIGHT_X,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE, PS4.AXIS_RIGHT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_RIGHT_X,
+				deadzone);
 
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, PS4.BUTTON_CROSS);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, PS4.BUTTON_OPTIONS);
@@ -84,7 +81,6 @@ public class ControlMapCreator {
 
 		return controlMap;
 	}
-
 
 	/**
 	 * Applies the default Xbox 360 control scheme to a control map.
@@ -95,62 +91,64 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultXbox360Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default Xbox 360 controls");
-		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_LEFT_Y, deadzone);
-		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_LEFT_X, deadzone);
-		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_LEFT_Y, deadzone);
-		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_LEFT_X, deadzone);
+		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_LEFT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE, Xbox360.AXIS_LEFT_X,
+				deadzone);
+		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE, Xbox360.AXIS_LEFT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_LEFT_X,
+				deadzone);
 
-		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_RIGHT_Y, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_RIGHT_X, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE,
-				Xbox360.AXIS_RIGHT_Y, deadzone);
-		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-				Xbox360.AXIS_RIGHT_X, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_RIGHT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE, Xbox360.AXIS_RIGHT_X,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE, Xbox360.AXIS_RIGHT_Y,
+				deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE, Xbox360.AXIS_RIGHT_X,
+				deadzone);
 
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
 		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
-		// controlMap.addControllerForAction(Action.RIGHT, ControllerBindingType.AXIS_POSITIVE,
-		// Xbox360.AXIS_LEFT_X, deadzone);
-		// controlMap.addControllerForAction(Action.LEFT, ControllerBindingType.AXIS_NEGATIVE,
-		// Xbox360.AXIS_LEFT_X,
-		// deadzone);
-		// controlMap.addControllerForAction(Action.UP, ControllerBindingType.AXIS_NEGATIVE,
-		// Xbox360.AXIS_LEFT_Y,
-		// deadzone);
-		// controlMap.addControllerForAction(Action.DOWN, ControllerBindingType.AXIS_POSITIVE,
-		// Xbox360.AXIS_LEFT_Y,
-		// deadzone);
-		// controlMap.addControllerForAction(Action.SPRINT, ControllerBindingType.BUTTON,
-		// Xbox360.BUTTON_LEFT_BUMPER);
-		//
-		// controlMap.addControllerForAction(Action.LOOK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
-		// Xbox360.AXIS_RIGHT_X, deadzone);
-		// controlMap.addControllerForAction(Action.LOOK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
-		// Xbox360.AXIS_RIGHT_X, deadzone);
-		// controlMap.addControllerForAction(Action.LOOK_UP, ControllerBindingType.AXIS_NEGATIVE,
-		// Xbox360.AXIS_RIGHT_Y, deadzone);
-		// controlMap.addControllerForAction(Action.LOOK_DOWN, ControllerBindingType.AXIS_POSITIVE,
-		// Xbox360.AXIS_RIGHT_Y, deadzone);
-		//
-		// controlMap.addControllerForAction(Action.FIRE, ControllerBindingType.AXIS_POSITIVE,
-		// Xbox360.AXIS_RIGHT_TRIGGER, deadzone);
-		// controlMap.addControllerForAction(Action.RELOAD, ControllerBindingType.BUTTON,
-		// Xbox360.BUTTON_RIGHT_BUMPER);
-		//
-		// controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
-		// controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
-		// controlMap.addControllerForAction(Action.BACK, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
 
 		return controlMap;
 	}
 
+	/**
+	 * Applies the default Xbox 360 Windows control scheme to a control map.
+	 *
+	 * @param controlMap
+	 * @param deadzone
+	 * @return the control map after changes
+	 */
+	public static ControlMap applyDefaultXbox360WindowsControls(ControlMap controlMap, float deadzone) {
+		Gdx.app.log("Controls", "Applying default Xbox 360 Windows controls");
+		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360Windows.AXIS_LEFT_Y, deadzone);
+		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360Windows.AXIS_LEFT_X, deadzone);
+		controlMap.addControllerForAction(Action.WALK_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360Windows.AXIS_LEFT_Y, deadzone);
+		controlMap.addControllerForAction(Action.WALK_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360Windows.AXIS_LEFT_X, deadzone);
+
+		controlMap.addControllerForAction(Action.SHOOT_UP, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360Windows.AXIS_RIGHT_Y, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_RIGHT, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360Windows.AXIS_RIGHT_X, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_DOWN, ControllerBindingType.AXIS_POSITIVE,
+				Xbox360Windows.AXIS_RIGHT_Y, deadzone);
+		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
+				Xbox360Windows.AXIS_RIGHT_X, deadzone);
+
+		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360Windows.BUTTON_A);
+		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360Windows.BUTTON_START);
+		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, Xbox360Windows.BUTTON_B);
+
+		return controlMap;
+	}
 
 	/**
 	 * @return
@@ -158,7 +156,6 @@ public class ControlMapCreator {
 	public static ControlMap newDefaultControlMap() {
 		return ControlMapCreator.newDefaultControlMap(null, ControlMapCreator.DEFAULT_DEADZONE);
 	}
-
 
 	/**
 	 * @param deadzone
@@ -168,7 +165,6 @@ public class ControlMapCreator {
 		return ControlMapCreator.newDefaultControlMap(null, deadzone);
 	}
 
-
 	/**
 	 * @param controllerName
 	 * @return
@@ -177,12 +173,11 @@ public class ControlMapCreator {
 		return ControlMapCreator.newDefaultControlMap(controllerName, ControlMapCreator.DEFAULT_DEADZONE);
 	}
 
-
 	/**
 	 * Creates a new control map with default keyboard and controller controls.
 	 *
 	 * @param controllerName
-	 *                null if no controller plugged in
+	 *            null if no controller plugged in
 	 * @param deadzone
 	 * @return
 	 */
@@ -197,10 +192,9 @@ public class ControlMapCreator {
 		return controlMap;
 	}
 
-
 	/**
-	 * Applies default controller controls to a control map if the controller is known. If the controller is not
-	 * known, no changes are made.
+	 * Applies default controller controls to a control map if the controller is
+	 * known. If the controller is not known, no changes are made.
 	 * <p>
 	 * Known controllers: PS4, Xbox 360
 	 *
@@ -216,13 +210,14 @@ public class ControlMapCreator {
 				ControlMapCreator.applyDefaultPs4Controls(controlMap, deadzone);
 			} else if (controllerName.equals(Xbox360.NAME)) {
 				ControlMapCreator.applyDefaultXbox360Controls(controlMap, deadzone);
+			} else if (controllerName.equals(Xbox360Windows.NAME)) {
+				ControlMapCreator.applyDefaultXbox360WindowsControls(controlMap, deadzone);
 			} else {
 				Gdx.app.log("Controls", "Unknown controller \"" + controllerName + "\"");
 			}
 		}
 		return controlMap;
 	}
-
 
 	/**
 	 * @param controllerName
@@ -235,6 +230,8 @@ public class ControlMapCreator {
 		if (controllerName.equals(PS4.NAME)) {
 			return true;
 		} else if (controllerName.equals(Xbox360.NAME)) {
+			return true;
+		} else if (controllerName.equals(Xbox360Windows.NAME)) {
 			return true;
 		}
 		return false;
