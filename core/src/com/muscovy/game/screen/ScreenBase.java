@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.Levels;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.TextureMap;
+import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
@@ -122,6 +123,11 @@ public abstract class ScreenBase implements Screen {
 
 	public Random getRandom() {
 		return game.getRandom();
+	}
+
+
+	public PlayerCharacter getPlayerCharacter() {
+		return game.getPlayerCharacter();
 	}
 
 

@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.EntityManager;
 import com.muscovy.game.GUI;
@@ -62,7 +61,9 @@ public class GameScreen extends ScreenBase {
 
 		this.level = level;
 		entityManager = new EntityManager(getGame(), level);
-		initialisePlayerCharacter();
+		// initialisePlayerCharacter();
+		playerCharacter = getPlayerCharacter();
+		resetPlayer();
 		initialiseGui();
 		entityManager.startLevel(playerCharacter);
 	}
@@ -106,20 +107,16 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	private void initialisePlayerCharacter() {
-		// TODO: Player stats need to be passed to initialisePlayerCharacter
-		Sprite playerSprite = new Sprite();
-		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+	public void resetPlayer() {
+		Sprite playerSprite = playerCharacter.getSprite();
 
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
-
 		playerStartX -= playerSprite.getRegionWidth() / 2;
 		playerStartY -= playerSprite.getRegionHeight() / 2;
 
-		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
-		playerCharacter = new PlayerCharacter(getGame(), playerSprite, playerStartPosition, getControlMap(),
-				getController());
+		playerCharacter.setX(playerStartX);
+		playerCharacter.setY(playerStartY);
 	}
 
 

@@ -7,7 +7,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
@@ -25,6 +28,7 @@ public class MuscovyGame extends Game {
 	private Levels levels;
 	private Random random;
 
+	private PlayerCharacter playerCharacter;
 	private ControlMap controlMap;
 	private Controller controller;
 
@@ -43,6 +47,7 @@ public class MuscovyGame extends Game {
 		textureMap = new TextureMap();
 
 		initialiseInput();
+		initialisePlayerCharacter();
 
 		resetGame();
 	}
@@ -57,6 +62,23 @@ public class MuscovyGame extends Game {
 			controller = null;
 			Gdx.app.log("Controller", "Controller not known");
 		}
+	}
+
+
+	private void initialisePlayerCharacter() {
+		// TODO: Player stats need to be passed to initialisePlayerCharacter
+		Sprite playerSprite = new Sprite();
+		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+
+		float playerStartX = getWindowWidth() / 2;
+		float playerStartY = getWindowHeight() / 2;
+
+		playerStartX -= playerSprite.getRegionWidth() / 2;
+		playerStartY -= playerSprite.getRegionHeight() / 2;
+
+		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
+		playerCharacter = new PlayerCharacter(this, playerSprite, playerStartPosition, getControlMap(),
+				getController());
 	}
 
 
@@ -107,6 +129,11 @@ public class MuscovyGame extends Game {
 
 	public Random getRandom() {
 		return random;
+	}
+
+
+	public PlayerCharacter getPlayerCharacter() {
+		return playerCharacter;
 	}
 
 

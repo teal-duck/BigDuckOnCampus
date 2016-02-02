@@ -1,5 +1,6 @@
 package com.muscovy.game.input.controller;
 
+
 public class Xbox360Windows {
 	public static final String NAME = "Controller (XBOX 360 For Windows)";
 
