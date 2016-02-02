@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
@@ -212,7 +213,7 @@ public class PlayerCharacter extends MoveableEntity {
 		count = 3;
 
 		return Projectile.shootProjectiles(game, count, position, direction, projectileLife, projectileSpeed,
-				ProjectileDamager.ENEMY);
+				ProjectileDamager.ENEMY, ProjectileType.STANDARD);
 	}
 
 
