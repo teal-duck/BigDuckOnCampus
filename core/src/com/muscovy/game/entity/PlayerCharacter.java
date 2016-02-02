@@ -190,9 +190,9 @@ public class PlayerCharacter extends MoveableEntity {
 		 * Returns a different projectile array list depending on the shot type, so that needs to be given
 		 * directly to the entity manager
 		 */
-		float x = ((getX() + (getWidth() / 2)) - 8);
+		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
-		float y = ((getY() + getHeight()) - (game.getTileSize() / 2));
+		float y = getY() + (getHeight()/2);
 
 		Vector2 position = new Vector2(x, y);
 		Vector2 direction = shotDirection.cpy();
