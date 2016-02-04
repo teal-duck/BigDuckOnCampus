@@ -14,6 +14,7 @@ import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
+import com.muscovy.game.save.control.SaveControls;
 import com.muscovy.game.screen.LoadingScreen;
 
 
@@ -47,7 +48,12 @@ public class MuscovyGame extends Game {
 		textureMap = new TextureMap();
 
 		initialiseInput();
+		ControlMapCreator.applyDefaultPs4Controls(controlMap, 0.2f);
 		initialisePlayerCharacter();
+
+		SaveControls saveControls = new SaveControls();
+		String controlMapString = saveControls.getSaveString(controlMap);
+		System.out.println(controlMapString);
 
 		resetGame();
 	}

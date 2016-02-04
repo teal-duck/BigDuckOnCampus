@@ -1,4 +1,4 @@
-package com.muscovy.game.save;
+package com.muscovy.game.save.game;
 
 
 import com.muscovy.game.Levels;

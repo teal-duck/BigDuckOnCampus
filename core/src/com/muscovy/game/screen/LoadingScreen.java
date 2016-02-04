@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.Levels;
 import com.muscovy.game.MuscovyGame;
-import com.muscovy.game.save.SaveData;
-import com.muscovy.game.save.SaveGame;
+import com.muscovy.game.save.game.SaveData;
+import com.muscovy.game.save.game.SaveGame;
 
 
 public class LoadingScreen extends ScreenBase {
@@ -42,13 +42,14 @@ public class LoadingScreen extends ScreenBase {
 			levels.generateLevelContents();
 			getGame().setLevels(levels);
 
-			doSaveLoadTest();
+			// doSaveLoadTest();
 
 			setScreen(new MainMenuScreen(getGame()));
 		}
 	}
 
 
+	@SuppressWarnings("unused")
 	private void doSaveLoadTest() {
 		MuscovyGame game = getGame();
 		SaveGame saveGame = new SaveGame(game);

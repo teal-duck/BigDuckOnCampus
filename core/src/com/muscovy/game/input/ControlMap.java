@@ -234,6 +234,19 @@ public class ControlMap {
 
 
 	/**
+	 * Calls addDefaultKeyBindingForAction and addDefaultControllerBindingForAction
+	 * 
+	 * @param action
+	 * @return
+	 */
+	private Binding addDefaultBindingForAction(Action action) {
+		addDefaultKeyBindingForAction(action);
+		addDefaultControllerBindingForAction(action);
+		return controls.get(action);
+	}
+
+
+	/**
 	 * Gets the key binding for an action. If there is no key binding, the default is inserted into the map and
 	 * returned.
 	 *
@@ -275,6 +288,28 @@ public class ControlMap {
 			return binding.getControllerBinding();
 		} else {
 			return addDefaultControllerBindingForAction(action);
+		}
+	}
+
+
+	/**
+	 * Gets the binding for an action. If there is no binding, the default is inserted into the map and returned.
+	 *
+	 * @param action
+	 * @return the binding for the action, or default if there is none
+	 * @throws IllegalArgumentException
+	 *                 if action is null
+	 */
+	public Binding getBindingForAction(Action action) {
+		if (action == null) {
+			throw new IllegalArgumentException("action is null");
+		}
+
+		Binding binding = controls.get(action);
+		if (binding != null) {
+			return binding;
+		} else {
+			return addDefaultBindingForAction(action);
 		}
 	}
 
