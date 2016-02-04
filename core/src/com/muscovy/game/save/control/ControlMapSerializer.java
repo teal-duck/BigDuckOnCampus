@@ -4,6 +4,7 @@ package com.muscovy.game.save.control;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.muscovy.game.input.Action;
+import com.muscovy.game.input.Binding;
 import com.muscovy.game.input.ControlMap;
 
 
@@ -23,7 +24,18 @@ public class ControlMapSerializer implements Json.Serializer<ControlMap> {
 
 	@Override
 	public ControlMap read(Json json, JsonValue jsonData, Class type) {
-		return null;
+		ControlMap controlMap = new ControlMap();
+
+		JsonValue actionValue = jsonData.child;
+		if (actionValue != null) {
+			do {
+				Action action = Action.valueOf(actionValue.name);
+				Binding binding = json.getSerializer(Binding.class).read(json, actionValue, type);
+				controlMap.addBindingForAction(action, binding);
+			} while ((actionValue = actionValue.next) != null);
+		}
+
+		return controlMap;
 	}
 
 }

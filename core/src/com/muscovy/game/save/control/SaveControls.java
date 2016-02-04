@@ -10,16 +10,12 @@ import com.muscovy.game.input.KeyBinding;
 
 
 public class SaveControls {
-	// @SuppressWarnings("unused")
-	// private final MuscovyGame game;
 	private final Json json;
 
 
-	public SaveControls() { // MuscovyGame game) {
-		// this.game = game;
+	public SaveControls() {
 
 		json = new Json();
-		// json.setTypeName(null);
 		json.setUsePrototypes(false);
 		json.setIgnoreUnknownFields(true);
 		json.setOutputType(OutputType.json);
@@ -28,15 +24,6 @@ public class SaveControls {
 		json.setSerializer(Binding.class, new BindingSerializer());
 		json.setSerializer(KeyBinding.class, new KeyBindingSerializer());
 		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer());
-
-		// json.setSerializer(SaveData.class, new SaveDataSerializer());
-		// json.setSerializer(PlayerCharacter.class, new PlayerCharacterSerializer(game));
-		// json.setSerializer(Levels.class, new LevelsSerializer());
-		// json.setSerializer(Level.class, new LevelSerializer());
-		// json.setSerializer(DungeonRoom.class, new DungeonRoomSerializer());
-		// json.setSerializer(Obstacle.class, new ObstacleSerializer());
-		// json.setSerializer(Enemy.class, new EnemySerializer());
-		// json.setSerializer(Item.class, new ItemSerializer());
 	}
 
 
@@ -49,5 +36,4 @@ public class SaveControls {
 		ControlMap controlMap = json.fromJson(ControlMap.class, string);
 		return controlMap;
 	}
-
 }

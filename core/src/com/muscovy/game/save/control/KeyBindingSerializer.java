@@ -19,7 +19,13 @@ public class KeyBindingSerializer implements Json.Serializer<KeyBinding> {
 
 	@Override
 	public KeyBinding read(Json json, JsonValue jsonData, Class type) {
-		return null;
-	}
+		JsonValue primaryValue = jsonData.get("primary");
+		JsonValue secondaryValue = jsonData.get("secondary");
 
+		int primary = primaryValue.asInt();
+		int secondary = secondaryValue.asInt();
+
+		KeyBinding keyBinding = new KeyBinding(primary, secondary);
+		return keyBinding;
+	}
 }

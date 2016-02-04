@@ -53,7 +53,10 @@ public class MuscovyGame extends Game {
 
 		SaveControls saveControls = new SaveControls();
 		String controlMapString = saveControls.getSaveString(controlMap);
-		System.out.println(controlMapString);
+		// System.out.println(controlMapString);
+
+		ControlMap loadedControls = saveControls.loadFromSaveString(controlMapString);
+		System.out.println(loadedControls);
 
 		resetGame();
 	}

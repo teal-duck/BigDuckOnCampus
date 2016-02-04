@@ -31,12 +31,16 @@ public class LevelsSerializer implements Json.Serializer<Levels> {
 		Level[] levels = new Level[levelCount];
 
 		JsonValue levelValue = jsonData.child;
-		int i = 0;
-		do {
-			// System.out.println(i + ": " + levelValue.toString());
-			levels[i] = json.getSerializer(Level.class).read(json, levelValue, type);
-			i += 1;
-		} while ((levelValue = levelValue.next) != null);
+		if (levelValue != null) {
+			int i = 0;
+			do {
+				// System.out.println(i + ": " + levelValue.toString());
+				levels[i] = json.getSerializer(Level.class).read(json, levelValue, type);
+				i += 1;
+			} while ((levelValue = levelValue.next) != null);
+		} else {
+			System.out.println("Level value when loading levels is null");
+		}
 
 		Levels levelsObject = new Levels();
 		levelsObject.setLevels(levels);

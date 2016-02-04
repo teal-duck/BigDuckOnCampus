@@ -235,14 +235,36 @@ public class ControlMap {
 
 	/**
 	 * Calls addDefaultKeyBindingForAction and addDefaultControllerBindingForAction
-	 * 
+	 *
 	 * @param action
 	 * @return
 	 */
-	private Binding addDefaultBindingForAction(Action action) {
+	public Binding addDefaultBindingForAction(Action action) {
 		addDefaultKeyBindingForAction(action);
 		addDefaultControllerBindingForAction(action);
 		return controls.get(action);
+	}
+
+
+	/**
+	 * @param action
+	 * @param binding
+	 * @return
+	 * @throws IllegalArgumentException
+	 *                 if action is null
+	 * @throws IllegalArgumentException
+	 *                 if binding is null
+	 */
+	public Binding addBindingForAction(Action action, Binding binding) {
+		if (action == null) {
+			throw new IllegalArgumentException("action is null");
+		}
+		if (binding == null) {
+			throw new IllegalArgumentException("binding is null");
+		}
+
+		controls.put(action, binding);
+		return binding;
 	}
 
 
