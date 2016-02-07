@@ -110,7 +110,6 @@ public class MainMenuScreen extends ScreenBase {
 		}
 		draw();
 	}
-	
 
 	private void draw() {
 		clearScreen();
@@ -118,16 +117,16 @@ public class MainMenuScreen extends ScreenBase {
 		buttons.render(batch);
 	}
 	
-
 	private void selectNewGame() {
 		this.setScreen(new LevelSelectScreen(getGame()));
 	}
 
-
 	private void selectLoadGame() {
+		//TODO Load Game
 	}
 
 	private void selectSettings() {
+		//TODO Settings
 	}
 
 	private void selectQuit() {

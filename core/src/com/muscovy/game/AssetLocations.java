@@ -37,12 +37,6 @@ public class AssetLocations {
 	public static final String DOOR_LEFT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorLeft.png";
 
 	public static final String MAIN_MENU = "mainMenu.png";
-	public static final String START_GAME_BUTTON = "startGameButton.png";
-	public static final String LOAD_GAME_BUTTON = "loadGameButton.png";
-	public static final String SETTINGS_BUTTON = "settingsGameButton.png";
-	public static final String START_GAME_SELECT = "startGameClick.png";
-	public static final String LOAD_GAME_SELECT = "loadGameClick.png";
-	public static final String SETTINGS_SELECT = "settingsGameClick.png";
 	public static final String GAME_BUTTON = "GameButton.png";
 	public static final String GAME_BUTTON_SELECT = "GameButtonSelect.png";
 
@@ -124,7 +118,8 @@ public class AssetLocations {
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_LEFT_BOSS);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.MAIN_MENU);
-		textureMap.getTextureOrLoadFile(AssetLocations.START_GAME_BUTTON);
+		textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON);
+		textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON_SELECT);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.SELECTOR);
 		textureMap.getTextureOrLoadFile(AssetLocations.BAD_SELECTOR);

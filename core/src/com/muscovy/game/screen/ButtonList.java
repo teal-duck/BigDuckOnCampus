@@ -52,7 +52,9 @@ public class ButtonList {
 
 	private Color selectedColour = Color.WHITE;
 	private Color deselectedColour = Color.BLACK;
-
+	
+	private Texture selectedButton;
+	private Texture deselectedButton;
 
 	private Sprite sprite;
 	
@@ -263,7 +265,7 @@ public class ButtonList {
 	 */
 	public void render(SpriteBatch batch) {
 		
-		//Button sprite's
+		//BUTTON SPRITES
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		batch.enableBlending();
@@ -271,13 +273,13 @@ public class ButtonList {
 		int y = topLeftY - buttonHeight;
 		
 		for (int i = 0; i < buttonTexts.length; i += 1) {
-			Texture button = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON));
-			Texture buttonSelected = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON_SELECT));
+			deselectedButton = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON));
+			selectedButton = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON_SELECT));
 			
 			if (selected == i) {
-				sprite = new Sprite(buttonSelected);
+				sprite = new Sprite(selectedButton);
 			} else {
-				sprite = new Sprite(button);
+				sprite = new Sprite(deselectedButton);
 			}
 			
 			sprite.setSize(buttonWidth,buttonHeight);
@@ -290,7 +292,7 @@ public class ButtonList {
 		}
 		batch.end();
 
-		//Text on button
+		//BUTTON TEXT 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		batch.enableBlending();
@@ -309,7 +311,7 @@ public class ButtonList {
 
 			int x = (int) ((topLeftX + halfButtonWidth) - (layout.width / 2));
 			font.draw(batch, text, x, y);
-
+			
 			y -= buttonDifference;
 			y -= buttonHeight;
 		}
