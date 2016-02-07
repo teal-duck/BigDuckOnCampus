@@ -18,7 +18,7 @@ public class LoadingScreen extends ScreenBase {
 
 	public LoadingScreen(MuscovyGame game) {
 		super(game);
-		font = AssetLocations.newFont();
+		font = AssetLocations.newFont20();
 		font.setColor(Color.WHITE);
 	}
 

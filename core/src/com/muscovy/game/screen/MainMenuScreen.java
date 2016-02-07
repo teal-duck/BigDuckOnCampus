@@ -2,6 +2,8 @@ package com.muscovy.game.screen;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
@@ -9,56 +11,78 @@ import com.muscovy.game.GUI;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.input.Action;
 
-
 public class MainMenuScreen extends ScreenBase {
 	private GUI gui;
 	private boolean escapeJustPressed = true;
-
+	private ButtonList buttons;
+	private BitmapFont font;
+	
+	private static final int NEW_GAME = 0;
+	private static final int LOAD_GAME = 1;
+	private static final int SETTINGS = 2;
+	private static final int QUIT = 3;
+	private static final String[] BUTTON_TEXTS = new String[] { "New Game", "Load Game", "Settings", "Quit" };
 
 	public MainMenuScreen(MuscovyGame game) {
 		super(game);
+		font = AssetLocations.newFont32();
+		font.setColor(Color.WHITE);
 		initialiseGuis();
+		draw();
 	}
-
 
 	private void initialiseGuis() {
 		Sprite background = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.MAIN_MENU));
 		background.setX(0);
 		background.setY(getWindowHeight() - background.getTexture().getHeight());
-
-		Sprite startButton = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.START_GAME_BUTTON));
-		startButton.setCenter(getWindowWidth(), getWindowHeight());
-		startButton.setX((getWindowWidth() - 392) / 2);
-		startButton.setY(getWindowHeight() / 2);
-
-		/*
-		 * Sprite loadButton = new
-		 * Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.LOAD_GAME_BUTTON));
-		 * loadButton.setCenter(getWindowWidth(), getWindowHeight()); loadButton.setX((getWindowWidth() - 392) /
-		 * 2); loadButton.setY((getWindowHeight() / 2) - 120);
-		 *
-		 * Sprite settingsButton = new
-		 * Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.SETTINGS_BUTTON));
-		 * settingsButton.setCenter(getWindowWidth(), getWindowHeight()); settingsButton.setX((getWindowWidth()
-		 * - 392) / 2); settingsButton.setY((getWindowHeight() / 2) - 240);
-		 */
-
+		
 		gui = new GUI();
 		gui.addElement(background);
-		gui.addElement(startButton);
-		/*
-		 * gui.addElement(loadButton); gui.addElement(settingsButton);
-		 */
+		
+		buttons = new ButtonList(MainMenuScreen.BUTTON_TEXTS, font, getCamera(), getControlMap(),
+				getController());
+		setButtonLocations();
+	}
+
+	private void setButtonLocations() {
+		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2); 
+				ButtonList.getHeightForDefaultButtonList(MainMenuScreen.BUTTON_TEXTS.length);
+				
+		int y =	(getWindowHeight() / 6) - ButtonList.WINDOW_EDGE_OFFSET + ButtonList
+				.getHeightForDefaultButtonList(MainMenuScreen.BUTTON_TEXTS.length);
+		buttons.setPositionDefaultSize(x, y);
 	}
 
 
 	@Override
-	public void updateScreen(float deltaTime) {
-		if (isStateForAction(Action.ENTER)) {
-			setScreen(new LevelSelectScreen(getGame()));
-			return;
-		}
+	public void resize(int width, int height) {
+		setButtonLocations();
+	}
 
+
+	/**
+	 * @param selected
+	 */
+	private void selectOption(int selected) {
+		switch (selected) {
+		case NEW_GAME:
+			selectNewGame();
+			break;
+		case LOAD_GAME:
+			selectLoadGame();
+			break;
+		case SETTINGS:
+			selectSettings();
+			break;
+		case QUIT:
+			selectQuit();
+			break;
+		}
+	}
+
+	@Override
+	public void updateScreen(float deltaTime) {
+		
 		if (isStateForAction(Action.ESCAPE)) {
 			if (!escapeJustPressed) {
 				Gdx.app.exit();
@@ -70,7 +94,6 @@ public class MainMenuScreen extends ScreenBase {
 		}
 	}
 
-
 	@Override
 	public void renderScreen(float deltaTime, SpriteBatch batch) {
 		clearScreen();
@@ -79,5 +102,35 @@ public class MainMenuScreen extends ScreenBase {
 		batch.begin();
 		gui.render(batch);
 		batch.end();
+		
+		buttons.updateSelected();
+		if (buttons.isSelectedSelected()) {
+			int selected = buttons.getSelected();
+			selectOption(selected);
+		}
+		draw();
+	}
+	
+
+	private void draw() {
+		clearScreen();
+		SpriteBatch batch = getBatch();
+		buttons.render(batch);
+	}
+	
+
+	private void selectNewGame() {
+		this.setScreen(new LevelSelectScreen(getGame()));
+	}
+
+
+	private void selectLoadGame() {
+	}
+
+	private void selectSettings() {
+	}
+
+	private void selectQuit() {
+		Gdx.app.exit();
 	}
 }

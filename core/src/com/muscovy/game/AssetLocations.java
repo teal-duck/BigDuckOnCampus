@@ -43,6 +43,8 @@ public class AssetLocations {
 	public static final String START_GAME_SELECT = "startGameClick.png";
 	public static final String LOAD_GAME_SELECT = "loadGameClick.png";
 	public static final String SETTINGS_SELECT = "settingsGameClick.png";
+	public static final String GAME_BUTTON = "GameButton.png";
+	public static final String GAME_BUTTON_SELECT = "GameButtonSelect.png";
 
 	public static final String SELECTOR = "selector.png";
 	public static final String BAD_SELECTOR = "badselector.png";
@@ -59,8 +61,11 @@ public class AssetLocations {
 	public static final String COMPSCI_BACKGROUND = "accommodationAssets/csBackground.png";
 	public static final String RCH_BACKGROUND = "accommodationAssets/rchBackground.png";
 
-	public static final String FONT_FNT = "fonts/gamefont.fnt";
-	public static final String FONT_PNG = "fonts/gamefont.png";
+	public static final String FONT_FNT_20 = "fonts/gamefont_20.fnt";
+	public static final String FONT_PNG_20 = "fonts/gamefont_20.png";
+	
+	public static final String FONT_FNT_32 = "fonts/gamefont_32.fnt";
+	public static final String FONT_PNG_32 = "fonts/gamefont_32.png";
 
 
 	public static String getLevelBackground(LevelType levelType) {
@@ -138,9 +143,14 @@ public class AssetLocations {
 	}
 
 
-	public static BitmapFont newFont() {
-		return new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT),
-				Gdx.files.internal(AssetLocations.FONT_PNG), false);
+	public static BitmapFont newFont20() {
+		return new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT_20),
+				Gdx.files.internal(AssetLocations.FONT_PNG_20), false);
+	}
+	
+	public static BitmapFont newFont32() {
+		return new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT_32),
+				Gdx.files.internal(AssetLocations.FONT_PNG_32), false);
 	}
 
 

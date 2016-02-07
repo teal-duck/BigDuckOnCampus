@@ -26,7 +26,7 @@ public class GameOverScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
-		gameOverFont = AssetLocations.newFont();
+		gameOverFont = AssetLocations.newFont20();
 		gameOverFont.setColor(Color.RED);
 
 		gui = new GUI();

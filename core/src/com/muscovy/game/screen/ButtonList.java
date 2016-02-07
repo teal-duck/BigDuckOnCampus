@@ -5,12 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.muscovy.game.AssetLocations;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
@@ -23,7 +24,6 @@ public class ButtonList {
 	private GlyphLayout[] buttonLayouts;
 	private BitmapFont font;
 	private OrthographicCamera guiCamera;
-	private ShapeRenderer shapeRenderer;
 
 	private ControlMap controlMap;
 	private Controller controller;
@@ -44,17 +44,18 @@ public class ButtonList {
 	// Default button sizes
 	// Used for consistency between menus
 	// But setDimensions() allows you to change the sizes for a specific button list
-	public static final int BUTTON_WIDTH = 200;
-	public static final int BUTTON_HEIGHT = 40;
+	public static final int BUTTON_WIDTH = 350;
+	public static final int BUTTON_HEIGHT = 80;
 	public static final int BUTTON_DIFFERENCE = 10;
 	public static final int BUTTON_TEXT_VERTICAL_OFFSET = 30;
 	public static final int WINDOW_EDGE_OFFSET = 32;
 
-	private Color selectedColour = Color.RED;
-	private Color deselectedColour = Color.BLUE;
-	private Color outlineColour = Color.BLACK;
+	private Color selectedColour = Color.WHITE;
+	private Color deselectedColour = Color.BLACK;
 
 
+	private Sprite sprite;
+	
 	/**
 	 * @param buttonTexts
 	 * @param font
@@ -74,8 +75,8 @@ public class ButtonList {
 		for (int i = 0; i < buttonTexts.length; i += 1) {
 			buttonLayouts[i] = new GlyphLayout(font, buttonTexts[i]);
 		}
-
-		shapeRenderer = new ShapeRenderer();
+		
+		sprite = new Sprite();
 	}
 
 
@@ -131,13 +132,8 @@ public class ButtonList {
 	public void setColours(Color selectedColour, Color deselectedColour, Color outlineColour) {
 		this.selectedColour = selectedColour;
 		this.deselectedColour = deselectedColour;
-		this.outlineColour = outlineColour;
 	}
 
-
-	/**
-	 * @return
-	 */
 	public int getSelected() {
 		return selected;
 	}
@@ -265,54 +261,51 @@ public class ButtonList {
 	 *
 	 * @param batch
 	 */
-	// TODO rewrite render to display sprites
 	public void render(SpriteBatch batch) {
-		shapeRenderer.setProjectionMatrix(guiCamera.combined);
-		shapeRenderer.begin(ShapeType.Filled);
-
-		int y = topLeftY - buttonHeight;
-
-		for (int i = 0; i < buttonTexts.length; i += 1) {
-			if (selected == i) {
-				shapeRenderer.setColor(deselectedColour);
-			} else {
-				shapeRenderer.setColor(selectedColour);
-			}
-
-			shapeRenderer.rect(topLeftX, y, buttonWidth, buttonHeight);
-
-			shapeRenderer.setColor(outlineColour);
-			float width = 2f;
-			shapeRenderer.rectLine(topLeftX, y, topLeftX + buttonWidth, y, width);
-			shapeRenderer.rectLine(topLeftX + buttonWidth, y, topLeftX + buttonWidth, y + buttonHeight,
-					width);
-			shapeRenderer.rectLine(topLeftX + buttonWidth, y + buttonHeight, topLeftX, y + buttonHeight,
-					width);
-			shapeRenderer.rectLine(topLeftX, y + buttonHeight, topLeftX, y, width);
-
-			// shapeRenderer.setColor(Color.BLACK);
-			// shapeRenderer.rectLine(topLeftX, y, topLeftX + buttonWidth, y + buttonHeight, 5);
-
-			y -= buttonDifference;
-			y -= buttonHeight;
-		}
-
-		shapeRenderer.end();
-
+		
+		//Button sprite's
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		batch.enableBlending();
+		
+		int y = topLeftY - buttonHeight;
+		
+		for (int i = 0; i < buttonTexts.length; i += 1) {
+			Texture button = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON));
+			Texture buttonSelected = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON_SELECT));
+			
+			if (selected == i) {
+				sprite = new Sprite(buttonSelected);
+			} else {
+				sprite = new Sprite(button);
+			}
+			
+			sprite.setSize(buttonWidth,buttonHeight);
+			sprite.setPosition(topLeftX, y);
+			sprite.draw(batch);
+			
+			y -= sprite.getHeight();
+			y -= buttonDifference;
+			
+		}
+		batch.end();
 
-		y = (topLeftY - buttonHeight) + buttonTextVerticalOffset;
+		//Text on button
+		batch.setProjectionMatrix(guiCamera.combined);
+		batch.begin();
+		batch.enableBlending();
+		
+		y = topLeftY + buttonTextVerticalOffset - (2*buttonHeight/3) ;
 
 		for (int i = 0; i < buttonTexts.length; i += 1) {
 			String text = buttonTexts[i];
 			GlyphLayout layout = buttonLayouts[i];
 
 			if (selected == i) {
-				text = "> " + text + " <";
+				font.setColor(selectedColour);				
+			} else {
+				font.setColor(deselectedColour);
 			}
-			layout.setText(font, text);
 
 			int x = (int) ((topLeftX + halfButtonWidth) - (layout.width / 2));
 			font.draw(batch, text, x, y);
@@ -320,7 +313,7 @@ public class ButtonList {
 			y -= buttonDifference;
 			y -= buttonHeight;
 		}
-
 		batch.end();
+		
 	}
 }

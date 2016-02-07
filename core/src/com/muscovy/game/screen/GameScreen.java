@@ -73,7 +73,7 @@ public class GameScreen extends ScreenBase {
 	private void initialiseGui() {
 		dungeonGui = new GUI();
 
-		guiFont = AssetLocations.newFont();
+		guiFont = AssetLocations.newFont20();
 		guiFont.setColor(Color.WHITE); // Color.BLACK
 
 		int dungeonGuiX = GameScreen.TEXT_EDGE_OFFSET;
@@ -95,7 +95,7 @@ public class GameScreen extends ScreenBase {
 		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
 		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
 
-		pauseFont = AssetLocations.newFont();
+		pauseFont = AssetLocations.newFont20();
 		pauseFont.setColor(Color.RED);
 		pauseGui = new GUI();
 		pauseGui.addData(GameScreen.PAUSE_ID, "PAUSED", pauseFont, (getWindowWidth() / 2) - 50,
