@@ -28,4 +28,10 @@ public class SaveData {
 	public Levels getLevels() {
 		return levels;
 	}
+
+
+	@Override
+	public String toString() {
+		return "SaveData(" + player.toString() + ", " + levels.toString() + ")";
+	}
 }

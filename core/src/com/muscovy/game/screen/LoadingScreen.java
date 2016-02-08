@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.Levels;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.save.game.SaveGame;
 
@@ -37,15 +38,61 @@ public class LoadingScreen extends ScreenBase {
 		if (time > startTime) {
 			AssetLocations.loadAllTexturesIntoMap(getTextureMap());
 
-			Levels levels = new Levels();
-			levels.generateLevels(getGame());
-			levels.generateLevelContents();
-			getGame().setLevels(levels);
+			int saveNumber = 0;
 
-			// doSaveLoadTest();
+			// Try to load the data for the save
+			SaveData loadedData = loadSave(saveNumber);
+
+			// For testing purposes
+			// The loading code isn't finished so parts are still null
+			loadedData = null;
+
+			// If the save file doesn't exist
+			// Load a new world and save it
+			if (loadedData == null) {
+				loadedData = generateNewGame(saveNumber);
+				saveData(saveNumber, loadedData);
+			}
+
+			// Set the game to use this loaded world
+			getGame().initialiseFromSaveData(loadedData);
 
 			setScreen(new MainMenuScreen(getGame()));
 		}
+	}
+
+
+	/**
+	 * Loads the save data for a given save number. Returns null if there is no data.
+	 *
+	 * @param saveNumber
+	 * @return
+	 */
+	private SaveData loadSave(int saveNumber) {
+		SaveGame saveGame = new SaveGame(getGame());
+		String saveLocation = AssetLocations.getFileForSaveNumber(saveNumber);
+		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
+		return loadedData;
+	}
+
+
+	private void saveData(int saveNumber, SaveData data) {
+		new SaveGame(getGame()).saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
+	}
+
+
+	/**
+	 * Randomly generates a new world.
+	 *
+	 * @param saveNumber
+	 * @return
+	 */
+	private SaveData generateNewGame(int saveNumber) {
+		Levels levels = new Levels();
+		levels.generateLevels(getGame());
+		levels.generateLevelContents();
+		PlayerCharacter player = getGame().getPlayerCharacter();
+		return new SaveData(player, levels);
 	}
 
 
@@ -54,14 +101,16 @@ public class LoadingScreen extends ScreenBase {
 		MuscovyGame game = getGame();
 		SaveGame saveGame = new SaveGame(game);
 		SaveData saveData = new SaveData(game.getPlayerCharacter(), game.getLevels());
-		String json = saveGame.getPrettySaveString(saveData);
-		System.out.println(json);
 
-		// System.out.println("");
+		String saveLocation = AssetLocations.getFileForSaveNumber(0);
+		saveGame.saveToFile(saveData, saveLocation);
 
-		// SaveData loadedData = saveGame.loadFromSaveString(json);
-		// System.out.println(loadedData.getPlayer().getPosition());
-		// System.out.println(loadedData.getPlayer().getScore());
+		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
+		if (loadedData == null) {
+			System.out.println("File doesn't exist");
+		} else {
+			System.out.println(loadedData);
+		}
 	}
 
 

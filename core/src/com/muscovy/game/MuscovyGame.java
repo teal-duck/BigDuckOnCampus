@@ -15,6 +15,7 @@ import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
 import com.muscovy.game.save.control.SaveControls;
+import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.screen.LoadingScreen;
 
 
@@ -52,13 +53,9 @@ public class MuscovyGame extends Game {
 		initialisePlayerCharacter();
 
 		SaveControls saveControls = new SaveControls(this);
-		// String controlMapString = saveControls.getPrettySaveString(controlMap);
-		// System.out.println(controlMapString);
-
-		// ControlMap loadedControls = saveControls.loadFromSaveString(controlMapString);
-		// System.out.println(loadedControls);
-		// System.out.println(Gdx.files.local(AssetLocations.CONTROLS_FILE).file().getAbsolutePath());
-		saveControls.saveToFile(controlMap, Gdx.files.local(AssetLocations.CONTROLS_FILE));
+		saveControls.saveToFile(controlMap, AssetLocations.CONTROLS_FILE);
+		ControlMap loadedControls = saveControls.loadFromFile(AssetLocations.CONTROLS_FILE);
+		System.out.println(loadedControls);
 
 		resetGame();
 	}
@@ -110,6 +107,17 @@ public class MuscovyGame extends Game {
 	public void dispose() {
 		textureMap.disposeAllTextures();
 		super.dispose();
+	}
+
+
+	public void initialiseFromSaveData(SaveData saveData) {
+		playerCharacter = saveData.getPlayer();
+		levels = saveData.getLevels();
+	}
+
+
+	public SaveData getSaveData() {
+		return new SaveData(playerCharacter, levels);
 	}
 
 
