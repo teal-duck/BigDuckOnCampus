@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.EntityManager;
-import com.muscovy.game.GUI;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Item;
@@ -22,6 +21,7 @@ import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.entity.Projectile;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.level.Level;
 

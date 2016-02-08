@@ -29,5 +29,4 @@ public class SaveDataSerializer implements Json.Serializer<SaveData> {
 		SaveData saveData = new SaveData(player, levels);
 		return saveData;
 	}
-
 }

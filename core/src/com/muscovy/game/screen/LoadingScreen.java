@@ -54,7 +54,7 @@ public class LoadingScreen extends ScreenBase {
 		MuscovyGame game = getGame();
 		SaveGame saveGame = new SaveGame(game);
 		SaveData saveData = new SaveData(game.getPlayerCharacter(), game.getLevels());
-		String json = saveGame.getSaveString(saveData);
+		String json = saveGame.getPrettySaveString(saveData);
 		System.out.println(json);
 
 		// System.out.println("");

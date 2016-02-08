@@ -1,17 +1,18 @@
-package com.muscovy.game.screen;
+package com.muscovy.game.gui;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.muscovy.game.AssetLocations;
+import com.muscovy.game.TextureMap;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
@@ -46,18 +47,17 @@ public class ButtonList {
 	// But setDimensions() allows you to change the sizes for a specific button list
 	public static final int BUTTON_WIDTH = 350;
 	public static final int BUTTON_HEIGHT = 80;
-	public static final int BUTTON_DIFFERENCE = 10;
+	public static final int BUTTON_DIFFERENCE = 20; // 10;
 	public static final int BUTTON_TEXT_VERTICAL_OFFSET = 30;
 	public static final int WINDOW_EDGE_OFFSET = 32;
 
-	private Color selectedColour = Color.WHITE;
-	private Color deselectedColour = Color.BLACK;
-	
 	private Texture selectedButton;
 	private Texture deselectedButton;
 
-	private Sprite sprite;
-	
+	private Color selectedTextColour = Color.WHITE;
+	private Color deselectedTextColour = Color.BLACK;
+
+
 	/**
 	 * @param buttonTexts
 	 * @param font
@@ -65,8 +65,8 @@ public class ButtonList {
 	 * @param controlMap
 	 * @param controller
 	 */
-	public ButtonList(String[] buttonTexts, BitmapFont font, OrthographicCamera guiCamera, ControlMap controlMap,
-			Controller controller) {
+	public ButtonList(String[] buttonTexts, BitmapFont font, OrthographicCamera guiCamera, TextureMap textureMap,
+			ControlMap controlMap, Controller controller) {
 		this.buttonTexts = buttonTexts;
 		this.font = font;
 		this.guiCamera = guiCamera;
@@ -77,8 +77,9 @@ public class ButtonList {
 		for (int i = 0; i < buttonTexts.length; i += 1) {
 			buttonLayouts[i] = new GlyphLayout(font, buttonTexts[i]);
 		}
-		
-		sprite = new Sprite();
+
+		deselectedButton = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON);
+		selectedButton = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON_SELECT);
 	}
 
 
@@ -131,10 +132,11 @@ public class ButtonList {
 	 * @param deselectedColour
 	 * @param outlineColour
 	 */
-	public void setColours(Color selectedColour, Color deselectedColour, Color outlineColour) {
-		this.selectedColour = selectedColour;
-		this.deselectedColour = deselectedColour;
+	public void setTextColours(Color selectedColour, Color deselectedColour, Color outlineColour) {
+		selectedTextColour = selectedColour;
+		deselectedTextColour = deselectedColour;
 	}
+
 
 	public int getSelected() {
 		return selected;
@@ -156,16 +158,16 @@ public class ButtonList {
 		}
 
 		if (getMouseOverButton() == selected) {
-			if (Gdx.input.isButtonPressed(0)) {
+			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 				isSelected = true;
 			}
 		}
 
 		if (enterJustPushed) {
-			enterJustPushed = isSelected || Gdx.input.isButtonPressed(0);
+			enterJustPushed = isSelected || Gdx.input.isButtonPressed(Buttons.LEFT);
 			return false;
 		} else {
-			enterJustPushed = isSelected || Gdx.input.isButtonPressed(0);
+			enterJustPushed = isSelected || Gdx.input.isButtonPressed(Buttons.LEFT);
 			return isSelected;
 		}
 	}
@@ -175,8 +177,8 @@ public class ButtonList {
 	 * Update the selected property based on keys/controller up/down input or location of mouse.
 	 */
 	public void updateSelected() {
-		float upState = controlMap.getStateForAction(Action.WALK_UP, controller);
-		float downState = controlMap.getStateForAction(Action.WALK_DOWN, controller);
+		float upState = controlMap.getStateForActions(Action.WALK_UP, Action.SHOOT_UP, controller);
+		float downState = controlMap.getStateForActions(Action.WALK_DOWN, Action.SHOOT_DOWN, controller);
 
 		int directionToMove = 0;
 		if (upState > 0) {
@@ -264,58 +266,38 @@ public class ButtonList {
 	 * @param batch
 	 */
 	public void render(SpriteBatch batch) {
-		
-		//BUTTON SPRITES
-		batch.setProjectionMatrix(guiCamera.combined);
-		batch.begin();
+		// batch.setProjectionMatrix(guiCamera.combined);
+		// batch.begin();
 		batch.enableBlending();
-		
-		int y = topLeftY - buttonHeight;
-		
-		for (int i = 0; i < buttonTexts.length; i += 1) {
-			deselectedButton = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON));
-			selectedButton = new Texture(Gdx.files.internal(AssetLocations.GAME_BUTTON_SELECT));
-			
-			if (selected == i) {
-				sprite = new Sprite(selectedButton);
-			} else {
-				sprite = new Sprite(deselectedButton);
-			}
-			
-			sprite.setSize(buttonWidth,buttonHeight);
-			sprite.setPosition(topLeftX, y);
-			sprite.draw(batch);
-			
-			y -= sprite.getHeight();
-			y -= buttonDifference;
-			
-		}
-		batch.end();
 
-		//BUTTON TEXT 
-		batch.setProjectionMatrix(guiCamera.combined);
-		batch.begin();
-		batch.enableBlending();
-		
-		y = topLeftY + buttonTextVerticalOffset - (2*buttonHeight/3) ;
+		Texture texture = deselectedButton;
+		int buttonX = topLeftX;
+		int buttonY = topLeftY - buttonHeight;
+		int textX = 0;
+		int textY = (topLeftY + buttonTextVerticalOffset) - ((2 * buttonHeight) / 3);
 
 		for (int i = 0; i < buttonTexts.length; i += 1) {
 			String text = buttonTexts[i];
 			GlyphLayout layout = buttonLayouts[i];
+			textX = (int) ((buttonX + halfButtonWidth) - (layout.width / 2));
 
 			if (selected == i) {
-				font.setColor(selectedColour);				
+				texture = selectedButton;
+				font.setColor(selectedTextColour);
 			} else {
-				font.setColor(deselectedColour);
+				texture = deselectedButton;
+				font.setColor(deselectedTextColour);
 			}
 
-			int x = (int) ((topLeftX + halfButtonWidth) - (layout.width / 2));
-			font.draw(batch, text, x, y);
-			
-			y -= buttonDifference;
-			y -= buttonHeight;
+			batch.draw(texture, buttonX, buttonY, buttonWidth, buttonHeight);
+			font.draw(batch, text, textX, textY);
+
+			buttonY -= buttonHeight;
+			buttonY -= buttonDifference;
+			textY -= buttonHeight;
+			textY -= buttonDifference;
 		}
-		batch.end();
-		
+
+		// batch.end();
 	}
 }

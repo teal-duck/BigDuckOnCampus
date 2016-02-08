@@ -1,4 +1,4 @@
-package com.muscovy.game;
+package com.muscovy.game.gui;
 
 
 import java.util.ArrayList;

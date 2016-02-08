@@ -39,15 +39,11 @@ public abstract class ScreenBase implements Screen {
 	}
 
 
-	public void blackScreen() {
+	public void clearScreen() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
-	public void clearScreen() {
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	}
 
 	public void updateAndSetCamera() {
 		getCamera().update();

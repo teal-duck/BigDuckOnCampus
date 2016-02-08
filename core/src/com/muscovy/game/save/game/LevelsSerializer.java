@@ -34,7 +34,6 @@ public class LevelsSerializer implements Json.Serializer<Levels> {
 		if (levelValue != null) {
 			int i = 0;
 			do {
-				// System.out.println(i + ": " + levelValue.toString());
 				levels[i] = json.getSerializer(Level.class).read(json, levelValue, type);
 				i += 1;
 			} while ((levelValue = levelValue.next) != null);

@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
-import com.muscovy.game.GUI;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 

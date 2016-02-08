@@ -51,12 +51,14 @@ public class MuscovyGame extends Game {
 		ControlMapCreator.applyDefaultPs4Controls(controlMap, 0.2f);
 		initialisePlayerCharacter();
 
-		SaveControls saveControls = new SaveControls();
-		String controlMapString = saveControls.getSaveString(controlMap);
+		SaveControls saveControls = new SaveControls(this);
+		// String controlMapString = saveControls.getPrettySaveString(controlMap);
 		// System.out.println(controlMapString);
 
-		ControlMap loadedControls = saveControls.loadFromSaveString(controlMapString);
-		System.out.println(loadedControls);
+		// ControlMap loadedControls = saveControls.loadFromSaveString(controlMapString);
+		// System.out.println(loadedControls);
+		// System.out.println(Gdx.files.local(AssetLocations.CONTROLS_FILE).file().getAbsolutePath());
+		saveControls.saveToFile(controlMap, Gdx.files.local(AssetLocations.CONTROLS_FILE));
 
 		resetGame();
 	}
