@@ -161,7 +161,8 @@ public class DungeonRoom {
 
 
 	private void createHealthPack(int x, int y) {
-		Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile("healthpack.png"));
+		// Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.HEALTHPACK));
+		Sprite sprite = new Sprite(ItemType.getItemTexture(game, ItemType.HEALTH));
 		Vector2 position = new Vector2(x, y);
 		Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
 
@@ -258,7 +259,7 @@ public class DungeonRoom {
 			addEnemy(enemy);
 
 			ItemType itemType = ItemType.TRIPLE_SHOT;
-			Sprite itemSprite = new Sprite(ItemType.getItemSprite(game, itemType));
+			Sprite itemSprite = new Sprite(ItemType.getItemTexture(game, itemType));
 			Item item = new Item(game, itemSprite, new Vector2(0, 0), itemType);
 			item.setXTiles(5);
 			item.setYTiles(5);

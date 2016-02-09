@@ -32,11 +32,7 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 
 	@Override
 	public PlayerCharacter read(Json json, JsonValue jsonData, Class type) {
-		JsonValue positionData = jsonData.get("position");
-		float x = positionData.getFloat("x");
-		float y = positionData.getFloat("y");
-		Vector2 position = new Vector2(x, y);
-
+		Vector2 position = loadVector2(jsonData.get("position"));
 		int score = jsonData.getInt("score");
 		int health = jsonData.getInt("health");
 
