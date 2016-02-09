@@ -189,7 +189,7 @@ public class Enemy extends MoveableEntity {
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
 					projectileRange, projectileSpeed, ProjectileDamager.PLAYER,
-					ProjectileType.STANDARD);
+					ProjectileType.HOMING);
 		} else {
 			return new ArrayList<Projectile>();
 		}

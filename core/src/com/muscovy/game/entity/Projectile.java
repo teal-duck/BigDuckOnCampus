@@ -3,6 +3,7 @@ package com.muscovy.game.entity;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +11,7 @@ import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ProjectileDamager;
 import com.muscovy.game.enums.ProjectileType;
+import com.muscovy.game.screen.GameScreen;
 
 
 /**
@@ -81,13 +83,35 @@ public class Projectile extends OnscreenDrawable {
 
 	public void movementLogic(float deltaTime) {
 	}
+	
+	public PlayerCharacter getPlayer() {
+		// TODO: Make Enemy.getPlayer() nicer
+		Screen screen = game.getScreen();
+
+		if (screen instanceof GameScreen) {
+			return ((GameScreen) screen).getPlayer();
+		} else {
+			return null;
+		}
+	}
 
 
 	public void moveEntity(float deltaTime) {
+		
+		switch (projectileType){
+		case STANDARD:
+			break;
+		case HOMING:
+			System.out.println("HOMING FIRE"); 
+			//TODO: Homing projectile logic
+			PlayerCharacter player = getPlayer();
+			velocity.set(player.getPosition()).sub(getPosition());
+			velocity.setLength(speed);
+			
+		}
 		getPosition().mulAdd(velocity, deltaTime);
 		updateCollisionBox();
 	}
-
 
 	public void killSelf() {
 		maxLifeTime = 0;
@@ -131,7 +155,7 @@ public class Projectile extends OnscreenDrawable {
 
 		for (int i = 0; i < count; i += 1) {
 			projectiles.add(new Projectile(game, position.cpy(), direction.cpy().rotateRad(spreadAngle),
-					life, maxVelocity, damagesWho, ProjectileType.STANDARD));
+					life, maxVelocity, damagesWho, ProjectileType.HOMING));
 			spreadAngle += spreadDelta;
 		}
 
