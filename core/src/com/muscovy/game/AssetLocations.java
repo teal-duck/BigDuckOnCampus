@@ -26,7 +26,7 @@ public class AssetLocations {
 	// Items
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";
-	public static final String RAPID_FIRE = TRIPLE_SHOT;
+	public static final String RAPID_FIRE = "rapid_fire.png";
 
 	// Open Doors
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
