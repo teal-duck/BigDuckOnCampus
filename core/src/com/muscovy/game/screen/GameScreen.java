@@ -188,6 +188,7 @@ public class GameScreen extends ScreenBase {
 	private void selectSave() {
 		// TODO: Save Game
 		Gdx.app.log("TODO", "Save game");
+		getGame().saveCurrentGame();
 	}
 
 

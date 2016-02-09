@@ -684,7 +684,8 @@ public class EntityManager {
 				completed = true;
 				ItemType itemType = LevelType.getItemType(levelType);
 				if (itemType != null) {
-					Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
+					Item item = new Item(game, ItemType.getItemTextureName(itemType),
+							new Vector2(0, 0), itemType);
 					item.setXTiles(5);
 					item.setYTiles(5);
 					currentDungeonRoom.addItem(item);
@@ -781,8 +782,8 @@ public class EntityManager {
 		renderList.addAll(enemies);
 		enemyList.addAll(enemies);
 	}
-	
-	
+
+
 	public void addNewItem(Item item) {
 		renderList.add(item);
 		itemList.add(item);

@@ -267,11 +267,12 @@ public class DungeonRoom {
 			enemy.setYTiles(DungeonRoom.FLOOR_HEIGHT_IN_TILES - 1);
 			addEnemy(enemy);
 
-//			ItemType itemType = ItemType.TRIPLE_SHOT;
-//			Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
-//			item.setXTiles(5);
-//			item.setYTiles(5);
-//			addItem(item);
+			// ItemType itemType = ItemType.TRIPLE_SHOT;
+			// Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0),
+			// itemType);
+			// item.setXTiles(5);
+			// item.setYTiles(5);
+			// addItem(item);
 			break;
 
 		case SHOP:

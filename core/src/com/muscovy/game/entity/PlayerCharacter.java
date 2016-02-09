@@ -375,7 +375,8 @@ public class PlayerCharacter extends MoveableEntity {
 	public void setShotType(PlayerShotType type) {
 		shotType = type;
 	}
-	
+
+
 	public float getAttackInterval() {
 		return attackInterval;
 	}
@@ -384,6 +385,7 @@ public class PlayerCharacter extends MoveableEntity {
 	public void setAttackInterval(float attackInterval) {
 		this.attackInterval = attackInterval;
 	}
+
 
 	// TODO: Animations
 

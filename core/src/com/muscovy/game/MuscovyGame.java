@@ -16,6 +16,7 @@ import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
 import com.muscovy.game.save.control.SaveControls;
 import com.muscovy.game.save.game.SaveData;
+import com.muscovy.game.save.game.SaveGame;
 import com.muscovy.game.screen.MainMenuScreen;
 
 
@@ -34,6 +35,8 @@ public class MuscovyGame extends Game {
 	private ControlMap controlMap;
 	private Controller controller;
 
+	private int currentSaveNumber = -1;
+
 	private static final int WINDOW_WIDTH = 1344; // 1280;
 	private static final int WINDOW_HEIGHT = 832; // 816; // 960;
 	private static final int TILE_SIZE = 64;
@@ -42,7 +45,7 @@ public class MuscovyGame extends Game {
 
 	private float time = 0;
 	private int frames = 0;
-	private boolean logFPS = true;
+	private boolean logFPS = false;
 
 
 	@Override
@@ -62,6 +65,16 @@ public class MuscovyGame extends Game {
 		System.out.println(loadedControls);
 
 		resetGame();
+	}
+
+
+	public void setCurrentSaveNumber(int saveNumber) {
+		currentSaveNumber = saveNumber;
+	}
+
+
+	public int getCurrentSaveNumber() {
+		return currentSaveNumber;
 	}
 
 
@@ -137,6 +150,18 @@ public class MuscovyGame extends Game {
 	public void initialiseFromSaveData(SaveData saveData) {
 		playerCharacter = saveData.getPlayer();
 		levels = saveData.getLevels();
+	}
+
+
+	public void saveData(int saveNumber, SaveData data) {
+		Gdx.app.log("Load", "Saving game");
+		SaveGame saveGame = new SaveGame(this);
+		saveGame.saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
+	}
+
+
+	public void saveCurrentGame() {
+		saveData(getCurrentSaveNumber(), getSaveData());
 	}
 
 
