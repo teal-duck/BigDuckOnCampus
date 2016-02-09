@@ -7,46 +7,60 @@ import com.muscovy.game.enums.LevelType;
 
 
 public class AssetLocations {
+	// Obstacles
 	public static final String RECYLING_BIN = "accommodationAssets/obstacles/binRecycle.png";
 	public static final String WASTE_BIN = "accommodationAssets/obstacles/binWaste.png";
 
+	// Enemies
 	public static final String CLEANER = "accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png";
 	public static final String STUDENT = "accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png";
 	public static final String ACCOMODATION_BOSS = "accommodationAssets/accommodationBoss.png";
 
+	// Player
 	public static final String PLAYER = "duck.png";
+	
+	// Projectiles
 	public static final String BULLET = "breadBullet.png";
 	public static final String ENEMY_BULLET = "enemyBullet.png";
 
+	// Items
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";
+	public static final String RAPID_FIRE = TRIPLE_SHOT;
 
+	// Open Doors
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
 	public static final String DOOR_RIGHT_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorRight.png";
 	public static final String DOOR_DOWN_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorDown.png";
 	public static final String DOOR_LEFT_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorLeft.png";
 
+	// Closed Doors
 	public static final String DOOR_UP_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorUpClosed.png";
 	public static final String DOOR_RIGHT_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorRightClosed.png";
 	public static final String DOOR_DOWN_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorDownClosed.png";
 	public static final String DOOR_LEFT_CLOSED = "accommodationAssets/doorClosed/PNGs/accommodationDoorLeftClosed.png";
 
+	// Boss Doors
 	public static final String DOOR_UP_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorUp.png";
 	public static final String DOOR_RIGHT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorRight.png";
 	public static final String DOOR_DOWN_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorDown.png";
 	public static final String DOOR_LEFT_BOSS = "accommodationAssets/bossDoor/PNGs/accommodationBossDoorLeft.png";
 
+	// Menu
 	public static final String MAIN_MENU = "mainMenu.png";
 	public static final String GAME_BUTTON = "GameButton.png";
 	public static final String GAME_BUTTON_SELECT = "GameButtonSelect.png";
 
+	// Map
 	public static final String SELECTOR = "selector.png";
 	public static final String BAD_SELECTOR = "badselector.png";
 	public static final String HES_EAST_MAP = "hesEastMap.png";
 
+	// Room layouts
 	public static final String ROOM_TEMPLATE_FILE = "room_templates.csv";
 
-	public static final String CONSTANTINE_BACKGROUND = "accommodationAssets/constantineBackground.png";;
+	// Room backgrounds
+	public static final String CONSTANTINE_BACKGROUND = "accommodationAssets/constantineBackground.png";
 	public static final String LANGWITH_BACKGROUND = "accommodationAssets/langwithBackground.png";
 	public static final String GOODRICKE_BACKGROUND = "accommodationAssets/goodrickeBackground.png";
 	public static final String LMB_BACKGROUND = "accommodationAssets/lmbBackground.png";
@@ -55,6 +69,7 @@ public class AssetLocations {
 	public static final String COMPSCI_BACKGROUND = "accommodationAssets/csBackground.png";
 	public static final String RCH_BACKGROUND = "accommodationAssets/rchBackground.png";
 
+	// Fonts
 	public static final String FONT_FNT_20 = "fonts/gamefont_20.fnt";
 	public static final String FONT_PNG_20 = "fonts/gamefont_20.png";
 

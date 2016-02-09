@@ -43,6 +43,9 @@ public class Item extends Collidable {
 		case TRIPLE_SHOT:
 			playerCharacter.setShotType(PlayerShotType.TRIPLE);
 			return true;
+		case RAPID_FIRE:
+			playerCharacter.setAttackInterval(0.5f * playerCharacter.getAttackInterval());
+			return true;
 		default:
 			return false;
 		}
