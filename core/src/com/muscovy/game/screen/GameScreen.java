@@ -59,6 +59,9 @@ public class GameScreen extends ScreenBase {
 	// Pause status
 	private boolean paused = false;
 	private boolean pauseJustPressed = true;
+	// When the player opens pause menu, only let them save once (i.e. set to true)
+	// When they close it, reset this to false
+	private boolean hasSavedThisPauseMenu = false;
 
 	// Pause button options
 	private static final int RESUME = 0;
@@ -122,8 +125,8 @@ public class GameScreen extends ScreenBase {
 				((3 * getWindowHeight()) / 4));
 
 		pauseMenuFont = AssetLocations.newFont32();
-		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getCamera(),
-				getTextureMap(), getControlMap(), getController());
+		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getTextureMap(),
+				getControlMap(), getController());
 		setPauseButtonLocations();
 
 	}
@@ -139,6 +142,9 @@ public class GameScreen extends ScreenBase {
 
 		playerCharacter.setX(playerStartX);
 		playerCharacter.setY(playerStartY);
+
+		playerCharacter.getAcceleration().setZero();
+		playerCharacter.getVelocity().setZero();
 	}
 
 
@@ -155,8 +161,6 @@ public class GameScreen extends ScreenBase {
 
 	private void setPauseButtonLocations() {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
-		ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
-
 		int y = ((getWindowHeight() / 6) + ButtonList.WINDOW_EDGE_OFFSET)
 				+ ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
 		pauseMenuButtons.setPositionDefaultSize(x, y + 100);
@@ -171,7 +175,7 @@ public class GameScreen extends ScreenBase {
 	private void selectPauseOption(int selected) {
 		switch (selected) {
 		case RESUME:
-			paused = false;
+			setPaused(false);
 			break;
 		case SAVE:
 			selectSave();
@@ -184,8 +188,11 @@ public class GameScreen extends ScreenBase {
 
 
 	private void selectSave() {
-		// TODO: Save Game
-		Gdx.app.log("TODO", "Save game");
+		if (hasSavedThisPauseMenu) {
+			return;
+		}
+		pauseMenuButtons.changeTextOnButton(GameScreen.SAVE, "Saved!");
+		hasSavedThisPauseMenu = true;
 		getGame().saveCurrentGame();
 	}
 
@@ -195,18 +202,28 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	private void setPaused(boolean newPaused) {
+		paused = newPaused;
+		if (!paused) {
+			pauseMenuButtons.changeTextOnButton(GameScreen.SAVE,
+					GameScreen.PAUSE_BUTTON_TEXTS[GameScreen.SAVE]);
+			hasSavedThisPauseMenu = false;
+		}
+	}
+
+
 	@Override
 	public void updateScreen(float deltaTime) {
 		if (getStateForAction(Action.PAUSE) > 0) {
 			if (!pauseJustPressed) {
-				paused = !paused;
+				setPaused(!paused);
 			}
 			pauseJustPressed = true;
 		} else {
 			pauseJustPressed = false;
 		}
-		pauseMenuButtons.updateSelected();
-		if (pauseMenuButtons.isSelectedSelected()) {
+		pauseMenuButtons.updateSelected(getCamera());
+		if (pauseMenuButtons.isSelectedSelected(getCamera())) {
 			int selected = pauseMenuButtons.getSelected();
 			selectPauseOption(selected);
 		}
@@ -321,7 +338,7 @@ public class GameScreen extends ScreenBase {
 	public void pause() {
 		super.pause();
 		if (GameScreen.PAUSE_ON_LOSE_FOCUS) {
-			paused = true;
+			setPaused(true);
 		}
 	}
 

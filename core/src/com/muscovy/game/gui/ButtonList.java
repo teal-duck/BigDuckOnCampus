@@ -4,11 +4,9 @@ package com.muscovy.game.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.muscovy.game.AssetLocations;
@@ -22,21 +20,11 @@ import com.muscovy.game.input.ControlMap;
  */
 public class ButtonList {
 	private String[] buttonTexts;
-	private GlyphLayout[] buttonLayouts;
-	private BitmapFont font;
-	private OrthographicCamera guiCamera;
+	private Button[] buttons;
+	// private OrthographicCamera guiCamera;
 
 	private ControlMap controlMap;
 	private Controller controller;
-
-	private int topLeftX = 0;
-	private int topLeftY = 0;
-	private int buttonWidth = 0;
-	private int buttonHeight = 0;
-	private int buttonDifference = 0;
-	private int buttonTextVerticalOffset = 0;
-
-	private int halfButtonWidth = buttonWidth / 2;
 
 	private int selected = 0;
 	private boolean justMoved = true;
@@ -47,15 +35,9 @@ public class ButtonList {
 	// But setDimensions() allows you to change the sizes for a specific button list
 	public static final int BUTTON_WIDTH = 350;
 	public static final int BUTTON_HEIGHT = 80;
-	public static final int BUTTON_DIFFERENCE = 20; // 10;
-	public static final int BUTTON_TEXT_VERTICAL_OFFSET = 30;
+	public static final int BUTTON_DIFFERENCE = 20;
+	public static final int BUTTON_TEXT_VERTICAL_OFFSET = 55;
 	public static final int WINDOW_EDGE_OFFSET = 32;
-
-	private Texture selectedButton;
-	private Texture deselectedButton;
-
-	private Color selectedTextColour = Color.WHITE;
-	private Color deselectedTextColour = Color.BLACK;
 
 
 	/**
@@ -65,21 +47,31 @@ public class ButtonList {
 	 * @param controlMap
 	 * @param controller
 	 */
-	public ButtonList(String[] buttonTexts, BitmapFont font, OrthographicCamera guiCamera, TextureMap textureMap,
-			ControlMap controlMap, Controller controller) {
+	public ButtonList(String[] buttonTexts, BitmapFont font, TextureMap textureMap, ControlMap controlMap,
+			Controller controller) {
 		this.buttonTexts = buttonTexts;
-		this.font = font;
-		this.guiCamera = guiCamera;
+		// this.guiCamera = guiCamera;
 		this.controlMap = controlMap;
 		this.controller = controller;
 
-		buttonLayouts = new GlyphLayout[buttonTexts.length];
+		Texture deselectedTexture = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON);
+		Texture selectedTexture = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON_SELECT);
+
+		buttons = new Button[buttonTexts.length];
 		for (int i = 0; i < buttonTexts.length; i += 1) {
-			buttonLayouts[i] = new GlyphLayout(font, buttonTexts[i]);
+			buttons[i] = new Button(buttonTexts[i], 0, 0, 0, 0, 0, font, selectedTexture,
+					deselectedTexture);
 		}
 
-		deselectedButton = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON);
-		selectedButton = textureMap.getTextureOrLoadFile(AssetLocations.GAME_BUTTON_SELECT);
+		setDimensions(0, 0, ButtonList.BUTTON_WIDTH, ButtonList.BUTTON_HEIGHT, ButtonList.BUTTON_DIFFERENCE,
+				ButtonList.BUTTON_TEXT_VERTICAL_OFFSET);
+	}
+
+
+	public void changeTextOnButton(int index, String text) {
+		if ((index >= 0) && (index < buttons.length)) {
+			buttons[index].setText(text);
+		}
 	}
 
 
@@ -103,15 +95,18 @@ public class ButtonList {
 	 * @param buttonDifference
 	 * @param buttonTextVerticalOffset
 	 */
-	public void setDimensions(int topLeftX, int topLeftY, int buttonWidth, int buttonHeight, int buttonDifference,
-			int buttonTextVerticalOffset) {
-		this.topLeftX = topLeftX;
-		this.topLeftY = topLeftY;
-		this.buttonWidth = buttonWidth;
-		this.buttonHeight = buttonHeight;
-		this.buttonDifference = buttonDifference;
-		this.buttonTextVerticalOffset = buttonTextVerticalOffset;
-		halfButtonWidth = buttonWidth / 2;
+	public void setDimensions(float topLeftX, float topLeftY, float width, float height, float yDifference,
+			float textYOffset) {
+		float y = topLeftY - height;
+		for (Button button : buttons) {
+			button.setX(topLeftX);
+			button.setY(y);
+			button.setWidth(width);
+			button.setHeight(height);
+			button.setTextYOffset(textYOffset);
+
+			y -= height + yDifference;
+		}
 	}
 
 
@@ -128,16 +123,8 @@ public class ButtonList {
 
 
 	/**
-	 * @param selectedColour
-	 * @param deselectedColour
-	 * @param outlineColour
+	 * @return
 	 */
-	public void setTextColours(Color selectedColour, Color deselectedColour, Color outlineColour) {
-		selectedTextColour = selectedColour;
-		deselectedTextColour = deselectedColour;
-	}
-
-
 	public int getSelected() {
 		return selected;
 	}
@@ -149,7 +136,7 @@ public class ButtonList {
 	 *
 	 * @return
 	 */
-	public boolean isSelectedSelected() {
+	public boolean isSelectedSelected(OrthographicCamera camera) {
 		boolean isSelected = false;
 
 		float selectState = controlMap.getStateForAction(Action.ENTER, controller);
@@ -157,7 +144,7 @@ public class ButtonList {
 			isSelected = true;
 		}
 
-		if (getMouseOverButton() == selected) {
+		if (getMouseOverButton(camera) == selected) {
 			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 				isSelected = true;
 			}
@@ -176,7 +163,7 @@ public class ButtonList {
 	/**
 	 * Update the selected property based on keys/controller up/down input or location of mouse.
 	 */
-	public void updateSelected() {
+	public void updateSelected(OrthographicCamera camera) {
 		float upState = controlMap.getStateForActions(Action.WALK_UP, Action.SHOOT_UP, controller);
 		float downState = controlMap.getStateForActions(Action.WALK_DOWN, Action.SHOOT_DOWN, controller);
 
@@ -193,9 +180,13 @@ public class ButtonList {
 		}
 
 		justMoved = (directionToMove != 0);
-		int over = getMouseOverButton();
+		int over = getMouseOverButton(camera);
 		if (over >= 0) {
 			selected = over;
+		}
+
+		for (int i = 0; i < buttons.length; i += 1) {
+			buttons[i].setSelected(selected == i);
 		}
 	}
 
@@ -205,39 +196,24 @@ public class ButtonList {
 	 *
 	 * @return
 	 */
-	private int getMouseOverButton() {
+	private int getMouseOverButton(OrthographicCamera camera) {
 		float originalMouseX = Gdx.input.getX();
 		float originalMouseY = Gdx.input.getY();
 
-		Vector3 posInWorld3 = guiCamera.unproject(new Vector3(originalMouseX, originalMouseY, 0));
+		Vector3 posInWorld3 = camera.unproject(new Vector3(originalMouseX, originalMouseY, 0));
 
 		float mouseX = posInWorld3.x;
 		float mouseY = posInWorld3.y;
 
-		if ((mouseY <= topLeftY) && (mouseX >= topLeftX) && (mouseX <= (topLeftX + buttonWidth))) {
-			int over = 0;
-			int testY = topLeftY;
-			boolean overButton = false;
-
-			while (over < buttonTexts.length) {
-				testY -= buttonHeight;
-				if (testY <= mouseY) {
-					overButton = true;
-					break;
-				}
-				over += 1;
-				testY -= buttonDifference;
-				if (testY < mouseY) {
-					overButton = false;
-					break;
-				}
-			}
-
-			if (overButton) {
-				return over;
+		int overButton = -1;
+		for (int i = 0; i < buttons.length; i += 1) {
+			Button button = buttons[i];
+			if (button.pointOnButton(mouseX, mouseY)) {
+				overButton = i;
 			}
 		}
-		return -1;
+
+		return overButton;
 	}
 
 
@@ -249,11 +225,12 @@ public class ButtonList {
 	private void moveSelected(int amount) {
 		selected += amount;
 
-		int buttons = buttonTexts.length;
+		final int buttons = buttonTexts.length;
 
 		while (selected < 0) {
 			selected = buttons + selected;
 		}
+
 		while (selected >= buttons) {
 			selected = selected - buttons;
 		}
@@ -266,38 +243,8 @@ public class ButtonList {
 	 * @param batch
 	 */
 	public void render(SpriteBatch batch) {
-		// batch.setProjectionMatrix(guiCamera.combined);
-		// batch.begin();
-		batch.enableBlending();
-
-		Texture texture = deselectedButton;
-		int buttonX = topLeftX;
-		int buttonY = topLeftY - buttonHeight;
-		int textX = 0;
-		int textY = (topLeftY + buttonTextVerticalOffset) - ((2 * buttonHeight) / 3);
-
-		for (int i = 0; i < buttonTexts.length; i += 1) {
-			String text = buttonTexts[i];
-			GlyphLayout layout = buttonLayouts[i];
-			textX = (int) ((buttonX + halfButtonWidth) - (layout.width / 2));
-
-			if (selected == i) {
-				texture = selectedButton;
-				font.setColor(selectedTextColour);
-			} else {
-				texture = deselectedButton;
-				font.setColor(deselectedTextColour);
-			}
-
-			batch.draw(texture, buttonX, buttonY, buttonWidth, buttonHeight);
-			font.draw(batch, text, textX, textY);
-
-			buttonY -= buttonHeight;
-			buttonY -= buttonDifference;
-			textY -= buttonHeight;
-			textY -= buttonDifference;
+		for (Button button : buttons) {
+			button.render(batch);
 		}
-
-		// batch.end();
 	}
 }

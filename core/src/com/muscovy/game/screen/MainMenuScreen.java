@@ -43,8 +43,8 @@ public class MainMenuScreen extends ScreenBase {
 		gui = new GUI();
 		gui.addElement(background);
 
-		buttons = new ButtonList(MainMenuScreen.BUTTON_TEXTS, font, getCamera(), getTextureMap(),
-				getControlMap(), getController());
+		buttons = new ButtonList(MainMenuScreen.BUTTON_TEXTS, font, getTextureMap(), getControlMap(),
+				getController());
 		setButtonLocations();
 	}
 
@@ -77,8 +77,8 @@ public class MainMenuScreen extends ScreenBase {
 			escapeJustPressed = false;
 		}
 
-		buttons.updateSelected();
-		if (buttons.isSelectedSelected()) {
+		buttons.updateSelected(getCamera());
+		if (buttons.isSelectedSelected(getCamera())) {
 			int selected = buttons.getSelected();
 			selectOption(selected);
 		}
