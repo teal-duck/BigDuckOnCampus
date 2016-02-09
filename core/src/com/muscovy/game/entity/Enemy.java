@@ -27,7 +27,7 @@ public class Enemy extends MoveableEntity {
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
 
-	public static final float JUST_DAMAGED_TIME = 0.5f;
+	public static final float JUST_DAMAGED_TIME = 0.6f;
 
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;

@@ -348,8 +348,8 @@ public class EntityManager {
 				Enemy e = (Enemy) drawable;
 				float justDamagedTime = e.getJustDamagedTime();
 				if (justDamagedTime > 0) {
-					if (((justDamagedTime * 10) % 2) < 0.75) {
-						batch.setColor(Color.RED);
+					if (((int) ((justDamagedTime / Enemy.JUST_DAMAGED_TIME) * 4) % 2) == 0) {
+						batch.setColor(1f, 0.2f, 0.2f, 1f);
 					}
 				}
 			}
