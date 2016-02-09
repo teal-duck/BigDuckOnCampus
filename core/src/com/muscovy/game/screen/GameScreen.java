@@ -3,6 +3,7 @@ package com.muscovy.game.screen;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -21,6 +22,7 @@ import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.entity.Projectile;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.gui.ButtonList;
 import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 import com.muscovy.game.level.Level;
@@ -55,7 +57,14 @@ public class GameScreen extends ScreenBase {
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final int TEXT_EDGE_OFFSET = 10;
-
+	
+	private static final int RESUME = 0;
+	private static final int SAVE = 1;
+	private static final int QUIT = 2;
+	private static final String[] PAUSE_BUTTON_TEXTS = new String[] { "Resume", "Save", "Quit" };
+	
+	private ButtonList pauseMenuButtons;
+	private BitmapFont pauseMenuFont;
 
 	public GameScreen(MuscovyGame game, Level level) {
 		super(game);
@@ -94,19 +103,19 @@ public class GameScreen extends ScreenBase {
 		String objectiveText = level.getObjectiveName();
 		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
 		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
-
-		pauseFont = AssetLocations.newFont20();
+		
+		pauseFont = AssetLocations.newFont32();
 		pauseFont.setColor(Color.RED);
 		pauseGui = new GUI();
-		pauseGui.addData(GameScreen.PAUSE_ID, "PAUSED", pauseFont, (getWindowWidth() / 2) - 50,
-				(getWindowHeight() / 2) + 20);
+		pauseGui.addData(GameScreen.PAUSE_ID, "PAUSED", pauseFont, (getWindowWidth() / 2) - getWallWidth(),
+				(3*getWindowHeight() / 4));
+		
+		pauseMenuFont = AssetLocations.newFont32();
+		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getCamera(), getTextureMap(),
+				getControlMap(), getController());
+		setPauseButtonLocations();
+		
 	}
-
-
-	public PlayerCharacter getPlayer() {
-		return playerCharacter;
-	}
-
 
 	public void resetPlayer() {
 		Sprite playerSprite = playerCharacter.getSprite();
@@ -125,7 +134,48 @@ public class GameScreen extends ScreenBase {
 		GlyphLayout glyphLayout = new GlyphLayout(font, text);
 		return (int) glyphLayout.width;
 	}
+	
+	public PlayerCharacter getPlayer() {
+		return playerCharacter;
+	}
 
+
+	
+	private void setPauseButtonLocations() {
+		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
+		ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
+
+		int y = ((getWindowHeight() / 6) + ButtonList.WINDOW_EDGE_OFFSET)
+				+ ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
+		pauseMenuButtons.setPositionDefaultSize(x, y + 100);
+	}
+	
+	/**
+	 * Pause menu options
+	 * @param selected
+	 */
+	private void selectPauseOption(int selected) {
+		switch (selected) {
+		case RESUME:
+			paused = false;
+			break;
+		case SAVE:
+			selectSave();
+			break;
+		case QUIT:
+			selectQuit();
+			break;
+		}
+	}
+	
+	private void selectSave() {
+		// TODO: Save Game
+		Gdx.app.log("TODO", "Save game");
+	}
+	
+	private void selectQuit() {
+		setScreen(new MainMenuScreen(getGame()));
+	}
 
 	@Override
 	public void updateScreen(float deltaTime) {
@@ -136,6 +186,11 @@ public class GameScreen extends ScreenBase {
 			pauseJustPressed = true;
 		} else {
 			pauseJustPressed = false;
+		}
+		pauseMenuButtons.updateSelected();
+		if (pauseMenuButtons.isSelectedSelected()) {
+			int selected = pauseMenuButtons.getSelected();
+			selectPauseOption(selected);
 		}
 
 		if (paused) {
@@ -188,6 +243,7 @@ public class GameScreen extends ScreenBase {
 		dungeonGui.render(batch);
 		if (paused) {
 			pauseGui.render(batch);
+			pauseMenuButtons.render(batch);
 		}
 		batch.end();
 
@@ -198,7 +254,9 @@ public class GameScreen extends ScreenBase {
 		}
 	}
 
-
+	/**
+	 * If player not on game window will pause screen i.e. click off window
+	 */
 	@Override
 	public void pause() {
 		super.pause();
@@ -213,6 +271,7 @@ public class GameScreen extends ScreenBase {
 		super.dispose();
 		guiFont.dispose();
 		pauseFont.dispose();
+		pauseMenuFont.dispose();
 		// entityManager.dispose();
 	}
 
