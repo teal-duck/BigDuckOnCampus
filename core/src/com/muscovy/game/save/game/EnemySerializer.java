@@ -24,6 +24,8 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 	public void write(Json json, Enemy enemy, Class knownType) {
 		json.writeObjectStart();
 		json.writeValue("position", enemy.getPosition());
+		json.writeValue("friction", enemy.getFriction());
+		json.writeValue("accelerationSpeed", enemy.getAccelerationSpeed());
 		json.writeValue("textureName", enemy.getTextureName());
 		json.writeValue("movementType", enemy.getMovementType());
 		json.writeValue("attackType", enemy.getAttackType());
@@ -31,6 +33,8 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		json.writeValue("projectileType", enemy.getProjectileType());
 		json.writeValue("touchDamage", enemy.getTouchDamage());
 		json.writeValue("health", enemy.getCurrentHealth());
+		json.writeValue("maxAttackInterval", enemy.getMaxAttackInterval());
+		json.writeValue("attackRandomness", enemy.getAttackRandomness());
 		json.writeObjectEnd();
 	}
 
@@ -52,16 +56,24 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		JsonValue projectileTypeValue = jsonData.get("projectileType");
 		ProjectileType projectileType = ProjectileType.valueOf(projectileTypeValue.asString());
 
+		float friction = jsonData.getFloat("friction");
+		float accelerationSpeed = jsonData.getFloat("accelerationSpeed");
 		float touchDamage = jsonData.getFloat("touchDamage");
 		float health = jsonData.getFloat("health");
+		float maxAttackInterval = jsonData.getFloat("maxAttackInterval");
+		float attackRandomness = jsonData.getFloat("attackRandomness");
 
 		Enemy enemy = new Enemy(game, textureName, position);
 		enemy.setMovementType(movementType);
 		enemy.setAttackType(attackType);
 		enemy.setShotType(shotType);
 		enemy.setProjectileType(projectileType);
+		enemy.setFriction(friction);
+		enemy.setAccelerationSpeed(accelerationSpeed);
 		enemy.setTouchDamage(touchDamage);
 		enemy.setCurrentHealth(health);
+		enemy.setMaxAttackInterval(maxAttackInterval);
+		enemy.setAttackRandomness(attackRandomness);
 
 		return enemy;
 	}

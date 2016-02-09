@@ -23,6 +23,8 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 	public void write(Json json, PlayerCharacter playerCharacter, Class knownType) {
 		json.writeObjectStart();
 		json.writeValue("position", playerCharacter.getPosition());
+		json.writeValue("friction", playerCharacter.getFriction());
+		json.writeValue("accelerationSpeed", playerCharacter.getAccelerationSpeed());
 		json.writeValue("score", playerCharacter.getScore());
 		json.writeValue("health", playerCharacter.getHealth());
 		json.writeObjectEnd();
@@ -32,17 +34,19 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 	@Override
 	public PlayerCharacter read(Json json, JsonValue jsonData, Class type) {
 		Vector2 position = loadVector2(jsonData.get("position"));
+		float friction = jsonData.getFloat("friction");
+		float accelerationSpeed = jsonData.getFloat("accelerationSpeed");
 		int score = jsonData.getInt("score");
 		int health = jsonData.getInt("health");
 
-		// Sprite playerSprite = new Sprite();
-		// playerSprite.setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 		Controller controller = game.getController();
 		ControlMap controlMap = game.getControlMap();
 
 		PlayerCharacter playerCharacter = new PlayerCharacter(game, AssetLocations.PLAYER, position, controlMap,
 				controller);
 		playerCharacter.getSprite().setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+		playerCharacter.setFriction(friction);
+		playerCharacter.setAccelerationSpeed(accelerationSpeed);
 		playerCharacter.setScore(score);
 		playerCharacter.setHealth(health);
 

@@ -115,6 +115,10 @@
 
 - Player and enemies use acceleration and friction
 
+- Enemies bounce off obstacles
+
+- Randomized how often enemies shoot
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

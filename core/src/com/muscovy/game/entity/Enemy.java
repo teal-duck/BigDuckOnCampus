@@ -3,6 +3,7 @@ package com.muscovy.game.entity;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.AttackType;
@@ -18,6 +19,7 @@ import com.muscovy.game.enums.ProjectileType;
 public class Enemy extends MoveableEntity {
 	public static final float TOUCH_DAMAGE = 10f;
 	public static final float ATTACK_INTERVAL = 1.5f;
+	public static final float ATTACK_RANDOMNESS = 0.5f;
 	public static final float MAX_SPEED = 200;
 	public static final float BOSS_MAX_SPEED = Enemy.MAX_SPEED * 0.8f;
 
@@ -38,7 +40,9 @@ public class Enemy extends MoveableEntity {
 	private float touchDamage = Enemy.TOUCH_DAMAGE;
 
 	private float attackTimer;
-	private float attackInterval = Enemy.ATTACK_INTERVAL;
+	private float maxAttackInterval = Enemy.ATTACK_INTERVAL;
+	private float attackInterval = maxAttackInterval;
+	private float attackRandomness = Enemy.ATTACK_RANDOMNESS;
 
 	private float projectileRange = Enemy.PROJECTILE_RANGE;
 	private float projectileSpeed = Enemy.PROJECTILE_SPEED;
@@ -60,6 +64,7 @@ public class Enemy extends MoveableEntity {
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
 		rotateRandomDirection(getVelocity());
+		chooseNewAttackInterval();
 	}
 
 
@@ -81,6 +86,11 @@ public class Enemy extends MoveableEntity {
 		if (justDamagedTime < 0) {
 			justDamagedTime = 0;
 		}
+	}
+
+
+	public void flipDirection() {
+		getVelocity().scl(-1f);
 	}
 
 
@@ -140,25 +150,8 @@ public class Enemy extends MoveableEntity {
 	public PlayerCharacter getPlayer() {
 		// TODO: Make Enemy.getPlayer() nicer
 		return game.getPlayerCharacter();
-		// Screen screen = game.getScreen();
-
-		// if (screen instanceof GameScreen) {
-		// return ((GameScreen) screen).getPlayer();
-		// } else {
-		// return null;
-		// }
 	}
 
-
-	// public void pointTo(Collidable collidable, Vector2 vecToRotate) {
-	// float length = vecToRotate.len();
-	// // Set to other position
-	// vecToRotate.set(collidable.getPosition());
-	// // Subtract current position (to get vector between objects)
-	// vecToRotate.sub(getPosition());
-	// // Reset the length of the velocity
-	// vecToRotate.setLength(length);
-	// }
 
 	public float getDistanceTo(Collidable collidable) {
 		return getPosition().dst(collidable.getPosition());
@@ -217,6 +210,12 @@ public class Enemy extends MoveableEntity {
 		} else {
 			return false;
 		}
+	}
+
+
+	public void chooseNewAttackInterval() {
+		attackInterval = MathUtils.random(maxAttackInterval - attackRandomness,
+				maxAttackInterval + attackRandomness);
 	}
 
 
@@ -281,6 +280,26 @@ public class Enemy extends MoveableEntity {
 
 	public boolean isLifeOver() {
 		return dead;
+	}
+
+
+	public float getMaxAttackInterval() {
+		return maxAttackInterval;
+	}
+
+
+	public void setMaxAttackInterval(float maxAttackInterval) {
+		this.maxAttackInterval = maxAttackInterval;
+	}
+
+
+	public float getAttackRandomness() {
+		return attackRandomness;
+	}
+
+
+	public void setAttackRandomness(float attackRandomness) {
+		this.attackRandomness = attackRandomness;
 	}
 
 

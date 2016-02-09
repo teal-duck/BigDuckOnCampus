@@ -48,7 +48,7 @@ public class GameScreen extends ScreenBase {
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final int TEXT_EDGE_OFFSET = 10;
-	
+
 	// GUI, GUI font
 	private BitmapFont guiFont;
 	private BitmapFont pauseFont;
@@ -331,7 +331,6 @@ public class GameScreen extends ScreenBase {
 		guiFont.dispose();
 		pauseFont.dispose();
 		pauseMenuFont.dispose();
-		// entityManager.dispose();
 	}
 
 
@@ -405,9 +404,18 @@ public class GameScreen extends ScreenBase {
 
 		for (Obstacle obstacle : obstacleList) {
 			playerObstacleCollision(obstacle);
+		}
 
-			for (Enemy enemy : enemyList) {
-				enemyObstacleCollision(enemy, obstacle);
+		for (Enemy enemy : enemyList) {
+			boolean enemyCollidedWithObstacle = false;
+			for (Obstacle obstacle : obstacleList) {
+				if (enemyObstacleCollision(enemy, obstacle)) {
+					enemyCollidedWithObstacle = true;
+				}
+			}
+
+			if (enemyCollidedWithObstacle) {
+				enemy.flipDirection();
 			}
 		}
 
@@ -511,7 +519,7 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
+	public boolean enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
 		if (enemy.collides(obstacle)) {
 			enemy.moveToNearestEdgeRectangle(obstacle);
 			enemy.setCollidingWithSomething(true);
@@ -520,7 +528,9 @@ public class GameScreen extends ScreenBase {
 			if (obstacle.isDamaging()) {
 				enemy.takeDamage(obstacle.getTouchDamage());
 			}
+			return true;
 		}
+		return false;
 	}
 
 
