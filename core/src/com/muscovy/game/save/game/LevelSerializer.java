@@ -75,8 +75,8 @@ public class LevelSerializer extends BaseSerializer<Level> {
 				objectiveType);
 		levelParameters.setRoomCount(roomCount);
 
-		JsonValue jsonValue = jsonData.get("levelArray");
-		JsonValue levelArrayValue = jsonValue.child;
+		JsonValue levelArrayParentValue = jsonData.get("levelArray");
+		JsonValue levelArrayValue = levelArrayParentValue.child;
 		JsonValue dungeonRoomValue = null;
 
 		int y = 0;
@@ -104,11 +104,27 @@ public class LevelSerializer extends BaseSerializer<Level> {
 		Level level = new Level(levelArray, levelType, levelParameters);
 		level.setCompleted(completed);
 
-		// TODO: Load visited array
-		for (y = 0; y < roomsHigh; y += 1) {
-			for (x = 0; x < roomsWide; x += 1) {
-				level.markRoomVisited(x, y);
+		JsonValue visitedArrayParentValue = jsonData.get("visited");
+		JsonValue visitedArrayValue = visitedArrayParentValue.child;
+		JsonValue visitedValue = null;
+
+		y = 0;
+		x = 0;
+
+		while (visitedArrayValue != null) {
+			x = 0;
+			visitedValue = visitedArrayValue.child;
+
+			while (visitedValue != null) {
+				if (visitedValue.asBoolean()) {
+					level.markRoomVisited(x, y);
+				}
+				visitedValue = visitedValue.next;
+				x += 1;
 			}
+
+			visitedArrayValue = visitedArrayValue.next;
+			y += 1;
 		}
 
 		return level;
