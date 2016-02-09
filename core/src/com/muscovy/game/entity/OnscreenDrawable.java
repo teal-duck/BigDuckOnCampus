@@ -28,11 +28,13 @@ public abstract class OnscreenDrawable {
 
 	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
 		this.game = game;
-		this.textureName = textureName;
 		this.position = position;
 
-		Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
-		sprite = new Sprite(texture);
+		sprite = new Sprite();
+		setTexture(textureName);
+		// this.textureName = textureName;
+		// Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
+		// sprite.setTexture(texture);
 	}
 
 
@@ -67,20 +69,25 @@ public abstract class OnscreenDrawable {
 	}
 
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public void setTexture(String textureName) {
+		this.textureName = textureName;
+		Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
+		sprite.setTexture(texture);
 	}
 
+
+	// public void setSprite(Sprite sprite) {
+	// this.sprite = sprite;
+	// }
 
 	public Texture getTexture() {
 		return sprite.getTexture();
 	}
 
 
-	public void setTexture(Texture texture) {
-		sprite.setTexture(texture);
-	}
-
+	// public void setTexture(Texture texture) {
+	// sprite.setTexture(texture);
+	// }
 
 	public float getX() {
 		return position.x;
