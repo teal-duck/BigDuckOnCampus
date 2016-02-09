@@ -256,7 +256,7 @@ public class DungeonRoom {
 			enemy.setXTiles(DungeonRoom.FLOOR_WIDTH_IN_TILES - 1);
 			enemy.setYTiles(DungeonRoom.FLOOR_HEIGHT_IN_TILES - 1);
 			addEnemy(enemy);
-			
+
 			ItemType itemType = ItemType.TRIPLE_SHOT;
 			Sprite itemSprite = new Sprite(ItemType.getItemSprite(game, itemType));
 			Item item = new Item(game, itemSprite, new Vector2(0, 0), itemType);
