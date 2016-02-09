@@ -3,6 +3,7 @@ package com.muscovy.game.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.muscovy.game.input.controller.PS4;
 import com.muscovy.game.input.controller.Xbox360;
 import com.muscovy.game.input.controller.Xbox360Windows;
@@ -80,6 +81,11 @@ public class ControlMapCreator {
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				PS4.AXIS_RIGHT_X, deadzone);
 
+		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, PS4.DPAD,
+				PovDirection.north);
+		controlMap.addControllerForAction(Action.DPAD_DOWN, ControllerBindingType.POV, PS4.DPAD,
+				PovDirection.south);
+
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, PS4.BUTTON_CROSS);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, PS4.BUTTON_OPTIONS);
 		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, PS4.BUTTON_CIRCLE);
@@ -115,6 +121,11 @@ public class ControlMapCreator {
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360.AXIS_RIGHT_X, deadzone);
 
+		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, Xbox360.DPAD,
+				PovDirection.north);
+		controlMap.addControllerForAction(Action.DPAD_DOWN, ControllerBindingType.POV, Xbox360.DPAD,
+				PovDirection.south);
+
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360.BUTTON_A);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON, Xbox360.BUTTON_START);
 		controlMap.addControllerForAction(Action.ESCAPE, ControllerBindingType.BUTTON, Xbox360.BUTTON_B);
@@ -149,6 +160,11 @@ public class ControlMapCreator {
 				Xbox360Windows.AXIS_RIGHT_Y, deadzone);
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360Windows.AXIS_RIGHT_X, deadzone);
+
+		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, Xbox360Windows.DPAD,
+				PovDirection.north);
+		controlMap.addControllerForAction(Action.DPAD_DOWN, ControllerBindingType.POV, Xbox360Windows.DPAD,
+				PovDirection.south);
 
 		controlMap.addControllerForAction(Action.ENTER, ControllerBindingType.BUTTON, Xbox360Windows.BUTTON_A);
 		controlMap.addControllerForAction(Action.PAUSE, ControllerBindingType.BUTTON,

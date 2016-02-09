@@ -186,8 +186,10 @@ public class ButtonList {
 	 * Update the selected property based on keys/controller up/down input or location of mouse.
 	 */
 	public void updateSelected(OrthographicCamera camera) {
-		float upState = controlMap.getStateForActions(Action.WALK_UP, Action.SHOOT_UP, controller);
-		float downState = controlMap.getStateForActions(Action.WALK_DOWN, Action.SHOOT_DOWN, controller);
+		float upState = controlMap.getStateForActions(controller, Action.WALK_UP, Action.SHOOT_UP,
+				Action.DPAD_UP);
+		float downState = controlMap.getStateForActions(controller, Action.WALK_DOWN, Action.SHOOT_DOWN,
+				Action.DPAD_DOWN);
 
 		int directionToMove = 0;
 		if (upState > 0) {

@@ -473,16 +473,18 @@ public class ControlMap {
 
 
 	/**
-	 * Returns the larger of the states for the 2 actions.
+	 * Returns the largest state for the actions
 	 *
-	 * @param a0
-	 * @param a1
 	 * @param controller
+	 * @param actions
 	 * @return
-	 * @see {@link ControlMap#getStateForAction(Action, Controller)}
 	 */
-	public float getStateForActions(Action a0, Action a1, Controller controller) {
-		return Math.max(getStateForAction(a0, controller), getStateForAction(a1, controller));
+	public float getStateForActions(Controller controller, Action... actions) {
+		float state = 0;
+		for (Action action : actions) {
+			state = Math.max(state, getStateForAction(action, controller));
+		}
+		return state;
 	}
 
 

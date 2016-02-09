@@ -61,8 +61,18 @@ public abstract class ScreenBase implements Screen {
 	}
 
 
+	public float getStateForActions(Action... actions) {
+		return getControlMap().getStateForActions(getController(), actions);
+	}
+
+
 	public boolean isStateForAction(Action action) {
 		return (getStateForAction(action) > 0);
+	}
+
+
+	public boolean isStateForActions(Action... actions) {
+		return (getStateForActions(actions) > 0);
 	}
 
 

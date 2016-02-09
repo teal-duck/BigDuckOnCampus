@@ -66,13 +66,12 @@ public class LevelSelectScreen extends ScreenBase {
 	@Override
 	public void updateScreen(float deltaTime) {
 		int moveDirection = 0;
-		if ((isStateForAction(Action.WALK_DOWN) || isStateForAction(Action.SHOOT_DOWN))
+		if (isStateForActions(Action.WALK_DOWN, Action.SHOOT_DOWN, Action.DPAD_DOWN)
 				&& (mapSelected.ordinal() < (LevelType.LEVEL_COUNT - 1))) {
 			moveDirection = 1;
 		}
 
-		if ((isStateForAction(Action.WALK_UP) || isStateForAction(Action.SHOOT_UP))
-				&& (mapSelected.ordinal() > 0)) {
+		if (isStateForActions(Action.WALK_UP, Action.SHOOT_UP, Action.DPAD_UP) && (mapSelected.ordinal() > 0)) {
 			moveDirection = -1;
 		}
 
@@ -84,10 +83,8 @@ public class LevelSelectScreen extends ScreenBase {
 
 		if (isStateForAction(Action.ENTER)) {
 			if (!enterJustPressed) {
-				// if (!getLevels().isLevelCompleted(mapSelected.ordinal())) {
 				setScreen(new GameScreen(getGame(), getLevels().getLevel(mapSelected.ordinal())));
 				return;
-				// }
 			}
 			enterJustPressed = true;
 		} else {
