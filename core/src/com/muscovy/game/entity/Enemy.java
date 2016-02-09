@@ -72,7 +72,7 @@ public class Enemy extends MoveableEntity {
 
 	private void rotateRandomDirection() {
 		float minRotation = 10;
-		float maxRotation = 80;
+		float maxRotation = 15;
 
 		int direction = 0;
 		if (game.getRandom().nextBoolean()) {
@@ -96,7 +96,7 @@ public class Enemy extends MoveableEntity {
 
 		case RANDOM:
 			setSpeedToMax();
-			float timeToStayInSameDirection = 0.4f;
+			float timeToStayInSameDirection = 0.05f;
 
 			if (directionCounter > timeToStayInSameDirection) {
 				directionCounter = 0;
