@@ -105,6 +105,8 @@
 	
 - Put level name and objective on the screen
 
+- Created items to act as powerups and health restore etc.
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side
