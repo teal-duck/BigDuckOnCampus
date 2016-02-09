@@ -85,8 +85,9 @@ public class MuscovyGame extends Game {
 		playerStartY -= playerSprite.getRegionHeight() / 2;
 
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
-		playerCharacter = new PlayerCharacter(this, playerSprite, playerStartPosition, getControlMap(),
+		playerCharacter = new PlayerCharacter(this, AssetLocations.PLAYER, playerStartPosition, getControlMap(),
 				getController());
+		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 	}
 
 

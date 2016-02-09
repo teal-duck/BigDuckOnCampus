@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 
 public class TextureMap {
@@ -21,7 +22,12 @@ public class TextureMap {
 	 * @return
 	 */
 	private static final Texture getTextureFromFile(String filename) {
-		return new Texture(Gdx.files.internal(filename));
+		try {
+			return new Texture(Gdx.files.internal(filename));
+		} catch (GdxRuntimeException e) {
+			Gdx.app.log("Texture", "Unable to load texture \"" + filename + "\"");
+			return null;
+		}
 	}
 
 

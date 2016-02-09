@@ -3,7 +3,6 @@ package com.muscovy.game.entity;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +33,8 @@ public class Projectile extends OnscreenDrawable {
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
 			ProjectileDamager damagesWho, ProjectileType projectileType) {
-		super(game, new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET)), position);
+		// super(game, new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET)), position);
+		super(game, AssetLocations.BULLET, position);
 
 		maxLifeTime = life;
 		this.speed = speed;

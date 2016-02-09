@@ -1,7 +1,6 @@
 package com.muscovy.game.save.game;
 
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -33,7 +32,7 @@ public class ItemSerializer extends BaseSerializer<Item> {
 		JsonValue itemTypeValue = jsonData.get("type");
 		ItemType itemType = ItemType.valueOf(itemTypeValue.asString());
 
-		Item item = new Item(game, new Sprite(ItemType.getItemTexture(game, itemType)), position, itemType);
+		Item item = new Item(game, ItemType.getItemTextureName(itemType), position, itemType);
 
 		return item;
 	}

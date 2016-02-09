@@ -399,11 +399,11 @@ public class GameScreen extends ScreenBase {
 	public void enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
 		if (enemy.collides(obstacle)) {
 			enemy.moveToNearestEdgeRectangle(obstacle);
+			enemy.setCollidingWithSomething(true);
 
 			// TODO: Should enemies be damaged by obstacles?
 			if (obstacle.isDamaging()) {
 				enemy.takeDamage(obstacle.getTouchDamage());
-				enemy.setCollidingWithSomething(true);
 			}
 		}
 	}

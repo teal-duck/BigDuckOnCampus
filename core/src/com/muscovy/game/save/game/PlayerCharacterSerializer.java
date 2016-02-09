@@ -2,7 +2,6 @@ package com.muscovy.game.save.game;
 
 
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -36,13 +35,14 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		int score = jsonData.getInt("score");
 		int health = jsonData.getInt("health");
 
-		Sprite playerSprite = new Sprite();
-		playerSprite.setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+		// Sprite playerSprite = new Sprite();
+		// playerSprite.setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 		Controller controller = game.getController();
 		ControlMap controlMap = game.getControlMap();
 
-		PlayerCharacter playerCharacter = new PlayerCharacter(game, playerSprite, position, controlMap,
+		PlayerCharacter playerCharacter = new PlayerCharacter(game, AssetLocations.PLAYER, position, controlMap,
 				controller);
+		playerCharacter.getSprite().setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 		playerCharacter.setScore(score);
 		playerCharacter.setHealth(health);
 

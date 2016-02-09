@@ -16,19 +16,39 @@ public abstract class OnscreenDrawable {
 	 * getting myself into, innit
 	 */
 	public final MuscovyGame game;
+	private String textureName;
 	private Sprite sprite;
 	private Vector2 position;
 
 
-	public OnscreenDrawable(MuscovyGame game, Sprite sprite) {
-		this(game, sprite, new Vector2(0, 0));
+	public OnscreenDrawable(MuscovyGame game, String textureName) {
+		this(game, textureName, new Vector2(0, 0));
 	}
 
 
-	public OnscreenDrawable(MuscovyGame game, Sprite sprite, Vector2 position) {
+	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
 		this.game = game;
-		this.sprite = sprite;
+		this.textureName = textureName;
 		this.position = position;
+
+		Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
+		sprite = new Sprite(texture);
+	}
+
+
+	// public OnscreenDrawable(MuscovyGame game, Sprite sprite) {
+	// this(game, sprite, new Vector2(0, 0));
+	// }
+	//
+	//
+	// public OnscreenDrawable(MuscovyGame game, Sprite sprite, Vector2 position) {
+	// this.game = game;
+	// this.sprite = sprite;
+	// this.position = position;
+	// }
+
+	public String getTextureName() {
+		return textureName;
 	}
 
 

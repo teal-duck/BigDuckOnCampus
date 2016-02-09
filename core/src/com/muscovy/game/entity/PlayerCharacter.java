@@ -4,7 +4,6 @@ package com.muscovy.game.entity;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.PlayerShotType;
@@ -63,9 +62,12 @@ public class PlayerCharacter extends MoveableEntity {
 	private boolean firing = false;
 
 
-	public PlayerCharacter(MuscovyGame game, Sprite playerSprite, Vector2 position, ControlMap controlMap,
+	// public PlayerCharacter(MuscovyGame game, Sprite playerSprite, Vector2 position, ControlMap controlMap,
+	// Controller controller) {
+	// super(game, playerSprite, position);
+	public PlayerCharacter(MuscovyGame game, String textureName, Vector2 position, ControlMap controlMap,
 			Controller controller) {
-		super(game, playerSprite, position);
+		super(game, textureName, position);
 		this.controlMap = controlMap;
 		this.controller = controller;
 

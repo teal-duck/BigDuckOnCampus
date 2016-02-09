@@ -19,6 +19,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 	public void write(Json json, Enemy enemy, Class knownType) {
 		json.writeObjectStart();
 		json.writeValue("position", enemy.getPosition());
+		json.writeValue("textureName", enemy.getTextureName());
 		json.writeValue("movementType", enemy.getMovementType());
 		json.writeValue("attackType", enemy.getAttackType());
 		json.writeValue("shotType", enemy.getShotType());

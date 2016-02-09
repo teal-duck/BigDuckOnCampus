@@ -80,6 +80,13 @@ public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 
 		// TODO: Load obstacles, enemies and items
 		JsonValue obstacleListArrayValue = jsonData.get("obstacleList");
+		JsonValue obstacleListValue = obstacleListArrayValue.child;
+		while (obstacleListValue != null) {
+			Obstacle obstacle = fromJson(Obstacle.class, json, obstacleListValue, type);
+			dungeonRoom.addObstacle(obstacle);
+			obstacleListValue = obstacleListValue.next;
+		}
+
 		JsonValue enemyListArrayValue = jsonData.get("enemyList");
 
 		JsonValue itemListArrayValue = jsonData.get("itemList");
