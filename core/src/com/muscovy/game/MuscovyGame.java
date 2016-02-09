@@ -68,13 +68,11 @@ public class MuscovyGame extends Game {
 	}
 
 
-	public void setCurrentSaveNumber(int saveNumber) {
-		currentSaveNumber = saveNumber;
-	}
+	public void resetGame() {
+		levels = null;
+		random = new Random();
 
-
-	public int getCurrentSaveNumber() {
-		return currentSaveNumber;
+		setScreen(new MainMenuScreen(this));
 	}
 
 
@@ -82,6 +80,8 @@ public class MuscovyGame extends Game {
 		ControllerHelper.setupControllers();
 		controller = ControllerHelper.getFirstControllerOrNull();
 		String controllerName = ControllerHelper.getControllerName(controller);
+
+		// TODO: Load control map from file
 		controlMap = ControlMapCreator.newDefaultControlMap(controllerName);
 		if (!ControlMapCreator.isControllerKnown(controllerName)) {
 			controller = null;
@@ -105,14 +105,6 @@ public class MuscovyGame extends Game {
 		playerCharacter = new PlayerCharacter(this, AssetLocations.PLAYER, playerStartPosition, getControlMap(),
 				getController());
 		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
-	}
-
-
-	public void resetGame() {
-		levels = null;
-		random = new Random();
-		// setScreen(new LoadingScreen(this, saveNumber));
-		setScreen(new MainMenuScreen(this));
 	}
 
 
@@ -153,20 +145,30 @@ public class MuscovyGame extends Game {
 	}
 
 
-	public void saveData(int saveNumber, SaveData data) {
+	public void saveDataToFilel(int saveNumber, SaveData data) {
 		Gdx.app.log("Load", "Saving game");
 		SaveGame saveGame = new SaveGame(this);
-		saveGame.saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
+		saveGame.saveToFile(data, SaveHandler.getFileForSaveNumber(saveNumber));
 	}
 
 
 	public void saveCurrentGame() {
-		saveData(getCurrentSaveNumber(), getSaveData());
+		saveDataToFilel(getCurrentSaveNumber(), getSaveData());
 	}
 
 
 	public SaveData getSaveData() {
 		return new SaveData(playerCharacter, levels);
+	}
+
+
+	public void setCurrentSaveNumber(int saveNumber) {
+		currentSaveNumber = saveNumber;
+	}
+
+
+	public int getCurrentSaveNumber() {
+		return currentSaveNumber;
 	}
 
 

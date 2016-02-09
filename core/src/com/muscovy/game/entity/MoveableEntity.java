@@ -11,16 +11,6 @@ public abstract class MoveableEntity extends Collidable {
 	private float currentSpeed = 0;
 
 
-	// public MoveableEntity(MuscovyGame game, Sprite sprite) {
-	// this(game, sprite, new Vector2(0, 0));
-	// }
-	//
-	//
-	// public MoveableEntity(MuscovyGame game, Sprite sprite, Vector2 position) {
-	// super(game, sprite, position);
-	// velocity = new Vector2(0, 0);
-	// }
-
 	public MoveableEntity(MuscovyGame game, String textureName) {
 		this(game, textureName, new Vector2(0, 0));
 	}

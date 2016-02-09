@@ -52,9 +52,6 @@ public class Enemy extends MoveableEntity {
 	private boolean dead = false;
 
 
-	// public Enemy(MuscovyGame game, Sprite sprite, Vector2 position) {
-	// super(game, sprite, position);
-
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
 

@@ -80,7 +80,6 @@ public class AssetLocations {
 	public static final String BASE_SAVE_FOLDER = "preferences/";
 	public static final String SETTINGS_FOLDER = AssetLocations.BASE_SAVE_FOLDER + "settings/";
 	public static final String SAVE_FOLDER = AssetLocations.BASE_SAVE_FOLDER + "saves/";
-	public static final int MAX_SAVE_COUNT = 4;
 
 	public static final String CONTROLS_FILE_NAME = "controls.json";
 	public static final String CONTROLS_FILE = AssetLocations.SETTINGS_FOLDER + AssetLocations.CONTROLS_FILE_NAME;
@@ -185,24 +184,6 @@ public class AssetLocations {
 	public static BitmapFont newFont32() {
 		return new BitmapFont(Gdx.files.internal(AssetLocations.FONT_FNT_32),
 				Gdx.files.internal(AssetLocations.FONT_PNG_32), false);
-	}
-
-
-	/**
-	 * @param saveNumber
-	 * @return
-	 */
-	public static String getFileNameForSaveNumber(int saveNumber) {
-		return "save_" + saveNumber + ".json";
-	}
-
-
-	/**
-	 * @param saveNumber
-	 * @return
-	 */
-	public static String getFileForSaveNumber(int saveNumber) {
-		return AssetLocations.SAVE_FOLDER + AssetLocations.getFileNameForSaveNumber(saveNumber);
 	}
 
 

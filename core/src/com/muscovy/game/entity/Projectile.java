@@ -34,7 +34,6 @@ public class Projectile extends OnscreenDrawable {
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
 			ProjectileDamager damagesWho, ProjectileType projectileType) {
-		// super(game, new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET)), position);
 		super(game, AssetLocations.BULLET, position);
 
 		maxLifeTime = life;

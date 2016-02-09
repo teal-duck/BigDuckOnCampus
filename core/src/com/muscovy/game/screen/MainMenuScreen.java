@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.SaveHandler;
 import com.muscovy.game.gui.ButtonList;
 import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
@@ -114,15 +115,31 @@ public class MainMenuScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectNewGame() {
 		int saveNumber = getNextUnusedSaveNumber();
-		System.out.println(saveNumber);
+		Gdx.app.log("NewGame", "Starting a new game in save slot " + saveNumber);
+
 		if (saveNumber < 0) {
 			// TODO: Overwrite save
 			Gdx.app.log("TODO", "Overwrite save");
-			saveNumber = 0;
+			int overwriteSaveNumber = getSaveSlotToOverwrite();
+			Gdx.app.log("OverwriteGame", "Overwiting game in slot " + overwriteSaveNumber);
+			SaveHandler.deleteSave(overwriteSaveNumber);
+			saveNumber = overwriteSaveNumber;
 		}
+
 		setScreen(new LoadingScreen(getGame(), saveNumber));
+	}
+
+
+	/**
+	 * @return
+	 */
+	private int getSaveSlotToOverwrite() {
+		return 0;
 	}
 
 
@@ -132,9 +149,8 @@ public class MainMenuScreen extends ScreenBase {
 	 * @return
 	 */
 	private int getNextUnusedSaveNumber() {
-		for (int saveNumber = 0; saveNumber < AssetLocations.MAX_SAVE_COUNT; saveNumber += 1) {
-			String fileName = AssetLocations.getFileForSaveNumber(saveNumber);
-			if (!Gdx.files.local(fileName).exists()) {
+		for (int saveNumber = 0; saveNumber < SaveHandler.MAX_SAVE_COUNT; saveNumber += 1) {
+			if (!SaveHandler.doesSaveFileExist(saveNumber)) {
 				return saveNumber;
 			}
 		}
@@ -147,13 +163,12 @@ public class MainMenuScreen extends ScreenBase {
 		Gdx.app.log("TODO", "Load game");
 
 		int saveNumber = 0;
-		String fileName = AssetLocations.getFileForSaveNumber(saveNumber);
-		if (Gdx.files.local(fileName).exists()) {
+		if (SaveHandler.doesSaveFileExist(saveNumber)) {
+			Gdx.app.log("LoadGame", "Loading game from save slot " + saveNumber);
 			setScreen(new LoadingScreen(getGame(), saveNumber));
 		} else {
-			Gdx.app.log("TODO", "Loading");
+			Gdx.app.log("TODO", "Allow user to select which game to load");
 		}
-
 	}
 
 

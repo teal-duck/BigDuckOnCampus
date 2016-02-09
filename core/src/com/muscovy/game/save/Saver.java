@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue.PrettyPrintSettings;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.SaveHandler;
 
 
 public abstract class Saver<T> {
@@ -74,7 +75,7 @@ public abstract class Saver<T> {
 			return "";
 		}
 
-		return saveToFile(data, Gdx.files.local(fileName));
+		return saveToFile(data, SaveHandler.getFileHandleForSaveName(fileName));
 	}
 
 
@@ -116,7 +117,7 @@ public abstract class Saver<T> {
 			return null;
 		}
 
-		return loadFromFile(Gdx.files.local(fileName));
+		return loadFromFile(SaveHandler.getFileHandleForSaveName(fileName));
 	}
 
 
@@ -140,6 +141,6 @@ public abstract class Saver<T> {
 			return null;
 		}
 
-		return loadFromFileOrNull(Gdx.files.local(fileName));
+		return loadFromFileOrNull(SaveHandler.getFileHandleForSaveName(fileName));
 	}
 }

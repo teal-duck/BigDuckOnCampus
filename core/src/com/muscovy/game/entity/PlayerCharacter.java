@@ -63,9 +63,6 @@ public class PlayerCharacter extends MoveableEntity {
 	private boolean firing = false;
 
 
-	// public PlayerCharacter(MuscovyGame game, Sprite playerSprite, Vector2 position, ControlMap controlMap,
-	// Controller controller) {
-	// super(game, playerSprite, position);
 	public PlayerCharacter(MuscovyGame game, String textureName, Vector2 position, ControlMap controlMap,
 			Controller controller) {
 		super(game, textureName, position);

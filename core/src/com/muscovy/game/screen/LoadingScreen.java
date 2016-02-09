@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.Levels;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.SaveHandler;
 import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.save.game.SaveGame;
@@ -53,7 +54,7 @@ public class LoadingScreen extends ScreenBase {
 			// Load a new world and save it
 			if (loadedData == null) {
 				loadedData = generateNewGame(saveNumber);
-				getGame().saveData(saveNumber, loadedData);
+				// getGame().saveData(saveNumber, loadedData);
 			}
 
 			// Set the game to use this loaded world
@@ -61,7 +62,6 @@ public class LoadingScreen extends ScreenBase {
 			getGame().setCurrentSaveNumber(saveNumber);
 
 			setScreen(new LevelSelectScreen(getGame()));
-			// setScreen(new MainMenuScreen(getGame()));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class LoadingScreen extends ScreenBase {
 		if (loadData) {
 			Gdx.app.log("Load", "Loading save");
 			SaveGame saveGame = new SaveGame(getGame());
-			String saveLocation = AssetLocations.getFileForSaveNumber(saveNumber);
+			String saveLocation = SaveHandler.getFileForSaveNumber(saveNumber);
 			SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
 			return loadedData;
 		} else {
@@ -108,7 +108,7 @@ public class LoadingScreen extends ScreenBase {
 		SaveGame saveGame = new SaveGame(game);
 		SaveData saveData = new SaveData(game.getPlayerCharacter(), game.getLevels());
 
-		String saveLocation = AssetLocations.getFileForSaveNumber(0);
+		String saveLocation = SaveHandler.getFileForSaveNumber(0);
 		saveGame.saveToFile(saveData, saveLocation);
 
 		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);

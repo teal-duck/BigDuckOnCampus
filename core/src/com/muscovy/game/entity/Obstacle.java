@@ -14,10 +14,6 @@ public class Obstacle extends Collidable {
 	private float touchDamage;
 
 
-	// public Obstacle(MuscovyGame game, Sprite sprite, Vector2 position) {
-	// super(game, sprite, position);
-	// }
-
 	public Obstacle(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
 	}

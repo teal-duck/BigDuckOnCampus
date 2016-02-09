@@ -22,8 +22,6 @@ public class Item extends Collidable {
 	private static final int HEALTHPACK_REGEN = 10;
 
 
-	// public Item(MuscovyGame game, Sprite sprite, Vector2 position, ItemType type) {
-	// super(game, sprite, position);
 	public Item(MuscovyGame game, String textureName, Vector2 position, ItemType type) {
 		super(game, textureName, position);
 		this.type = type;
