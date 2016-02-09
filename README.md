@@ -2,15 +2,15 @@
 Game by Team Muscovy, continued by Team Teal
 
 ## Importing project to eclipse
-1. clone with git with ```git clone https://github.com/teal-duck/BigDuckOnCampus.git```
-2. install gradle to eclipse 
+1. Clone with git with ```git clone https://github.com/teal-duck/BigDuckOnCampus.git```
+2. Install gradle to eclipse 
   1. Help -> Install new software... -> Add... (Name: gradle, Location: http://dist.springsource.com/release/TOOLS/gradle)
   2. Select only 'Extensions / Gradle Integration' NOT 'Uncategorized'
   3. Press Finish
 3. Import project to eclipse via gradle (https://github.com/libgdx/libgdx/wiki/Gradle-and-Eclipse)
-  1. File -> Import -> Gradle -> Gradle Project -> Browse for teal-duck folder (root of project) -> Build Model.
+  1. File -> Import -> Gradle -> Gradle Project -> Browse for BigDuckOnCampus folder (root of project) -> Build Model.
   2. Select all -> Finish.
-4. You have now installed teal-duck to eclipse.
+4. You have now installed BigDuckOnCampus to eclipse.
 
 
 ## Get changes from GitHub
