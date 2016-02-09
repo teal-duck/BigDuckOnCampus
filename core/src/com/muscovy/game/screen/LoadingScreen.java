@@ -21,7 +21,7 @@ public class LoadingScreen extends ScreenBase {
 
 	// For testing purposes
 	// The loading code isn't finished so parts are still null
-	private final boolean loadData = false;
+	private final boolean loadData = true;
 
 
 	public LoadingScreen(MuscovyGame game, int saveNumber) {
@@ -59,7 +59,8 @@ public class LoadingScreen extends ScreenBase {
 			// Set the game to use this loaded world
 			getGame().initialiseFromSaveData(loadedData);
 
-			setScreen(new MainMenuScreen(getGame()));
+			setScreen(new LevelSelectScreen(getGame()));
+			// setScreen(new MainMenuScreen(getGame()));
 		}
 	}
 

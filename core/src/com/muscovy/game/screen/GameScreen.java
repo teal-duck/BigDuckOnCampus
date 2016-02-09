@@ -5,10 +5,13 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.muscovy.game.AssetLocations;
@@ -36,14 +39,6 @@ public class GameScreen extends ScreenBase {
 	private PlayerCharacter playerCharacter;
 	private Level level;
 
-	private BitmapFont guiFont;
-	private BitmapFont pauseFont;
-	private GUI dungeonGui;
-	private GUI pauseGui;
-
-	private boolean paused = false;
-	private boolean pauseJustPressed = true;
-
 	private float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
 	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
 	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
@@ -57,14 +52,27 @@ public class GameScreen extends ScreenBase {
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final int TEXT_EDGE_OFFSET = 10;
-	
+	// GUI, GUI font
+	private BitmapFont guiFont;
+	private BitmapFont pauseFont;
+	private GUI dungeonGui;
+	private GUI pauseGui;
+
+	// Pause status
+	private boolean paused = false;
+	private boolean pauseJustPressed = true;
+
+	// Pause button options
 	private static final int RESUME = 0;
 	private static final int SAVE = 1;
 	private static final int QUIT = 2;
 	private static final String[] PAUSE_BUTTON_TEXTS = new String[] { "Resume", "Save", "Quit" };
-	
+
 	private ButtonList pauseMenuButtons;
 	private BitmapFont pauseMenuFont;
+
+	private ShapeRenderer shapeRenderer;
+
 
 	public GameScreen(MuscovyGame game, Level level) {
 		super(game);
@@ -80,10 +88,12 @@ public class GameScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
+
+		// DUNGEON
 		dungeonGui = new GUI();
 
 		guiFont = AssetLocations.newFont20();
-		guiFont.setColor(Color.WHITE); // Color.BLACK
+		guiFont.setColor(Color.WHITE);
 
 		int dungeonGuiX = GameScreen.TEXT_EDGE_OFFSET;
 		int dungeonGuiY = getWindowHeight();
@@ -103,19 +113,23 @@ public class GameScreen extends ScreenBase {
 		String objectiveText = level.getObjectiveName();
 		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
 		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
-		
+
+		// PAUSE MENU
+		shapeRenderer = new ShapeRenderer();
+
 		pauseFont = AssetLocations.newFont32();
-		pauseFont.setColor(Color.RED);
+		pauseFont.setColor(Color.WHITE);
 		pauseGui = new GUI();
 		pauseGui.addData(GameScreen.PAUSE_ID, "PAUSED", pauseFont, (getWindowWidth() / 2) - getWallWidth(),
-				(3*getWindowHeight() / 4));
-		
+				((3 * getWindowHeight()) / 4));
+
 		pauseMenuFont = AssetLocations.newFont32();
-		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getCamera(), getTextureMap(),
-				getControlMap(), getController());
+		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getCamera(),
+				getTextureMap(), getControlMap(), getController());
 		setPauseButtonLocations();
-		
+
 	}
+
 
 	public void resetPlayer() {
 		Sprite playerSprite = playerCharacter.getSprite();
@@ -134,13 +148,13 @@ public class GameScreen extends ScreenBase {
 		GlyphLayout glyphLayout = new GlyphLayout(font, text);
 		return (int) glyphLayout.width;
 	}
-	
+
+
 	public PlayerCharacter getPlayer() {
 		return playerCharacter;
 	}
 
 
-	
 	private void setPauseButtonLocations() {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
 		ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
@@ -149,9 +163,11 @@ public class GameScreen extends ScreenBase {
 				+ ButtonList.getHeightForDefaultButtonList(GameScreen.PAUSE_BUTTON_TEXTS.length);
 		pauseMenuButtons.setPositionDefaultSize(x, y + 100);
 	}
-	
+
+
 	/**
 	 * Pause menu options
+	 *
 	 * @param selected
 	 */
 	private void selectPauseOption(int selected) {
@@ -167,15 +183,18 @@ public class GameScreen extends ScreenBase {
 			break;
 		}
 	}
-	
+
+
 	private void selectSave() {
 		// TODO: Save Game
 		Gdx.app.log("TODO", "Save game");
 	}
-	
+
+
 	private void selectQuit() {
-		setScreen(new MainMenuScreen(getGame()));
+		setScreen(new LevelSelectScreen(getGame()));
 	}
+
 
 	@Override
 	public void updateScreen(float deltaTime) {
@@ -241,18 +260,60 @@ public class GameScreen extends ScreenBase {
 		batch.begin();
 		entityManager.render(deltaTime, batch);
 		dungeonGui.render(batch);
-		if (paused) {
-			pauseGui.render(batch);
-			pauseMenuButtons.render(batch);
-		}
 		batch.end();
+
+		if (paused) {
+			renderPauseOverlay();
+		}
 
 		entityManager.renderMapOverlay();
 
 		if (renderDebugGrid) {
 			entityManager.renderGridOverlay();
 		}
+
 	}
+
+
+	/**
+	 * Render Pause Menu shape overlay over screen, pause GUI and buttons.
+	 */
+	private void renderPauseOverlay() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		shapeRenderer.setProjectionMatrix(getCamera().combined);
+		shapeRenderer.begin(ShapeType.Filled);
+
+		float windowWidth = getWindowWidth();
+		float windowHeight = getWindowHeight();
+
+		// Overlay entire window
+		float colour = 0.2f;
+		float alpha = 0.5f;
+		shapeRenderer.setColor(colour, colour, colour, alpha);
+		shapeRenderer.rect(0, 0, windowWidth, windowHeight);
+
+		// Pause menu box size
+		float width = 500;
+		float height = 500;
+
+		/// Pause menu box
+		float x = (windowWidth / 2) - (width / 2);
+		float y = (windowHeight / 2) - (height / 2);
+		shapeRenderer.setColor(colour, colour, colour, 1f);
+		shapeRenderer.rect(x, y, width, height);
+
+		shapeRenderer.end();
+
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+
+		SpriteBatch batch = getBatch();
+
+		batch.begin();
+		pauseGui.render(batch);
+		pauseMenuButtons.render(batch);
+		batch.end();
+	}
+
 
 	/**
 	 * If player not on game window will pause screen i.e. click off window
@@ -580,43 +641,48 @@ public class GameScreen extends ScreenBase {
 
 
 	public void playerDoorCollision() {
-		float doorOffset = 70;
+		float doorOffset = 50; // 70
 		// TODO: Replace "player walking towards door" check with dot product
+		boolean collidedWithDoor = false;
 
-		if (entityManager.getCurrentDungeonRoom().hasUpDoor()) {
+		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasUpDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getUpDoor()))
 					&& (getStateForAction(Action.WALK_UP) > 0)) {
+				collidedWithDoor = true;
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToUpRoom();
 				playerCharacter.setY(doorOffset);
 			}
 		}
 
-		if (entityManager.getCurrentDungeonRoom().hasDownDoor()) {
+		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasDownDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getDownDoor()))
 					&& (getStateForAction(Action.WALK_DOWN) > 0)) {
+				collidedWithDoor = true;
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToDownRoom();
 				playerCharacter.setY(getWindowHeight() - playerCharacter.getHeight() - doorOffset);
 			}
 		}
 
-		if (entityManager.getCurrentDungeonRoom().hasRightDoor()) {
+		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasRightDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getRightDoor()))
 					&& (getStateForAction(Action.WALK_RIGHT) > 0)) {
+				collidedWithDoor = true;
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToRightRoom();
 				playerCharacter.setX(doorOffset);
 			}
 		}
 
-		if (entityManager.getCurrentDungeonRoom().hasLeftDoor()) {
+		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasLeftDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getLeftDoor()))
 					&& (getStateForAction(Action.WALK_LEFT) > 0)) {
+				collidedWithDoor = true;
 				playerCharacter.setVelocity(0, 0);
 				entityManager.moveToLeftRoom();
 				playerCharacter.setX(getWindowWidth() - playerCharacter.getWidth() - doorOffset);

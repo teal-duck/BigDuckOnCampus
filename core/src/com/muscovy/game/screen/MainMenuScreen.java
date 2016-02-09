@@ -115,13 +115,44 @@ public class MainMenuScreen extends ScreenBase {
 
 
 	private void selectNewGame() {
-		setScreen(new LevelSelectScreen(getGame()));
+		int saveNumber = getNextUnusedSaveNumber();
+		System.out.println(saveNumber);
+		if (saveNumber < 0) {
+			// TODO: Overwrite save
+			Gdx.app.log("TODO", "Overwrite save");
+			saveNumber = 0;
+		}
+		setScreen(new LoadingScreen(getGame(), saveNumber));
+	}
+
+
+	/**
+	 * Returns -1 if there are no free saves.
+	 *
+	 * @return
+	 */
+	private int getNextUnusedSaveNumber() {
+		for (int saveNumber = 0; saveNumber < AssetLocations.MAX_SAVE_COUNT; saveNumber += 1) {
+			String fileName = AssetLocations.getFileForSaveNumber(saveNumber);
+			if (!Gdx.files.local(fileName).exists()) {
+				return saveNumber;
+			}
+		}
+		return -1;
 	}
 
 
 	private void selectLoadGame() {
 		// TODO: Load Game
 		Gdx.app.log("TODO", "Load game");
+
+		int saveNumber = 0;
+		String fileName = AssetLocations.getFileForSaveNumber(saveNumber);
+		if (Gdx.files.local(fileName).exists()) {
+			setScreen(new LoadingScreen(getGame(), saveNumber));
+		} else {
+			Gdx.app.log("TODO", "Loading");
+		}
 
 	}
 
