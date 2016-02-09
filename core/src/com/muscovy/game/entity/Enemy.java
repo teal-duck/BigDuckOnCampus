@@ -4,7 +4,6 @@ package com.muscovy.game.entity;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.AttackType;
@@ -52,8 +51,11 @@ public class Enemy extends MoveableEntity {
 	private boolean dead = false;
 
 
-	public Enemy(MuscovyGame game, Sprite sprite, Vector2 position) {
-		super(game, sprite, position);
+	// public Enemy(MuscovyGame game, Sprite sprite, Vector2 position) {
+	// super(game, sprite, position);
+
+	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
+		super(game, textureName, position);
 
 		setMaxSpeed(Enemy.MAX_SPEED);
 		setCurrentSpeed(0);

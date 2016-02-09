@@ -1,7 +1,6 @@
 package com.muscovy.game.entity;
 
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,8 +25,14 @@ public abstract class Collidable extends OnscreenDrawable {
 	private float hitboxYOffset = 0;
 
 
-	public Collidable(MuscovyGame game, Sprite sprite, Vector2 position) {
-		super(game, sprite, position);
+	// public Collidable(MuscovyGame game, Sprite sprite, Vector2 position) {
+	// super(game, sprite, position);
+	// initialisePosition(position);
+	// setUpBoxes();
+	// }
+
+	public Collidable(MuscovyGame game, String textureName, Vector2 position) {
+		super(game, textureName, position);
 		initialisePosition(position);
 		setUpBoxes();
 	}

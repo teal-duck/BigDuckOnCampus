@@ -4,7 +4,6 @@ package com.muscovy.game.level;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
@@ -94,8 +93,10 @@ public class DungeonRoom {
 
 
 	private Obstacle createNonDamagingObstacle(int x, int y) {
-		Sprite rockSprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.RECYLING_BIN));
-		Obstacle obstacle = new Obstacle(game, rockSprite, new Vector2(x, y));
+		// Sprite rockSprite = new
+		// Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.RECYLING_BIN));
+		// Obstacle obstacle = new Obstacle(game, rockSprite, new Vector2(x, y));
+		Obstacle obstacle = new Obstacle(game, AssetLocations.RECYLING_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
 		addObstacle(obstacle);
@@ -104,8 +105,10 @@ public class DungeonRoom {
 
 
 	private Obstacle createDamagingObstacle(int x, int y) {
-		Sprite spikeSprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.WASTE_BIN));
-		Obstacle obstacle = new Obstacle(game, spikeSprite, new Vector2(x, y));
+		/// Sprite spikeSprite = new
+		/// Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.WASTE_BIN));
+		// Obstacle obstacle = new Obstacle(game, spikeSprite, new Vector2(x, y));
+		Obstacle obstacle = new Obstacle(game, AssetLocations.WASTE_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
 
@@ -118,17 +121,19 @@ public class DungeonRoom {
 
 
 	private Enemy createRandomEnemy(int x, int y) {
-		Sprite enemySprite;
+		// Sprite enemySprite;
 		Enemy enemy;
 		Vector2 position = new Vector2(x, y);
 
 		if (game.getRandom().nextBoolean()) {
-			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.CLEANER));
-			enemy = new Enemy(game, enemySprite, position);
+			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.CLEANER));
+			// enemy = new Enemy(game, enemySprite, position);
+			enemy = new Enemy(game, AssetLocations.CLEANER, position);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
-			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(game, enemySprite, position);
+			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			// enemy = new Enemy(game, enemySprite, position);
+			enemy = new Enemy(game, AssetLocations.STUDENT, position);
 			enemy.setAttackType(AttackType.RANGE);
 		}
 
@@ -161,9 +166,12 @@ public class DungeonRoom {
 
 
 	private void createHealthPack(int x, int y) {
-		Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile("healthpack.png"));
+		// Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.HEALTHPACK));
+		// Sprite sprite = new Sprite(ItemType.getItemTexture(game, ItemType.HEALTH));
 		Vector2 position = new Vector2(x, y);
-		Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
+		// Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
+		Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
+				ItemType.HEALTH);
 
 		healthPack.setXTiles(x);
 		healthPack.setYTiles(y);
@@ -178,7 +186,7 @@ public class DungeonRoom {
 		 * space, 1 = non-damaging obstacle, 2 = damaging obstacle, 3 = random obstacle, 4 = random enemy Easy
 		 * to put in more, just extend the case statement below to have more specific stuff.
 		 */
-		Sprite enemySprite;
+		// Sprite enemySprite;
 		Enemy enemy;
 
 		switch (roomType) {
@@ -227,9 +235,10 @@ public class DungeonRoom {
 		case BOSS:
 			// Boss
 			// TODO: Change boss parameters
-			enemySprite = new Sprite(
-					game.getTextureMap().getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
-			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			// enemySprite = new Sprite(
+			// game.getTextureMap().getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
+			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0));
 			enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 					- (enemy.getWidth() / game.getTileSize() / 2)));
 			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
@@ -250,16 +259,18 @@ public class DungeonRoom {
 		case ITEM:
 			// Item
 			// TODO: Item room
-			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(DungeonRoom.FLOOR_WIDTH_IN_TILES - 1);
 			enemy.setYTiles(DungeonRoom.FLOOR_HEIGHT_IN_TILES - 1);
 			addEnemy(enemy);
 
 			ItemType itemType = ItemType.TRIPLE_SHOT;
-			Sprite itemSprite = new Sprite(ItemType.getItemSprite(game, itemType));
-			Item item = new Item(game, itemSprite, new Vector2(0, 0), itemType);
+			// Sprite itemSprite = new Sprite(ItemType.getItemTexture(game, itemType));
+			// Item item = new Item(game, itemSprite, new Vector2(0, 0), itemType);
+			Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
 			item.setXTiles(5);
 			item.setYTiles(5);
 			addItem(item);
@@ -268,8 +279,9 @@ public class DungeonRoom {
 		case SHOP:
 			// Shop
 			// TODO: Shop room
-			enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
+			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
+			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(0);
 			enemy.setYTiles(0);

@@ -1,7 +1,6 @@
 package com.muscovy.game.entity;
 
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 
@@ -12,13 +11,23 @@ public abstract class MoveableEntity extends Collidable {
 	private float currentSpeed = 0;
 
 
-	public MoveableEntity(MuscovyGame game, Sprite sprite) {
-		this(game, sprite, new Vector2(0, 0));
+	// public MoveableEntity(MuscovyGame game, Sprite sprite) {
+	// this(game, sprite, new Vector2(0, 0));
+	// }
+	//
+	//
+	// public MoveableEntity(MuscovyGame game, Sprite sprite, Vector2 position) {
+	// super(game, sprite, position);
+	// velocity = new Vector2(0, 0);
+	// }
+
+	public MoveableEntity(MuscovyGame game, String textureName) {
+		this(game, textureName, new Vector2(0, 0));
 	}
 
 
-	public MoveableEntity(MuscovyGame game, Sprite sprite, Vector2 position) {
-		super(game, sprite, position);
+	public MoveableEntity(MuscovyGame game, String textureName, Vector2 position) {
+		super(game, textureName, position);
 		velocity = new Vector2(0, 0);
 	}
 

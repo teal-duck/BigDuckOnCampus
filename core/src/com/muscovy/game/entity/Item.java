@@ -1,7 +1,6 @@
 package com.muscovy.game.entity;
 
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
@@ -23,8 +22,10 @@ public class Item extends Collidable {
 	private static final int HEALTHPACK_REGEN = 10;
 
 
-	public Item(MuscovyGame game, Sprite sprite, Vector2 position, ItemType type) {
-		super(game, sprite, position);
+	// public Item(MuscovyGame game, Sprite sprite, Vector2 position, ItemType type) {
+	// super(game, sprite, position);
+	public Item(MuscovyGame game, String textureName, Vector2 position, ItemType type) {
+		super(game, textureName, position);
 		this.type = type;
 		lifeOver = false;
 	}

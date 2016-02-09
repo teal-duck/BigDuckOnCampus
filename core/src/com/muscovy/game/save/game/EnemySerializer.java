@@ -1,10 +1,14 @@
 package com.muscovy.game.save.game;
 
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.enums.AttackType;
+import com.muscovy.game.enums.EnemyShotType;
+import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.save.BaseSerializer;
 
 
@@ -19,6 +23,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 	public void write(Json json, Enemy enemy, Class knownType) {
 		json.writeObjectStart();
 		json.writeValue("position", enemy.getPosition());
+		json.writeValue("textureName", enemy.getTextureName());
 		json.writeValue("movementType", enemy.getMovementType());
 		json.writeValue("attackType", enemy.getAttackType());
 		json.writeValue("shotType", enemy.getShotType());
@@ -30,6 +35,28 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 
 	@Override
 	public Enemy read(Json json, JsonValue jsonData, Class type) {
-		return null;
+		Vector2 position = loadVector2(jsonData.get("position"));
+		String textureName = jsonData.getString("textureName");
+
+		JsonValue movementTypeValue = jsonData.get("movementType");
+		MovementType movementType = MovementType.valueOf(movementTypeValue.asString());
+
+		JsonValue attackTypeValue = jsonData.get("attackType");
+		AttackType attackType = AttackType.valueOf(attackTypeValue.asString());
+
+		JsonValue shotTypeValue = jsonData.get("shotType");
+		EnemyShotType shotType = EnemyShotType.valueOf(shotTypeValue.asString());
+
+		float touchDamage = jsonData.getFloat("touchDamage");
+		float health = jsonData.getFloat("health");
+
+		Enemy enemy = new Enemy(game, textureName, position);
+		enemy.setMovementType(movementType);
+		enemy.setAttackType(attackType);
+		enemy.setShotType(shotType);
+		enemy.setTouchDamage(touchDamage);
+		enemy.setCurrentHealth(health);
+
+		return enemy;
 	}
 }

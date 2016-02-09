@@ -51,7 +51,6 @@ public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 	}
 
 
-	@SuppressWarnings("unused")
 	@Override
 	public DungeonRoom read(Json json, JsonValue jsonData, Class type) {
 		if (jsonData.isNull()) {
@@ -78,10 +77,29 @@ public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 		boolean allEnemiesDead = jsonData.getBoolean("allEnemiesDead");
 		dungeonRoom.setEnemiesDead(allEnemiesDead);
 
-		// TODO: Load obstacles, enemies and items
-		JsonValue obstacleListValue = jsonData.get("obstacleList");
-		JsonValue enemyListValue = jsonData.get("enemyList");
-		JsonValue itemListValue = jsonData.get("itemList");
+		JsonValue obstacleListArrayValue = jsonData.get("obstacleList");
+		JsonValue obstacleListValue = obstacleListArrayValue.child;
+		while (obstacleListValue != null) {
+			Obstacle obstacle = fromJson(Obstacle.class, json, obstacleListValue, type);
+			dungeonRoom.addObstacle(obstacle);
+			obstacleListValue = obstacleListValue.next;
+		}
+
+		JsonValue enemyListArrayValue = jsonData.get("enemyList");
+		JsonValue enemyListValue = enemyListArrayValue.child;
+		while (enemyListValue != null) {
+			Enemy enemy = fromJson(Enemy.class, json, enemyListValue, type);
+			dungeonRoom.addEnemy(enemy);
+			enemyListValue = enemyListValue.next;
+		}
+
+		JsonValue itemListArrayValue = jsonData.get("itemList");
+		JsonValue itemListValue = itemListArrayValue.child;
+		while (itemListValue != null) {
+			Item item = fromJson(Item.class, json, itemListValue, type);
+			dungeonRoom.addItem(item);
+			itemListValue = itemListValue.next;
+		}
 
 		return dungeonRoom;
 	}

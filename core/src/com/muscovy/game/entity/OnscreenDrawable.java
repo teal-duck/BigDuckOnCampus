@@ -16,19 +16,41 @@ public abstract class OnscreenDrawable {
 	 * getting myself into, innit
 	 */
 	public final MuscovyGame game;
+	private String textureName;
 	private Sprite sprite;
 	private Vector2 position;
 
 
-	public OnscreenDrawable(MuscovyGame game, Sprite sprite) {
-		this(game, sprite, new Vector2(0, 0));
+	public OnscreenDrawable(MuscovyGame game, String textureName) {
+		this(game, textureName, new Vector2(0, 0));
 	}
 
 
-	public OnscreenDrawable(MuscovyGame game, Sprite sprite, Vector2 position) {
+	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
 		this.game = game;
-		this.sprite = sprite;
 		this.position = position;
+
+		sprite = new Sprite();
+		setTexture(textureName);
+		// this.textureName = textureName;
+		// Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
+		// sprite.setTexture(texture);
+	}
+
+
+	// public OnscreenDrawable(MuscovyGame game, Sprite sprite) {
+	// this(game, sprite, new Vector2(0, 0));
+	// }
+	//
+	//
+	// public OnscreenDrawable(MuscovyGame game, Sprite sprite, Vector2 position) {
+	// this.game = game;
+	// this.sprite = sprite;
+	// this.position = position;
+	// }
+
+	public String getTextureName() {
+		return textureName;
 	}
 
 
@@ -47,20 +69,25 @@ public abstract class OnscreenDrawable {
 	}
 
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public void setTexture(String textureName) {
+		this.textureName = textureName;
+		Texture texture = game.getTextureMap().getTextureOrLoadFile(textureName);
+		sprite.setTexture(texture);
 	}
 
+
+	// public void setSprite(Sprite sprite) {
+	// this.sprite = sprite;
+	// }
 
 	public Texture getTexture() {
 		return sprite.getTexture();
 	}
 
 
-	public void setTexture(Texture texture) {
-		sprite.setTexture(texture);
-	}
-
+	// public void setTexture(Texture texture) {
+	// sprite.setTexture(texture);
+	// }
 
 	public float getX() {
 		return position.x;
