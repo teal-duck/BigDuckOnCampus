@@ -18,11 +18,17 @@ public class Levels {
 	}
 
 
+	/**
+	 * @param levels
+	 */
 	public void setLevels(Level[] levels) {
 		this.levels = levels;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Level[] getLevels() {
 		return levels;
 	}
@@ -30,8 +36,6 @@ public class Levels {
 
 	/**
 	 * @param game
-	 * @param random
-	 * @param textureMap
 	 */
 	public void generateLevels(MuscovyGame game) {
 		// TODO: Only generate level when player wants to play it?

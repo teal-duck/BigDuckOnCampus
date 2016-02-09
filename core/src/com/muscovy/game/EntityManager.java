@@ -99,11 +99,17 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isTransitioning() {
 		return (transitionTime > 0);
 	}
 
 
+	/**
+	 * @param playerCharacter
+	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
 		currentRoomX = level.getStartX();
@@ -114,6 +120,10 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @param dungeonRoom
+	 * @param transitionDirection
+	 */
 	private void setCurrentDungeonRoom(DungeonRoom dungeonRoom, Vector2 transitionDirection) {
 		roomTimer = 0;
 
@@ -141,11 +151,20 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @param roomX
+	 * @param roomY
+	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY) {
 		setCurrentDungeonRoom(roomX, roomY, null);
 	}
 
 
+	/**
+	 * @param roomX
+	 * @param roomY
+	 * @param transitionDirection
+	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY, Vector2 transitionDirection) {
 		DungeonRoom room = level.getRoom(roomX, roomY);
 		setCurrentDungeonRoom(room, transitionDirection);
@@ -153,6 +172,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void moveToUpRoom() {
 		int newY = currentRoomY - 1;
 		setCurrentDungeonRoom(currentRoomX, newY, new Vector2(0, 1));
@@ -161,6 +183,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void moveToRightRoom() {
 		int newX = currentRoomX + 1;
 		setCurrentDungeonRoom(newX, currentRoomY, new Vector2(1, 0));
@@ -169,6 +194,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void moveToLeftRoom() {
 		int newX = currentRoomX - 1;
 		setCurrentDungeonRoom(newX, currentRoomY, new Vector2(-1, 0));
@@ -226,6 +254,15 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @param batch
+	 * @param dungeonRoom
+	 * @param roomX
+	 * @param roomY
+	 * @param renderList
+	 * @param translateX
+	 * @param translateY
+	 */
 	private void renderDungeonRoom(SpriteBatch batch, DungeonRoom dungeonRoom, int roomX, int roomY,
 			ArrayList<OnscreenDrawable> renderList, float translateX, float translateY) {
 		renderList = sortDrawables(renderList);
@@ -315,6 +352,15 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @param batch
+	 * @param doorTexture
+	 * @param doorRectangle
+	 * @param translateX
+	 * @param translateY
+	 * @param scaleX
+	 * @param scaleY
+	 */
 	private void renderDoor(SpriteBatch batch, Texture doorTexture, Rectangle doorRectangle, float translateX,
 			float translateY, float scaleX, float scaleY) {
 		float width = doorRectangle.width;
@@ -328,6 +374,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void renderMapOverlay() {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
 		shapeRenderer.begin(ShapeType.Filled);
@@ -456,6 +505,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void renderGridOverlay() {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
 		shapeRenderer.begin(ShapeType.Line);
@@ -537,6 +589,12 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @param less
+	 * @param pivot
+	 * @param greater
+	 * @return
+	 */
 	private ArrayList<OnscreenDrawable> concatenate(ArrayList<OnscreenDrawable> less, OnscreenDrawable pivot,
 			ArrayList<OnscreenDrawable> greater) {
 		less.add(pivot);
@@ -545,6 +603,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void killProjectiles() {
 		ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
 
@@ -560,6 +621,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void killItems() {
 		ArrayList<Item> deadItems = new ArrayList<Item>();
 
@@ -576,6 +640,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 *
+	 */
 	public void killEnemies() {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 
@@ -594,6 +661,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean checkLevelCompletion() {
 		ObjectiveType objectiveType = level.getObjectiveType();
 
@@ -626,86 +696,134 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public DungeonRoom getCurrentDungeonRoom() {
 		return currentDungeonRoom;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getRoomTimer() {
 		return roomTimer;
 	}
 
 
+	/**
+	 * @param drawable
+	 */
 	public void addNewDrawable(OnscreenDrawable drawable) {
 		renderList.add(drawable);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Item> getItems() {
 		return itemList;
 	}
 
 
+	/**
+	 * @param drawables
+	 */
 	public void addNewDrawables(ArrayList<OnscreenDrawable> drawables) {
 		renderList.addAll(drawables);
 	}
 
 
+	/**
+	 * @param obstacle
+	 */
 	public void addNewObstacle(Obstacle obstacle) {
 		renderList.add(obstacle);
 		obstacleList.add(obstacle);
 	}
 
 
+	/**
+	 * @param obstacles
+	 */
 	public void addNewObstacles(ArrayList<Obstacle> obstacles) {
 		renderList.addAll(obstacles);
 		obstacleList.addAll(obstacles);
 	}
 
 
+	/**
+	 * @param enemy
+	 */
 	public void addNewEnemy(Enemy enemy) {
 		renderList.add(enemy);
 		enemyList.add(enemy);
 	}
 
 
+	/**
+	 * @param enemies
+	 */
 	public void addNewEnemies(ArrayList<Enemy> enemies) {
 		renderList.addAll(enemies);
 		enemyList.addAll(enemies);
 	}
 
 
+	/**
+	 * @param items
+	 */
 	public void addNewItems(ArrayList<Item> items) {
 		renderList.addAll(items);
 		itemList.addAll(items);
 	}
 
 
+	/**
+	 * @param projectile
+	 */
 	public void addNewProjectile(Projectile projectile) {
 		projectileList.add(projectile);
 	}
 
 
+	/**
+	 * @param projectiles
+	 */
 	public void addNewProjectiles(ArrayList<Projectile> projectiles) {
 		projectileList.addAll(projectiles);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Obstacle> getObstacles() {
 		return obstacleList;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Enemy> getEnemies() {
 		return enemyList;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Projectile> getProjectiles() {
 		return projectileList;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public PlayerCharacter getPlayer() {
 		return playerCharacter;
 	}
