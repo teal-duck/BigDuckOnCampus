@@ -119,6 +119,8 @@
 
 - Randomized how often enemies shoot
 
+- Enemy bullets look different to player's
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side
