@@ -42,6 +42,8 @@ public class LevelSelectScreen extends ScreenBase {
 		mapSelected = selectedLevel;
 		initialiseGui();
 		cursorUpdate();
+
+		getGame().saveCurrentGame();
 	}
 
 
@@ -82,11 +84,10 @@ public class LevelSelectScreen extends ScreenBase {
 
 		if (isStateForAction(Action.ENTER)) {
 			if (!enterJustPressed) {
-				if (!getLevels().isLevelCompleted(mapSelected.ordinal())) {
-					setScreen(new GameScreen(getGame(),
-							getLevels().getLevel(mapSelected.ordinal())));
-					return;
-				}
+				// if (!getLevels().isLevelCompleted(mapSelected.ordinal())) {
+				setScreen(new GameScreen(getGame(), getLevels().getLevel(mapSelected.ordinal())));
+				return;
+				// }
 			}
 			enterJustPressed = true;
 		} else {

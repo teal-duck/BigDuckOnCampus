@@ -21,7 +21,7 @@ public class LoadingScreen extends ScreenBase {
 
 	// For testing purposes
 	// The loading code isn't finished so parts are still null
-	private final boolean loadData = false;
+	private final boolean loadData = true;
 
 
 	public LoadingScreen(MuscovyGame game, int saveNumber) {
@@ -53,13 +53,15 @@ public class LoadingScreen extends ScreenBase {
 			// Load a new world and save it
 			if (loadedData == null) {
 				loadedData = generateNewGame(saveNumber);
-				saveData(saveNumber, loadedData);
+				getGame().saveData(saveNumber, loadedData);
 			}
 
 			// Set the game to use this loaded world
 			getGame().initialiseFromSaveData(loadedData);
+			getGame().setCurrentSaveNumber(saveNumber);
 
-			setScreen(new MainMenuScreen(getGame()));
+			setScreen(new LevelSelectScreen(getGame()));
+			// setScreen(new MainMenuScreen(getGame()));
 		}
 	}
 
@@ -81,13 +83,6 @@ public class LoadingScreen extends ScreenBase {
 			Gdx.app.log("Load", "Loading disabled, returning null");
 			return null;
 		}
-	}
-
-
-	private void saveData(int saveNumber, SaveData data) {
-		Gdx.app.log("Load", "Saving game");
-		SaveGame saveGame = new SaveGame(getGame());
-		saveGame.saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
 	}
 
 
@@ -131,7 +126,7 @@ public class LoadingScreen extends ScreenBase {
 		updateAndSetCamera();
 
 		batch.begin();
-		font.draw(batch, "RANDOMLY GENERATING LEVELS", (getWindowWidth() / 2) - 250, getWindowHeight() / 2);
+		font.draw(batch, "Loading Game...", (getWindowWidth() / 2) - 250, getWindowHeight() / 2);
 		batch.end();
 	}
 

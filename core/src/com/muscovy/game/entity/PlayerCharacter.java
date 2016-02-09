@@ -22,7 +22,7 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final float MAX_SPEED = 350f;
 	public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
 	public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
-	public static final float ATTACK_INTERVAL = 0.25f;
+	public static final float BASE_ATTACK_INTERVAL = 0.25f;
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
 	public static final int MAX_HEALTH = 100;
@@ -34,7 +34,8 @@ public class PlayerCharacter extends MoveableEntity {
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
 
-	private float attackInterval = PlayerCharacter.ATTACK_INTERVAL;
+	private float attackInterval = PlayerCharacter.BASE_ATTACK_INTERVAL;
+
 	private float timeSinceLastAttack = attackInterval;
 
 	private float projectileSpeed = PlayerCharacter.PROJECTILE_SPEED;
@@ -373,6 +374,16 @@ public class PlayerCharacter extends MoveableEntity {
 
 	public void setShotType(PlayerShotType type) {
 		shotType = type;
+	}
+
+
+	public float getAttackInterval() {
+		return attackInterval;
+	}
+
+
+	public void setAttackInterval(float attackInterval) {
+		this.attackInterval = attackInterval;
 	}
 
 

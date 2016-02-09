@@ -72,4 +72,19 @@ public enum LevelType {
 		}
 		return "";
 	}
+
+
+	public static ItemType getItemType(LevelType levelType) {
+		ItemType itemType;
+
+		if (levelType == CONSTANTINE) {
+			itemType = ItemType.TRIPLE_SHOT;
+		} else if (levelType == GOODRICKE) {
+			itemType = ItemType.RAPID_FIRE;
+		} else {
+			itemType = null;
+		}
+
+		return itemType;
+	}
 }

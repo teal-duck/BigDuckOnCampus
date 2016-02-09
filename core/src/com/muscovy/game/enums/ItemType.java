@@ -5,7 +5,7 @@ import com.muscovy.game.AssetLocations;
 
 
 public enum ItemType {
-	HEALTH, COIN, TRIPLE_SHOT;
+	HEALTH, COIN, TRIPLE_SHOT, RAPID_FIRE;
 
 	// public static Texture getItemTexture(MuscovyGame game, ItemType itemType) {
 	// switch (itemType) {
@@ -23,6 +23,8 @@ public enum ItemType {
 			return AssetLocations.HEALTHPACK;
 		case TRIPLE_SHOT:
 			return AssetLocations.TRIPLE_SHOT;
+		case RAPID_FIRE:
+			return AssetLocations.RAPID_FIRE;
 		default:
 			return null;
 		}

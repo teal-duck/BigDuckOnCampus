@@ -16,7 +16,8 @@ import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
 import com.muscovy.game.save.control.SaveControls;
 import com.muscovy.game.save.game.SaveData;
-import com.muscovy.game.screen.LoadingScreen;
+import com.muscovy.game.save.game.SaveGame;
+import com.muscovy.game.screen.MainMenuScreen;
 
 
 /**
@@ -34,11 +35,17 @@ public class MuscovyGame extends Game {
 	private ControlMap controlMap;
 	private Controller controller;
 
+	private int currentSaveNumber = -1;
+
 	private static final int WINDOW_WIDTH = 1344; // 1280;
 	private static final int WINDOW_HEIGHT = 832; // 816; // 960;
 	private static final int TILE_SIZE = 64;
 	private static final int WALL_EDGE = 32; // WALL_WIDTH - TILE_SIZE;
 	private static final int WALL_WIDTH = MuscovyGame.TILE_SIZE + MuscovyGame.WALL_EDGE; // 96;
+
+	private float time = 0;
+	private int frames = 0;
+	private boolean logFPS = false;
 
 
 	@Override
@@ -58,6 +65,16 @@ public class MuscovyGame extends Game {
 		System.out.println(loadedControls);
 
 		resetGame();
+	}
+
+
+	public void setCurrentSaveNumber(int saveNumber) {
+		currentSaveNumber = saveNumber;
+	}
+
+
+	public int getCurrentSaveNumber() {
+		return currentSaveNumber;
 	}
 
 
@@ -94,14 +111,32 @@ public class MuscovyGame extends Game {
 	public void resetGame() {
 		levels = null;
 		random = new Random();
-		int saveNumber = 0;
-		setScreen(new LoadingScreen(this, saveNumber));
+		// setScreen(new LoadingScreen(this, saveNumber));
+		setScreen(new MainMenuScreen(this));
 	}
 
 
 	@Override
 	public void render() {
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		calculateFPS(deltaTime);
 		super.render();
+	}
+
+
+	private void calculateFPS(float deltaTime) {
+		time += deltaTime;
+		frames += 1;
+
+		while (time >= 1) {
+			String fpsText = "Calculated FPS: " + frames + "; Libgdx FPS: "
+					+ Gdx.graphics.getFramesPerSecond();
+			if (logFPS) {
+				Gdx.app.log("FPS", fpsText);
+			}
+			frames = 0;
+			time -= 1;
+		}
 	}
 
 
@@ -115,6 +150,18 @@ public class MuscovyGame extends Game {
 	public void initialiseFromSaveData(SaveData saveData) {
 		playerCharacter = saveData.getPlayer();
 		levels = saveData.getLevels();
+	}
+
+
+	public void saveData(int saveNumber, SaveData data) {
+		Gdx.app.log("Load", "Saving game");
+		SaveGame saveGame = new SaveGame(this);
+		saveGame.saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
+	}
+
+
+	public void saveCurrentGame() {
+		saveData(getCurrentSaveNumber(), getSaveData());
 	}
 
 
