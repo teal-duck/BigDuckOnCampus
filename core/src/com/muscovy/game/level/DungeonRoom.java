@@ -74,10 +74,6 @@ public class DungeonRoom {
 	private void initialiseWalls() {
 		final int windowWidth = game.getWindowWidth();
 		final int windowHeight = game.getWindowHeight();
-		// final int tileSize = game.getTileSize();
-		// final float halfTileSize = tileSize / 2f;
-		// final int topGuiSize = game.getTopGuiSize();
-		// final int worldHeight = game.getWorldHeight();
 		final int wallWidth = game.getWallWidth();
 		final int projectileWallWidth = (2 * wallWidth) / 3;
 
@@ -278,10 +274,15 @@ public class DungeonRoom {
 			break;
 		}
 
+		loadBackgroundTexture(levelType);
+		initialiseDoors();
+	}
+
+
+	public void loadBackgroundTexture(LevelType levelType) {
 		Texture backgroundTexture = game.getTextureMap()
 				.getTextureOrLoadFile(AssetLocations.getLevelBackground(levelType));
 		setBackgroundTexture(backgroundTexture);
-		initialiseDoors();
 	}
 
 

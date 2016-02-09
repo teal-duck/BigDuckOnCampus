@@ -1,6 +1,7 @@
 package com.muscovy.game.screen;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,12 +14,19 @@ import com.muscovy.game.save.game.SaveGame;
 
 
 public class LoadingScreen extends ScreenBase {
-	private BitmapFont font;
+	private final BitmapFont font;
+	private final int saveNumber;
+
 	private float time = 0;
 
+	// For testing purposes
+	// The loading code isn't finished so parts are still null
+	private final boolean loadData = false;
 
-	public LoadingScreen(MuscovyGame game) {
+
+	public LoadingScreen(MuscovyGame game, int saveNumber) {
 		super(game);
+		this.saveNumber = saveNumber;
 		font = AssetLocations.newFont20();
 		font.setColor(Color.WHITE);
 	}
@@ -38,14 +46,8 @@ public class LoadingScreen extends ScreenBase {
 		if (time > startTime) {
 			AssetLocations.loadAllTexturesIntoMap(getTextureMap());
 
-			int saveNumber = 0;
-
 			// Try to load the data for the save
 			SaveData loadedData = loadSave(saveNumber);
-
-			// For testing purposes
-			// The loading code isn't finished so parts are still null
-			loadedData = null;
 
 			// If the save file doesn't exist
 			// Load a new world and save it
@@ -69,15 +71,23 @@ public class LoadingScreen extends ScreenBase {
 	 * @return
 	 */
 	private SaveData loadSave(int saveNumber) {
-		SaveGame saveGame = new SaveGame(getGame());
-		String saveLocation = AssetLocations.getFileForSaveNumber(saveNumber);
-		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
-		return loadedData;
+		if (loadData) {
+			Gdx.app.log("Load", "Loading save");
+			SaveGame saveGame = new SaveGame(getGame());
+			String saveLocation = AssetLocations.getFileForSaveNumber(saveNumber);
+			SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
+			return loadedData;
+		} else {
+			Gdx.app.log("Load", "Loading disabled, returning null");
+			return null;
+		}
 	}
 
 
 	private void saveData(int saveNumber, SaveData data) {
-		new SaveGame(getGame()).saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
+		Gdx.app.log("Load", "Saving game");
+		SaveGame saveGame = new SaveGame(getGame());
+		saveGame.saveToFile(data, AssetLocations.getFileForSaveNumber(saveNumber));
 	}
 
 
@@ -88,6 +98,7 @@ public class LoadingScreen extends ScreenBase {
 	 * @return
 	 */
 	private SaveData generateNewGame(int saveNumber) {
+		Gdx.app.log("Load", "Generating new game");
 		Levels levels = new Levels();
 		levels.generateLevels(getGame());
 		levels.generateLevelContents();

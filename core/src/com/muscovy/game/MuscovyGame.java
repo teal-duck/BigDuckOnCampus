@@ -93,7 +93,8 @@ public class MuscovyGame extends Game {
 	public void resetGame() {
 		levels = null;
 		random = new Random();
-		setScreen(new LoadingScreen(this));
+		int saveNumber = 0;
+		setScreen(new LoadingScreen(this, saveNumber));
 	}
 
 

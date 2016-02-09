@@ -10,15 +10,13 @@ import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.ControlMap;
+import com.muscovy.game.save.BaseSerializer;
 
 
 @SuppressWarnings("rawtypes")
-public class PlayerCharacterSerializer implements Json.Serializer<PlayerCharacter> {
-	private final MuscovyGame game;
-
-
+public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 	public PlayerCharacterSerializer(MuscovyGame game) {
-		this.game = game;
+		super(game);
 	}
 
 

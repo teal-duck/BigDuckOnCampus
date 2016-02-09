@@ -61,8 +61,8 @@ public class AssetLocations {
 	public static final String FONT_FNT_32 = "fonts/gamefont_32.fnt";
 	public static final String FONT_PNG_32 = "fonts/gamefont_32.png";
 
-	// When running in Eclipse, these save to BigDuckOnCampus/desktop/data/...
-	public static final String BASE_SAVE_FOLDER = "data/";
+	// When running in Eclipse, these save to BigDuckOnCampus/desktop/preferences/...
+	public static final String BASE_SAVE_FOLDER = "preferences/";
 	public static final String SETTINGS_FOLDER = AssetLocations.BASE_SAVE_FOLDER + "settings/";
 	public static final String SAVE_FOLDER = AssetLocations.BASE_SAVE_FOLDER + "saves/";
 

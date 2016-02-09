@@ -21,10 +21,10 @@ import com.muscovy.game.save.Saver;
 //		json.setIgnoreUnknownFields(true);
 //		json.setOutputType(OutputType.json);
 //
-//		json.setSerializer(ControlMap.class, new ControlMapSerializer());
-//		json.setSerializer(Binding.class, new BindingSerializer());
-//		json.setSerializer(KeyBinding.class, new KeyBindingSerializer());
-//		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer());
+//		json.setSerializer(ControlMap.class, new ControlMapSerializer(game));
+//		json.setSerializer(Binding.class, new BindingSerializer(game));
+//		json.setSerializer(KeyBinding.class, new KeyBindingSerializer(game));
+//		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer(game));
 //	}
 //
 //
@@ -48,9 +48,9 @@ public class SaveControls extends Saver<ControlMap> {
 	@Override
 	protected void initialiseSerializers() {
 		dataClass = ControlMap.class;
-		json.setSerializer(ControlMap.class, new ControlMapSerializer());
-		json.setSerializer(Binding.class, new BindingSerializer());
-		json.setSerializer(KeyBinding.class, new KeyBindingSerializer());
-		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer());
+		json.setSerializer(ControlMap.class, new ControlMapSerializer(game));
+		json.setSerializer(Binding.class, new BindingSerializer(game));
+		json.setSerializer(KeyBinding.class, new KeyBindingSerializer(game));
+		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer(game));
 	}
 }

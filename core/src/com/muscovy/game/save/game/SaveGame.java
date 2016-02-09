@@ -28,14 +28,14 @@ import com.muscovy.game.save.Saver;
 //		json.setIgnoreUnknownFields(true);
 //		json.setOutputType(OutputType.json);
 //
-//		json.setSerializer(SaveData.class, new SaveDataSerializer());
+//		json.setSerializer(SaveData.class, new SaveDataSerializer(game));
 //		json.setSerializer(PlayerCharacter.class, new PlayerCharacterSerializer(game));
-//		json.setSerializer(Levels.class, new LevelsSerializer());
-//		json.setSerializer(Level.class, new LevelSerializer());
-//		json.setSerializer(DungeonRoom.class, new DungeonRoomSerializer());
-//		json.setSerializer(Obstacle.class, new ObstacleSerializer());
-//		json.setSerializer(Enemy.class, new EnemySerializer());
-//		json.setSerializer(Item.class, new ItemSerializer());
+//		json.setSerializer(Levels.class, new LevelsSerializer(game));
+//		json.setSerializer(Level.class, new LevelSerializer(game));
+//		json.setSerializer(DungeonRoom.class, new DungeonRoomSerializer(game));
+//		json.setSerializer(Obstacle.class, new ObstacleSerializer(game));
+//		json.setSerializer(Enemy.class, new EnemySerializer(game));
+//		json.setSerializer(Item.class, new ItemSerializer(game));
 //
 //	}
 //
@@ -69,13 +69,13 @@ public class SaveGame extends Saver<SaveData> {
 	@Override
 	protected void initialiseSerializers() {
 		dataClass = SaveData.class;
-		json.setSerializer(SaveData.class, new SaveDataSerializer());
+		json.setSerializer(SaveData.class, new SaveDataSerializer(game));
 		json.setSerializer(PlayerCharacter.class, new PlayerCharacterSerializer(game));
-		json.setSerializer(Levels.class, new LevelsSerializer());
-		json.setSerializer(Level.class, new LevelSerializer());
-		json.setSerializer(DungeonRoom.class, new DungeonRoomSerializer());
-		json.setSerializer(Obstacle.class, new ObstacleSerializer());
-		json.setSerializer(Enemy.class, new EnemySerializer());
-		json.setSerializer(Item.class, new ItemSerializer());
+		json.setSerializer(Levels.class, new LevelsSerializer(game));
+		json.setSerializer(Level.class, new LevelSerializer(game));
+		json.setSerializer(DungeonRoom.class, new DungeonRoomSerializer(game));
+		json.setSerializer(Obstacle.class, new ObstacleSerializer(game));
+		json.setSerializer(Enemy.class, new EnemySerializer(game));
+		json.setSerializer(Item.class, new ItemSerializer(game));
 	}
 }

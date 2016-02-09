@@ -2,13 +2,19 @@ package com.muscovy.game.save.game;
 
 
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializer;
 import com.badlogic.gdx.utils.JsonValue;
+import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.entity.Obstacle;
+import com.muscovy.game.save.BaseSerializer;
 
 
 @SuppressWarnings("rawtypes")
-public class ObstacleSerializer implements Serializer<Obstacle> {
+public class ObstacleSerializer extends BaseSerializer<Obstacle> {
+	public ObstacleSerializer(MuscovyGame game) {
+		super(game);
+	}
+
+
 	@Override
 	public void write(Json json, Obstacle obstacle, Class knownType) {
 		json.writeObjectStart();
