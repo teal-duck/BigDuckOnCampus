@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.EntityManager;
 import com.muscovy.game.MuscovyGame;
@@ -334,7 +335,10 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void enemiesUpdate(float deltaTime) {
+	/**
+	 * @param deltaTime
+	 */
+	private void enemiesUpdate(float deltaTime) {
 		if (entityManager.getRoomTimer() < GameScreen.ROOM_START_TIME) {
 			return;
 		}
@@ -357,7 +361,7 @@ public class GameScreen extends ScreenBase {
 	 *
 	 * @param deltaTime
 	 */
-	public void projectilesUpdate(float deltaTime) {
+	private void projectilesUpdate(float deltaTime) {
 		ArrayList<Projectile> projectileList = entityManager.getProjectiles();
 		for (Projectile projectile : projectileList) {
 			projectile.update(deltaTime);
@@ -367,19 +371,28 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void cleanUpDeadThings() {
+	/**
+	 *
+	 */
+	private void cleanUpDeadThings() {
 		entityManager.killEnemies();
 		entityManager.killProjectiles();
 		entityManager.killItems();
 	}
 
 
-	public void playerUpdate(float deltaTime) {
+	/**
+	 * @param deltaTime
+	 */
+	private void playerUpdate(float deltaTime) {
 		playerAttack(deltaTime);
 	}
 
 
-	public void playerAttack(float deltaTime) {
+	/**
+	 * @param deltaTime
+	 */
+	private void playerAttack(float deltaTime) {
 		if (playerCharacter.isFiring()) {
 			if (playerCharacter.checkRangedAttack(deltaTime)) {
 				entityManager.addNewProjectiles(playerCharacter.rangedAttack());
@@ -394,9 +407,9 @@ public class GameScreen extends ScreenBase {
 
 	/**
 	 * Iterates through all enemies and obstacles, and calculates collisions with each other and player character
-	 * Could be optimised, but at the moment, doesn't chug, even with many enemies, obstacles and projectiles
+	 * Could be optimised, but at the moment, doesn't chug, even with many enemies, obstacles and projectile
 	 */
-	public void playerCollision() {
+	private void playerCollision() {
 		ArrayList<Obstacle> obstacleList = entityManager.getObstacles();
 		ArrayList<Enemy> enemyList = entityManager.getEnemies();
 		ArrayList<Projectile> projectileList = entityManager.getProjectiles();
@@ -441,27 +454,63 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 
-	}
-
-
-	public void projectileEnemyCollision(Projectile projectile, Enemy enemy) {
-		if ((Intersector.overlaps(enemy.getCircleHitbox(), projectile.getCollisionBox()))
-				&& !(projectile.getDamagesWho() == ProjectileDamager.PLAYER)) {
-			projectile.killSelf();
-			enemy.takeDamage(projectile.getDamage());
-			enemy.setJustDamagedTime(Enemy.JUST_DAMAGED_TIME);
+		for (int i = 0; i < (enemyList.size() - 1); i += 1) {
+			for (int j = i + 1; j < enemyList.size(); j += 1) {
+				Enemy e0 = enemyList.get(i);
+				Enemy e1 = enemyList.get(j);
+				enemyEnemyCollision(e0, e1);
+			}
 		}
 	}
 
 
-	public void projectileObstacleCollision(Projectile projectile, Obstacle obstacle) {
+	/**
+	 * Pushes e0 out of e1.
+	 *
+	 * @param e0
+	 * @param e1
+	 */
+	private void enemyEnemyCollision(Enemy e0, Enemy e1) {
+		if (Intersector.overlaps(e0.getCircleHitbox(), e1.getCircleHitbox())) {
+			Vector2 c0 = e0.getCenter();
+			Vector2 c1 = e1.getCenter();
+
+			Vector2 c1ToC0 = c0.cpy().sub(c1);
+
+			e0.getVelocity().add(c1ToC0.scl(1.5f));
+
+		}
+	}
+
+
+	/**
+	 * @param projectile
+	 * @param enemy
+	 */
+	private void projectileEnemyCollision(Projectile projectile, Enemy enemy) {
+		if ((Intersector.overlaps(enemy.getCircleHitbox(), projectile.getCollisionBox()))
+				&& !(projectile.getDamagesWho() == ProjectileDamager.PLAYER)) {
+			projectile.killSelf();
+			enemy.takeDamage(projectile.getDamage());
+		}
+	}
+
+
+	/**
+	 * @param projectile
+	 * @param obstacle
+	 */
+	private void projectileObstacleCollision(Projectile projectile, Obstacle obstacle) {
 		if (Intersector.overlaps(projectile.getCollisionBox(), obstacle.getRectangleHitbox())) {
 			projectile.killSelf();
 		}
 	}
 
 
-	public void projectilePlayerCollision(Projectile projectile) {
+	/**
+	 * @param projectile
+	 */
+	private void projectilePlayerCollision(Projectile projectile) {
 		if ((Intersector.overlaps(playerCharacter.getCircleHitbox(), projectile.getCollisionBox()))
 				&& !(projectile.getDamagesWho() == ProjectileDamager.ENEMY)) {
 			projectile.killSelf();
@@ -470,7 +519,10 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void projectileWallCollision(Projectile projectile) {
+	/**
+	 * @param projectile
+	 */
+	private void projectileWallCollision(Projectile projectile) {
 		if (Intersector.overlaps(projectile.getCollisionBox(),
 				entityManager.getCurrentDungeonRoom().getBottomProjectileWall())) {
 			projectile.killSelf();
@@ -493,7 +545,10 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void playerObstacleCollision(Obstacle obstacle) {
+	/**
+	 * @param obstacle
+	 */
+	private void playerObstacleCollision(Obstacle obstacle) {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), obstacle.getRectangleHitbox())) {
 			playerCharacter.moveToNearestEdgeRectangle(obstacle);
 
@@ -504,7 +559,11 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public boolean playerItemCollision(Item item) {
+	/**
+	 * @param item
+	 * @return
+	 */
+	private boolean playerItemCollision(Item item) {
 		boolean applied = false;
 
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), item.getRectangleHitbox())) {
@@ -519,22 +578,30 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public boolean enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
+	/**
+	 * @param enemy
+	 * @param obstacle
+	 * @return
+	 */
+	private boolean enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
 		if (enemy.collides(obstacle)) {
 			enemy.moveToNearestEdgeRectangle(obstacle);
 			enemy.setCollidingWithSomething(true);
 
-			// TODO: Should enemies be damaged by obstacles?
-			if (obstacle.isDamaging()) {
-				enemy.takeDamage(obstacle.getTouchDamage());
-			}
+			// if (obstacle.isDamaging()) {
+			// enemy.takeDamage(obstacle.getTouchDamage());
+			// }
 			return true;
 		}
+
 		return false;
 	}
 
 
-	public void enemyWallCollision(Enemy enemy) {
+	/**
+	 * @param enemy
+	 */
+	private void enemyWallCollision(Enemy enemy) {
 		enemy.setCollidingWithSomething(false);
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopWall())) {
@@ -579,7 +646,7 @@ public class GameScreen extends ScreenBase {
 	 *
 	 * @param enemy
 	 */
-	public void playerEnemyCollision(Enemy enemy) {
+	private void playerEnemyCollision(Enemy enemy) {
 		if (playerCharacter.collides(enemy)) {
 			if (enemy.isCollidingWithSomething()) {
 				playerCharacter.moveToNearestEdgeCircle(enemy);
@@ -594,7 +661,10 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void playerWallCollision() {
+	/**
+	 *
+	 */
+	private void playerWallCollision() {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getTopWall())) {
 			playerCharacter.setVelocityY(0);
@@ -628,12 +698,16 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	public void entityWallCollision(MoveableEntity entity) {
-
+	@SuppressWarnings("unused")
+	private void entityWallCollision(MoveableEntity entity) {
+		// TODO: Entity wall collision
 	}
 
 
-	public void playerDoorCollision() {
+	/**
+	 *
+	 */
+	private void playerDoorCollision() {
 		float doorOffset = 50; // 70
 		// TODO: Replace "player walking towards door" check with dot product
 		boolean collidedWithDoor = false;

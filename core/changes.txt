@@ -121,6 +121,8 @@
 
 - Enemy bullets look different to player's
 
+- Enemies now push apart from each other
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

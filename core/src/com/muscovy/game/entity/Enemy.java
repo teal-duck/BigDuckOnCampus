@@ -221,6 +221,7 @@ public class Enemy extends MoveableEntity {
 
 	public void takeDamage(float damage) {
 		currentHealth -= damage;
+		setJustDamagedTime(Enemy.JUST_DAMAGED_TIME);
 		if (currentHealth <= 0) {
 			killSelf();
 		}
