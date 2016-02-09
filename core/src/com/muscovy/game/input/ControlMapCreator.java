@@ -63,6 +63,7 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultPs4Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default PS4 controls");
+
 		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE, PS4.AXIS_LEFT_Y,
 				deadzone);
 		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
@@ -103,6 +104,7 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultXbox360Controls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default Xbox 360 controls");
+
 		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360.AXIS_LEFT_Y, deadzone);
 		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,
@@ -143,6 +145,7 @@ public class ControlMapCreator {
 	 */
 	public static ControlMap applyDefaultXbox360WindowsControls(ControlMap controlMap, float deadzone) {
 		Gdx.app.log("Controls", "Applying default Xbox 360 Windows controls");
+
 		controlMap.addControllerForAction(Action.WALK_UP, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360Windows.AXIS_LEFT_Y, deadzone);
 		controlMap.addControllerForAction(Action.WALK_RIGHT, ControllerBindingType.AXIS_POSITIVE,

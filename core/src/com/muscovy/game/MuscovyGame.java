@@ -56,7 +56,6 @@ public class MuscovyGame extends Game {
 		textureMap = new TextureMap();
 
 		initialiseInput();
-		ControlMapCreator.applyDefaultPs4Controls(controlMap, 0.2f);
 		initialisePlayerCharacter();
 
 		SaveControls saveControls = new SaveControls(this);

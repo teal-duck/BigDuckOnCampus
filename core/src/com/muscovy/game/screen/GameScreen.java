@@ -214,15 +214,17 @@ public class GameScreen extends ScreenBase {
 		} else {
 			pauseJustPressed = false;
 		}
-		pauseMenuButtons.updateSelected(getCamera());
-		if (pauseMenuButtons.isSelectedSelected(getCamera())) {
-			int selected = pauseMenuButtons.getSelected();
-			selectPauseOption(selected);
-		}
 
 		if (paused) {
+			pauseMenuButtons.updateSelected(getCamera());
+			if (pauseMenuButtons.isSelectedSelected(getCamera())) {
+				int selected = pauseMenuButtons.getSelected();
+				selectPauseOption(selected);
+			}
+
 			if (getStateForAction(Action.ESCAPE) > 0) {
 				setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
+				return;
 			}
 
 		} else {
