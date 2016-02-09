@@ -447,6 +447,7 @@ public class GameScreen extends ScreenBase {
 				&& !(projectile.getDamagesWho() == ProjectileDamager.PLAYER)) {
 			projectile.killSelf();
 			enemy.takeDamage(projectile.getDamage());
+			enemy.setJustDamagedTime(Enemy.JUST_DAMAGED_TIME);
 		}
 	}
 

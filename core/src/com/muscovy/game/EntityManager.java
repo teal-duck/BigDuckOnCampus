@@ -338,11 +338,19 @@ public class EntityManager {
 		for (OnscreenDrawable drawable : renderList) {
 			boolean shouldDraw = true;
 
+			batch.setColor(Color.WHITE);
 			if (drawable instanceof PlayerCharacter) {
 				PlayerCharacter p = (PlayerCharacter) drawable;
 				if (p.isInvincible() && (((p.getInvincibilityCounter() * 10) % 2) < 0.75)) {
 					shouldDraw = false;
-
+				}
+			} else if (drawable instanceof Enemy) {
+				Enemy e = (Enemy) drawable;
+				float justDamagedTime = e.getJustDamagedTime();
+				if (justDamagedTime > 0) {
+					if (((justDamagedTime * 10) % 2) < 0.75) {
+						batch.setColor(Color.RED);
+					}
 				}
 			}
 
@@ -351,6 +359,7 @@ public class EntityManager {
 						translateY + drawable.getY());
 			}
 		}
+		batch.setColor(Color.WHITE);
 	}
 
 

@@ -27,6 +27,8 @@ public class Enemy extends MoveableEntity {
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
 
+	public static final float JUST_DAMAGED_TIME = 0.5f;
+
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
 
@@ -51,6 +53,8 @@ public class Enemy extends MoveableEntity {
 
 	private boolean dead = false;
 
+	private float justDamagedTime = 0f;
+
 
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
@@ -62,9 +66,24 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	public void setJustDamagedTime(float justDamagedTime) {
+		this.justDamagedTime = justDamagedTime;
+	}
+
+
+	public float getJustDamagedTime() {
+		return justDamagedTime;
+	}
+
+
 	@Override
 	public void selfUpdate(float deltaTime) {
 		attackTimer += deltaTime;
+
+		justDamagedTime -= deltaTime;
+		if (justDamagedTime < 0) {
+			justDamagedTime = 0;
+		}
 	}
 
 
