@@ -9,6 +9,7 @@ import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.MovementType;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.save.BaseSerializer;
 
 
@@ -27,6 +28,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		json.writeValue("movementType", enemy.getMovementType());
 		json.writeValue("attackType", enemy.getAttackType());
 		json.writeValue("shotType", enemy.getShotType());
+		json.writeValue("projectileType", enemy.getProjectileType());
 		json.writeValue("touchDamage", enemy.getTouchDamage());
 		json.writeValue("health", enemy.getCurrentHealth());
 		json.writeObjectEnd();
@@ -47,6 +49,9 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		JsonValue shotTypeValue = jsonData.get("shotType");
 		EnemyShotType shotType = EnemyShotType.valueOf(shotTypeValue.asString());
 
+		JsonValue projectileTypeValue = jsonData.get("projectileType");
+		ProjectileType projectileType = ProjectileType.valueOf(projectileTypeValue.asString());
+
 		float touchDamage = jsonData.getFloat("touchDamage");
 		float health = jsonData.getFloat("health");
 
@@ -54,6 +59,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		enemy.setMovementType(movementType);
 		enemy.setAttackType(attackType);
 		enemy.setShotType(shotType);
+		enemy.setProjectileType(projectileType);
 		enemy.setTouchDamage(touchDamage);
 		enemy.setCurrentHealth(health);
 

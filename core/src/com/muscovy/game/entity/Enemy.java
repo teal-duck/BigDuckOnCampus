@@ -42,6 +42,7 @@ public class Enemy extends MoveableEntity {
 	private float projectileRange = Enemy.PROJECTILE_RANGE;
 	private float projectileSpeed = Enemy.PROJECTILE_SPEED;
 	private float projectileLife = projectileRange / projectileSpeed;
+	private ProjectileType projectileType = ProjectileType.STANDARD;
 	private float attackRange = Enemy.ATTACK_RANGE;
 	private float viewDistance = Enemy.VIEW_DISTANCE;
 
@@ -188,8 +189,7 @@ public class Enemy extends MoveableEntity {
 
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
-					projectileRange, projectileSpeed, ProjectileDamager.PLAYER,
-					ProjectileType.HOMING);
+					projectileRange, projectileSpeed, ProjectileDamager.PLAYER, projectileType);
 		} else {
 			return new ArrayList<Projectile>();
 		}
@@ -310,6 +310,16 @@ public class Enemy extends MoveableEntity {
 	public void setProjectileVelocity(float projectileVelocity) {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
+	}
+
+
+	public ProjectileType getProjectileType() {
+		return projectileType;
+	}
+
+
+	public void setProjectileType(ProjectileType projectileType) {
+		this.projectileType = projectileType;
 	}
 
 

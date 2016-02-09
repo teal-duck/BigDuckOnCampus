@@ -682,9 +682,9 @@ public class EntityManager {
 			if (currentDungeonRoom.areAllEnemiesDead()
 					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
 				completed = true;
-				
+
 				ItemType itemType = LevelType.getItemType(levelType);
-				
+
 				if (itemType != null) {
 					Item item = new Item(game, ItemType.getItemTextureName(itemType),
 							new Vector2(0, 0), itemType);
