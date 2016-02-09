@@ -16,6 +16,8 @@ import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
 import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.entity.Projectile;
+import com.muscovy.game.enums.ItemType;
+import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
 import com.muscovy.game.level.DungeonRoom;
@@ -596,6 +598,7 @@ public class EntityManager {
 
 	public boolean checkLevelCompletion() {
 		ObjectiveType objectiveType = level.getObjectiveType();
+		LevelType levelType = level.getLevelType();
 
 		// If the level has already been completed, don't check again
 		boolean completed = level.isCompleted();
@@ -609,6 +612,14 @@ public class EntityManager {
 			if (currentDungeonRoom.areAllEnemiesDead()
 					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
 				completed = true;
+				ItemType itemType = LevelType.getItemType(levelType);
+				if (itemType != null) {
+					Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
+					item.setXTiles(5);
+					item.setYTiles(5);
+					currentDungeonRoom.addItem(item);
+					addNewItem(item);
+				}
 			}
 			break;
 		case KILL_ENEMIES:
@@ -672,6 +683,12 @@ public class EntityManager {
 	public void addNewEnemies(ArrayList<Enemy> enemies) {
 		renderList.addAll(enemies);
 		enemyList.addAll(enemies);
+	}
+	
+	
+	public void addNewItem(Item item) {
+		renderList.add(item);
+		itemList.add(item);
 	}
 
 
