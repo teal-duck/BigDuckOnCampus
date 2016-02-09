@@ -33,15 +33,11 @@ import com.muscovy.game.level.Level;
 
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
-	private static final float ROOM_START_TIME = 1f; // 1.5f;
+	private static final float ROOM_START_TIME = 1f;
 
 	private EntityManager entityManager;
 	private PlayerCharacter playerCharacter;
 	private Level level;
-
-	private float playerObstacleCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	private float playerEnemyCollisionSpeed = PlayerCharacter.MAX_SPEED; // 100f;
-	private float playerWallCollisionSpeed = PlayerCharacter.MAX_SPEED; // 200f;
 
 	private boolean renderDebugGrid = false;
 	private boolean hasCompletedLevel = false;
@@ -52,6 +48,7 @@ public class GameScreen extends ScreenBase {
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final int TEXT_EDGE_OFFSET = 10;
+	
 	// GUI, GUI font
 	private BitmapFont guiFont;
 	private BitmapFont pauseFont;
@@ -406,9 +403,6 @@ public class GameScreen extends ScreenBase {
 		ArrayList<Projectile> projectileList = entityManager.getProjectiles();
 		ArrayList<Item> itemList = entityManager.getItems();
 
-		playerCharacter.setMaxSpeed(PlayerCharacter.MAX_SPEED);
-		playerCharacter.setSpeedToMax();
-
 		for (Obstacle obstacle : obstacleList) {
 			playerObstacleCollision(obstacle);
 
@@ -494,7 +488,6 @@ public class GameScreen extends ScreenBase {
 	public void playerObstacleCollision(Obstacle obstacle) {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(), obstacle.getRectangleHitbox())) {
 			playerCharacter.moveToNearestEdgeRectangle(obstacle);
-			playerCharacter.setMaxSpeed(playerObstacleCollisionSpeed);
 
 			if (obstacle.isDamaging()) {
 				playerCharacter.takeDamage(obstacle.getTouchDamage());
@@ -536,7 +529,6 @@ public class GameScreen extends ScreenBase {
 
 		if (Intersector.overlaps(enemy.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopWall())) {
 			enemy.setVelocityY(-1 * Math.abs(enemy.getVelocityY()));
-			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getTopWall().getY()
 							- enemy.getCircleHitbox().radius);
@@ -546,7 +538,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getRightWall())) {
 			enemy.setVelocityX(-1 * Math.abs(enemy.getVelocityX()));
-			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightWall().getX()
 					- enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
 			enemy.setCollidingWithSomething(true);
@@ -555,7 +546,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
 			enemy.setVelocityX(1 * Math.abs(enemy.getVelocityX()));
-			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(entityManager.getCurrentDungeonRoom().getLeftWall().getX()
 					+ entityManager.getCurrentDungeonRoom().getLeftWall().getWidth()
 					+ enemy.getCircleHitbox().radius, enemy.getCircleHitbox().y);
@@ -565,15 +555,12 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(enemy.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getBottomWall())) {
 			enemy.setVelocityY(1 * Math.abs(enemy.getVelocityY()));
-			enemy.setVelocityLengthToCurrentSpeed();
 			enemy.setHitboxCentre(enemy.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getBottomWall().getY() + entityManager
 							.getCurrentDungeonRoom().getBottomWall().getHeight()
 					+ enemy.getCircleHitbox().radius);
 			enemy.setCollidingWithSomething(true);
 		}
-
-		// enemy.setCollidingWithSomething(false);
 	}
 
 
@@ -584,8 +571,6 @@ public class GameScreen extends ScreenBase {
 	 */
 	public void playerEnemyCollision(Enemy enemy) {
 		if (playerCharacter.collides(enemy)) {
-			playerCharacter.setMaxSpeed(playerEnemyCollisionSpeed);
-
 			if (enemy.isCollidingWithSomething()) {
 				playerCharacter.moveToNearestEdgeCircle(enemy);
 			} else {
@@ -603,7 +588,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getTopWall())) {
 			playerCharacter.setVelocityY(0);
-			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
 					entityManager.getCurrentDungeonRoom().getTopWall().getY()
 							- playerCharacter.getCircleHitbox().radius);
@@ -612,7 +596,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getRightWall())) {
 			playerCharacter.setVelocityX(0);
-			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(
 					entityManager.getCurrentDungeonRoom().getRightWall().getX()
 							- playerCharacter.getCircleHitbox().radius,
@@ -622,7 +605,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getLeftWall())) {
 			playerCharacter.setVelocityX(0);
-			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(getWallWidth() + playerCharacter.getCircleHitbox().radius,
 					playerCharacter.getCircleHitbox().y);
 		}
@@ -630,7 +612,6 @@ public class GameScreen extends ScreenBase {
 		if (Intersector.overlaps(playerCharacter.getCircleHitbox(),
 				entityManager.getCurrentDungeonRoom().getBottomWall())) {
 			playerCharacter.setVelocityY(0);
-			playerCharacter.setMaxSpeed(playerWallCollisionSpeed);
 			playerCharacter.setHitboxCentre(playerCharacter.getCircleHitbox().x,
 					getWallWidth() + playerCharacter.getCircleHitbox().radius);
 		}
@@ -652,7 +633,7 @@ public class GameScreen extends ScreenBase {
 					entityManager.getCurrentDungeonRoom().getUpDoor()))
 					&& (getStateForAction(Action.WALK_UP) > 0)) {
 				collidedWithDoor = true;
-				playerCharacter.setVelocity(0, 0);
+				playerCharacter.setVelocityToZero();
 				entityManager.moveToUpRoom();
 				playerCharacter.setY(doorOffset);
 			}
@@ -663,7 +644,7 @@ public class GameScreen extends ScreenBase {
 					entityManager.getCurrentDungeonRoom().getDownDoor()))
 					&& (getStateForAction(Action.WALK_DOWN) > 0)) {
 				collidedWithDoor = true;
-				playerCharacter.setVelocity(0, 0);
+				playerCharacter.setVelocityToZero();
 				entityManager.moveToDownRoom();
 				playerCharacter.setY(getWindowHeight() - playerCharacter.getHeight() - doorOffset);
 			}
@@ -674,7 +655,7 @@ public class GameScreen extends ScreenBase {
 					entityManager.getCurrentDungeonRoom().getRightDoor()))
 					&& (getStateForAction(Action.WALK_RIGHT) > 0)) {
 				collidedWithDoor = true;
-				playerCharacter.setVelocity(0, 0);
+				playerCharacter.setVelocityToZero();
 				entityManager.moveToRightRoom();
 				playerCharacter.setX(doorOffset);
 			}
@@ -685,7 +666,7 @@ public class GameScreen extends ScreenBase {
 					entityManager.getCurrentDungeonRoom().getLeftDoor()))
 					&& (getStateForAction(Action.WALK_LEFT) > 0)) {
 				collidedWithDoor = true;
-				playerCharacter.setVelocity(0, 0);
+				playerCharacter.setVelocityToZero();
 				entityManager.moveToLeftRoom();
 				playerCharacter.setX(getWindowWidth() - playerCharacter.getWidth() - doorOffset);
 			}

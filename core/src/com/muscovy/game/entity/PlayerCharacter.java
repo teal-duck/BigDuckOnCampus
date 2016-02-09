@@ -70,7 +70,7 @@ public class PlayerCharacter extends MoveableEntity {
 		this.controller = controller;
 
 		setMaxSpeed(PlayerCharacter.MAX_SPEED);
-		setCurrentSpeed(getMaxSpeed());
+		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED);
 
 		animationCycle = 0;
 		shotDirection = new Vector2(0, 1);
@@ -130,9 +130,9 @@ public class PlayerCharacter extends MoveableEntity {
 		float dx = rightState - leftState;
 		float dy = upState - downState;
 
-		Vector2 velocity = new Vector2(dx, dy);
-		velocity.limit(1);
-		setVelocity(velocity);
+		Vector2 acceleration = new Vector2(dx, dy);
+		acceleration.limit(1);
+		addMovementAcceleration(acceleration);
 
 		float shootRightState = controlMap.getStateForAction(Action.SHOOT_RIGHT, controller);
 		float shootLeftState = controlMap.getStateForAction(Action.SHOOT_LEFT, controller);

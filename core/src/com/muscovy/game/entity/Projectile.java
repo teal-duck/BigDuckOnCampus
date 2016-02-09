@@ -3,7 +3,6 @@ package com.muscovy.game.entity;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,6 @@ import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ProjectileDamager;
 import com.muscovy.game.enums.ProjectileType;
-import com.muscovy.game.screen.GameScreen;
 
 
 /**
@@ -85,8 +83,9 @@ public class Projectile extends OnscreenDrawable {
 			break;
 		case HOMING:
 			// TODO: Homing projectile logic
+			// Use centers of objects
 			PlayerCharacter player = getPlayer();
-			velocity.set(player.getPosition()).sub(getPosition());
+			velocity.set(player.getCenter()).sub(getCenter());
 			velocity.setLength(speed);
 		}
 	}
@@ -94,13 +93,14 @@ public class Projectile extends OnscreenDrawable {
 
 	public PlayerCharacter getPlayer() {
 		// TODO: Make Enemy.getPlayer() nicer
-		Screen screen = game.getScreen();
-
-		if (screen instanceof GameScreen) {
-			return ((GameScreen) screen).getPlayer();
-		} else {
-			return null;
-		}
+		return game.getPlayerCharacter();
+		// Screen screen = game.getScreen();
+		//
+		// if (screen instanceof GameScreen) {
+		// return ((GameScreen) screen).getPlayer();
+		// } else {
+		// return null;
+		// }
 	}
 
 

@@ -93,9 +93,6 @@ public class DungeonRoom {
 
 
 	private Obstacle createNonDamagingObstacle(int x, int y) {
-		// Sprite rockSprite = new
-		// Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.RECYLING_BIN));
-		// Obstacle obstacle = new Obstacle(game, rockSprite, new Vector2(x, y));
 		Obstacle obstacle = new Obstacle(game, AssetLocations.RECYLING_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
@@ -105,9 +102,6 @@ public class DungeonRoom {
 
 
 	private Obstacle createDamagingObstacle(int x, int y) {
-		/// Sprite spikeSprite = new
-		/// Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.WASTE_BIN));
-		// Obstacle obstacle = new Obstacle(game, spikeSprite, new Vector2(x, y));
 		Obstacle obstacle = new Obstacle(game, AssetLocations.WASTE_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
@@ -121,18 +115,13 @@ public class DungeonRoom {
 
 
 	private Enemy createRandomEnemy(int x, int y) {
-		// Sprite enemySprite;
 		Enemy enemy;
 		Vector2 position = new Vector2(x, y);
 
 		if (game.getRandom().nextBoolean()) {
-			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.CLEANER));
-			// enemy = new Enemy(game, enemySprite, position);
 			enemy = new Enemy(game, AssetLocations.CLEANER, position);
 			enemy.setAttackType(AttackType.TOUCH);
 		} else {
-			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			// enemy = new Enemy(game, enemySprite, position);
 			enemy = new Enemy(game, AssetLocations.STUDENT, position);
 			enemy.setAttackType(AttackType.RANGE);
 		}
@@ -166,10 +155,7 @@ public class DungeonRoom {
 
 
 	private void createHealthPack(int x, int y) {
-		// Sprite sprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.HEALTHPACK));
-		// Sprite sprite = new Sprite(ItemType.getItemTexture(game, ItemType.HEALTH));
 		Vector2 position = new Vector2(x, y);
-		// Item healthPack = new Item(game, sprite, position, ItemType.HEALTH);
 		Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
 				ItemType.HEALTH);
 
@@ -186,7 +172,6 @@ public class DungeonRoom {
 		 * space, 1 = non-damaging obstacle, 2 = damaging obstacle, 3 = random obstacle, 4 = random enemy Easy
 		 * to put in more, just extend the case statement below to have more specific stuff.
 		 */
-		// Sprite enemySprite;
 		Enemy enemy;
 
 		switch (roomType) {
@@ -235,9 +220,6 @@ public class DungeonRoom {
 		case BOSS:
 			// Boss
 			// TODO: Change boss parameters
-			// enemySprite = new Sprite(
-			// game.getTextureMap().getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS));
-			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0));
 			enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 					- (enemy.getWidth() / game.getTileSize() / 2)));
@@ -245,7 +227,7 @@ public class DungeonRoom {
 					- (enemy.getHeight() / game.getTileSize() / 2)));
 			enemy.setAttackType(AttackType.BOTH);
 			enemy.setMovementType(MovementType.FOLLOW);
-			enemy.setMaxSpeed(enemy.getMaxSpeed() * 0.8f);
+			enemy.setMaxSpeed(Enemy.BOSS_MAX_SPEED);
 			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
 			enemy.setTouchDamage(20);
 			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
@@ -260,8 +242,6 @@ public class DungeonRoom {
 		case ITEM:
 			// Item
 			// TODO: Item room
-			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(DungeonRoom.FLOOR_WIDTH_IN_TILES - 1);
@@ -279,8 +259,6 @@ public class DungeonRoom {
 		case SHOP:
 			// Shop
 			// TODO: Shop room
-			// enemySprite = new Sprite(game.getTextureMap().getTextureOrLoadFile(AssetLocations.STUDENT));
-			// enemy = new Enemy(game, enemySprite, new Vector2(0, 0));
 			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
 			enemy.setAttackType(AttackType.RANGE);
 			enemy.setXTiles(0);
@@ -353,7 +331,6 @@ public class DungeonRoom {
 
 	public void killEnemy(Enemy enemy) {
 		enemyList.remove(enemy);
-		// enemyList.trimToSize();
 		areAllEnemiesDead();
 	}
 

@@ -107,6 +107,14 @@
 
 - Created items to act as powerups and health restore etc.
 
+- Saving and loading
+
+- Pause GUI
+
+- Enemies flash when they take damage
+
+- Player and enemies use acceleration and friction
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

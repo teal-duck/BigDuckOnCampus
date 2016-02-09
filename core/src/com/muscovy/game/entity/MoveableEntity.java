@@ -6,9 +6,16 @@ import com.muscovy.game.MuscovyGame;
 
 
 public abstract class MoveableEntity extends Collidable {
-	private Vector2 velocity;
+	public static final float WORLD_FRICTION = 0.8f;
+	public static final float PLAYER_ACCELERATION_SPEED = 5000;
+	public static final float ENEMY_ACCELERATION_SPEED = (MoveableEntity.PLAYER_ACCELERATION_SPEED * 2) / 3;
+
 	private float maxSpeed = Enemy.MAX_SPEED;
-	private float currentSpeed = 0;
+	private float friction = MoveableEntity.WORLD_FRICTION;
+	private float accelerationSpeed = 0;
+
+	private Vector2 acceleration;
+	private Vector2 velocity;
 
 
 	public MoveableEntity(MuscovyGame game, String textureName) {
@@ -17,8 +24,14 @@ public abstract class MoveableEntity extends Collidable {
 
 
 	public MoveableEntity(MuscovyGame game, String textureName, Vector2 position) {
+		this(game, textureName, position, new Vector2(0, 0));
+	}
+
+
+	public MoveableEntity(MuscovyGame game, String textureName, Vector2 position, Vector2 velocity) {
 		super(game, textureName, position);
-		velocity = new Vector2(0, 0);
+		this.velocity = velocity;
+		acceleration = new Vector2(0, 0);
 	}
 
 
@@ -35,35 +48,48 @@ public abstract class MoveableEntity extends Collidable {
 	public abstract void movementLogic(float deltaTime);
 
 
-	public void setVelocityLengthToCurrentSpeed() {
-		velocity.setLength(currentSpeed);
-	}
-
-
 	public void moveEntity(float deltaTime) {
-		setVelocityLengthToCurrentSpeed();
+		velocity.mulAdd(acceleration, deltaTime);
+		velocity.limit(maxSpeed);
 		getPosition().mulAdd(velocity, deltaTime);
 		updateBoxesPosition();
+		velocity.scl(friction);
+		acceleration.setZero();
 	}
 
 
-	public void incrementVelocityX(float dx) {
-		velocity.x += dx;
+	public Vector2 getAcceleration() {
+		return acceleration;
 	}
 
 
-	public void incrementVelocityY(float dy) {
-		velocity.y += dy;
+	public void addAcceleration(Vector2 a) {
+		acceleration.add(a);
 	}
 
 
-	public void incrementVelocity(float dx, float dy) {
-		velocity.add(dx, dy);
+	public void addMovementAcceleration(Vector2 direction) {
+		acceleration.mulAdd(direction, accelerationSpeed);
 	}
 
 
-	public void incrementVelocity(Vector2 dd) {
-		velocity.add(dd);
+	public float getAccelerationSpeed() {
+		return accelerationSpeed;
+	}
+
+
+	public void setAccelerationSpeed(float accelerationSpeed) {
+		this.accelerationSpeed = accelerationSpeed;
+	}
+
+
+	public float getFriction() {
+		return friction;
+	}
+
+
+	public void setFriction(float friction) {
+		this.friction = friction;
 	}
 
 
@@ -92,13 +118,8 @@ public abstract class MoveableEntity extends Collidable {
 	}
 
 
-	public void setVelocity(Vector2 velocity) {
-		this.velocity.set(velocity);
-	}
-
-
-	public void setVelocity(float x, float y) {
-		velocity.set(x, y);
+	public void setVelocityToZero() {
+		velocity.setZero();
 	}
 
 
@@ -109,26 +130,5 @@ public abstract class MoveableEntity extends Collidable {
 
 	public void setMaxSpeed(float speed) {
 		maxSpeed = speed;
-		if (currentSpeed > maxSpeed) {
-			currentSpeed = maxSpeed;
-		}
-	}
-
-
-	public float getCurrentSpeed() {
-		return currentSpeed;
-	}
-
-
-	public void setCurrentSpeed(float speed) {
-		currentSpeed = speed;
-		if (currentSpeed > maxSpeed) {
-			currentSpeed = maxSpeed;
-		}
-	}
-
-
-	public void setSpeedToMax() {
-		currentSpeed = maxSpeed;
 	}
 }

@@ -3,7 +3,6 @@ package com.muscovy.game.entity;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.AttackType;
@@ -11,7 +10,6 @@ import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.ProjectileDamager;
 import com.muscovy.game.enums.ProjectileType;
-import com.muscovy.game.screen.GameScreen;
 
 
 /**
@@ -21,6 +19,7 @@ public class Enemy extends MoveableEntity {
 	public static final float TOUCH_DAMAGE = 10f;
 	public static final float ATTACK_INTERVAL = 1.5f;
 	public static final float MAX_SPEED = 200;
+	public static final float BOSS_MAX_SPEED = Enemy.MAX_SPEED * 0.8f;
 
 	public static final float PROJECTILE_RANGE = 400;
 	public static final float PROJECTILE_SPEED = 150;
@@ -57,12 +56,10 @@ public class Enemy extends MoveableEntity {
 
 
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
-		super(game, textureName, position);
+		super(game, textureName, position, new Vector2(1, 0).setLength(Enemy.MAX_SPEED));
 
-		setMaxSpeed(Enemy.MAX_SPEED);
-		setCurrentSpeed(0);
-		setVelocity(new Vector2(1, 0).setLength(getMaxSpeed()));
-		rotateRandomDirection();
+		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
+		rotateRandomDirection(getVelocity());
 	}
 
 
@@ -87,7 +84,7 @@ public class Enemy extends MoveableEntity {
 	}
 
 
-	private void rotateRandomDirection() {
+	private void rotateRandomDirection(Vector2 vecToRotate) {
 		float minRotation = 10;
 		float maxRotation = 15;
 
@@ -98,26 +95,26 @@ public class Enemy extends MoveableEntity {
 			direction = -1;
 		}
 
-		getVelocity().rotate(direction
+		vecToRotate.rotate(direction
 				* (((maxRotation - minRotation) * game.getRandom().nextFloat()) + minRotation));
 	}
 
 
 	@Override
 	public void movementLogic(float deltaTime) {
+		Vector2 direction = getVelocity().cpy().nor();
+
 		switch (movementType) {
 		case STATIC:
-			setCurrentSpeed(0);
 			setMaxSpeed(0);
 			break;
 
 		case RANDOM:
-			setSpeedToMax();
 			float timeToStayInSameDirection = 0.05f;
 
 			if (directionCounter > timeToStayInSameDirection) {
 				directionCounter = 0;
-				rotateRandomDirection();
+				rotateRandomDirection(direction);
 			} else {
 				directionCounter += deltaTime;
 			}
@@ -127,40 +124,41 @@ public class Enemy extends MoveableEntity {
 			PlayerCharacter player = getPlayer();
 
 			if ((player != null) && (getDistanceTo(player) < viewDistance)) {
-				setSpeedToMax();
-				pointTo(player);
+				direction.set(player.getCenter()).sub(getCenter()).nor();
 			} else {
-				setCurrentSpeed(0);
+				direction.setZero();
 			}
 
 			break;
 		}
 
+		direction.nor();
+		addMovementAcceleration(direction);
 	}
 
 
 	public PlayerCharacter getPlayer() {
 		// TODO: Make Enemy.getPlayer() nicer
-		Screen screen = game.getScreen();
+		return game.getPlayerCharacter();
+		// Screen screen = game.getScreen();
 
-		if (screen instanceof GameScreen) {
-			return ((GameScreen) screen).getPlayer();
-		} else {
-			return null;
-		}
+		// if (screen instanceof GameScreen) {
+		// return ((GameScreen) screen).getPlayer();
+		// } else {
+		// return null;
+		// }
 	}
 
 
-	public void pointTo(Collidable collidable) {
-		float length = getVelocity().len();
-		// Set to other position
-		setVelocity(collidable.getPosition());
-		// Subtract current position (to get vector between objects)
-		getVelocity().sub(getPosition());
-		// Reset the length of the velocity
-		getVelocity().setLength(length);
-	}
-
+	// public void pointTo(Collidable collidable, Vector2 vecToRotate) {
+	// float length = vecToRotate.len();
+	// // Set to other position
+	// vecToRotate.set(collidable.getPosition());
+	// // Subtract current position (to get vector between objects)
+	// vecToRotate.sub(getPosition());
+	// // Reset the length of the velocity
+	// vecToRotate.setLength(length);
+	// }
 
 	public float getDistanceTo(Collidable collidable) {
 		return getPosition().dst(collidable.getPosition());
