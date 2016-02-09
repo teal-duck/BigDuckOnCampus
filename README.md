@@ -15,13 +15,13 @@ Game by Team Muscovy, continued by Team Teal
 
 ## Get changes from GitHub
 1. Exit eclipse.
-2. Run ```git pull``` in teal-duck
+2. Run ```git pull``` in BigDuckOnCampus
 3. Re-open eclipse.
 
 
 ## Push changes to GitHub
 1. Exit eclipse.
-2. Open terminal, ```cd``` to teal-duck.
+2. Open terminal, ```cd``` to BigDuckOnCampus.
 3. Run ```git branch``` to make sure you are on your correct branch.
 2. Run ```git status``` to see all changes you have made to project.
 3. Run ```git add <filename>``` for each file added/edited.
@@ -41,7 +41,7 @@ See also https://docs.gradle.org/current/userguide/artifact_dependencies_tutoria
 ## Create a new branch to work in
 1. Open BigDuckOnCampus on https://github.com/teal-duck/BigDuckOnCampus
 2. Click on ```Branch: master```, type in name of your new branch, press enter.
-3. Open terminal, ```cd``` to teal-duck.
+3. Open terminal, ```cd``` to BigDuckOnCampus.
 4. ```git pull```
 5. ```git checkout <branch-name>```
 6. You have created and switched to your new branch.
