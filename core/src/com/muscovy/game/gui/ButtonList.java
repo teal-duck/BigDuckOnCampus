@@ -21,7 +21,6 @@ import com.muscovy.game.input.ControlMap;
 public class ButtonList {
 	private String[] buttonTexts;
 	private Button[] buttons;
-	// private OrthographicCamera guiCamera;
 
 	private ControlMap controlMap;
 	private Controller controller;
@@ -50,7 +49,6 @@ public class ButtonList {
 	public ButtonList(String[] buttonTexts, BitmapFont font, TextureMap textureMap, ControlMap controlMap,
 			Controller controller) {
 		this.buttonTexts = buttonTexts;
-		// this.guiCamera = guiCamera;
 		this.controlMap = controlMap;
 		this.controller = controller;
 
@@ -68,9 +66,33 @@ public class ButtonList {
 	}
 
 
-	public void changeTextOnButton(int index, String text) {
+	public int getButtonCount() {
+		return buttons.length;
+	}
+
+
+	public Button getButtonAtIndex(int index) {
 		if ((index >= 0) && (index < buttons.length)) {
-			buttons[index].setText(text);
+			return buttons[index];
+		} else {
+			return null;
+		}
+	}
+
+
+	public void changeTextOnButton(int index, String text) {
+		Button button = getButtonAtIndex(index);
+		if (button != null) {
+			button.setText(text);
+		}
+	}
+
+
+	public void changePositionOfButton(int index, float x, float y) {
+		Button button = getButtonAtIndex(index);
+		if (button != null) {
+			button.setX(x);
+			button.setY(y);
 		}
 	}
 

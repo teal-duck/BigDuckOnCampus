@@ -80,7 +80,6 @@ public class GameScreen extends ScreenBase {
 
 		this.level = level;
 		entityManager = new EntityManager(getGame(), level);
-		// initialisePlayerCharacter();
 		playerCharacter = getPlayerCharacter();
 		resetPlayer();
 		initialiseGui();
@@ -89,7 +88,6 @@ public class GameScreen extends ScreenBase {
 
 
 	private void initialiseGui() {
-
 		// DUNGEON
 		dungeonGui = new GUI();
 
@@ -128,11 +126,10 @@ public class GameScreen extends ScreenBase {
 		pauseMenuButtons = new ButtonList(GameScreen.PAUSE_BUTTON_TEXTS, pauseMenuFont, getTextureMap(),
 				getControlMap(), getController());
 		setPauseButtonLocations();
-
 	}
 
 
-	public void resetPlayer() {
+	private void resetPlayer() {
 		Sprite playerSprite = playerCharacter.getSprite();
 
 		float playerStartX = getWindowWidth() / 2;
@@ -151,11 +148,6 @@ public class GameScreen extends ScreenBase {
 	private int getTextWidth(BitmapFont font, String text) {
 		GlyphLayout glyphLayout = new GlyphLayout(font, text);
 		return (int) glyphLayout.width;
-	}
-
-
-	public PlayerCharacter getPlayer() {
-		return playerCharacter;
 	}
 
 

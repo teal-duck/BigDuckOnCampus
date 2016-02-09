@@ -15,16 +15,16 @@ import com.muscovy.game.input.Action;
 
 
 public class MainMenuScreen extends ScreenBase {
-	private GUI gui;
-	private boolean escapeJustPressed = true;
-	private ButtonList buttons;
-	private BitmapFont font;
-
 	private static final int NEW_GAME = 0;
 	private static final int LOAD_GAME = 1;
 	private static final int SETTINGS = 2;
 	private static final int QUIT = 3;
 	private static final String[] BUTTON_TEXTS = new String[] { "New Game", "Load Game", "Settings", "Quit" };
+
+	private GUI gui;
+	private boolean escapeJustPressed = true;
+	private ButtonList buttons;
+	private BitmapFont font;
 
 
 	public MainMenuScreen(MuscovyGame game) {
@@ -53,7 +53,7 @@ public class MainMenuScreen extends ScreenBase {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
 		ButtonList.getHeightForDefaultButtonList(MainMenuScreen.BUTTON_TEXTS.length);
 
-		int y = ((getWindowHeight() / 6) - ButtonList.WINDOW_EDGE_OFFSET)
+		int y = (getWindowHeight() / 6)
 				+ ButtonList.getHeightForDefaultButtonList(MainMenuScreen.BUTTON_TEXTS.length);
 		buttons.setPositionDefaultSize(x, y);
 	}
@@ -159,16 +159,7 @@ public class MainMenuScreen extends ScreenBase {
 
 
 	private void selectLoadGame() {
-		// TODO: Load Game
-		Gdx.app.log("TODO", "Load game");
-
-		int saveNumber = 0;
-		if (SaveHandler.doesSaveFileExist(saveNumber)) {
-			Gdx.app.log("LoadGame", "Loading game from save slot " + saveNumber);
-			setScreen(new LoadingScreen(getGame(), saveNumber));
-		} else {
-			Gdx.app.log("TODO", "Allow user to select which game to load");
-		}
+		setScreen(new LoadGameScreen(getGame()));
 	}
 
 
