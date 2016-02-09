@@ -238,7 +238,8 @@ public class EntityManager {
 
 		if (dungeonRoom.hasUpDoor()) {
 			if (dungeonRoom.areAllEnemiesDead()
-					&& level.getUpRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)) {
+					&& level.getUpRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)
+					&& !level.getUpRoom(roomX, roomY).areAllEnemiesDead()) {
 				doorTexture = upDoorTextureBoss;
 			} else if (dungeonRoom.areAllEnemiesDead()) {
 				doorTexture = upDoorTextureOpen;
@@ -268,7 +269,7 @@ public class EntityManager {
 		if (dungeonRoom.hasRightDoor()) {
 			if (dungeonRoom.areAllEnemiesDead()
 					&& level.getRightRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)
-					&& !level.getDownRoom(roomX, roomY).areAllEnemiesDead()) {
+					&& !level.getRightRoom(roomX, roomY).areAllEnemiesDead()) {
 				doorTexture = rightDoorTextureBoss;
 			} else if (dungeonRoom.areAllEnemiesDead()) {
 				doorTexture = rightDoorTextureOpen;
@@ -283,7 +284,7 @@ public class EntityManager {
 		if (dungeonRoom.hasLeftDoor()) {
 			if (dungeonRoom.areAllEnemiesDead()
 					&& level.getLeftRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)
-					&& !level.getDownRoom(roomX, roomY).areAllEnemiesDead()) {
+					&& !level.getLeftRoom(roomX, roomY).areAllEnemiesDead()) {
 				doorTexture = leftDoorTextureBoss;
 			} else if (dungeonRoom.areAllEnemiesDead()) {
 				doorTexture = leftDoorTextureOpen;
