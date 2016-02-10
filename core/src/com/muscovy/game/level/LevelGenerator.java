@@ -178,10 +178,10 @@ public class LevelGenerator {
 					levelType);
 		}
 
-		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.ITEM, 1, random,
-				levelType);
-		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.SHOP, 1, random,
-				levelType);
+//		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.ITEM, 1, random,
+//				levelType);
+//		LevelGenerator.setRandomRoomTo(dungeonRoomArray, roomsWide, roomsHigh, RoomType.SHOP, 1, random,
+//				levelType);
 
 		levelParameters.setRoomCount(currentRooms);
 		return dungeonRoomArray;
