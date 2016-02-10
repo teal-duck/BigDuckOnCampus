@@ -45,6 +45,8 @@ public class ControlMapCreator {
 		controlMap.addKeyForAction(Action.SHOOT_RIGHT, Keys.RIGHT);
 		controlMap.addKeyForAction(Action.SHOOT_DOWN, Keys.DOWN);
 		controlMap.addKeyForAction(Action.SHOOT_LEFT, Keys.LEFT);
+		
+		controlMap.addKeyForAction(Action.FLY, Keys.SPACE);
 
 		controlMap.addKeyForAction(Action.ENTER, Keys.ENTER);
 		controlMap.addKeyForAction(Action.PAUSE, Keys.P);
@@ -81,6 +83,8 @@ public class ControlMapCreator {
 				PS4.AXIS_RIGHT_Y, deadzone);
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				PS4.AXIS_RIGHT_X, deadzone);
+		
+		controlMap.addControllerForAction(Action.FLY, ControllerBindingType.BUTTON, PS4.BUTTON_L1);
 
 		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, PS4.DPAD,
 				PovDirection.north);
@@ -122,6 +126,8 @@ public class ControlMapCreator {
 				Xbox360.AXIS_RIGHT_Y, deadzone);
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360.AXIS_RIGHT_X, deadzone);
+		
+		controlMap.addControllerForAction(Action.FLY, ControllerBindingType.BUTTON, Xbox360.BUTTON_LEFT_BUMPER);
 
 		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, Xbox360.DPAD,
 				PovDirection.north);
@@ -163,6 +169,8 @@ public class ControlMapCreator {
 				Xbox360Windows.AXIS_RIGHT_Y, deadzone);
 		controlMap.addControllerForAction(Action.SHOOT_LEFT, ControllerBindingType.AXIS_NEGATIVE,
 				Xbox360Windows.AXIS_RIGHT_X, deadzone);
+		
+		controlMap.addControllerForAction(Action.FLY, ControllerBindingType.BUTTON, Xbox360Windows.BUTTON_LEFT_BUMPER);
 
 		controlMap.addControllerForAction(Action.DPAD_UP, ControllerBindingType.POV, Xbox360Windows.DPAD,
 				PovDirection.north);

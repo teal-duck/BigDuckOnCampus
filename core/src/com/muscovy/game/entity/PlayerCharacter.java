@@ -17,11 +17,13 @@ import com.muscovy.game.input.ControlMap;
  * Created by ewh502 on 04/12/2015. Good luck
  */
 public class PlayerCharacter extends MoveableEntity {
+	
 	// TODO: Possibly make a MoveableEntity class with these velocity parameters?
 	// Player and enemy extend MoveableEntity
 	public static final float MAX_SPEED = 350f;
 	public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
 	public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
+	public static final float FLIGHT_SPEED = 3f;
 	public static final float BASE_ATTACK_INTERVAL = 0.25f;
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
@@ -30,6 +32,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 	public static final float HITBOX_Y_OFFSET = -6;
 	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
+	public static final float MAX_FLIGHT_TIME = 0.25f;
 
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
@@ -61,6 +64,7 @@ public class PlayerCharacter extends MoveableEntity {
 	private Controller controller;
 
 	private boolean firing = false;
+	private float flightTime = 0;
 
 
 	public PlayerCharacter(MuscovyGame game, String textureName, Vector2 position, ControlMap controlMap,
@@ -122,6 +126,12 @@ public class PlayerCharacter extends MoveableEntity {
 
 	@Override
 	public void movementLogic(float deltaTime) {
+		
+		// start a counter when the player presses 'fly'
+		if (flightTime <= 0 && new Float(controlMap.getStateForAction(Action.FLY, controller)).equals(1f)) {
+			flightTime = MAX_FLIGHT_TIME;
+		}
+		
 		float rightState = controlMap.getStateForAction(Action.WALK_RIGHT, controller);
 		float leftState = controlMap.getStateForAction(Action.WALK_LEFT, controller);
 		float upState = controlMap.getStateForAction(Action.WALK_UP, controller);
@@ -132,6 +142,13 @@ public class PlayerCharacter extends MoveableEntity {
 
 		Vector2 acceleration = new Vector2(dx, dy);
 		acceleration.limit(1);
+		
+		// increase speed during flight
+		if (flightTime > 0) {
+			acceleration.scl(FLIGHT_SPEED);
+			setMaxSpeed(MAX_SPEED * FLIGHT_SPEED);
+			flightTime -= deltaTime;
+		}
 		addMovementAcceleration(acceleration);
 
 		float shootRightState = controlMap.getStateForAction(Action.SHOOT_RIGHT, controller);
@@ -144,7 +161,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 		int sx = 0;
 		int sy = 0;
-
+		
 		if (Math.abs(shootDX) > Math.abs(shootDY)) {
 			sx = (int) Math.signum(shootDX);
 			sy = 0;
