@@ -172,4 +172,11 @@ public class MainMenuScreen extends ScreenBase {
 	private void selectQuit() {
 		Gdx.app.exit();
 	}
+
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		font.dispose();
+	}
 }

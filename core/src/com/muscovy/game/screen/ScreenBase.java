@@ -8,6 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.muscovy.game.Levels;
 import com.muscovy.game.MuscovyGame;
@@ -36,6 +38,12 @@ public abstract class ScreenBase implements Screen {
 	public void render(float deltaTime) {
 		updateScreen(deltaTime);
 		renderScreen(deltaTime, getBatch());
+	}
+
+
+	public int getTextWidth(BitmapFont font, String text) {
+		GlyphLayout glyphLayout = new GlyphLayout(font, text);
+		return (int) glyphLayout.width;
 	}
 
 

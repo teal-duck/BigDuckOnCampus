@@ -144,6 +144,11 @@ public class ButtonList {
 	}
 
 
+	public void setSelected(int selected) {
+		this.selected = selected;
+	}
+
+
 	/**
 	 * @return
 	 */
@@ -179,6 +184,11 @@ public class ButtonList {
 			enterJustPushed = isSelected || Gdx.input.isButtonPressed(Buttons.LEFT);
 			return isSelected;
 		}
+	}
+
+
+	public void setEnterJustPushedTrue() {
+		enterJustPushed = true;
 	}
 
 
