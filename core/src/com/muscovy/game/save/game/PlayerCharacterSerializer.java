@@ -29,12 +29,15 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		json.writeValue("accelerationSpeed", playerCharacter.getAccelerationSpeed());
 		json.writeValue("score", playerCharacter.getScore());
 		json.writeValue("health", playerCharacter.getHealth());
-		
+		json.writeValue("maxFlightTime", playerCharacter.getMaxFlightTime());
+		json.writeValue("flightSpeedScale", playerCharacter.getFlightSpeedScale());
+
 		json.writeArrayStart("obtainedItems");
-		for (ItemType item: playerCharacter.getObtainedItems())
+		for (ItemType item : playerCharacter.getObtainedItems()) {
 			json.writeValue(item);
+		}
 		json.writeArrayEnd();
-		
+
 		json.writeObjectEnd();
 	}
 
@@ -46,6 +49,8 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		float accelerationSpeed = jsonData.getFloat("accelerationSpeed");
 		int score = jsonData.getInt("score");
 		int health = jsonData.getInt("health");
+		float maxFlightTime = jsonData.getFloat("maxFlightTime");
+		float flightSpeedScale = jsonData.getFloat("flightSpeedScale");
 
 		Controller controller = game.getController();
 		ControlMap controlMap = game.getControlMap();
@@ -57,7 +62,9 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		playerCharacter.setAccelerationSpeed(accelerationSpeed);
 		playerCharacter.setScore(score);
 		playerCharacter.setHealth(health);
-		
+		playerCharacter.setMaxFlightTime(maxFlightTime);
+		playerCharacter.setFlightSpeedScale(flightSpeedScale);
+
 		JsonValue obtainedItemsArrayValue = jsonData.get("obtainedItems");
 		JsonValue obtainedItemValue = obtainedItemsArrayValue.child;
 		while (obtainedItemValue != null) {

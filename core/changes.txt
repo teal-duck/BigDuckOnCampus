@@ -123,6 +123,11 @@
 
 - Enemies now push apart from each other
 
+- Added load game screen
+	- Can also delete saves
+	- Needs prompt for deletion
+	- Could display save metadata (e.g. progress %, current score/health) when loading
+
 
 Other possible things to do:
 - When enemies are in bottom corners, player can't shoot them from the side

@@ -96,6 +96,7 @@ public class LoadGameScreen extends ScreenBase {
 		selectedGameGui = new GUI();
 		selectedGameGui.addData(LoadGameScreen.SELECTED_GAME_NAME, "-", font, 0, (getWindowHeight() / 6)
 				+ ButtonList.getHeightForDefaultButtonList(SaveHandler.MAX_SAVE_COUNT));
+		// TODO: Add metadata to selected game gui (e.g. progress %, current score etc)
 
 		optionsButtons = new ButtonList(LoadGameScreen.optionsTexts, font, getTextureMap(), getControlMap(),
 				getController());
@@ -270,6 +271,7 @@ public class LoadGameScreen extends ScreenBase {
 		batch.begin();
 		backgroundGui.render(batch);
 		if (selectedGameNumber == -1) {
+			// TODO: Should render something if there are no save files
 			savedGameButtons.render(batch);
 		} else {
 			font.setColor(Color.WHITE);

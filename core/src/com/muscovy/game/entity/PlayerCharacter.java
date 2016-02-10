@@ -19,22 +19,22 @@ import com.muscovy.game.input.ControlMap;
  * Created by ewh502 on 04/12/2015. Good luck
  */
 public class PlayerCharacter extends MoveableEntity {
-	
-	// TODO: Possibly make a MoveableEntity class with these velocity parameters?
-	// Player and enemy extend MoveableEntity
 	public static final float MAX_SPEED = 350f;
-	public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
-	public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
-	public static final float FLIGHT_SPEED = 3f;
+	// public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
+	// public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
+
+	public static final float FLIGHT_SPEED_MULTIPLIER = 3f;
+	public static final float MAX_FLIGHT_TIME = 1f; // 0.25f;
+
 	public static final float BASE_ATTACK_INTERVAL = 0.25f;
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
+
 	public static final int MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
 	public static final float HITBOX_Y_OFFSET = -6;
 	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
-	public static final float MAX_FLIGHT_TIME = 0.25f;
 
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
@@ -46,6 +46,7 @@ public class PlayerCharacter extends MoveableEntity {
 	private float projectileSpeed = PlayerCharacter.PROJECTILE_SPEED;
 	private float projectileRange = PlayerCharacter.PROJECTILE_RANGE;
 	private float projectileLife = projectileRange / projectileSpeed;
+	private boolean firing = false;
 
 	private int maxHealth = PlayerCharacter.MAX_HEALTH;
 	private int currentHealth = maxHealth;
@@ -67,8 +68,11 @@ public class PlayerCharacter extends MoveableEntity {
 	private ControlMap controlMap;
 	private Controller controller;
 
-	private boolean firing = false;
-	private float flightTime = 0;
+	private boolean flying = false;
+	private boolean usedAllFlight = false;
+	private float maxFlightTime = PlayerCharacter.MAX_FLIGHT_TIME;
+	private float flightTime = maxFlightTime;
+	private float flightSpeedScale = PlayerCharacter.FLIGHT_SPEED_MULTIPLIER;
 
 
 	public PlayerCharacter(MuscovyGame game, String textureName, Vector2 position, ControlMap controlMap,
@@ -130,13 +134,6 @@ public class PlayerCharacter extends MoveableEntity {
 
 	@Override
 	public void movementLogic(float deltaTime) {
-		
-		// start a counter when the player presses 'fly'
-		// TODO: keep track of some sort of stamina bar to prevent permanent 'flight'?
-		if (flightTime <= 0 && new Float(controlMap.getStateForAction(Action.FLY, controller)).equals(1f)) {
-			flightTime = MAX_FLIGHT_TIME;
-		}
-		
 		float rightState = controlMap.getStateForAction(Action.WALK_RIGHT, controller);
 		float leftState = controlMap.getStateForAction(Action.WALK_LEFT, controller);
 		float upState = controlMap.getStateForAction(Action.WALK_UP, controller);
@@ -147,13 +144,47 @@ public class PlayerCharacter extends MoveableEntity {
 
 		Vector2 acceleration = new Vector2(dx, dy);
 		acceleration.limit(1);
-		
-		// increase speed during flight
-		if (flightTime > 0) {
-			acceleration.scl(FLIGHT_SPEED);
-			setMaxSpeed(MAX_SPEED * FLIGHT_SPEED);
+
+		// When flying, the timer is decreasing to 0
+		// When not flying, the timer is incrementing back to the max
+		if (flying) {
 			flightTime -= deltaTime;
+		} else {
+			flightTime += deltaTime;
 		}
+
+		// If the number reaches 0, then all the fly has been used
+		if (flightTime <= 0) {
+			flightTime = 0;
+			flying = false;
+			usedAllFlight = true;
+		}
+
+		// If the number reaches the max, then flying fully recharged
+		if (flightTime >= maxFlightTime) {
+			flightTime = maxFlightTime;
+			usedAllFlight = false;
+		}
+
+		float flyScale = 1;
+		if (controlMap.getStateForAction(Action.FLY, controller) > 0) {
+			// Player already flying
+			if (flying) {
+				flyScale = flightSpeedScale;
+			} else {
+				// Only allow sprinting to start if the player didn't use the charge
+				if ((flightTime >= 0) && !usedAllFlight) {
+					flying = true;
+					flyScale = flightSpeedScale;
+				}
+			}
+		} else {
+			flying = false;
+		}
+
+		setMaxSpeed(PlayerCharacter.MAX_SPEED * flyScale);
+		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED * flyScale);
+
 		addMovementAcceleration(acceleration);
 
 		float shootRightState = controlMap.getStateForAction(Action.SHOOT_RIGHT, controller);
@@ -166,7 +197,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 		int sx = 0;
 		int sy = 0;
-		
+
 		if (Math.abs(shootDX) > Math.abs(shootDY)) {
 			sx = (int) Math.signum(shootDX);
 			sy = 0;
@@ -259,7 +290,7 @@ public class PlayerCharacter extends MoveableEntity {
 			invincible = true;
 		}
 	}
-	
+
 
 	public boolean gainHealth(int health) {
 		if (currentHealth == maxHealth) {
@@ -404,13 +435,15 @@ public class PlayerCharacter extends MoveableEntity {
 	public void setAttackInterval(float attackInterval) {
 		this.attackInterval = attackInterval;
 	}
-	
+
+
 	public void addItemToObtainedItems(ItemType itemType) {
-		this.obtainedItems.add(itemType);
+		obtainedItems.add(itemType);
 	}
-	
+
+
 	public HashSet<ItemType> getObtainedItems() {
-		return this.obtainedItems;
+		return obtainedItems;
 	}
 
 
@@ -492,5 +525,40 @@ public class PlayerCharacter extends MoveableEntity {
 		// // this.setTexture(downWalkCycle.get(0));
 		// animationCycle = 0;
 		// }
+	}
+
+
+	public float getMaxFlightTime() {
+		return maxFlightTime;
+	}
+
+
+	public void setMaxFlightTime(float maxFlightTime) {
+		this.maxFlightTime = maxFlightTime;
+	}
+
+
+	public float getFlightSpeedScale() {
+		return flightSpeedScale;
+	}
+
+
+	public void setFlightSpeedScale(float flightSpeedScale) {
+		this.flightSpeedScale = flightSpeedScale;
+	}
+
+
+	public boolean isFlying() {
+		return flying;
+	}
+
+
+	public boolean hasUsedAllFlight() {
+		return usedAllFlight;
+	}
+
+
+	public float getFlightTime() {
+		return flightTime;
 	}
 }

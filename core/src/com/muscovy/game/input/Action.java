@@ -7,7 +7,6 @@ package com.muscovy.game.input;
 public enum Action {
 	WALK_UP, WALK_RIGHT, WALK_DOWN, WALK_LEFT, //
 	SHOOT_UP, SHOOT_RIGHT, SHOOT_DOWN, SHOOT_LEFT, //
-	FLY,
-	DPAD_UP, DPAD_DOWN, // These are used for controller GUI with controller
+	FLY, DPAD_UP, DPAD_DOWN, // These are used for controller GUI with controller
 	PAUSE, ENTER, ESCAPE;
 }
