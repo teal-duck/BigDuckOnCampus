@@ -28,13 +28,17 @@ public class Projectile extends OnscreenDrawable {
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
 	private ProjectileType projectileType = ProjectileType.STANDARD;
-	private static String projectileTexture = AssetLocations.BULLET;
 
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
 			ProjectileDamager damagesWho, ProjectileType projectileType) {
-		super(game, projectileTexture, position);
-	
+		super(game, AssetLocations.BULLET, position);
+
+		if (projectileType == ProjectileType.FLAMES) {
+			setTexture(AssetLocations.FLAME);
+			damage = 5;
+		}
+
 		maxLifeTime = life;
 		this.speed = speed;
 		this.damagesWho = damagesWho;
@@ -95,12 +99,11 @@ public class Projectile extends OnscreenDrawable {
 			velocity.set(player.getCenter()).sub(getCenter());
 			velocity.setLength(speed);
 		case FLAMES:
-			projectileTexture = AssetLocations.FLAME;
-			damage = 5;
-			break;	
+			break;
 		}
-			
+
 	}
+
 
 	/**
 	 * @return

@@ -25,14 +25,14 @@ public class PlayerCharacter extends MoveableEntity {
 
 	public static final float FLIGHT_SPEED_MULTIPLIER = 3f;
 	public static final float MAX_FLIGHT_TIME = 1f; // 0.25f;
-	
-	public static final float BASE_ATTACK_INTERVAL = 0.1f; //interval between attacks
+
+	public static final float BASE_ATTACK_INTERVAL = 0.1f; // interval between attacks
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
-	
+
 	public static final int MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
-	
+
 	public static final float HITBOX_Y_OFFSET = -6;
 	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
 
@@ -87,6 +87,8 @@ public class PlayerCharacter extends MoveableEntity {
 
 		animationCycle = 0;
 		shotDirection = new Vector2(0, 1);
+
+		// setShotType(PlayerShotType.FLAME_THROWER);
 
 		// Sprite playerSprite;
 		// downWalkCycle = new ArrayList<Texture>();
@@ -263,20 +265,20 @@ public class PlayerCharacter extends MoveableEntity {
 	 * @return
 	 */
 	public ArrayList<Projectile> rangedAttack() {
-		
+
 		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
 		float y = getY() + (getHeight() / 2);
-		
-		//Player position
+
+		// Player position
 		Vector2 position = new Vector2(x, y);
-		
+
 		Vector2 direction = shotDirection.cpy();
 
 		int count = 0;
 		switch (shotType) {
 		case SINGLE:
-			//projectileLife = 20f;
+			// projectileLife = 20f;
 			count = 1;
 			break;
 		case DOUBLE:
