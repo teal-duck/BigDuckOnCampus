@@ -14,6 +14,9 @@ import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 
+/**
+ *
+ */
 public class MainMenuScreen extends ScreenBase {
 	private static final int NEW_GAME = 0;
 	private static final int LOAD_GAME = 1;
@@ -35,6 +38,9 @@ public class MainMenuScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialiseGuis() {
 		Sprite background = new Sprite(getTextureMap().getTextureOrLoadFile(AssetLocations.MAIN_MENU));
 		background.setX(0);
@@ -49,6 +55,9 @@ public class MainMenuScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void setButtonLocations() {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
 		ButtonList.getHeightForDefaultButtonList(MainMenuScreen.BUTTON_TEXTS.length);
@@ -139,6 +148,7 @@ public class MainMenuScreen extends ScreenBase {
 	 * @return
 	 */
 	private int getSaveSlotToOverwrite() {
+		// TODO: getSaveSlotToOverwrite
 		return 0;
 	}
 
@@ -158,17 +168,26 @@ public class MainMenuScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectLoadGame() {
 		setScreen(new LoadGameScreen(getGame()));
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectSettings() {
 		// TODO: Settings
 		Gdx.app.log("TODO", "Settings");
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectQuit() {
 		Gdx.app.exit();
 	}

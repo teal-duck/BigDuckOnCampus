@@ -19,6 +19,9 @@ import com.muscovy.game.input.Action;
 import com.muscovy.game.input.ControlMap;
 
 
+/**
+ *
+ */
 public abstract class ScreenBase implements Screen {
 	private final MuscovyGame game;
 
@@ -41,44 +44,74 @@ public abstract class ScreenBase implements Screen {
 	}
 
 
+	/**
+	 * @param font
+	 * @param text
+	 * @return
+	 */
 	public int getTextWidth(BitmapFont font, String text) {
 		GlyphLayout glyphLayout = new GlyphLayout(font, text);
 		return (int) glyphLayout.width;
 	}
 
 
+	/**
+	 *
+	 */
 	public void clearScreen() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
 
+	/**
+	 *
+	 */
 	public void updateAndSetCamera() {
 		getCamera().update();
 		getBatch().setProjectionMatrix(getCamera().combined);
 	}
 
 
+	/**
+	 * @param screen
+	 */
 	public void setScreen(Screen screen) {
 		game.setScreen(screen);
 	}
 
 
+	/**
+	 * @param action
+	 * @return
+	 */
 	public float getStateForAction(Action action) {
 		return getControlMap().getStateForAction(action, getController());
 	}
 
 
+	/**
+	 * @param actions
+	 * @return
+	 */
 	public float getStateForActions(Action... actions) {
 		return getControlMap().getStateForActions(getController(), actions);
 	}
 
 
+	/**
+	 * @param action
+	 * @return
+	 */
 	public boolean isStateForAction(Action action) {
 		return (getStateForAction(action) > 0);
 	}
 
 
+	/**
+	 * @param actions
+	 * @return
+	 */
 	public boolean isStateForActions(Action... actions) {
 		return (getStateForActions(actions) > 0);
 	}
@@ -114,71 +147,113 @@ public abstract class ScreenBase implements Screen {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public MuscovyGame getGame() {
 		return game;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public SpriteBatch getBatch() {
 		return game.getBatch();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public OrthographicCamera getCamera() {
 		return game.getCamera();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public TextureMap getTextureMap() {
 		return game.getTextureMap();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Levels getLevels() {
 		return game.getLevels();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Random getRandom() {
 		return game.getRandom();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public PlayerCharacter getPlayerCharacter() {
 		return game.getPlayerCharacter();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ControlMap getControlMap() {
 		return game.getControlMap();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Controller getController() {
 		return game.getController();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWindowWidth() {
 		return game.getWindowWidth();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWindowHeight() {
 		return game.getWindowHeight();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getTileSize() {
 		return game.getTileSize();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWallWidth() {
 		return game.getWallWidth();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWallEdge() {
 		return game.getWallEdge();
 	}

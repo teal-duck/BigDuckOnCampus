@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
+/**
+ *
+ */
 public class Button {
 	private String text;
 	private GlyphLayout glyphLayout;
@@ -49,11 +52,17 @@ public class Button {
 	}
 
 
+	/**
+	 *
+	 */
 	private void createGlyphLayout() {
 		glyphLayout = new GlyphLayout(font, text);
 	}
 
 
+	/**
+	 * @param batch
+	 */
 	public void render(SpriteBatch batch) {
 		float textX = (x + (width / 2)) - (glyphLayout.width / 2);
 		float textY = y + textYOffset;
@@ -72,153 +81,249 @@ public class Button {
 	}
 
 
+	/**
+	 * @param px
+	 * @param py
+	 * @return
+	 */
 	public boolean pointOnButton(float px, float py) {
 		return ((px >= getLeft()) && (px <= getRight()) && (py >= getBottom()) && (py <= getTop()));
 	}
 
 
+	/**
+	 * @return
+	 */
 	public String getText() {
 		return text;
 	}
 
 
+	/**
+	 * Recreates the glyph layout.
+	 *
+	 * @param text
+	 */
 	public void setText(String text) {
 		this.text = text;
 		createGlyphLayout();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public BitmapFont getFont() {
 		return font;
 	}
 
 
+	/**
+	 * Recreates the glyph layout.
+	 *
+	 * @param font
+	 */
 	public void setFont(BitmapFont font) {
 		this.font = font;
 		createGlyphLayout();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getX() {
 		return x;
 	}
 
 
+	/**
+	 * @param x
+	 */
 	public void setX(float x) {
 		this.x = x;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getY() {
 		return y;
 	}
 
 
+	/**
+	 * @param y
+	 */
 	public void setY(float y) {
 		this.y = y;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getWidth() {
 		return width;
 	}
 
 
+	/**
+	 * @param width
+	 */
 	public void setWidth(float width) {
 		this.width = width;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getHeight() {
 		return height;
 	}
 
 
+	/**
+	 * @param height
+	 */
 	public void setHeight(float height) {
 		this.height = height;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getLeft() {
 		return x;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getRight() {
 		return x + width;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getTop() {
 		return y + height;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getBottom() {
 		return y;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getTextYOffset() {
 		return textYOffset;
 	}
 
 
+	/**
+	 * @param textYOffset
+	 */
 	public void setTextYOffset(float textYOffset) {
 		this.textYOffset = textYOffset;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isSelected() {
 		return selected;
 	}
 
 
+	/**
+	 * @param selected
+	 */
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Texture getSelectedTexture() {
 		return selectedTexture;
 	}
 
 
+	/**
+	 * @param selectedTexture
+	 */
 	public void setSelectedTexture(Texture selectedTexture) {
 		this.selectedTexture = selectedTexture;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Texture getDeselectedTexture() {
 		return deselectedTexture;
 	}
 
 
+	/**
+	 * @param deselectedTexture
+	 */
 	public void setDeselectedTexture(Texture deselectedTexture) {
 		this.deselectedTexture = deselectedTexture;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Color getSelectedTextColour() {
 		return selectedTextColour;
 	}
 
 
+	/**
+	 * @param selectedTextColour
+	 */
 	public void setSelectedTextColour(Color selectedTextColour) {
 		this.selectedTextColour = selectedTextColour;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Color getDeselectedTextColour() {
 		return deselectedTextColour;
 	}
 
 
+	/**
+	 * @param deselectedTextColour
+	 */
 	public void setDeselectedTextColour(Color deselectedTextColour) {
 		this.deselectedTextColour = deselectedTextColour;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public GlyphLayout getGlyphLayout() {
 		return glyphLayout;
 	}

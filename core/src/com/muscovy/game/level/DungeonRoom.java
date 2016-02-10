@@ -22,6 +22,10 @@ import com.muscovy.game.enums.RoomType;
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
+/**
+ * @author ben
+ *
+ */
 public class DungeonRoom {
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;
@@ -70,6 +74,9 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialiseWalls() {
 		final int windowWidth = game.getWindowWidth();
 		final int windowHeight = game.getWindowHeight();
@@ -92,6 +99,11 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Obstacle createNonDamagingObstacle(int x, int y) {
 		Obstacle obstacle = new Obstacle(game, AssetLocations.RECYLING_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
@@ -101,6 +113,11 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Obstacle createDamagingObstacle(int x, int y) {
 		Obstacle obstacle = new Obstacle(game, AssetLocations.WASTE_BIN, new Vector2(x, y));
 		obstacle.setXTiles(x);
@@ -114,6 +131,11 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Enemy createRandomEnemy(int x, int y) {
 		Enemy enemy;
 		Vector2 position = new Vector2(x, y);
@@ -154,6 +176,10 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 */
 	private void createHealthPack(int x, int y) {
 		Vector2 position = new Vector2(x, y);
 		Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
@@ -165,6 +191,10 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param levelType
+	 * @param templateLoader
+	 */
 	public void generateRoom(LevelType levelType, DungeonRoomTemplateLoader templateLoader) {
 		/**
 		 * Currently chooses from 1 of 10 types of room, 5 with enemies, 5 without, most with some sort of
@@ -276,6 +306,9 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param levelType
+	 */
 	public void loadBackgroundTexture(LevelType levelType) {
 		Texture backgroundTexture = game.getTextureMap()
 				.getTextureOrLoadFile(AssetLocations.getLevelBackgroundTextureName(levelType));
@@ -283,6 +316,9 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 *
+	 */
 	public void initialiseDoors() {
 		if (hasUpDoor) {
 			createUpDoorRect();
@@ -299,117 +335,185 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 *
+	 */
 	private void createUpDoorRect() {
 		upDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2,
 				game.getWindowHeight() - (doorSize + game.getWallEdge()), doorSize, doorSize);
 	}
 
 
+	/**
+	 *
+	 */
 	private void createDownDoorRect() {
 		downDoorRect = new Rectangle((game.getWindowWidth() - doorSize) / 2, game.getWallEdge(), doorSize,
 				doorSize);
 	}
 
 
+	/**
+	 *
+	 */
 	private void createRightDoorRect() {
 		rightDoorRect = new Rectangle(game.getWindowWidth() - (doorSize + game.getWallEdge()),
 				(game.getWindowHeight() - doorSize) / 2, doorSize, doorSize);
 	}
 
 
+	/**
+	 *
+	 */
 	private void createLeftDoorRect() {
 		leftDoorRect = new Rectangle(game.getWallEdge(), (game.getWindowHeight() - doorSize) / 2, doorSize,
 				doorSize);
 	}
 
 
+	/**
+	 * @param enemy
+	 */
 	public void addEnemy(Enemy enemy) {
 		// TODO: Add enemy should set allEnemiesDead = false
 		enemyList.add(enemy);
 	}
 
 
+	/**
+	 * Removes enemy from list of enemies and checks if all enemies are dead.
+	 *
+	 * @param enemy
+	 */
 	public void killEnemy(Enemy enemy) {
 		enemyList.remove(enemy);
 		areAllEnemiesDead();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Enemy> getEnemyList() {
 		return enemyList;
 	}
 
 
+	/**
+	 * @param obstacle
+	 */
 	public void addObstacle(Obstacle obstacle) {
 		obstacleList.add(obstacle);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Obstacle> getObstacleList() {
 		return obstacleList;
 	}
 
 
+	/**
+	 * @param item
+	 */
 	public void addItem(Item item) {
 		itemList.add(item);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Item> getItemList() {
 		return itemList;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getBottomWall() {
 		return walls[0];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getLeftWall() {
 		return walls[1];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getRightWall() {
 		return walls[2];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getTopWall() {
 		return walls[3];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getBottomProjectileWall() {
 		return projectileWalls[0];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getLeftProjectileWall() {
 		return projectileWalls[1];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getRightProjectileWall() {
 		return projectileWalls[2];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getTopProjectileWall() {
 		return projectileWalls[3];
 	}
 
 
+	/**
+	 * @return
+	 */
 	public RoomType getRoomType() {
 		return roomType;
 	}
 
 
+	/**
+	 * @param roomType
+	 */
 	public void setRoomType(RoomType roomType) {
 		this.roomType = roomType;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			allEnemiesDead = true;
@@ -418,77 +522,122 @@ public class DungeonRoom {
 	}
 
 
+	/**
+	 * @param enemiesDead
+	 */
 	public void setEnemiesDead(boolean enemiesDead) {
 		allEnemiesDead = enemiesDead;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean hasUpDoor() {
 		return hasUpDoor;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean hasRightDoor() {
 		return hasRightDoor;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean hasDownDoor() {
 		return hasDownDoor;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean hasLeftDoor() {
 		return hasLeftDoor;
 	}
 
 
 	// TODO: Setting has a door should generate the door?
+	/**
+	 * @param upDoor
+	 */
 	public void setHasUpDoor(boolean upDoor) {
 		hasUpDoor = upDoor;
 	}
 
 
+	/**
+	 * @param rightDoor
+	 */
 	public void setHasRightDoor(boolean rightDoor) {
 		hasRightDoor = rightDoor;
 	}
 
 
+	/**
+	 * @param downDoor
+	 */
 	public void setHasDownDoor(boolean downDoor) {
 		hasDownDoor = downDoor;
 	}
 
 
+	/**
+	 * @param leftDoor
+	 */
 	public void setHasLeftDoor(boolean leftDoor) {
 		hasLeftDoor = leftDoor;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getUpDoor() {
 		return upDoorRect;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getRightDoor() {
 		return rightDoorRect;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getDownDoor() {
 		return downDoorRect;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getLeftDoor() {
 		return leftDoorRect;
 	}
 
 
+	/**
+	 * @param backgroundTexture
+	 */
 	public void setBackgroundTexture(Texture backgroundTexture) {
 		this.backgroundTexture = backgroundTexture;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Texture getBackgroundTexture() {
 		return backgroundTexture;
 	}

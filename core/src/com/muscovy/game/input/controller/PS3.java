@@ -33,5 +33,6 @@ public class PS3 {
 	public static final int AXIS_RIGHT_X = 2;
 	public static final int AXIS_RIGHT_Y = 3;
 
+	// Allow X as an alias for CROSS
 	public static final int BUTTON_X = PS3.BUTTON_CROSS;
 }

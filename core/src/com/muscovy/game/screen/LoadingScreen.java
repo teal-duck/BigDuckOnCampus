@@ -14,6 +14,10 @@ import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.save.game.SaveGame;
 
 
+/**
+ * @author ben
+ *
+ */
 public class LoadingScreen extends ScreenBase {
 	private final BitmapFont font;
 	private final int saveNumber;
@@ -99,24 +103,6 @@ public class LoadingScreen extends ScreenBase {
 		levels.generateLevelContents();
 		PlayerCharacter player = getGame().getPlayerCharacter();
 		return new SaveData(player, levels);
-	}
-
-
-	@SuppressWarnings("unused")
-	private void doSaveLoadTest() {
-		MuscovyGame game = getGame();
-		SaveGame saveGame = new SaveGame(game);
-		SaveData saveData = new SaveData(game.getPlayerCharacter(), game.getLevels());
-
-		String saveLocation = SaveHandler.getFileForSaveNumber(0);
-		saveGame.saveToFile(saveData, saveLocation);
-
-		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
-		if (loadedData == null) {
-			System.out.println("File doesn't exist");
-		} else {
-			System.out.println(loadedData);
-		}
 	}
 
 

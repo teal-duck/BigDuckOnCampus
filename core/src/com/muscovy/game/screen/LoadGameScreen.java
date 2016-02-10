@@ -15,6 +15,9 @@ import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 
+/**
+ *
+ */
 public class LoadGameScreen extends ScreenBase {
 	private String[] savedGameTexts;
 	private static final String[] optionsTexts = new String[] { "Load", "Delete", "Back" };
@@ -112,7 +115,7 @@ public class LoadGameScreen extends ScreenBase {
 
 		int y = (getWindowHeight() / 6) + ButtonList.getHeightForDefaultButtonList(SaveHandler.MAX_SAVE_COUNT);
 		savedGameButtons.setPositionDefaultSize(x, y);
-		// Push the options down to make way for the text saying the selected game
+		// Push the options down to make soace for the text saying the selected game
 		optionsButtons.setPositionDefaultSize(x, y - 50);
 
 		setBackButtonDimensions(savedGameButtons.getButtonAtIndex(savedGameButtons.getButtonCount() - 1));

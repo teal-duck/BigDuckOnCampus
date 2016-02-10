@@ -31,6 +31,9 @@ import com.muscovy.game.input.Action;
 import com.muscovy.game.level.Level;
 
 
+/**
+ *
+ */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
 	private static final float ROOM_START_TIME = 1f;
@@ -93,6 +96,9 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialiseGui() {
 		// DUNGEON
 		dungeonGui = new GUI();
@@ -142,6 +148,9 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void resetPlayer() {
 		Sprite playerSprite = playerCharacter.getSprite();
 
@@ -158,6 +167,9 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void setPauseButtonLocations() {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
 		int y = ((getWindowHeight() / 6) + ButtonList.WINDOW_EDGE_OFFSET)
@@ -186,24 +198,36 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectSave() {
+		// Only allow the player to save once per pause
 		if (hasSavedThisPauseMenu) {
 			return;
 		}
 		pauseMenuButtons.changeTextOnButton(GameScreen.SAVE, "Saved!");
 		hasSavedThisPauseMenu = true;
+
 		getGame().saveCurrentGame();
 	}
 
 
+	/**
+	 *
+	 */
 	private void selectQuit() {
 		setScreen(new LevelSelectScreen(getGame()));
 	}
 
 
+	/**
+	 * @param newPaused
+	 */
 	private void setPaused(boolean newPaused) {
 		paused = newPaused;
 		if (!paused) {
+			// Reset the text on the save button
 			pauseMenuButtons.changeTextOnButton(GameScreen.SAVE,
 					GameScreen.PAUSE_BUTTON_TEXTS[GameScreen.SAVE]);
 			hasSavedThisPauseMenu = false;
@@ -252,6 +276,7 @@ public class GameScreen extends ScreenBase {
 				boolean completed = entityManager.checkLevelCompletion();
 				if (completed && !hasCompletedLevel) {
 					hasCompletedLevel = true;
+					// Update the text and location of the objective gui
 					String levelCompleteText = "Level Complete!";
 					int x = getWindowWidth() - GameScreen.TEXT_EDGE_OFFSET
 							- getTextWidth(guiFont, levelCompleteText);
@@ -333,6 +358,9 @@ public class GameScreen extends ScreenBase {
 	}
 
 
+	/**
+	 * @param playerCharacter
+	 */
 	private void renderFlightBar(PlayerCharacter playerCharacter) {
 		float maxFlightTime = playerCharacter.getMaxFlightTime();
 		float flightTime = playerCharacter.getFlightTime();
@@ -497,6 +525,7 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 
+		// Push enemies out of each other
 		for (int i = 0; i < (enemyList.size() - 1); i += 1) {
 			for (int j = i + 1; j < enemyList.size(); j += 1) {
 				Enemy e0 = enemyList.get(i);
@@ -513,7 +542,7 @@ public class GameScreen extends ScreenBase {
 	 * @param e0
 	 * @param e1
 	 */
-	private void enemyEnemyCollision(Enemy e0, Enemy e1) {
+	private void enemyEnemyCollision(MoveableEntity e0, MoveableEntity e1) {
 		if (Intersector.overlaps(e0.getCircleHitbox(), e1.getCircleHitbox())) {
 			Vector2 c0 = e0.getCenter();
 			Vector2 c1 = e1.getCenter();
@@ -603,6 +632,9 @@ public class GameScreen extends ScreenBase {
 
 
 	/**
+	 * If the player has collided with an item, attempt to apply the item to the player. If it was applied, mark the
+	 * item's life over and return true.
+	 *
 	 * @param item
 	 * @return
 	 */

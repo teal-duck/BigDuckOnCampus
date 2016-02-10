@@ -35,11 +35,20 @@ public class DungeonRoomTemplateLoader {
 	}
 
 
+	/**
+	 * @return
+	 */
 	private String readFileContents() {
 		return Gdx.files.internal(filename).readString();
 	}
 
 
+	/**
+	 * Turns a comma separated list of integers into an array of integers.
+	 *
+	 * @param templateString
+	 * @return
+	 */
 	private int[] templateStringToIntegers(String templateString) {
 		// Remove whitespace
 		templateString = templateString.replaceAll("\\s", "");
@@ -47,6 +56,8 @@ public class DungeonRoomTemplateLoader {
 		String[] splits = templateString.split(",");
 		int[] integers = new int[splits.length];
 
+		// Try to turn each value read into an integer
+		// Defaults to 0 if invalid
 		for (int index = 0; index < splits.length; index += 1) {
 			String split = splits[index];
 			try {
@@ -248,16 +259,25 @@ public class DungeonRoomTemplateLoader {
 	// 1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
 
 
+	/**
+	 * @return
+	 */
 	public String getFilename() {
 		return filename;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isLoaded() {
 		return isLoaded;
 	}
 
 
+	/**
+	 *
+	 */
 	public void dispose() {
 		roomTemplates = null;
 		isLoaded = false;

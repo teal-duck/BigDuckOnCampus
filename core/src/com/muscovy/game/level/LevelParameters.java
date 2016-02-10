@@ -4,6 +4,9 @@ package com.muscovy.game.level;
 import com.muscovy.game.enums.ObjectiveType;
 
 
+/**
+ *
+ */
 public class LevelParameters {
 	private int roomsWide;
 	private int roomsHigh;
@@ -26,43 +29,77 @@ public class LevelParameters {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getRoomsWide() {
 		return roomsWide;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getRoomsHigh() {
 		return roomsHigh;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getMaxRooms() {
 		return maxRooms;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getStartX() {
 		return startX;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getStartY() {
 		return startY;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ObjectiveType getObjectiveType() {
 		return objectiveType;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getRoomCount() {
 		return roomCount;
 	}
 
 
+	/**
+	 * @param roomCount
+	 */
 	public void setRoomCount(int roomCount) {
 		this.roomCount = roomCount;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public String toReadString() {
+		return "LevelParameters(roomsWide=" + roomsWide + ", roomsHigh=" + roomsHigh + ", maxRooms=" + maxRooms
+				+ ", startX=" + startX + ", startY=" + startY + ", objectiveType="
+				+ objectiveType.toString() + ")";
 	}
 
 
@@ -70,12 +107,5 @@ public class LevelParameters {
 	public String toString() {
 		return "LevelParameters(" + roomsWide + ", " + roomsHigh + ", " + maxRooms + ", " + startX + ", "
 				+ startY + ", " + objectiveType.toString() + ")";
-	}
-
-
-	public String toReadString() {
-		return "LevelParameters(roomsWide=" + roomsWide + ", roomsHigh=" + roomsHigh + ", maxRooms=" + maxRooms
-				+ ", startX=" + startX + ", startY=" + startY + ", objectiveType="
-				+ objectiveType.toString() + ")";
 	}
 }

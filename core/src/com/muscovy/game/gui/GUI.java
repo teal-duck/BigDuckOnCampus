@@ -19,6 +19,10 @@ public class GUI {
 	private ArrayList<GuiData> guiData;
 
 
+	/**
+	 * @author ben
+	 *
+	 */
 	private class GuiData {
 		/**
 		 * Helper Class: GuiData Structure for the text elements of the GUI. No need to access directly, getters
@@ -39,6 +43,9 @@ public class GUI {
 		}
 
 
+		/**
+		 * @return
+		 */
 		public String getID() {
 			return ID;
 		}
@@ -50,41 +57,65 @@ public class GUI {
 		}
 
 
+		/**
+		 * @return
+		 */
 		public int getX() {
 			return x;
 		}
 
 
+		/**
+		 * @param x
+		 */
 		public void setX(int x) {
 			this.x = x;
 		}
 
 
+		/**
+		 * @return
+		 */
 		public int getY() {
 			return y;
 		}
 
 
+		/**
+		 * @param y
+		 */
 		public void setY(int y) {
 			this.y = y;
 		}
 
 
+		/**
+		 * @return
+		 */
 		public String getData() {
 			return data;
 		}
 
 
+		/**
+		 * @param data
+		 */
 		public void setData(String data) {
 			this.data = data;
 		}
 
 
+		/**
+		 * @return
+		 */
 		public BitmapFont getFont() {
 			return font;
 		}
 
 
+		/**
+		 * @param font
+		 */
 		public void setFont(BitmapFont font) {
 			this.font = font;
 		}
@@ -123,6 +154,10 @@ public class GUI {
 	}
 
 
+	/**
+	 * @param id
+	 * @param newData
+	 */
 	public void editData(String id, String newData) {
 		for (GuiData data : guiData) {
 			if (data.getID().matches(id)) {
@@ -132,6 +167,11 @@ public class GUI {
 	}
 
 
+	/**
+	 * @param id
+	 * @param x
+	 * @param y
+	 */
 	public void moveData(String id, int x, int y) {
 		for (GuiData data : guiData) {
 			if (data.getID().matches(id)) {
@@ -142,6 +182,10 @@ public class GUI {
 	}
 
 
+	/**
+	 * @param id
+	 * @param font
+	 */
 	public void changeDataFont(String id, BitmapFont font) {
 		for (GuiData data : guiData) {
 			if (data.getID().matches(id)) {
@@ -151,11 +195,18 @@ public class GUI {
 	}
 
 
+	/**
+	 * @param sprite
+	 */
 	public void addElement(Sprite sprite) {
 		guiElements.add(sprite);
 	}
 
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	public int getDataX(String id) {
 		for (GuiData data : guiData) {
 			if (data.getID().matches(id)) {
@@ -166,6 +217,10 @@ public class GUI {
 	}
 
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	public int getDataY(String id) {
 		for (GuiData data : guiData) {
 			if (data.getID().matches(id)) {
@@ -183,7 +238,6 @@ public class GUI {
 	 * @param batch
 	 */
 	public void render(SpriteBatch batch) {
-
 		for (Sprite sprite : guiElements) {
 			batch.draw(sprite.getTexture(), sprite.getX(), sprite.getY());
 		}

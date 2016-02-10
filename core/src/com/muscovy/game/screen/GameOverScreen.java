@@ -11,6 +11,9 @@ import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 
+/**
+ *
+ */
 public class GameOverScreen extends ScreenBase {
 	private GUI gui;
 	private BitmapFont gameOverFont;
@@ -25,6 +28,9 @@ public class GameOverScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialiseGui() {
 		gameOverFont = AssetLocations.newFont20();
 		gameOverFont.setColor(Color.RED);
@@ -67,8 +73,6 @@ public class GameOverScreen extends ScreenBase {
 
 		batch.begin();
 		gui.render(batch);
-		// batch.draw(playerCharacter.getSprite().getTexture(), playerCharacter.getX(),
-		// playerCharacter.getY());
 		batch.end();
 	}
 

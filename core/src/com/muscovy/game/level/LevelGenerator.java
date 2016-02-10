@@ -21,8 +21,13 @@ public class LevelGenerator {
 	 * dungeonRoomArray[yPosition][xPosition]
 	 */
 
-	/*
+	/**
 	 * Count the number of rooms adjacent to the given location
+	 *
+	 * @param dungeonRoomArray
+	 * @param roomX
+	 * @param roomY
+	 * @return
 	 */
 	public static int numberOfAdjacentRooms(DungeonRoom[][] dungeonRoomArray, int roomX, int roomY) {
 		int numAdjacent = 0;
@@ -47,26 +52,38 @@ public class LevelGenerator {
 	}
 
 
+	/**
+	 * Picks a random room that has less neighbours than maxNeighbours, then sets its type to roomType.
+	 *
+	 * @param dungeonRoomArray
+	 * @param roomsWide
+	 * @param roomsHigh
+	 * @param roomType
+	 * @param maxNeighbours
+	 * @param random
+	 * @param levelType
+	 * @return
+	 */
 	private static DungeonRoom[][] setRandomRoomTo(DungeonRoom[][] dungeonRoomArray, int roomsWide, int roomsHigh,
 			RoomType roomType, int maxNeighbours, Random random, LevelType levelType) {
-		ArrayList<Vector2> potentialBossRooms = new ArrayList<Vector2>();
+		ArrayList<Vector2> potentialRooms = new ArrayList<Vector2>();
+
 		for (int xPos = 0; xPos < roomsWide; xPos++) {
 			for (int yPos = 0; yPos < roomsHigh; yPos++) {
-
 				if ((dungeonRoomArray[yPos][xPos] != null)
 						&& (dungeonRoomArray[yPos][xPos].getRoomType() == RoomType.NORMAL)
 						&& (LevelGenerator.numberOfAdjacentRooms(dungeonRoomArray, xPos,
 								yPos) <= maxNeighbours)) {
 
-					potentialBossRooms.add(new Vector2(xPos, yPos));
+					potentialRooms.add(new Vector2(xPos, yPos));
 				}
 
 			}
 		}
 
-		if (potentialBossRooms.size() > 0) {
-			int randomIndex = random.nextInt(potentialBossRooms.size());
-			Vector2 randomPosition = potentialBossRooms.get(randomIndex);
+		if (potentialRooms.size() > 0) {
+			int randomIndex = random.nextInt(potentialRooms.size());
+			Vector2 randomPosition = potentialRooms.get(randomIndex);
 			int x = (int) randomPosition.x;
 			int y = (int) randomPosition.y;
 			dungeonRoomArray[y][x].setRoomType(roomType);
@@ -78,8 +95,13 @@ public class LevelGenerator {
 	}
 
 
-	/*
+	/**
 	 * Function is called to generate the array of rooms for our building
+	 *
+	 * @param game
+	 * @param levelType
+	 * @param levelParameters
+	 * @return
 	 */
 	public static DungeonRoom[][] generateBuilding(MuscovyGame game, LevelType levelType,
 			LevelParameters levelParameters) {
@@ -188,9 +210,13 @@ public class LevelGenerator {
 	}
 
 
+	/**
+	 * @param dungeonRoomArray
+	 * @param levelType
+	 * @param templateLoader
+	 */
 	public static void generateRoomContents(DungeonRoom[][] dungeonRoomArray, LevelType levelType,
 			DungeonRoomTemplateLoader templateLoader) {
-		// Generate the contents inside each room
 		int roomsHigh = dungeonRoomArray.length;
 		int roomsWide = dungeonRoomArray[0].length;
 		for (int yPos = 0; yPos < roomsHigh; yPos++) {

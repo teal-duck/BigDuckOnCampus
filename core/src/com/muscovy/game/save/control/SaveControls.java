@@ -9,36 +9,6 @@ import com.muscovy.game.input.KeyBinding;
 import com.muscovy.game.save.Saver;
 
 
-//public class SaveControls {
-//	private final MuscovyGame game;
-//	private final Json json;
-//
-//
-//	public SaveControls(MuscovyGame game) {
-//		this.game = game;
-//		json = new Json();
-//		json.setUsePrototypes(false);
-//		json.setIgnoreUnknownFields(true);
-//		json.setOutputType(OutputType.json);
-//
-//		json.setSerializer(ControlMap.class, new ControlMapSerializer(game));
-//		json.setSerializer(Binding.class, new BindingSerializer(game));
-//		json.setSerializer(KeyBinding.class, new KeyBindingSerializer(game));
-//		json.setSerializer(ControllerBinding.class, new ControllerBindingSerializer(game));
-//	}
-//
-//
-//	public String getSaveString(ControlMap controlMap) {
-//		return json.prettyPrint(controlMap);
-//	}
-//
-//
-//	public ControlMap loadFromSaveString(String string) {
-//		ControlMap controlMap = json.fromJson(ControlMap.class, string);
-//		return controlMap;
-//	}
-//}
-
 public class SaveControls extends Saver<ControlMap> {
 	public SaveControls(MuscovyGame game) {
 		super(game);
@@ -48,6 +18,7 @@ public class SaveControls extends Saver<ControlMap> {
 	@Override
 	protected void initialiseSerializers() {
 		dataClass = ControlMap.class;
+
 		json.setSerializer(ControlMap.class, new ControlMapSerializer(game));
 		json.setSerializer(Binding.class, new BindingSerializer(game));
 		json.setSerializer(KeyBinding.class, new KeyBindingSerializer(game));

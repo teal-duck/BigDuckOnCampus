@@ -4,19 +4,16 @@ package com.muscovy.game.enums;
 import com.muscovy.game.AssetLocations;
 
 
+/**
+ *
+ */
 public enum ItemType {
 	HEALTH, COIN, TRIPLE_SHOT, RAPID_FIRE;
 
-	// public static Texture getItemTexture(MuscovyGame game, ItemType itemType) {
-	// switch (itemType) {
-	// case HEALTH:
-	// return game.getTextureMap().getTextureOrLoadFile(AssetLocations.HEALTHPACK);
-	// case TRIPLE_SHOT:
-	// return game.getTextureMap().getTextureOrLoadFile(AssetLocations.TRIPLE_SHOT);
-	// default:
-	// return null;
-	// }
-	// }
+	/**
+	 * @param itemType
+	 * @return
+	 */
 	public static String getItemTextureName(ItemType itemType) {
 		switch (itemType) {
 		case HEALTH:

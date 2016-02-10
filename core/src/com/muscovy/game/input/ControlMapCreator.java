@@ -27,15 +27,6 @@ public class ControlMapCreator {
 	 * @return the control map after changes
 	 */
 	public static ControlMap applyDefaultKeyControls(ControlMap controlMap) {
-		// controlMap.addKeyForAction(Action.RIGHT, Keys.D, Keys.RIGHT);
-		// controlMap.addKeyForAction(Action.LEFT, Keys.A, Keys.LEFT);
-		// controlMap.addKeyForAction(Action.UP, Keys.W, Keys.UP);
-		// controlMap.addKeyForAction(Action.DOWN, Keys.S, Keys.DOWN);
-		// controlMap.addKeyForAction(Action.SPRINT, Keys.SHIFT_LEFT,
-		// Keys.SHIFT_RIGHT);
-		// controlMap.addKeyForAction(Action.FIRE, Keys.SPACE);
-		// controlMap.addKeyForAction(Action.RELOAD, Keys.R);
-
 		controlMap.addKeyForAction(Action.WALK_UP, Keys.W);
 		controlMap.addKeyForAction(Action.WALK_RIGHT, Keys.D);
 		controlMap.addKeyForAction(Action.WALK_DOWN, Keys.S);

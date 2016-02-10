@@ -35,5 +35,6 @@ public class PS4 {
 
 	public static final int DPAD = 0;
 
+	// Allow X as an alias for CROSS
 	public static final int BUTTON_X = PS4.BUTTON_CROSS;
 }

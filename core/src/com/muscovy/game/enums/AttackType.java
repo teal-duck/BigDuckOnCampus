@@ -1,10 +1,16 @@
 package com.muscovy.game.enums;
 
 
+/**
+ *
+ */
 public enum AttackType {
-	// 0 = touch damage, 1 = ranged attack, 2 = both
+	// TODO: Should range include touch as well (i.e. act as both?)
 	TOUCH, RANGE, BOTH;
 
+	/**
+	 * @return
+	 */
 	public int getScoreMultiplier() {
 		return ordinal();
 	}

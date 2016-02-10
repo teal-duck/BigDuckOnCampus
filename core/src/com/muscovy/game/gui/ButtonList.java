@@ -66,11 +66,20 @@ public class ButtonList {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getButtonCount() {
 		return buttons.length;
 	}
 
 
+	/**
+	 * Null if the index is out of bounds.
+	 *
+	 * @param index
+	 * @return
+	 */
 	public Button getButtonAtIndex(int index) {
 		if ((index >= 0) && (index < buttons.length)) {
 			return buttons[index];
@@ -80,6 +89,12 @@ public class ButtonList {
 	}
 
 
+	/**
+	 * Changes the text of the button at index. If index out of bounds, does nothing.
+	 *
+	 * @param index
+	 * @param text
+	 */
 	public void changeTextOnButton(int index, String text) {
 		Button button = getButtonAtIndex(index);
 		if (button != null) {
@@ -88,6 +103,13 @@ public class ButtonList {
 	}
 
 
+	/**
+	 * Changes the position of the button at index. If index out of bounds, does nothing.
+	 *
+	 * @param index
+	 * @param x
+	 * @param y
+	 */
 	public void changePositionOfButton(int index, float x, float y) {
 		Button button = getButtonAtIndex(index);
 		if (button != null) {
@@ -110,12 +132,14 @@ public class ButtonList {
 
 
 	/**
+	 * Repositions every button using the parameters provided.
+	 *
 	 * @param topLeftX
 	 * @param topLeftY
-	 * @param buttonWidth
-	 * @param buttonHeight
-	 * @param buttonDifference
-	 * @param buttonTextVerticalOffset
+	 * @param width
+	 * @param height
+	 * @param yDifference
+	 * @param textYOffset
 	 */
 	public void setDimensions(float topLeftX, float topLeftY, float width, float height, float yDifference,
 			float textYOffset) {
@@ -144,6 +168,9 @@ public class ButtonList {
 	}
 
 
+	/**
+	 * @param selected
+	 */
 	public void setSelected(int selected) {
 		this.selected = selected;
 	}
@@ -159,8 +186,9 @@ public class ButtonList {
 
 	/**
 	 * True if enter key/controller button/mouse is pressed whilst over a button. Only call this once per frame as
-	 * it updates state for the previous frame.
+	 * it updates state for the previous frame. Camera is for the mouse coordinates.
 	 *
+	 * @param camera
 	 * @return
 	 */
 	public boolean isSelectedSelected(OrthographicCamera camera) {
@@ -171,8 +199,9 @@ public class ButtonList {
 			isSelected = true;
 		}
 
-		if (getMouseOverButton(camera) == selected) {
-			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+		// Mouse click only works if the mouse is actually over a buttn
+		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+			if (getMouseOverButton(camera) == selected) {
 				isSelected = true;
 			}
 		}
@@ -187,6 +216,9 @@ public class ButtonList {
 	}
 
 
+	/**
+	 *
+	 */
 	public void setEnterJustPushedTrue() {
 		enterJustPushed = true;
 	}
@@ -194,6 +226,8 @@ public class ButtonList {
 
 	/**
 	 * Update the selected property based on keys/controller up/down input or location of mouse.
+	 *
+	 * @param camera
 	 */
 	public void updateSelected(OrthographicCamera camera) {
 		float upState = controlMap.getStateForActions(controller, Action.WALK_UP, Action.SHOOT_UP,
@@ -228,6 +262,7 @@ public class ButtonList {
 	/**
 	 * Returns -1 if the mouse isn't over a button, else returns the index of the button.
 	 *
+	 * @param camera
 	 * @return
 	 */
 	private int getMouseOverButton(OrthographicCamera camera) {

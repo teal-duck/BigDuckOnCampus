@@ -4,20 +4,32 @@ package com.muscovy.game.enums;
 import com.muscovy.game.level.LevelParameters;
 
 
+/**
+ *
+ */
 public enum LevelType {
-	// 0 = Constantine, 1 = Langwith, 2 = Goodricke, 3 = Law and Management, 4 = Catalyst, 5 =
-	// TFTV, 6 = Computer Science, 7 = Ron Cooke Hub
 	CONSTANTINE, LANGWITH, GOODRICKE, LMB, CATALYST, TFTV, COMP_SCI, RCH;
 
 	private static final LevelType[] LEVEL_VALUES = LevelType.values();
 	public static final int LEVEL_COUNT = LevelType.LEVEL_VALUES.length;
 
 
+	/**
+	 * @param i
+	 * @return
+	 */
 	public static LevelType fromInt(int i) {
 		return LevelType.LEVEL_VALUES[i];
 	}
 
 
+	/**
+	 * Increments the ordinal value for level by amount, wraps around and returns the new level.
+	 *
+	 * @param level
+	 * @param amount
+	 * @return
+	 */
 	public static LevelType advanceLevel(LevelType level, int amount) {
 		int currentLevel = level.ordinal();
 		int nextLevel = currentLevel + amount;
@@ -39,6 +51,10 @@ public enum LevelType {
 	// public static final int START_ROOM_X = 3;
 	// public static final int START_ROOM_Y = 3;
 
+	/**
+	 * @param levelType
+	 * @return
+	 */
 	public static LevelParameters getParametersForLevel(LevelType levelType) {
 		switch (levelType) {
 		case CONSTANTINE:
@@ -51,6 +67,10 @@ public enum LevelType {
 	}
 
 
+	/**
+	 * @param levelType
+	 * @return
+	 */
 	public static String getName(LevelType levelType) {
 		switch (levelType) {
 		case CONSTANTINE:
@@ -74,6 +94,12 @@ public enum LevelType {
 	}
 
 
+	/**
+	 * Item the player gets when they beat the level.
+	 *
+	 * @param levelType
+	 * @return
+	 */
 	public static ItemType getItemType(LevelType levelType) {
 		ItemType itemType;
 

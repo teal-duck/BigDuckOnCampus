@@ -23,8 +23,6 @@ public class ObstacleSerializer extends BaseSerializer<Obstacle> {
 		json.writeValue("textureName", obstacle.getTextureName());
 		json.writeValue("damaging", obstacle.isDamaging());
 		json.writeValue("touchDamage", obstacle.getTouchDamage());
-		// json.writeValue("width", obstacle.getWidth());
-		// json.writeValue("height", obstacle.getHeight());
 		json.writeObjectEnd();
 	}
 

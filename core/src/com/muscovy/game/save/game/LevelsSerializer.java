@@ -19,14 +19,8 @@ public class LevelsSerializer extends BaseSerializer<Levels> {
 	@Override
 	public void write(Json json, Levels levels, Class knownType) {
 		json.writeArrayStart();
-		int i = 0;
 		for (Level level : levels.getLevels()) {
 			json.writeValue(level);
-			i += 1;
-			if (i >= 1) {
-				// For testing as Eclipse console won't show the data for all 8 levels
-				// break;
-			}
 		}
 		json.writeArrayEnd();
 	}

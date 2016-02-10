@@ -34,6 +34,7 @@ public class ControllerBindingSerializer extends BaseSerializer<ControllerBindin
 		ControllerBindingType controllerBindingType = ControllerBindingType
 				.valueOf(controllerBindingTypeValue.asString());
 
+		// POV direction may be null
 		JsonValue povDirectionValue = jsonData.get("povDirection");
 		PovDirection povDirection;
 		String povString = povDirectionValue.asString();

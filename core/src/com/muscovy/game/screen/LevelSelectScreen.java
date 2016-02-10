@@ -11,6 +11,9 @@ import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 
+/**
+ *
+ */
 public class LevelSelectScreen extends ScreenBase {
 	private LevelType mapSelected;
 
@@ -47,6 +50,9 @@ public class LevelSelectScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialiseGui() {
 		availableLevel = getTextureMap().getTextureOrLoadFile(AssetLocations.SELECTOR);
 		unavailableLevel = getTextureMap().getTextureOrLoadFile(AssetLocations.BAD_SELECTOR);
@@ -115,6 +121,9 @@ public class LevelSelectScreen extends ScreenBase {
 	}
 
 
+	/**
+	 *
+	 */
 	public void cursorUpdate() {
 		if (!getLevels().isLevelCompleted(mapSelected.ordinal())) {
 			guiSelector.setTexture(availableLevel);
