@@ -28,6 +28,11 @@ public class Enemy extends MoveableEntity {
 	public static final float ATTACK_RANGE = 480;
 	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
 
+	// Used in the random movement type logic
+	public static final float MIN_ROTATION = 10;
+	public static final float MAX_ROTATION = 15;
+	public static final float TIME_TO_STAY_IN_RANDOM_DIRECTION = 0.05f;
+
 	public static final float JUST_DAMAGED_TIME = 0.6f;
 
 	private MovementType movementType = MovementType.STATIC;
@@ -63,18 +68,8 @@ public class Enemy extends MoveableEntity {
 		super(game, textureName, position, new Vector2(1, 0).setLength(Enemy.MAX_SPEED));
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
-		rotateRandomDirection(getVelocity());
+		rotateRandomDirection(getVelocity(), 0, 360);
 		chooseNewAttackInterval();
-	}
-
-
-	public void setJustDamagedTime(float justDamagedTime) {
-		this.justDamagedTime = justDamagedTime;
-	}
-
-
-	public float getJustDamagedTime() {
-		return justDamagedTime;
 	}
 
 
@@ -89,15 +84,20 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 * Flips the direction of the velocity (e.g. when the enemy hits an obstacle).
+	 */
 	public void flipDirection() {
 		getVelocity().scl(-1f);
 	}
 
 
-	private void rotateRandomDirection(Vector2 vecToRotate) {
-		float minRotation = 10;
-		float maxRotation = 15;
-
+	/**
+	 * Rotates a vector by a random direction within (minRotation, maxRotation) (in degrees).
+	 *
+	 * @param vecToRotate
+	 */
+	private void rotateRandomDirection(Vector2 vecToRotate, float minRotation, float maxRotation) {
 		int direction = 0;
 		if (game.getRandom().nextBoolean()) {
 			direction = 1;
@@ -120,11 +120,10 @@ public class Enemy extends MoveableEntity {
 			break;
 
 		case RANDOM:
-			float timeToStayInSameDirection = 0.05f;
 
-			if (directionCounter > timeToStayInSameDirection) {
+			if (directionCounter > Enemy.TIME_TO_STAY_IN_RANDOM_DIRECTION) {
 				directionCounter = 0;
-				rotateRandomDirection(direction);
+				rotateRandomDirection(direction, Enemy.MIN_ROTATION, Enemy.MAX_ROTATION);
 			} else {
 				directionCounter += deltaTime;
 			}
@@ -147,22 +146,36 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public PlayerCharacter getPlayer() {
 		// TODO: Make Enemy.getPlayer() nicer
 		return game.getPlayerCharacter();
 	}
 
 
+	/**
+	 * @param collidable
+	 * @return
+	 */
 	public float getDistanceTo(Collidable collidable) {
 		return getPosition().dst(collidable.getPosition());
 	}
 
 
+	/**
+	 * Shoots projectiles depending on this enemy's shot type.
+	 *
+	 * @param playerCharacter
+	 * @return
+	 */
 	public ArrayList<Projectile> rangedAttack(PlayerCharacter playerCharacter) {
 		Vector2 position = getCenter();
 
-		Vector2 directionToPlayer = new Vector2(playerCharacter.getCircleHitbox().x - getCircleHitbox().x,
-				playerCharacter.getCircleHitbox().y - getCircleHitbox().y).nor();
+		// Vector2 directionToPlayer = new Vector2(playerCharacter.getCircleHitbox().x - getCircleHitbox().x,
+		// playerCharacter.getCircleHitbox().y - getCircleHitbox().y).nor();
+		Vector2 directionToPlayer = playerCharacter.getCenter().cpy().sub(getCenter()).nor();
 		float distanceToPlayer = getDistanceTo(playerCharacter);
 
 		int bulletsToShoot = 0;
@@ -203,6 +216,9 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean checkRangedAttack() {
 		if (attackTimer > attackInterval) {
 			attackTimer = 0;
@@ -213,12 +229,18 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 *
+	 */
 	public void chooseNewAttackInterval() {
 		attackInterval = MathUtils.random(maxAttackInterval - attackRandomness,
 				maxAttackInterval + attackRandomness);
 	}
 
 
+	/**
+	 * @param damage
+	 */
 	public void takeDamage(float damage) {
 		currentHealth -= damage;
 		setJustDamagedTime(Enemy.JUST_DAMAGED_TIME);
@@ -228,170 +250,285 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 * @param justDamagedTime
+	 */
+	public void setJustDamagedTime(float justDamagedTime) {
+		this.justDamagedTime = justDamagedTime;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getJustDamagedTime() {
+		return justDamagedTime;
+	}
+
+
+	/**
+	 *
+	 */
 	public void killSelf() {
 		dead = true;
 	}
 
 
+	/**
+	 *
+	 */
 	public void calculateScoreOnDeath() {
 		scoreOnDeath = (attackType.getScoreMultiplier() * 10) + (movementType.getScoreMultiplier() * 10);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isCollidingWithSomething() {
 		return collidingWithSomething;
 	}
 
 
+	/**
+	 * @param collidingWithSomething
+	 */
 	public void setCollidingWithSomething(boolean collidingWithSomething) {
 		this.collidingWithSomething = collidingWithSomething;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getTouchDamage() {
 		return touchDamage;
 	}
 
 
+	/**
+	 * @param touchDamage
+	 */
 	public void setTouchDamage(float touchDamage) {
 		this.touchDamage = touchDamage;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public AttackType getAttackType() {
 		return attackType;
 	}
 
 
+	/**
+	 * @param attackType
+	 */
 	public void setAttackType(AttackType attackType) {
 		this.attackType = attackType;
 		calculateScoreOnDeath();
 	}
 
 
+	/**
+	 * @param shotType
+	 */
 	public void setShotType(EnemyShotType shotType) {
 		this.shotType = shotType;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public EnemyShotType getShotType() {
 		return shotType;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isLifeOver() {
 		return dead;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getMaxAttackInterval() {
 		return maxAttackInterval;
 	}
 
 
+	/**
+	 * @param maxAttackInterval
+	 */
 	public void setMaxAttackInterval(float maxAttackInterval) {
 		this.maxAttackInterval = maxAttackInterval;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getAttackRandomness() {
 		return attackRandomness;
 	}
 
 
+	/**
+	 * @param attackRandomness
+	 */
 	public void setAttackRandomness(float attackRandomness) {
 		this.attackRandomness = attackRandomness;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getAttackRange() {
 		return attackRange;
 	}
 
 
+	/**
+	 * @param attackRange
+	 */
 	public void setAttackRange(float attackRange) {
 		this.attackRange = attackRange;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileRange() {
 		return projectileRange;
 	}
 
 
+	/**
+	 * @param projectileRange
+	 */
 	public void setProjectileRange(float projectileRange) {
 		this.projectileRange = projectileRange;
 		projectileLife = projectileRange / projectileSpeed;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileLife() {
 		return projectileLife;
 	}
 
 
+	/**
+	 * @param projectileLife
+	 */
 	public void setProjectileLife(float projectileLife) {
 		this.projectileLife = projectileLife;
 		projectileRange = projectileSpeed * projectileLife;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileVelocity() {
 		return projectileSpeed;
 	}
 
 
+	/**
+	 * @param projectileVelocity
+	 */
 	public void setProjectileVelocity(float projectileVelocity) {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ProjectileType getProjectileType() {
 		return projectileType;
 	}
 
 
+	/**
+	 * @param projectileType
+	 */
 	public void setProjectileType(ProjectileType projectileType) {
 		this.projectileType = projectileType;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getMovementRange() {
 		return viewDistance;
 	}
 
 
+	/**
+	 * @param movementRange
+	 */
 	public void setMovementRange(float movementRange) {
 		viewDistance = movementRange;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getCurrentHealth() {
 		return currentHealth;
 	}
 
 
+	/**
+	 * @param currentHealth
+	 */
 	public void setCurrentHealth(float currentHealth) {
 		this.currentHealth = currentHealth;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getScoreOnDeath() {
 		return scoreOnDeath;
 	}
 
 
+	/**
+	 * @param scoreOnDeath
+	 */
 	public void setScoreOnDeath(int scoreOnDeath) {
 		this.scoreOnDeath = scoreOnDeath;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public MovementType getMovementType() {
 		return movementType;
 	}
 
 
+	/**
+	 * @param movementType
+	 */
 	public void setMovementType(MovementType movementType) {
 		this.movementType = movementType;
 		calculateScoreOnDeath();

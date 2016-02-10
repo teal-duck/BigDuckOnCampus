@@ -111,6 +111,8 @@ public class EntityManager {
 
 
 	/**
+	 * Sets the current room to the start room of the current level.
+	 *
 	 * @param playerCharacter
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
@@ -124,13 +126,21 @@ public class EntityManager {
 
 
 	/**
+	 * Transition direction is the normalized vector from the previous room to the new room.
+	 * <p>
+	 * E.g. moving up has the vector (0, 1). Null if not transitioning.
+	 *
 	 * @param dungeonRoom
 	 * @param transitionDirection
 	 */
 	private void setCurrentDungeonRoom(DungeonRoom dungeonRoom, Vector2 transitionDirection) {
 		roomTimer = 0;
 
+		// If we've come here from another room, a direction shall be passed
+		// Else don't transition (e.g. when the level first starts)
 		if (transitionDirection != null) {
+			// Copy the render list from the old room, but not the player
+			// As they are handled separately
 			previousRenderList.clear();
 			previousRenderList.addAll(renderList);
 			previousRenderList.remove(playerCharacter);
@@ -141,6 +151,7 @@ public class EntityManager {
 			previousRoomY = currentRoomY;
 		}
 
+		// Clear all the lists, ready for the next room
 		renderList.clear();
 		obstacleList.clear();
 		projectileList.clear();
@@ -164,6 +175,9 @@ public class EntityManager {
 
 
 	/**
+	 * Calls {@link EntityManager#setCurrentDungeonRoom(DungeonRoom, Vector2)}. Marks the room as visited in the
+	 * level.
+	 *
 	 * @param roomX
 	 * @param roomY
 	 * @param transitionDirection
@@ -176,7 +190,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Begins a transition to the room above the current.
 	 */
 	public void moveToUpRoom() {
 		int newY = currentRoomY - 1;
@@ -187,7 +201,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Begins a transition to the room to the right of the current.
 	 */
 	public void moveToRightRoom() {
 		int newX = currentRoomX + 1;
@@ -198,7 +212,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Begins a transition to the room to the left of the current.
 	 */
 	public void moveToLeftRoom() {
 		int newX = currentRoomX - 1;
@@ -208,6 +222,9 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * Begins a transition to the room below the current.
+	 */
 	public void moveToDownRoom() {
 		int newY = currentRoomY + 1;
 		setCurrentDungeonRoom(currentRoomX, newY, new Vector2(0, -1));
@@ -226,18 +243,22 @@ public class EntityManager {
 		if (isTransitioning()) {
 			transitionTime -= deltaTime;
 
+			// Stopped transitioning
+			// Don't need a reference to the previous room anymore
 			if (transitionTime < 0f) {
 				transitionTime = 0f;
 				previousDungeonRoom = null;
 				previousRenderList.clear();
 			} else {
-
+				// Calculate how far along the transition is, so how much to offset the rooms
 				float transitionAmount = transitionTime / MAX_TRANSITION_TIME;
 				float translateX = game.getWindowWidth() * transitionAmount * transitionDirection.x;
 				float translateY = game.getWindowHeight() * transitionAmount * transitionDirection.y;
 
+				// Render the new room and the previous room offset from each other
 				renderDungeonRoom(batch, currentDungeonRoom, currentRoomX, currentRoomY, renderList,
 						translateX, translateY);
+				// Direction is either -1, 0 or 1 in each axis
 				translateX -= transitionDirection.x * game.getWindowWidth();
 				translateY -= transitionDirection.y * game.getWindowHeight();
 				renderDungeonRoom(batch, previousDungeonRoom, previousRoomX, previousRoomY,
@@ -251,19 +272,26 @@ public class EntityManager {
 			renderDungeonRoom(batch, currentDungeonRoom, currentRoomX, currentRoomY, renderList, 0, 0);
 
 			for (Projectile projectile : projectileList) {
+				// If this projectile doesn't damage the player (because the player shot it)
+				// Leave the colour
+				// Else (it's an enemy's) so darken it
 				if (projectile.getDamagesWho() != ProjectileDamager.PLAYER) {
 					batch.setColor(Color.WHITE);
 				} else {
 					batch.setColor(Color.DARK_GRAY);
 				}
+
 				batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());
 			}
+
 			batch.setColor(Color.WHITE);
 		}
 	}
 
 
 	/**
+	 * Renders a room to the batch, offset by (translateX, translateY).
+	 *
 	 * @param batch
 	 * @param dungeonRoom
 	 * @param roomX
@@ -282,6 +310,9 @@ public class EntityManager {
 		Rectangle doorRectangle;
 		final float doorScale = 1.8f;
 
+		// Show eyes on the boss door if this room is complete, and the boss isn't dead
+		// Else show an open or closed door for this room
+		// Each door is similar, just different texture and location
 		if (dungeonRoom.hasUpDoor()) {
 			if (dungeonRoom.areAllEnemiesDead()
 					&& level.getUpRoom(roomX, roomY).getRoomType().equals(RoomType.BOSS)
@@ -348,11 +379,13 @@ public class EntityManager {
 			batch.setColor(Color.WHITE);
 			if (drawable instanceof PlayerCharacter) {
 				PlayerCharacter p = (PlayerCharacter) drawable;
+				// If the player is currently invincible, they flash visible/invisible
 				if (p.isInvincible() && (((p.getInvincibilityCounter() * 10) % 2) < 0.75)) {
 					shouldDraw = false;
 				}
 			} else if (drawable instanceof Enemy) {
 				Enemy e = (Enemy) drawable;
+				// If the enemy has been damaged, they flash red
 				float justDamagedTime = e.getJustDamagedTime();
 				if (justDamagedTime > 0) {
 					if (((int) ((justDamagedTime / Enemy.JUST_DAMAGED_TIME) * 4) % 2) == 0) {
@@ -371,6 +404,9 @@ public class EntityManager {
 
 
 	/**
+	 * Renders the door texture at the location defined by doorRectangle, translated by (translateX, translateY) and
+	 * scaled by (scaleX, scaleY). When scaling, ensures that the centre is still the same.
+	 *
 	 * @param batch
 	 * @param doorTexture
 	 * @param doorRectangle
@@ -410,10 +446,12 @@ public class EntityManager {
 		// How thick the doors are
 		float doorWidth = 5;
 
+		// Top left corner of the map
 		float xOffset = (game.getWindowWidth() - ((renderWidth + doorLength) * level.getRoomsWide()))
 				+ doorLength;
 		float yOffset = game.getWindowHeight() - renderHeight;
 
+		// Offset from the window edge
 		float windowEdgeOffset = 0;
 		xOffset -= windowEdgeOffset;
 		yOffset -= windowEdgeOffset;
@@ -456,6 +494,7 @@ public class EntityManager {
 							colour.b * darkerScale, 1f);
 				}
 
+				// Calculate render location of the room
 				float x = xOffset + (col * (renderWidth + doorLength));
 				float y = yOffset - (row * (renderHeight + doorLength));
 				float w = renderWidth;
@@ -491,6 +530,8 @@ public class EntityManager {
 					continue;
 				}
 
+				// If the right room exists
+				// Check if either this room or the right room has been visited
 				DungeonRoom rightRoom = level.getRoom(col + 1, row);
 				if (rightRoom != null) {
 					if (level.isRoomVisited(col, row) || level.isRoomVisited(col + 1, row)) {
@@ -504,6 +545,7 @@ public class EntityManager {
 					}
 				}
 
+				// Down handled same as right
 				DungeonRoom downRoom = level.getRoom(col, row + 1);
 				if (downRoom != null) {
 					if (level.isRoomVisited(col, row) || level.isRoomVisited(col, row + 1)) {
@@ -524,7 +566,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Used for debug purposes.
 	 */
 	public void renderGridOverlay() {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
@@ -552,6 +594,7 @@ public class EntityManager {
 			shapeRenderer.line(gridX, gy, gridX, gy + renderHeight);
 
 		}
+
 		for (int y = 0; y < rows; y += 1) {
 			gridX = startX + (0 * gridSize);
 			gy = startY + (y * gridSize);
@@ -622,7 +665,8 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Finds all projectiles who have lived longer than their lifetime, then removes them from the list of
+	 * projectiles.
 	 */
 	public void killProjectiles() {
 		ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
@@ -640,7 +684,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Removes all items that have been used·
 	 */
 	public void killItems() {
 		ArrayList<Item> deadItems = new ArrayList<Item>();
@@ -659,7 +703,7 @@ public class EntityManager {
 
 
 	/**
-	 *
+	 * Finds all dead enemies. For each of them, adds to the player's score and removes them from the game.
 	 */
 	public void killEnemies() {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
@@ -680,6 +724,9 @@ public class EntityManager {
 
 
 	/**
+	 * Checks whether the current level is completed based on the objective type. If it has been completed, sets the
+	 * completion in the level to true.
+	 *
 	 * @return
 	 */
 	public boolean checkLevelCompletion() {
@@ -695,10 +742,11 @@ public class EntityManager {
 		switch (objectiveType) {
 		case BOSS:
 			// TODO: Implement level.getBossRoom()
-			if (currentDungeonRoom.areAllEnemiesDead()
-					&& (currentDungeonRoom.getRoomType() == RoomType.BOSS)) {
+			if ((currentDungeonRoom.getRoomType() == RoomType.BOSS)
+					&& currentDungeonRoom.areAllEnemiesDead()) {
 				completed = true;
 
+				// Spawn the item for this level
 				ItemType itemType = LevelType.getItemType(levelType);
 
 				if (itemType != null) {
@@ -711,12 +759,17 @@ public class EntityManager {
 				}
 			}
 			break;
+
 		case KILL_ENEMIES:
+			// Only marks as completed if the player has visited every room
+			// (So they know they've killed all enemies)
 			if (level.areAllEnemiesDead() && level.areAllRoomsVisited()) {
 				completed = true;
 			}
 			break;
+
 		case FIND_ITEM:
+			// TODO: Find item objective
 			completed = false;
 			break;
 		}
@@ -767,6 +820,8 @@ public class EntityManager {
 
 
 	/**
+	 * Also adds to render list.
+	 *
 	 * @param obstacle
 	 */
 	public void addNewObstacle(Obstacle obstacle) {
@@ -776,6 +831,8 @@ public class EntityManager {
 
 
 	/**
+	 * Also adds to render list.
+	 *
 	 * @param obstacles
 	 */
 	public void addNewObstacles(ArrayList<Obstacle> obstacles) {
@@ -785,6 +842,8 @@ public class EntityManager {
 
 
 	/**
+	 * Also adds to render list.
+	 *
 	 * @param enemy
 	 */
 	public void addNewEnemy(Enemy enemy) {
@@ -794,6 +853,8 @@ public class EntityManager {
 
 
 	/**
+	 * Also adds to render list.
+	 *
 	 * @param enemies
 	 */
 	public void addNewEnemies(ArrayList<Enemy> enemies) {
@@ -802,6 +863,11 @@ public class EntityManager {
 	}
 
 
+	/**
+	 * Also adds to render list.
+	 *
+	 * @param item
+	 */
 	public void addNewItem(Item item) {
 		renderList.add(item);
 		itemList.add(item);
@@ -809,6 +875,8 @@ public class EntityManager {
 
 
 	/**
+	 * Also adds to render list.
+	 *
 	 * @param items
 	 */
 	public void addNewItems(ArrayList<Item> items) {

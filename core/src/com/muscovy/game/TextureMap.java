@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 
+/**
+ * Stores all textures in the game as map from their names to their instances.
+ */
 public class TextureMap {
 	private HashMap<String, Texture> textures;
 

@@ -5,11 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 
+/**
+ * Helper class for dealing with save files.
+ */
 public class SaveHandler {
 	public static final int MAX_SAVE_COUNT = 4;
 
 
 	/**
+	 * Returns just the name for the save file. E.g. save_0.json
+	 *
 	 * @param saveNumber
 	 * @return
 	 */
@@ -19,6 +24,8 @@ public class SaveHandler {
 
 
 	/**
+	 * Returns the folder and file name concatentated. E.g. preferences/saves/save_0.json
+	 *
 	 * @param saveNumber
 	 * @return
 	 */
@@ -27,11 +34,19 @@ public class SaveHandler {
 	}
 
 
+	/**
+	 * @param saveFileName
+	 * @return
+	 */
 	public static FileHandle getFileHandleForSaveName(String saveFileName) {
 		return Gdx.files.local(saveFileName);
 	}
 
 
+	/**
+	 * @param saveNumber
+	 * @return
+	 */
 	public static FileHandle getFileHandleForSaveNumber(int saveNumber) {
 		return SaveHandler.getFileHandleForSaveName(SaveHandler.getFileForSaveNumber(saveNumber));
 	}
@@ -50,7 +65,7 @@ public class SaveHandler {
 	 * @param saveNumber
 	 * @return
 	 */
-	public static boolean deleteSave(int saveNumber) {
+	public static boolean deleteSaveFile(int saveNumber) {
 		FileHandle fileHandle = SaveHandler.getFileHandleForSaveNumber(saveNumber);
 		if (fileHandle.exists()) {
 			return fileHandle.delete();

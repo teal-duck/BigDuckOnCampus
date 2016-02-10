@@ -36,16 +36,25 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * Initialisation Methods
 	 */
 	// Initialise X and Y for moving the collidable before the hitboxes are set up
+	/**
+	 * @param x
+	 */
 	public void initialiseX(float x) {
 		super.setX(x);
 	}
 
 
+	/**
+	 * @param y
+	 */
 	public void initialiseY(float y) {
 		super.setY(y);
 	}
 
 
+	/**
+	 * @param position
+	 */
 	public void initialisePosition(Vector2 position) {
 		initialiseX(position.x);
 		initialiseY(position.y);
@@ -135,21 +144,33 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * @param hitboxYOffset
+	 */
 	public void setHitboxYOffset(float hitboxYOffset) {
 		this.hitboxYOffset = hitboxYOffset;
 	}
 
 
+	/**
+	 * @param radius
+	 */
 	public void setHitboxRadius(float radius) {
 		circleHitbox.setRadius(radius);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Rectangle getRectangleHitbox() {
 		return rectangleHitbox;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Circle getCircleHitbox() {
 		return circleHitbox;
 	}
@@ -158,11 +179,13 @@ public abstract class Collidable extends OnscreenDrawable {
 	/**
 	 * Collision Methods
 	 */
+	/**
+	 * Calculates angle between the centre of the circles, and calculates the x & y distance needed so the centres
+	 * are this radius + collidable radius away. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+	 *
+	 * @param collidable
+	 */
 	public void moveToNearestEdgeCircle(Collidable collidable) {
-		/**
-		 * Calculates angle between the centre of the circles, and calculates the x & y distance needed so the
-		 * centres are this radius + collidable radius away. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
-		 */
 		float angle = getAngleFrom(collidable);
 		float distance = collidable.getCircleHitbox().radius + circleHitbox.radius;
 
@@ -206,11 +229,13 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * Checks where the centre of the circle of the other collidable is in relation to the rectangle, and moves it
+	 * accordingly. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+	 *
+	 * @param collidable
+	 */
 	public void moveToNearestEdgeRectangle(Collidable collidable) {
-		/**
-		 * Checks where the centre of the circle of the other collidable is in relation to the rectangle, and
-		 * moves it accordingly. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
-		 */
 		float angle = getAngleFrom(collidable);
 		float thisX = getCircleHitbox().x;
 		float thisY = getCircleHitbox().y;
@@ -283,6 +308,10 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * vertical
 	 */
 	// TODO: Use Math.atan2 or vector.angleRad()
+	/**
+	 * @param collidable
+	 * @return
+	 */
 	public float getAngleFrom(Collidable collidable) {
 		float x = (getCircleHitbox().x - collidable.getCircleHitbox().x);
 		float y = (getCircleHitbox().y - collidable.getCircleHitbox().y);
@@ -304,6 +333,10 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * @param collidable
+	 * @return
+	 */
 	public float getAngleTo(Collidable collidable) {
 		float x = (collidable.getCircleHitbox().x - circleHitbox.x);
 		float y = (collidable.getCircleHitbox().y - circleHitbox.y);
@@ -325,6 +358,9 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 *
+	 */
 	public void updateBoxesPosition() {
 		circleHitbox.setX(getX() + (getWidth() / 2));
 		circleHitbox.setY(getY() + (getHeight() / 2) + hitboxYOffset);
@@ -333,12 +369,24 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * @param collidable
+	 * @return
+	 */
 	public boolean collides(Collidable collidable) {
 		return Intersector.overlaps(circleHitbox, collidable.getCircleHitbox());
 	}
 
 
 	// http://stackoverflow.com/questions/27643616/ceil-conterpart-for-math-floordiv-in-java
+	/**
+	 * Originally this code used Java 8's Math.floorDiv. However for Java 7 compatibility, its implementation is
+	 * included here.
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public static long floorDiv(long x, long y) {
 		long r = x / y;
 		// if the signs are different and modulo not zero, round down

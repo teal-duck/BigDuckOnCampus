@@ -127,7 +127,7 @@ public class MainMenuScreen extends ScreenBase {
 			Gdx.app.log("TODO", "Overwrite save");
 			int overwriteSaveNumber = getSaveSlotToOverwrite();
 			Gdx.app.log("OverwriteGame", "Overwiting game in slot " + overwriteSaveNumber);
-			SaveHandler.deleteSave(overwriteSaveNumber);
+			SaveHandler.deleteSaveFile(overwriteSaveNumber);
 			saveNumber = overwriteSaveNumber;
 		}
 

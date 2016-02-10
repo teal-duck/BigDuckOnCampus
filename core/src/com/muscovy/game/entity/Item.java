@@ -29,11 +29,20 @@ public class Item extends Collidable {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ItemType getType() {
 		return type;
 	}
 
 
+	/**
+	 * Attempts to apply its own effect to the player. Returns true if it was successful, else false.
+	 *
+	 * @param playerCharacter
+	 * @return
+	 */
 	public boolean applyToPlayer(PlayerCharacter playerCharacter) {
 		switch (type) {
 		case HEALTH:
@@ -52,13 +61,18 @@ public class Item extends Collidable {
 	}
 
 
+	/**
+	 *
+	 */
 	public void setLifeOver() {
 		lifeOver = true;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isLifeOver() {
 		return lifeOver;
 	}
-
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.ControlMap;
@@ -22,6 +23,10 @@ import com.muscovy.game.screen.MainMenuScreen;
 
 /**
  * If you need a hand, email me on ewh502
+ */
+/**
+ * @author ben
+ *
  */
 public class MuscovyGame extends Game {
 	private SpriteBatch batch;
@@ -67,14 +72,20 @@ public class MuscovyGame extends Game {
 	}
 
 
+	/**
+	 *
+	 */
 	public void resetGame() {
 		levels = null;
-		random = new Random();
+		random = MathUtils.random;
 
 		setScreen(new MainMenuScreen(this));
 	}
 
 
+	/**
+	 * Sets up controllers and the control map.
+	 */
 	public void initialiseInput() {
 		ControllerHelper.setupControllers();
 		controller = ControllerHelper.getFirstControllerOrNull();
@@ -89,6 +100,9 @@ public class MuscovyGame extends Game {
 	}
 
 
+	/**
+	 *
+	 */
 	private void initialisePlayerCharacter() {
 		// TODO: Player stats need to be passed to initialisePlayerCharacter
 		Sprite playerSprite = new Sprite();
@@ -115,6 +129,9 @@ public class MuscovyGame extends Game {
 	}
 
 
+	/**
+	 * @param deltaTime
+	 */
 	private void calculateFPS(float deltaTime) {
 		time += deltaTime;
 		frames += 1;
@@ -138,104 +155,165 @@ public class MuscovyGame extends Game {
 	}
 
 
+	/**
+	 * @param saveData
+	 */
 	public void initialiseFromSaveData(SaveData saveData) {
 		playerCharacter = saveData.getPlayer();
 		levels = saveData.getLevels();
 	}
 
 
-	public void saveDataToFilel(int saveNumber, SaveData data) {
+	/**
+	 * @param saveNumber
+	 * @param data
+	 */
+	public void saveDataToFile(int saveNumber, SaveData data) {
 		Gdx.app.log("Load", "Saving game");
 		SaveGame saveGame = new SaveGame(this);
 		saveGame.saveToFile(data, SaveHandler.getFileForSaveNumber(saveNumber));
 	}
 
 
+	/**
+	 *
+	 */
 	public void saveCurrentGame() {
-		saveDataToFilel(getCurrentSaveNumber(), getSaveData());
+		saveDataToFile(getCurrentSaveNumber(), getSaveData());
 	}
 
 
+	/**
+	 * @return
+	 */
 	public SaveData getSaveData() {
 		return new SaveData(playerCharacter, levels);
 	}
 
 
+	/**
+	 * @param saveNumber
+	 */
 	public void setCurrentSaveNumber(int saveNumber) {
 		currentSaveNumber = saveNumber;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getCurrentSaveNumber() {
 		return currentSaveNumber;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public SpriteBatch getBatch() {
 		return batch;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public TextureMap getTextureMap() {
 		return textureMap;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Levels getLevels() {
 		return levels;
 	}
 
 
+	/**
+	 * @param levels
+	 */
 	public void setLevels(Levels levels) {
 		this.levels = levels;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Random getRandom() {
 		return random;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public PlayerCharacter getPlayerCharacter() {
 		return playerCharacter;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public ControlMap getControlMap() {
 		return controlMap;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Controller getController() {
 		return controller;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWindowWidth() {
 		return MuscovyGame.WINDOW_WIDTH;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWindowHeight() {
 		return MuscovyGame.WINDOW_HEIGHT;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getTileSize() {
 		return MuscovyGame.TILE_SIZE;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWallWidth() {
 		return MuscovyGame.WALL_WIDTH;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getWallEdge() {
 		return MuscovyGame.WALL_EDGE;
 	}

@@ -61,6 +61,9 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
+	/**
+	 *
+	 */
 	public void updateCollisionBox() {
 		collisionBox.setX(getX());
 		collisionBox.setY(getY());
@@ -68,7 +71,7 @@ public class Projectile extends OnscreenDrawable {
 
 
 	/**
-	 * Other shit, self explanatory
+	 * @param deltaTime
 	 */
 	public void update(float deltaTime) {
 		movementLogic(deltaTime);
@@ -77,6 +80,9 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * @param deltaTime
+	 */
 	public void movementLogic(float deltaTime) {
 		switch (projectileType) {
 		case STANDARD:
@@ -91,35 +97,124 @@ public class Projectile extends OnscreenDrawable {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public PlayerCharacter getPlayer() {
-		// TODO: Make Enemy.getPlayer() nicer
 		return game.getPlayerCharacter();
-		// Screen screen = game.getScreen();
-		//
-		// if (screen instanceof GameScreen) {
-		// return ((GameScreen) screen).getPlayer();
-		// } else {
-		// return null;
-		// }
 	}
 
 
+	/**
+	 * @param deltaTime
+	 */
 	public void moveEntity(float deltaTime) {
 		getPosition().mulAdd(velocity, deltaTime);
 		updateCollisionBox();
 	}
 
 
+	/**
+	 *
+	 */
 	public void killSelf() {
 		maxLifeTime = 0;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isLifeOver() {
 		return (lifeCounter > maxLifeTime);
 	}
 
 
+	/**
+	 * @return
+	 */
+	public float getDamage() {
+		return damage;
+	}
+
+
+	/**
+	 * @param damage
+	 */
+	public void setDamage(float damage) {
+		this.damage = damage;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public ProjectileDamager getDamagesWho() {
+		return damagesWho;
+	}
+
+
+	/**
+	 * @param damagesWho
+	 */
+	public void setDamagesWho(ProjectileDamager damagesWho) {
+		this.damagesWho = damagesWho;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getLife() {
+		return maxLifeTime;
+	}
+
+
+	/**
+	 * @param life
+	 */
+	public void setLife(float life) {
+		maxLifeTime = life;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getMaxVelocity() {
+		return speed;
+	}
+
+
+	/**
+	 * @param maxVelocity
+	 */
+	public void setMaxVelocity(float maxVelocity) {
+		speed = maxVelocity;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public Circle getCollisionBox() {
+		return collisionBox;
+	}
+
+
+	/**
+	 * Helper function for shooting multiple projectiles with a spread.
+	 *
+	 * @param game
+	 * @param count
+	 * @param position
+	 * @param direction
+	 * @param life
+	 * @param maxVelocity
+	 * @param damagesWho
+	 * @param projectileType
+	 * @return
+	 */
 	public static ArrayList<Projectile> shootProjectiles(MuscovyGame game, int count, Vector2 position,
 			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho,
 			ProjectileType projectileType) {
@@ -157,50 +252,5 @@ public class Projectile extends OnscreenDrawable {
 		}
 
 		return projectiles;
-	}
-
-
-	public float getDamage() {
-		return damage;
-	}
-
-
-	public void setDamage(float damage) {
-		this.damage = damage;
-	}
-
-
-	public ProjectileDamager getDamagesWho() {
-		return damagesWho;
-	}
-
-
-	public void setDamagesWho(ProjectileDamager damagesWho) {
-		this.damagesWho = damagesWho;
-	}
-
-
-	public float getLife() {
-		return maxLifeTime;
-	}
-
-
-	public void setLife(float life) {
-		maxLifeTime = life;
-	}
-
-
-	public float getMaxVelocity() {
-		return speed;
-	}
-
-
-	public void setMaxVelocity(float maxVelocity) {
-		speed = maxVelocity;
-	}
-
-
-	public Circle getCollisionBox() {
-		return collisionBox;
 	}
 }

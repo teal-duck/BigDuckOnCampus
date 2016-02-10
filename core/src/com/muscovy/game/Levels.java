@@ -9,6 +9,9 @@ import com.muscovy.game.level.LevelGenerator;
 import com.muscovy.game.level.LevelParameters;
 
 
+/**
+ * Groups all the levels together. Provides functions for generating the levels.S
+ */
 public class Levels {
 	private int maxLevels;
 	private Level[] levels;
@@ -35,6 +38,8 @@ public class Levels {
 
 
 	/**
+	 * Creates the levels array and generates each level in the game.
+	 *
 	 * @param game
 	 */
 	public void generateLevels(MuscovyGame game) {
@@ -49,13 +54,12 @@ public class Levels {
 			Level level = new Level(rooms, levelType, levelParameters);
 
 			levels[i] = level;
-
 		}
 	}
 
 
 	/**
-	 *
+	 * For each level, calls generateRoomContents using the template file.
 	 */
 	public void generateLevelContents() {
 		String templateFilename = AssetLocations.ROOM_TEMPLATE_FILE;
@@ -67,7 +71,6 @@ public class Levels {
 			LevelGenerator.generateRoomContents(rooms, levelType, templateLoader);
 		}
 		templateLoader.dispose();
-
 	}
 
 

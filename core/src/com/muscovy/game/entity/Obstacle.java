@@ -19,21 +19,33 @@ public class Obstacle extends Collidable {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isDamaging() {
 		return damaging;
 	}
 
 
+	/**
+	 * @param damaging
+	 */
 	public void setDamaging(boolean damaging) {
 		this.damaging = damaging;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getTouchDamage() {
 		return touchDamage;
 	}
 
 
+	/**
+	 * @param touchDamage
+	 */
 	public void setTouchDamage(float touchDamage) {
 		this.touchDamage = touchDamage;
 	}

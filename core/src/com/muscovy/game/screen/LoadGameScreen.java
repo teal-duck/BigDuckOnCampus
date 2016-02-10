@@ -254,7 +254,7 @@ public class LoadGameScreen extends ScreenBase {
 	private void deleteGame(int saveNumber) {
 		// TODO: Add a confirmation prompt for deleting save
 
-		SaveHandler.deleteSave(saveNumber);
+		SaveHandler.deleteSaveFile(saveNumber);
 		// Recreate the buttons as this save no longer exists
 		// So it shouldn't have a button
 		createSaveGameButtons();

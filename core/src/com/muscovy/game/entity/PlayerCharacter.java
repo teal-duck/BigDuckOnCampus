@@ -132,6 +132,11 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.muscovy.game.entity.MoveableEntity#movementLogic(float)
+	 */
 	@Override
 	public void movementLogic(float deltaTime) {
 		float rightState = controlMap.getStateForAction(Action.WALK_RIGHT, controller);
@@ -143,6 +148,9 @@ public class PlayerCharacter extends MoveableEntity {
 		float dy = upState - downState;
 
 		Vector2 acceleration = new Vector2(dx, dy);
+		// If both dx and dy are 1 (i.e. both W and D are pressed)
+		// Limit the magnitude of the acceleration
+		// Uses limit, not setLength, because controllers allow for movement between 0 and 1
 		acceleration.limit(1);
 
 		// When flying, the timer is decreasing to 0
@@ -198,12 +206,14 @@ public class PlayerCharacter extends MoveableEntity {
 		int sx = 0;
 		int sy = 0;
 
-		if (Math.abs(shootDX) > Math.abs(shootDY)) {
-			sx = (int) Math.signum(shootDX);
-			sy = 0;
-		} else {
+		// Shoot in the larger of the 2 directions
+		// If they're the same, shoots on X
+		if (Math.abs(shootDY) > Math.abs(shootDX)) {
 			sx = 0;
 			sy = (int) Math.signum(shootDY);
+		} else {
+			sx = (int) Math.signum(shootDX);
+			sy = 0;
 		}
 
 		if ((sx != 0) || (sy != 0)) {
@@ -229,21 +239,29 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @param deltaTime
+	 */
 	public void incrementTimeSinceLastAttack(float deltaTime) {
 		timeSinceLastAttack += deltaTime;
 	}
 
 
+	/**
+	 *
+	 */
 	public void resetAttackTimer() {
 		timeSinceLastAttack = attackInterval;
 	}
 
 
+	/**
+	 * Returns a different projectile array list depending on the shot type, so that needs to be given directly to
+	 * the entity manager
+	 *
+	 * @return
+	 */
 	public ArrayList<Projectile> rangedAttack() {
-		/**
-		 * Returns a different projectile array list depending on the shot type, so that needs to be given
-		 * directly to the entity manager
-		 */
 		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
 		float y = getY() + (getHeight() / 2);
@@ -269,21 +287,33 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isFiring() {
 		return firing;
 	}
 
 
+	/**
+	 * @param firing
+	 */
 	public void setFiring(boolean firing) {
 		this.firing = firing;
 	}
 
 
+	/**
+	 * @param score
+	 */
 	public void increaseScore(int score) {
 		this.score += score;
 	}
 
 
+	/**
+	 * @param damage
+	 */
 	public void takeDamage(float damage) {
 		if (!invincible) {
 			currentHealth -= damage;
@@ -292,6 +322,10 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @param health
+	 * @return
+	 */
 	public boolean gainHealth(int health) {
 		if (currentHealth == maxHealth) {
 			return false;
@@ -302,6 +336,9 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @param deltaTime
+	 */
 	private void invincibilityUpdate(float deltaTime) {
 		invincibilityCounter += deltaTime;
 		if (invincibilityCounter > invincibilityDuration) {
@@ -311,16 +348,27 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public boolean isInvincible() {
 		return invincible;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getHealth() {
 		return currentHealth;
 	}
 
 
+	/**
+	 * If the new health is bigger than max health, clamps it to max.
+	 *
+	 * @param newHealth
+	 */
 	public void setHealth(int newHealth) {
 		currentHealth = newHealth;
 		if (currentHealth > maxHealth) {
@@ -329,125 +377,251 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getMaxHealth() {
 		return maxHealth;
 	}
 
 
+	/**
+	 * @param maxHealth
+	 */
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getInvincibilityCounter() {
 		return invincibilityCounter;
 	}
 
 
-	public int getAnimationCounter() {
-		return animationCounter;
-	}
-
-
-	public int getAnimationCycle() {
-		return animationCycle;
-	}
-
-
+	/**
+	 * @param score
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public int getScore() {
 		return score;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Vector2 getShotDirection() {
 		return shotDirection;
 	}
 
 
+	/**
+	 * @param shotDirection
+	 */
 	public void setShotDirection(Vector2 shotDirection) {
 		this.shotDirection.set(shotDirection).nor();
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public void setShotDirection(float x, float y) {
 		shotDirection.set(x, y).nor();
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getTimeSinceLastAttack() {
 		return timeSinceLastAttack;
 	}
 
 
+	/**
+	 * @param timeSinceLastAttack
+	 */
 	public void setTimeSinceLastAttack(float timeSinceLastAttack) {
 		this.timeSinceLastAttack = timeSinceLastAttack;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileRange() {
 		return projectileRange;
 	}
 
 
+	/**
+	 * @param projectileRange
+	 */
 	public void setProjectileRange(float projectileRange) {
 		this.projectileRange = projectileRange;
 		projectileLife = projectileRange / projectileSpeed;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileLife() {
 		return projectileLife;
 	}
 
 
+	/**
+	 * @param projectileLife
+	 */
 	public void setProjectileLife(float projectileLife) {
 		this.projectileLife = projectileLife;
 		projectileRange = projectileSpeed * projectileLife;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getProjectileVelocity() {
 		return projectileSpeed;
 	}
 
 
+	/**
+	 * @param projectileVelocity
+	 */
 	public void setProjectileVelocity(float projectileVelocity) {
 		projectileSpeed = projectileVelocity;
 		projectileLife = projectileRange / projectileVelocity;
 	}
 
 
+	/**
+	 * @param type
+	 */
 	public void setShotType(PlayerShotType type) {
 		shotType = type;
 	}
 
 
+	/**
+	 * @return
+	 */
 	public float getAttackInterval() {
 		return attackInterval;
 	}
 
 
+	/**
+	 * @param attackInterval
+	 */
 	public void setAttackInterval(float attackInterval) {
 		this.attackInterval = attackInterval;
 	}
 
 
+	/**
+	 * @param itemType
+	 */
 	public void addItemToObtainedItems(ItemType itemType) {
 		obtainedItems.add(itemType);
 	}
 
 
+	/**
+	 * @return
+	 */
 	public HashSet<ItemType> getObtainedItems() {
 		return obtainedItems;
 	}
 
 
+	/**
+	 * @return
+	 */
+	public float getMaxFlightTime() {
+		return maxFlightTime;
+	}
+
+
+	/**
+	 * @param maxFlightTime
+	 */
+	public void setMaxFlightTime(float maxFlightTime) {
+		this.maxFlightTime = maxFlightTime;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getFlightSpeedScale() {
+		return flightSpeedScale;
+	}
+
+
+	/**
+	 * @param flightSpeedScale
+	 */
+	public void setFlightSpeedScale(float flightSpeedScale) {
+		this.flightSpeedScale = flightSpeedScale;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public boolean isFlying() {
+		return flying;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public boolean hasUsedAllFlight() {
+		return usedAllFlight;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getFlightTime() {
+		return flightTime;
+	}
+
+
 	// TODO: Animations
+
+	/**
+	 * @return
+	 */
+	public int getAnimationCounter() {
+		return animationCounter;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public int getAnimationCycle() {
+		return animationCycle;
+	}
+
 
 	/**
 	 * Animation methods currently commented out, as we only have one sprite atm, but they should be easy to work
@@ -525,40 +699,5 @@ public class PlayerCharacter extends MoveableEntity {
 		// // this.setTexture(downWalkCycle.get(0));
 		// animationCycle = 0;
 		// }
-	}
-
-
-	public float getMaxFlightTime() {
-		return maxFlightTime;
-	}
-
-
-	public void setMaxFlightTime(float maxFlightTime) {
-		this.maxFlightTime = maxFlightTime;
-	}
-
-
-	public float getFlightSpeedScale() {
-		return flightSpeedScale;
-	}
-
-
-	public void setFlightSpeedScale(float flightSpeedScale) {
-		this.flightSpeedScale = flightSpeedScale;
-	}
-
-
-	public boolean isFlying() {
-		return flying;
-	}
-
-
-	public boolean hasUsedAllFlight() {
-		return usedAllFlight;
-	}
-
-
-	public float getFlightTime() {
-		return flightTime;
 	}
 }

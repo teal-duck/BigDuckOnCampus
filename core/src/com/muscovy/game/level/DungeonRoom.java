@@ -278,7 +278,7 @@ public class DungeonRoom {
 
 	public void loadBackgroundTexture(LevelType levelType) {
 		Texture backgroundTexture = game.getTextureMap()
-				.getTextureOrLoadFile(AssetLocations.getLevelBackground(levelType));
+				.getTextureOrLoadFile(AssetLocations.getLevelBackgroundTextureName(levelType));
 		setBackgroundTexture(backgroundTexture);
 	}
 

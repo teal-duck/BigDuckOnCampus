@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.muscovy.game.enums.LevelType;
 
 
+/**
+ *
+ */
 public class AssetLocations {
 	// Obstacles
 	public static final String RECYLING_BIN = "accommodationAssets/obstacles/binRecycle.png";
@@ -89,7 +92,7 @@ public class AssetLocations {
 	 * @param levelType
 	 * @return
 	 */
-	public static String getLevelBackground(LevelType levelType) {
+	public static String getLevelBackgroundTextureName(LevelType levelType) {
 		// TODO: Make level backgrounds an array
 		switch (levelType) {
 		case CONSTANTINE:
@@ -115,6 +118,8 @@ public class AssetLocations {
 
 
 	/**
+	 * Queries the texture map to load all the textures (that haven't already been loaded).
+	 *
 	 * @param textureMap
 	 * @return
 	 */
@@ -132,6 +137,7 @@ public class AssetLocations {
 
 		textureMap.getTextureOrLoadFile(AssetLocations.HEALTHPACK);
 		textureMap.getTextureOrLoadFile(AssetLocations.TRIPLE_SHOT);
+		textureMap.getTextureOrLoadFile(AssetLocations.RAPID_FIRE);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);
@@ -170,6 +176,8 @@ public class AssetLocations {
 
 
 	/**
+	 * Loads a font of size 20.
+	 *
 	 * @return
 	 */
 	public static BitmapFont newFont20() {
@@ -179,6 +187,8 @@ public class AssetLocations {
 
 
 	/**
+	 * Loads a font of size 32.
+	 *
 	 * @return
 	 */
 	public static BitmapFont newFont32() {
