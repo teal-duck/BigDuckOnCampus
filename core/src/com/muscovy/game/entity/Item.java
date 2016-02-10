@@ -40,9 +40,11 @@ public class Item extends Collidable {
 			return playerCharacter.gainHealth(Item.HEALTHPACK_REGEN);
 		case TRIPLE_SHOT:
 			playerCharacter.setShotType(PlayerShotType.TRIPLE);
+			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		case RAPID_FIRE:
 			playerCharacter.setAttackInterval(0.5f * playerCharacter.getAttackInterval());
+			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		default:
 			return false;

@@ -2,10 +2,12 @@ package com.muscovy.game.entity;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.PlayerShotType;
 import com.muscovy.game.enums.ProjectileDamager;
 import com.muscovy.game.enums.ProjectileType;
@@ -50,6 +52,8 @@ public class PlayerCharacter extends MoveableEntity {
 	private boolean invincible = false;
 	private float invincibilityCounter = 0;
 	private float invincibilityDuration = PlayerCharacter.INVINCIBILITY_DURATION;
+
+	private HashSet<ItemType> obtainedItems = new HashSet<ItemType>();
 
 	private int score = 0;
 
@@ -255,7 +259,7 @@ public class PlayerCharacter extends MoveableEntity {
 			invincible = true;
 		}
 	}
-
+	
 
 	public boolean gainHealth(int health) {
 		if (currentHealth == maxHealth) {
@@ -399,6 +403,14 @@ public class PlayerCharacter extends MoveableEntity {
 
 	public void setAttackInterval(float attackInterval) {
 		this.attackInterval = attackInterval;
+	}
+	
+	public void addItemToObtainedItems(ItemType itemType) {
+		this.obtainedItems.add(itemType);
+	}
+	
+	public HashSet<ItemType> getObtainedItems() {
+		return this.obtainedItems;
 	}
 
 

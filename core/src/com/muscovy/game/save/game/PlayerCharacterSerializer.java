@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.entity.Item;
 import com.muscovy.game.entity.PlayerCharacter;
+import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.save.BaseSerializer;
 
@@ -27,6 +29,12 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		json.writeValue("accelerationSpeed", playerCharacter.getAccelerationSpeed());
 		json.writeValue("score", playerCharacter.getScore());
 		json.writeValue("health", playerCharacter.getHealth());
+		
+		json.writeArrayStart("obtainedItems");
+		for (ItemType item: playerCharacter.getObtainedItems())
+			json.writeValue(item);
+		json.writeArrayEnd();
+		
 		json.writeObjectEnd();
 	}
 
@@ -49,6 +57,15 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		playerCharacter.setAccelerationSpeed(accelerationSpeed);
 		playerCharacter.setScore(score);
 		playerCharacter.setHealth(health);
+		
+		JsonValue obtainedItemsArrayValue = jsonData.get("obtainedItems");
+		JsonValue obtainedItemValue = obtainedItemsArrayValue.child;
+		while (obtainedItemValue != null) {
+			ItemType itemType = ItemType.valueOf(obtainedItemValue.asString());
+			Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(), itemType);
+			item.applyToPlayer(playerCharacter);
+			obtainedItemValue = obtainedItemValue.next;
+		}
 
 		return playerCharacter;
 	}
