@@ -25,6 +25,7 @@ public class AssetLocations {
 	// Projectiles
 	public static final String BULLET = "breadBullet.png";
 	public static final String ENEMY_BULLET = "enemyBullet.png";
+	public static final String FLAME = "flame.png";
 
 	// Items
 	public static final String HEALTHPACK = "healthpack.png";
