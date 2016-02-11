@@ -28,7 +28,9 @@ public class Projectile extends OnscreenDrawable {
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
 	private ProjectileType projectileType = ProjectileType.STANDARD;
-	private float rotateProjectile = 1.5f;
+
+	private int rotateDirection = 1;
+	private float rotateSpeed = 1.5f;
 
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
@@ -47,6 +49,8 @@ public class Projectile extends OnscreenDrawable {
 
 		velocity = direction.cpy().setLength(speed);
 		collisionBox = new Circle((int) getX(), (int) getY(), getTexture().getWidth() / 2f);
+
+		rotateDirection = 1;
 	}
 
 
@@ -102,7 +106,7 @@ public class Projectile extends OnscreenDrawable {
 		case FLAMES:
 			break;
 		case CURVED:
-			velocity.rotate(rotateProjectile);
+			velocity.rotate(rotateDirection * rotateSpeed);
 			break;
 		}
 

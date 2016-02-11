@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.PlayerShotType;
+import com.muscovy.game.enums.ProjectileType;
 
 
 /**
@@ -13,7 +14,7 @@ import com.muscovy.game.enums.PlayerShotType;
 public class Item extends Collidable {
 	/**
 	 * For any items that can be picked up
-	 * 
+	 *
 	 */
 
 	private ItemType type;
@@ -53,6 +54,11 @@ public class Item extends Collidable {
 			return true;
 		case RAPID_FIRE:
 			playerCharacter.setAttackInterval(0.5f * playerCharacter.getAttackInterval());
+			playerCharacter.addItemToObtainedItems(type);
+			return true;
+		case FLAME_THROWER:
+			playerCharacter.setAttackInterval(0.03f);
+			playerCharacter.setProjectileType(ProjectileType.FLAMES);
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		default:

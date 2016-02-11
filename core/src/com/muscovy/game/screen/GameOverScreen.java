@@ -37,8 +37,10 @@ public class GameOverScreen extends ScreenBase {
 
 		gui = new GUI();
 		gui.addData("Gameover", "Game Over", gameOverFont, (getWindowWidth() / 2) - 80, 150);
-		gui.addData("Gameover", "Press " + Action.ENTER.toString() + " to go to main menu or " + Action.ESCAPE.toString() + " to quit", gameOverFont,
-				(getWindowWidth() / 2) - 350, 120);
+		gui.addData("Gameover",
+				"Press " + Action.ENTER.toString() + " to go to main menu or "
+						+ Action.ESCAPE.toString() + " to quit",
+				gameOverFont, (getWindowWidth() / 2) - 350, 120);
 	}
 
 

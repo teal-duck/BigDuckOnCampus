@@ -37,8 +37,10 @@ public class WinScreen extends ScreenBase {
 
 		gui = new GUI();
 		gui.addData("Gamewin", "You won!", gameOverFont, (getWindowWidth() / 2) - 80, 150);
-		gui.addData("Gamewin", "Press " + Action.ENTER.toString() + " to go to main menu or " + Action.ESCAPE.toString() + " to quit", gameOverFont,
-				(getWindowWidth() / 2) - 350, 120);
+		gui.addData("Gamewin",
+				"Press " + Action.ENTER.toString() + " to go to main menu or "
+						+ Action.ESCAPE.toString() + " to quit",
+				gameOverFont, (getWindowWidth() / 2) - 350, 120);
 	}
 
 
