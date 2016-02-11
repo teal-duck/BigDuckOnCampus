@@ -164,6 +164,7 @@ public class GameScreen extends ScreenBase {
 
 		playerCharacter.getAcceleration().setZero();
 		playerCharacter.getVelocity().setZero();
+		playerCharacter.setFullFlightBar();
 	}
 
 
@@ -217,7 +218,7 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void selectQuit() {
-		setScreen(new LevelSelectScreen(getGame()));
+		setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
 	}
 
 
@@ -254,7 +255,7 @@ public class GameScreen extends ScreenBase {
 			}
 
 			if (getStateForAction(Action.ESCAPE) > 0) {
-				setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
+				selectQuit();
 				return;
 			}
 
@@ -370,6 +371,9 @@ public class GameScreen extends ScreenBase {
 		shapeRenderer.setProjectionMatrix(getCamera().combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLACK);
+		float borderSize = 2f;
+		shapeRenderer.rect(flightBarX - borderSize, flightBarY - borderSize, flightBarWidth + (borderSize * 2),
+				flightBarHeight + (borderSize * 2));
 		shapeRenderer.rect(flightBarX, flightBarY, flightBarWidth, flightBarHeight);
 
 		if (playerCharacter.hasUsedAllFlight()) {
@@ -729,9 +733,8 @@ public class GameScreen extends ScreenBase {
 				enemy.moveToNearestEdgeCircle(playerCharacter);
 			}
 
-			if (enemy.getAttackType() != AttackType.RANGE) {
-				playerCharacter.takeDamage(enemy.getTouchDamage());
-			}
+			playerCharacter.takeDamage(enemy.getTouchDamage());
+
 		}
 	}
 

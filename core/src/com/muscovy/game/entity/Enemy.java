@@ -205,11 +205,23 @@ public class Enemy extends MoveableEntity {
 			bulletsToShoot = 1;
 			shootDirection.setToRandomDirection();
 			break;
+		case FOUR_DIRECTIONS:
+			bulletsToShoot = 4;
+			break;
+		case SIX_DIRECTIONS:
+			bulletsToShoot = 6;
+			break;
+		case EIGHT_DIRECTIONS:
+			bulletsToShoot = 8;
+			break;
+		default:
+			break;
 		}
 
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
-					projectileRange, projectileSpeed, ProjectileDamager.PLAYER, projectileType);
+					projectileLife, projectileSpeed, ProjectileDamager.PLAYER, projectileType);
+
 		} else {
 			return new ArrayList<Projectile>();
 		}

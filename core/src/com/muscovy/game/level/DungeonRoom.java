@@ -16,6 +16,7 @@ import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.enums.RoomType;
 
 
@@ -261,17 +262,27 @@ public class DungeonRoom {
 					- (enemy.getWidth() / game.getTileSize() / 2)));
 			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
 					- (enemy.getHeight() / game.getTileSize() / 2)));
-			enemy.setAttackType(AttackType.BOTH);
+			enemy.setAttackType(AttackType.RANGE);
 			enemy.setMovementType(MovementType.FOLLOW);
 			enemy.setMaxSpeed(Enemy.BOSS_MAX_SPEED);
 			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
 			enemy.setTouchDamage(20);
-			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
-			// enemy.setProjectileType(ProjectileType.HOMING);
+
 			enemy.setScoreOnDeath(3000);
 			enemy.setCurrentHealth(600);
 			enemy.setHitboxRadius(80);
 			enemy.setMovementRange(1000);
+
+			
+			enemy.setProjectileLife(2);
+
+
+			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
+			// enemy.setShotType(EnemyShotType.EIGHT_DIRECTIONS);
+			// enemy.setProjectileType(ProjectileType.HOMING);
+
+			enemy.setProjectileType(ProjectileType.CURVED);
+
 			addEnemy(enemy);
 			break;
 

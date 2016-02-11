@@ -49,6 +49,7 @@ public class LoadingScreen extends ScreenBase {
 	public void updateScreen(float deltaTime) {
 		time += deltaTime;
 		if (time > startTime) {
+			getGame().initialisePlayerCharacter();
 			AssetLocations.loadAllTexturesIntoMap(getTextureMap());
 
 			// Try to load the data for the save

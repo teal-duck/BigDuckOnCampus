@@ -756,7 +756,7 @@ public class EntityManager {
 			// (So they know they've killed all enemies)
 			if (level.areAllEnemiesDead() && level.areAllRoomsVisited()) {
 				completed = true;
-				
+
 				// spawn item for level
 				spawnItem(levelType);
 			}
@@ -778,19 +778,17 @@ public class EntityManager {
 		ItemType itemType = LevelType.getItemType(levelType);
 
 		if (itemType != null) {
-			Item item = new Item(game, ItemType.getItemTextureName(itemType),
-					new Vector2(0, 0), itemType);
+			Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
 			if (level.getObjectiveType().equals(ObjectiveType.BOSS)) {
 				item.setXTiles(5);
 				item.setYTiles(5);
-			}
-			else {
+			} else {
 				item.setXTiles(currentDungeonRoom.getItemSpawnX());
 				item.setYTiles(currentDungeonRoom.getItemSpawnY());
 			}
 			currentDungeonRoom.addItem(item);
 			addNewItem(item);
-		}		
+		}
 	}
 
 

@@ -103,7 +103,7 @@ public class MuscovyGame extends Game {
 	/**
 	 *
 	 */
-	private void initialisePlayerCharacter() {
+	public void initialisePlayerCharacter() {
 		// TODO: Player stats need to be passed to initialisePlayerCharacter
 		Sprite playerSprite = new Sprite();
 		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
