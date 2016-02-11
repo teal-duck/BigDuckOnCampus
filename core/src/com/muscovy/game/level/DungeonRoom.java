@@ -195,15 +195,15 @@ public class DungeonRoom {
 			Vector2 position = new Vector2(x, y);
 			Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
 					ItemType.HEALTH);
-	
+
 			healthPack.setXTiles(x);
 			healthPack.setYTiles(y);
 			this.healthPack = healthPack;
-			//addItem(this.healthPack);
+			// addItem(this.healthPack);
 		}
 	}
 
-	
+
 	/**
 	 * @param levelType
 	 * @param templateLoader
@@ -550,12 +550,12 @@ public class DungeonRoom {
 	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			allEnemiesDead = true;
-//			if (healthPack != null) {
-//				System.out.println("healthpack added");
-//				addItem(healthPack);
-//				//game.
-//				//healthPack = null;
-//			}
+			// if (healthPack != null) {
+			// System.out.println("healthpack added");
+			// addItem(healthPack);
+			// //game.
+			// //healthPack = null;
+			// }
 		}
 		return allEnemiesDead;
 	}
@@ -705,7 +705,8 @@ public class DungeonRoom {
 	public Item getHealthPack() {
 		return healthPack;
 	}
-	
+
+
 	public void removeHealthPack() {
 		healthPack = null;
 	}
