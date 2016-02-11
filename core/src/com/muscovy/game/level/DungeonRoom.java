@@ -3,11 +3,13 @@ package com.muscovy.game.level;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.entity.BossParameters;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Item;
 import com.muscovy.game.entity.Obstacle;
@@ -16,7 +18,6 @@ import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
-import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.enums.RoomType;
 
 
@@ -266,32 +267,33 @@ public class DungeonRoom {
 
 		case BOSS:
 			// Boss
-			// TODO: Change boss parameters
-			enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0));
-			enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
-					- (enemy.getWidth() / game.getTileSize() / 2)));
-			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
-					- (enemy.getHeight() / game.getTileSize() / 2)));
-			enemy.setAttackType(AttackType.RANGE);
-			enemy.setMovementType(MovementType.FOLLOW);
-			enemy.setMaxSpeed(Enemy.BOSS_MAX_SPEED);
-			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
-			enemy.setTouchDamage(20);
+			BossParameters bossParameters = LevelType.getBossParameters(levelType);
 
-			enemy.setScoreOnDeath(3000);
-			enemy.setCurrentHealth(600);
-			enemy.setHitboxRadius(80);
-			enemy.setMovementRange(1000);
+			if (bossParameters != null) {
+				enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0));
+				enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
+						- (enemy.getWidth() / game.getTileSize() / 2)));
+				enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
+						- (enemy.getHeight() / game.getTileSize() / 2)));
+				enemy.setScoreOnDeath(3000);
+				enemy.setHitboxRadius(80);
+				enemy.setMovementRange(1000);
+				enemy.setAttackType(AttackType.RANGE);
 
-			enemy.setProjectileLife(2);
+				enemy.setProjectileType(bossParameters.getProjectileType());
+				enemy.setShotType(bossParameters.getEnemyShotType());
+				enemy.setMovementType(bossParameters.getMovementType());
+				enemy.setMaxAttackInterval(bossParameters.getAttackInterval());
+				enemy.setProjectileVelocity(bossParameters.getProjectileVelocity());
+				enemy.setProjectileLife(bossParameters.getProjectileLife());
+				enemy.setMaxSpeed(bossParameters.getSpeed());
+				enemy.setTouchDamage(bossParameters.getTouchDamage());
+				enemy.setCurrentHealth(bossParameters.getHealth());
 
-			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
-			// enemy.setShotType(EnemyShotType.EIGHT_DIRECTIONS);
-			// enemy.setProjectileType(ProjectileType.HOMING);
-
-			enemy.setProjectileType(ProjectileType.CURVED);
-
-			addEnemy(enemy);
+				addEnemy(enemy);
+			} else {
+				Gdx.app.log("Boss", "No boss parameters for level " + levelType.toString());
+			}
 			break;
 
 		case ITEM:

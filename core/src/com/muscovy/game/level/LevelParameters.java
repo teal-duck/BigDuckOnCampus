@@ -8,13 +8,13 @@ import com.muscovy.game.enums.ObjectiveType;
  *
  */
 public class LevelParameters {
-	private int roomsWide;
-	private int roomsHigh;
-	private int maxRooms;
-	private int startX;
-	private int startY;
+	private final int roomsWide;
+	private final int roomsHigh;
+	private final int maxRooms;
+	private final int startX;
+	private final int startY;
 	private int roomCount;
-	private ObjectiveType objectiveType;
+	private final ObjectiveType objectiveType;
 
 
 	public LevelParameters(int roomsWide, int roomsHigh, int maxRooms, int startX, int startY,
