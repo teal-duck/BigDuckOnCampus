@@ -273,9 +273,7 @@ public class DungeonRoom {
 			enemy.setHitboxRadius(80);
 			enemy.setMovementRange(1000);
 
-			
 			enemy.setProjectileLife(2);
-
 
 			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
 			// enemy.setShotType(EnemyShotType.EIGHT_DIRECTIONS);
