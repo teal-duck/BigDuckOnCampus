@@ -76,7 +76,7 @@ public class GameScreen extends ScreenBase {
 	private static final int RESUME = 0;
 	private static final int SAVE = 1;
 	private static final int QUIT = 2;
-	private static final String[] PAUSE_BUTTON_TEXTS = new String[] { "Resume", "Save", "Quit" };
+	private static final String[] PAUSE_BUTTON_TEXTS = new String[] { "Resume", "Save", "Levels" };
 
 	private ButtonList pauseMenuButtons;
 	private BitmapFont pauseMenuFont;
@@ -220,8 +220,7 @@ public class GameScreen extends ScreenBase {
 	private void selectQuit() {
 		if (getGame().areAllLevelsCompleted()) {
 			setScreen(new WinScreen(getGame()));
-		}
-		else {
+		} else {
 			setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
 		}
 	}
@@ -243,7 +242,8 @@ public class GameScreen extends ScreenBase {
 
 	@Override
 	public void updateScreen(float deltaTime) {
-		if (getStateForAction(Action.PAUSE) > 0) {
+		// if (getStateForAction(Action.PAUSE) > 0) {
+		if (isStateForAction(Action.PAUSE) || isStateForAction(Action.ESCAPE)) {
 			if (!pauseJustPressed) {
 				setPaused(!paused);
 			}
@@ -259,10 +259,10 @@ public class GameScreen extends ScreenBase {
 				selectPauseOption(selected);
 			}
 
-			if (getStateForAction(Action.ESCAPE) > 0) {
-				selectQuit();
-				return;
-			}
+			// if (getStateForAction(Action.ESCAPE) > 0) {
+			// selectQuit();
+			// return;
+			// }
 
 		} else {
 			if (!entityManager.isTransitioning()) {
