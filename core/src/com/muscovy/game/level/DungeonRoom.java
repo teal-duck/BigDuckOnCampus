@@ -45,6 +45,8 @@ public class DungeonRoom {
 	private Rectangle[] walls;
 	private Rectangle[] projectileWalls;
 	private RoomType roomType = RoomType.NORMAL;
+	private int itemSpawnX;
+	private int itemSpawnY;
 
 	private boolean hasUpDoor = false;
 	private boolean hasRightDoor = false;
@@ -237,6 +239,10 @@ public class DungeonRoom {
 						break;
 					case DungeonRoomTemplateLoader.HEALTHPACK:
 						createHealthPack(col, fixedY);
+						break;
+					case DungeonRoomTemplateLoader.POWERUP:
+						setItemSpawnX(col);
+						setItemSpawnY(fixedY);
 						break;
 					default:
 						System.out.println("Unrecognised cell " + cell + "; location (" + col
@@ -640,5 +646,25 @@ public class DungeonRoom {
 	 */
 	public Texture getBackgroundTexture() {
 		return backgroundTexture;
+	}
+
+
+	public int getItemSpawnX() {
+		return itemSpawnX;
+	}
+
+
+	public void setItemSpawnX(int itemSpawnX) {
+		this.itemSpawnX = itemSpawnX;
+	}
+
+
+	public int getItemSpawnY() {
+		return itemSpawnY;
+	}
+
+
+	public void setItemSpawnY(int itemSpawnY) {
+		this.itemSpawnY = itemSpawnY;
 	}
 }

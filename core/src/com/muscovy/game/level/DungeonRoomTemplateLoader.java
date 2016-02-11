@@ -23,6 +23,7 @@ public class DungeonRoomTemplateLoader {
 	 */
 	public static final int MAYBE_ENEMY = 4;
 	public static final int HEALTHPACK = 5;
+	public static final int POWERUP = 6;
 
 	private String filename;
 	private int[][][] roomTemplates;

@@ -279,7 +279,6 @@ public class PlayerCharacter extends MoveableEntity {
 		int count = 0;
 		switch (shotType) {
 		case SINGLE:
-			// projectileLife = 20f;
 			count = 1;
 			break;
 		case DOUBLE:
