@@ -15,6 +15,7 @@ import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.input.ControlMapCreator;
 import com.muscovy.game.input.controller.ControllerHelper;
+import com.muscovy.game.level.Level;
 import com.muscovy.game.save.control.SaveControls;
 import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.save.game.SaveGame;
@@ -244,6 +245,14 @@ public class MuscovyGame extends Game {
 	 */
 	public void setLevels(Levels levels) {
 		this.levels = levels;
+	}
+	
+	/**
+	 * 
+	 * @return True if all levels have been completed.
+	 */
+	public boolean areAllLevelsCompleted() {
+		return levels.areAllLevelsCompleted();
 	}
 
 

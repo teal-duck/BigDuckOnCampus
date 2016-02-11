@@ -91,4 +91,16 @@ public class Levels {
 	public boolean isLevelCompleted(int level) {
 		return getLevel(level).isCompleted();
 	}
+	
+	/**
+	 * 
+	 * @return True if all levels have been completed.
+	 */
+	public boolean areAllLevelsCompleted() {
+		for (Level level : levels) {
+			if (!level.isCompleted())
+				return false;
+		}
+		return true;
+	}
 }
