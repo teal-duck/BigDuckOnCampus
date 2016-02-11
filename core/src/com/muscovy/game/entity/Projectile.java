@@ -91,7 +91,6 @@ public class Projectile extends OnscreenDrawable {
 	public void movementLogic(float deltaTime) {
 		switch (projectileType) {
 		case STANDARD:
-			//velocity.rotate(1);
 			break;
 		case HOMING:
 			// TODO: Homing projectile logic
@@ -100,6 +99,9 @@ public class Projectile extends OnscreenDrawable {
 			velocity.set(player.getCenter()).sub(getCenter());
 			velocity.setLength(speed);
 		case FLAMES:
+			break;
+		case CURVED:
+			velocity.rotate(1f);
 			break;
 		}
 
