@@ -290,7 +290,7 @@ public class PlayerCharacter extends MoveableEntity {
 		case FLAME_THROWER:
 			attackInterval = 0.03f;
 			projectileType = ProjectileType.FLAMES;
-			count = 3;
+			// count = 3;
 			break;
 		}
 
@@ -467,6 +467,21 @@ public class PlayerCharacter extends MoveableEntity {
 	 */
 	public void setTimeSinceLastAttack(float timeSinceLastAttack) {
 		this.timeSinceLastAttack = timeSinceLastAttack;
+	}
+
+
+	public ProjectileType getProjectileType() {
+		return projectileType;
+	}
+
+
+	public void setProjectileType(ProjectileType projectileType) {
+		this.projectileType = projectileType;
+	}
+
+
+	public PlayerShotType getShotType() {
+		return shotType;
 	}
 
 

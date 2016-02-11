@@ -598,7 +598,6 @@ public class GameScreen extends ScreenBase {
 	private void projectileWallCollision(Projectile projectile) {
 		if (Intersector.overlaps(projectile.getCollisionBox(),
 				entityManager.getCurrentDungeonRoom().getBottomProjectileWall())) {
-			System.out.println("Test");
 			projectile.killSelf();
 		}
 
