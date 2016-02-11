@@ -68,8 +68,7 @@ public class LoadingScreen extends ScreenBase {
 
 			if (getGame().areAllLevelsCompleted()) {
 				setScreen(new WinScreen(getGame()));
-			}
-			else {
+			} else {
 				setScreen(new LevelSelectScreen(getGame()));
 			}
 		}

@@ -220,8 +220,7 @@ public class GameScreen extends ScreenBase {
 	private void selectQuit() {
 		if (getGame().areAllLevelsCompleted()) {
 			setScreen(new WinScreen(getGame()));
-		}
-		else {
+		} else {
 			setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
 		}
 	}
