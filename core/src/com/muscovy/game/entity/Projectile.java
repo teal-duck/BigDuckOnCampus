@@ -91,6 +91,7 @@ public class Projectile extends OnscreenDrawable {
 	public void movementLogic(float deltaTime) {
 		switch (projectileType) {
 		case STANDARD:
+			//velocity.rotate(1);
 			break;
 		case HOMING:
 			// TODO: Homing projectile logic
@@ -230,20 +231,38 @@ public class Projectile extends OnscreenDrawable {
 
 		float maxSpread = 0;
 		float spreadDelta = 0;
-
+		//count = 8;
 		switch (count) {
 		case 1:
 			maxSpread = 0;
 			spreadDelta = 0;
 			break;
 		case 2:
-			maxSpread = MathUtils.PI / 24;
+			maxSpread =  MathUtils.PI / 24;
 			spreadDelta = maxSpread * 2;
 			break;
 		case 3:
 			maxSpread = (2 * MathUtils.PI) / 12;
 			spreadDelta = maxSpread;
 			break;
+		
+		//up, down, left, right
+		case 4:
+			maxSpread = MathUtils.PI / 2;
+			spreadDelta = maxSpread;
+			break;
+
+		//6 in circle
+		case 6:
+			maxSpread = MathUtils.PI / 3;
+			spreadDelta = maxSpread;
+			break;
+		//8 in a circle
+		case 8:
+			maxSpread = MathUtils.PI / 4;
+			spreadDelta = maxSpread;
+			break;
+			
 		default:
 			System.out.println("Spread not calculated for " + count + " bullets");
 			maxSpread = 0;
