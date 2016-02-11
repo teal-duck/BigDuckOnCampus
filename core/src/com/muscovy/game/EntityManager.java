@@ -732,6 +732,12 @@ public class EntityManager {
 	public boolean checkLevelCompletion() {
 		ObjectiveType objectiveType = level.getObjectiveType();
 		LevelType levelType = level.getLevelType();
+		
+		// Check if room is complete
+		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getHealthPack() != null) {
+			addNewItem(currentDungeonRoom.getHealthPack());
+			currentDungeonRoom.removeHealthPack();
+		}
 
 		// If the level has already been completed, don't check again
 		boolean completed = level.isCompleted();

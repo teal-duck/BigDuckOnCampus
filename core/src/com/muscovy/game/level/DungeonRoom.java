@@ -2,8 +2,10 @@ package com.muscovy.game.level;
 
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
@@ -50,6 +52,7 @@ public class DungeonRoom {
 	// These should be overwritten if placed in the room. We can test if these are still -1, and then throw an error.
 	private int itemSpawnX = -1;
 	private int itemSpawnY = -1;
+	private Item healthPack = null;
 
 	private boolean hasUpDoor = false;
 	private boolean hasRightDoor = false;
@@ -186,16 +189,20 @@ public class DungeonRoom {
 	 * @param y
 	 */
 	private void createHealthPack(int x, int y) {
-		Vector2 position = new Vector2(x, y);
-		Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
-				ItemType.HEALTH);
-
-		healthPack.setXTiles(x);
-		healthPack.setYTiles(y);
-		addItem(healthPack);
+		Random random = game.getRandom();
+		if (MathUtils.randomBoolean(0.5f)) {
+			Vector2 position = new Vector2(x, y);
+			Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
+					ItemType.HEALTH);
+	
+			healthPack.setXTiles(x);
+			healthPack.setYTiles(y);
+			this.healthPack = healthPack;
+			//addItem(this.healthPack);
+		}
 	}
 
-
+	
 	/**
 	 * @param levelType
 	 * @param templateLoader
@@ -293,6 +300,9 @@ public class DungeonRoom {
 			enemy.setProjectileType(ProjectileType.CURVED);
 
 			addEnemy(enemy);
+			
+			
+			
 			break;
 
 		case ITEM:
@@ -543,6 +553,12 @@ public class DungeonRoom {
 	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			allEnemiesDead = true;
+//			if (healthPack != null) {
+//				System.out.println("healthpack added");
+//				addItem(healthPack);
+//				//game.
+//				//healthPack = null;
+//			}
 		}
 		return allEnemiesDead;
 	}
@@ -686,5 +702,14 @@ public class DungeonRoom {
 
 	public void setItemSpawnY(int itemSpawnY) {
 		this.itemSpawnY = itemSpawnY;
+	}
+
+
+	public Item getHealthPack() {
+		return healthPack;
+	}
+	
+	public void removeHealthPack() {
+		healthPack = null;
 	}
 }
