@@ -11,8 +11,10 @@ import com.muscovy.game.level.DungeonRoom;
 
 
 /**
- * Created by SeldomBucket on 05-Jan-16. Class is inherited by all entities in game that can be collided with. All
- * inheritors of Collidable exist on a 64x64 tile. Players and enemies both exist on a 64x64 tile.
+ * Created by SeldomBucket on 05-Jan-16. 
+ * 
+ * Base class for all collidable entities.
+ * Provides methods to help perform collision calculations.
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -27,43 +29,35 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	public Collidable(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
-		initialisePosition(position);
+		//initialisePosition(position);
 		setUpBoxes();
 	}
 
 
-	/**
-	 * Initialisation Methods
-	 */
-	// Initialise X and Y for moving the collidable before the hitboxes are set up
-	/**
-	 * @param x
-	 */
-	public void initialiseX(float x) {
-		super.setX(x);
-	}
+//	// Initialise X and Y for moving the collidable before the hitboxes are set up
+//	private void initialiseX(float x) {
+//		super.setX(x);
+//	}
+//
+//	private void initialiseY(float y) {
+//		super.setY(y);
+//	}
+//
+//
+//	/**
+//	 * 
+//	 * @param position
+//	 */
+//	public void initialisePosition(Vector2 position) {
+//		initialiseX(position.x);
+//		initialiseY(position.y);
+//	}
 
 
 	/**
-	 * @param y
-	 */
-	public void initialiseY(float y) {
-		super.setY(y);
-	}
-
-
-	/**
-	 * @param position
-	 */
-	public void initialisePosition(Vector2 position) {
-		initialiseX(position.x);
-		initialiseY(position.y);
-	}
-
-
-	/**
-	 * Initialises circle and rectangle hitboxes based on current x and y, width and height Circle hitbox
-	 * automatically has radius of width/2 Rectangle hitbox automatically same size as the sprite image
+	 * Initialises circle and rectangle hitboxes based on current x and y, width and height.
+	 * Circle hitbox automatically has radius of width/2.
+	 * Rectangle hitbox automatically same size as the sprite image.
 	 */
 	public void setUpBoxes() {
 		float x = getX();
@@ -77,21 +71,34 @@ public abstract class Collidable extends OnscreenDrawable {
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}
 
-
+	/**
+	 * Sets the x co-ordinate for the entity and updates the hitbox accordingly.
+	 * 
+	 * @param x {@inheritDoc}
+	 */
 	@Override
 	public void setX(float x) {
 		super.setX(x);
 		updateBoxesPosition();
 	}
 
-
+	/**
+	 * Sets the y co-ordinate for the entity and updates the hitbox accordingly.
+	 * 
+	 * @param y {@inheritDoc}
+	 */
 	@Override
 	public void setY(float y) {
 		super.setY(y);
 		updateBoxesPosition();
 	}
 
-
+	
+	/**
+	 * Sets the position for the entity and updates the hitbox accordingly.
+	 * 
+	 * @param position {@inheritDoc}
+	 */
 	@Override
 	public void setPosition(Vector2 position) {
 		super.setPosition(position);
@@ -99,13 +106,15 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
-	/**
+	/*
 	 * setXTiles and setYTiles moves the collidable to fit on the grid directly. Clamps to walls of dungeon room,
 	 * assuming a 64x64 collidable Useful for placing stuff in the dungeon rooms
 	 */
 
 	/**
 	 * Use this when setting something in the playable space to make sure it is on the grid.
+	 * Sets the entity's x co-ordinate to place it on the given tile, clamping the value to
+	 * ensure that it is placed within the room's walls.
 	 *
 	 * @param xTiles
 	 */
@@ -120,6 +129,8 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	/**
 	 * Use this when setting something in the playable space to make sure it is on the grid.
+	 * Sets the entity's y co-ordinate to place it on the given tile, clamping the value to
+	 * ensure that it is placed within the room's walls.
 	 *
 	 * @param yTiles
 	 */
@@ -133,7 +144,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * Calculates the x and y of the bottom left corner using radius and y offset of the hitbox
+	 * Places the entity such that its hitbox is located at the given co-ordinates.
 	 *
 	 * @param x
 	 * @param y
@@ -145,6 +156,9 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
+	 * Raises the position of the hitbox with regard to the sprite.
+	 * Use to align hitbox with sprite.
+	 * 
 	 * @param hitboxYOffset
 	 */
 	public void setHitboxYOffset(float hitboxYOffset) {
@@ -153,7 +167,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * @param radius
+	 * @param radius Length of radius for circle hitbox in pixels.
 	 */
 	public void setHitboxRadius(float radius) {
 		circleHitbox.setRadius(radius);
@@ -161,7 +175,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * @return
+	 * @return Instance of the rectangle hitbox.
 	 */
 	public Rectangle getRectangleHitbox() {
 		return rectangleHitbox;
@@ -169,19 +183,19 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * @return
+	 * @return Instance of the circle hitbox.
 	 */
 	public Circle getCircleHitbox() {
 		return circleHitbox;
 	}
 
 
-	/**
+	/*
 	 * Collision Methods
 	 */
 	/**
 	 * Calculates angle between the centre of the circles, and calculates the x & y distance needed so the centres
-	 * are this radius + collidable radius away. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+	 * are this radius + collidable radius away. (MOVES THE CALLING ENTITY AWAY FROM THE GIVEN COLLIDABLE)
 	 *
 	 * @param collidable
 	 */
@@ -231,7 +245,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	/**
 	 * Checks where the centre of the circle of the other collidable is in relation to the rectangle, and moves it
-	 * accordingly. (MOVES THIS AWAY FROM THE GIVEN COLLIDABLE)
+	 * accordingly. (MOVES THE CALLING ENTITY AWAY FROM THE GIVEN COLLIDABLE)
 	 *
 	 * @param collidable
 	 */
@@ -303,7 +317,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	}
 
 
-	/**
+	/*
 	 * Angle methods use trig to calculate angles, then it's position to calculate the angle clockwise from the
 	 * vertical
 	 */
@@ -359,7 +373,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 *
+	 * Sets the hitboxes' positions to the entity's current position.
 	 */
 	public void updateBoxesPosition() {
 		circleHitbox.setX(getX() + (getWidth() / 2));
@@ -371,7 +385,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	/**
 	 * @param collidable
-	 * @return
+	 * @return True if the two entities are colliding.
 	 */
 	public boolean collides(Collidable collidable) {
 		return Intersector.overlaps(circleHitbox, collidable.getCircleHitbox());
@@ -383,9 +397,7 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * Originally this code used Java 8's Math.floorDiv. However for Java 7 compatibility, its implementation is
 	 * included here.
 	 *
-	 * @param x
-	 * @param y
-	 * @return
+	 * @return x/y rounded down to next long.
 	 */
 	public static long floorDiv(long x, long y) {
 		long r = x / y;
