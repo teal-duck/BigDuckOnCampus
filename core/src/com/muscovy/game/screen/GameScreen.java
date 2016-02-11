@@ -164,6 +164,7 @@ public class GameScreen extends ScreenBase {
 
 		playerCharacter.getAcceleration().setZero();
 		playerCharacter.getVelocity().setZero();
+		playerCharacter.setFullFlightBar();
 	}
 
 
@@ -217,7 +218,7 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void selectQuit() {
-		setScreen(new LevelSelectScreen(getGame()));
+		setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
 	}
 
 
@@ -254,7 +255,7 @@ public class GameScreen extends ScreenBase {
 			}
 
 			if (getStateForAction(Action.ESCAPE) > 0) {
-				setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
+				selectQuit();
 				return;
 			}
 

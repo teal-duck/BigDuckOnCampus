@@ -120,6 +120,7 @@ public class PlayerCharacter extends MoveableEntity {
 		setHitboxYOffset(PlayerCharacter.HITBOX_Y_OFFSET); // Just to get the hitbox in line with that fat fuck
 									// of a duck's body
 		setHitboxRadius(PlayerCharacter.HITBOX_RADIUS);
+		setFullFlightBar();
 	}
 
 
@@ -290,7 +291,7 @@ public class PlayerCharacter extends MoveableEntity {
 		case FLAME_THROWER:
 			attackInterval = 0.03f;
 			projectileType = ProjectileType.FLAMES;
-			count = 4;
+			count = 3;
 			break;
 		}
 
@@ -614,6 +615,11 @@ public class PlayerCharacter extends MoveableEntity {
 	 */
 	public float getFlightTime() {
 		return flightTime;
+	}
+
+
+	public void setFullFlightBar() {
+		flightTime = maxFlightTime;
 	}
 
 
