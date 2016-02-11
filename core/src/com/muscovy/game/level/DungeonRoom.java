@@ -46,8 +46,10 @@ public class DungeonRoom {
 	private Rectangle[] walls;
 	private Rectangle[] projectileWalls;
 	private RoomType roomType = RoomType.NORMAL;
-	private int itemSpawnX;
-	private int itemSpawnY;
+	
+	// These should be overwritten if placed in the room. We can test if these are still -1, and then throw an error.
+	private int itemSpawnX = -1;
+	private int itemSpawnY = -1;
 
 	private boolean hasUpDoor = false;
 	private boolean hasRightDoor = false;
@@ -252,6 +254,13 @@ public class DungeonRoom {
 					}
 				}
 			}
+			
+			if (getItemSpawnX() < 0 || getItemSpawnY() < 0) {
+				System.out.println("Item spawn location not found. Defaulting to (0, 0).");
+				setItemSpawnX(0);
+				setItemSpawnY(0);
+			}
+				
 			break;
 
 		case BOSS:
