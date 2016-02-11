@@ -371,6 +371,9 @@ public class GameScreen extends ScreenBase {
 		shapeRenderer.setProjectionMatrix(getCamera().combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLACK);
+		float borderSize = 2f;
+		shapeRenderer.rect(flightBarX - borderSize, flightBarY - borderSize, flightBarWidth + (borderSize * 2),
+				flightBarHeight + (borderSize * 2));
 		shapeRenderer.rect(flightBarX, flightBarY, flightBarWidth, flightBarHeight);
 
 		if (playerCharacter.hasUsedAllFlight()) {
