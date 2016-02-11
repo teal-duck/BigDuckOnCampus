@@ -105,7 +105,7 @@ public enum LevelType {
 
 		if (levelType == CONSTANTINE) {
 			itemType = ItemType.TRIPLE_SHOT;
-		} else if (levelType == GOODRICKE) {
+		} else if (levelType == LANGWITH) {
 			itemType = ItemType.RAPID_FIRE;
 		} else {
 			itemType = null;
