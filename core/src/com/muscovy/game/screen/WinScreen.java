@@ -14,14 +14,14 @@ import com.muscovy.game.input.Action;
 /**
  *
  */
-public class GameOverScreen extends ScreenBase {
+public class WinScreen extends ScreenBase {
 	private GUI gui;
 	private BitmapFont gameOverFont;
 	private boolean enterJustPressed = true;
 	private boolean escapeJustPressed = true;
 
 
-	public GameOverScreen(MuscovyGame game) {
+	public WinScreen(MuscovyGame game) {
 		super(game);
 
 		initialiseGui();
@@ -33,11 +33,11 @@ public class GameOverScreen extends ScreenBase {
 	 */
 	private void initialiseGui() {
 		gameOverFont = AssetLocations.newFont20();
-		gameOverFont.setColor(Color.RED);
+		gameOverFont.setColor(Color.FOREST);
 
 		gui = new GUI();
-		gui.addData("Gameover", "Game Over", gameOverFont, (getWindowWidth() / 2) - 80, 150);
-		gui.addData("Gameover", "Press " + Action.ENTER.toString() + " to go to main menu or " + Action.ESCAPE.toString() + " to quit", gameOverFont,
+		gui.addData("Gamewin", "You won!", gameOverFont, (getWindowWidth() / 2) - 80, 150);
+		gui.addData("Gamewin", "Press " + Action.ENTER.toString() + " to go to main menu or " + Action.ESCAPE.toString() + " to quit", gameOverFont,
 				(getWindowWidth() / 2) - 350, 120);
 	}
 
