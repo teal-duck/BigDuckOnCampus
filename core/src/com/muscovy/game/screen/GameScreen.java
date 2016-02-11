@@ -730,9 +730,8 @@ public class GameScreen extends ScreenBase {
 				enemy.moveToNearestEdgeCircle(playerCharacter);
 			}
 
-			if (enemy.getAttackType() != AttackType.RANGE) {
-				playerCharacter.takeDamage(enemy.getTouchDamage());
-			}
+			playerCharacter.takeDamage(enemy.getTouchDamage());
+
 		}
 	}
 
