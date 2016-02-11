@@ -13,8 +13,8 @@ import com.muscovy.game.enums.ProjectileType;
  */
 public class Item extends Collidable {
 	/**
-	 * This will be for items which change your stats like fire rate etc, but not for pickups which increase your
-	 * health etc
+	 * For any items that can be picked up
+	 *
 	 */
 
 	private ItemType type;

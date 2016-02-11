@@ -30,7 +30,7 @@ public class Projectile extends OnscreenDrawable {
 	private ProjectileType projectileType = ProjectileType.STANDARD;
 
 	private int rotateDirection = 1;
-	private float rotateSpeed = 1f;
+	private float rotateSpeed = 1.5f;
 
 
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,

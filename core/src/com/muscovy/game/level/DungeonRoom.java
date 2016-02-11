@@ -267,12 +267,14 @@ public class DungeonRoom {
 			enemy.setMaxSpeed(Enemy.BOSS_MAX_SPEED);
 			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
 			enemy.setTouchDamage(20);
-			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
+
 			enemy.setScoreOnDeath(3000);
 			enemy.setCurrentHealth(600);
 			enemy.setHitboxRadius(80);
 			enemy.setMovementRange(1000);
 
+			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
+			// enemy.setShotType(EnemyShotType.EIGHT_DIRECTIONS);
 			// enemy.setProjectileType(ProjectileType.HOMING);
 			enemy.setProjectileType(ProjectileType.CURVED);
 

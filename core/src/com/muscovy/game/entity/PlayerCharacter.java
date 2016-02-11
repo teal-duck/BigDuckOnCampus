@@ -287,11 +287,6 @@ public class PlayerCharacter extends MoveableEntity {
 		case TRIPLE:
 			count = 3;
 			break;
-		case FLAME_THROWER:
-			attackInterval = 0.03f;
-			projectileType = ProjectileType.FLAMES;
-			// count = 3;
-			break;
 		}
 
 		return Projectile.shootProjectiles(game, count, position, direction, projectileLife, projectileSpeed,
