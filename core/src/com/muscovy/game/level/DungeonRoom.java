@@ -121,7 +121,7 @@ public class DungeonRoom {
 	 * @return
 	 */
 	private Obstacle createDamagingObstacle(int x, int y) {
-		Obstacle obstacle = new Obstacle(game, AssetLocations.WASTE_BIN, new Vector2(x, y));
+		Obstacle obstacle = new Obstacle(game, AssetLocations.SPIKES, new Vector2(x, y));
 		obstacle.setXTiles(x);
 		obstacle.setYTiles(y);
 
