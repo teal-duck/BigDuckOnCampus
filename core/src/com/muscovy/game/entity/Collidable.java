@@ -11,10 +11,9 @@ import com.muscovy.game.level.DungeonRoom;
 
 
 /**
- * Created by SeldomBucket on 05-Jan-16. 
- * 
- * Base class for all collidable entities.
- * Provides methods to help perform collision calculations.
+ * Created by SeldomBucket on 05-Jan-16.
+ *
+ * Base class for all collidable entities. Provides methods to help perform collision calculations.
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -29,35 +28,33 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	public Collidable(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
-		//initialisePosition(position);
+		// initialisePosition(position);
 		setUpBoxes();
 	}
 
 
-//	// Initialise X and Y for moving the collidable before the hitboxes are set up
-//	private void initialiseX(float x) {
-//		super.setX(x);
-//	}
-//
-//	private void initialiseY(float y) {
-//		super.setY(y);
-//	}
-//
-//
-//	/**
-//	 * 
-//	 * @param position
-//	 */
-//	public void initialisePosition(Vector2 position) {
-//		initialiseX(position.x);
-//		initialiseY(position.y);
-//	}
-
+	// // Initialise X and Y for moving the collidable before the hitboxes are set up
+	// private void initialiseX(float x) {
+	// super.setX(x);
+	// }
+	//
+	// private void initialiseY(float y) {
+	// super.setY(y);
+	// }
+	//
+	//
+	// /**
+	// *
+	// * @param position
+	// */
+	// public void initialisePosition(Vector2 position) {
+	// initialiseX(position.x);
+	// initialiseY(position.y);
+	// }
 
 	/**
-	 * Initialises circle and rectangle hitboxes based on current x and y, width and height.
-	 * Circle hitbox automatically has radius of width/2.
-	 * Rectangle hitbox automatically same size as the sprite image.
+	 * Initialises circle and rectangle hitboxes based on current x and y, width and height. Circle hitbox
+	 * automatically has radius of width/2. Rectangle hitbox automatically same size as the sprite image.
 	 */
 	public void setUpBoxes() {
 		float x = getX();
@@ -71,10 +68,12 @@ public abstract class Collidable extends OnscreenDrawable {
 		rectangleHitbox = new Rectangle(x, y, width, height);
 	}
 
+
 	/**
 	 * Sets the x co-ordinate for the entity and updates the hitbox accordingly.
-	 * 
-	 * @param x {@inheritDoc}
+	 *
+	 * @param x
+	 *                {@inheritDoc}
 	 */
 	@Override
 	public void setX(float x) {
@@ -82,10 +81,12 @@ public abstract class Collidable extends OnscreenDrawable {
 		updateBoxesPosition();
 	}
 
+
 	/**
 	 * Sets the y co-ordinate for the entity and updates the hitbox accordingly.
-	 * 
-	 * @param y {@inheritDoc}
+	 *
+	 * @param y
+	 *                {@inheritDoc}
 	 */
 	@Override
 	public void setY(float y) {
@@ -93,11 +94,12 @@ public abstract class Collidable extends OnscreenDrawable {
 		updateBoxesPosition();
 	}
 
-	
+
 	/**
 	 * Sets the position for the entity and updates the hitbox accordingly.
-	 * 
-	 * @param position {@inheritDoc}
+	 *
+	 * @param position
+	 *                {@inheritDoc}
 	 */
 	@Override
 	public void setPosition(Vector2 position) {
@@ -112,9 +114,9 @@ public abstract class Collidable extends OnscreenDrawable {
 	 */
 
 	/**
-	 * Use this when setting something in the playable space to make sure it is on the grid.
-	 * Sets the entity's x co-ordinate to place it on the given tile, clamping the value to
-	 * ensure that it is placed within the room's walls.
+	 * Use this when setting something in the playable space to make sure it is on the grid. Sets the entity's x
+	 * co-ordinate to place it on the given tile, clamping the value to ensure that it is placed within the room's
+	 * walls.
 	 *
 	 * @param xTiles
 	 */
@@ -128,9 +130,9 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * Use this when setting something in the playable space to make sure it is on the grid.
-	 * Sets the entity's y co-ordinate to place it on the given tile, clamping the value to
-	 * ensure that it is placed within the room's walls.
+	 * Use this when setting something in the playable space to make sure it is on the grid. Sets the entity's y
+	 * co-ordinate to place it on the given tile, clamping the value to ensure that it is placed within the room's
+	 * walls.
 	 *
 	 * @param yTiles
 	 */
@@ -156,9 +158,8 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * Raises the position of the hitbox with regard to the sprite.
-	 * Use to align hitbox with sprite.
-	 * 
+	 * Raises the position of the hitbox with regard to the sprite. Use to align hitbox with sprite.
+	 *
 	 * @param hitboxYOffset
 	 */
 	public void setHitboxYOffset(float hitboxYOffset) {
@@ -167,7 +168,8 @@ public abstract class Collidable extends OnscreenDrawable {
 
 
 	/**
-	 * @param radius Length of radius for circle hitbox in pixels.
+	 * @param radius
+	 *                Length of radius for circle hitbox in pixels.
 	 */
 	public void setHitboxRadius(float radius) {
 		circleHitbox.setRadius(radius);

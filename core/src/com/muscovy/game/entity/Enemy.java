@@ -205,6 +205,14 @@ public class Enemy extends MoveableEntity {
 			bulletsToShoot = 1;
 			shootDirection.setToRandomDirection();
 			break;
+		case EIGHT_DIRECTIONS:
+			break;
+		case FOUR_DIRECTIONS:
+			break;
+		case SIX_DIRECTIONS:
+			break;
+		default:
+			break;
 		}
 
 		if (bulletsToShoot > 0) {

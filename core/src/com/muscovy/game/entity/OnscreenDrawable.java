@@ -8,15 +8,14 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
- * Base class for all drawable entities. 
- * Provides methods around the entity's sprite and position on the map. 
+ * Base class for all drawable entities. Provides methods around the entity's sprite and position on the map.
  */
 public abstract class OnscreenDrawable {
 	/**
 	 * Instance of the game in which the entity exists.
 	 */
 	public final MuscovyGame game;
-	
+
 	private String textureName;
 	private Sprite sprite;
 	private Vector2 position;
@@ -24,9 +23,11 @@ public abstract class OnscreenDrawable {
 
 	/**
 	 * Places the entity at (0, 0).
-	 * 
-	 * @param game Instance of the game in which the entity exists.
-	 * @param textureName Filename storing the texture.
+	 *
+	 * @param game
+	 *                Instance of the game in which the entity exists.
+	 * @param textureName
+	 *                Filename storing the texture.
 	 */
 	public OnscreenDrawable(MuscovyGame game, String textureName) {
 		this(game, textureName, new Vector2(0, 0));
@@ -34,10 +35,13 @@ public abstract class OnscreenDrawable {
 
 
 	/**
-	 * 
-	 * @param game Instance of the game in which the entity exists.
-	 * @param textureName Filename storing the texture.
-	 * @param position {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
+	 *
+	 * @param game
+	 *                Instance of the game in which the entity exists.
+	 * @param textureName
+	 *                Filename storing the texture.
+	 * @param position
+	 *                {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
 	 */
 	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
 		this.game = game;
@@ -84,7 +88,8 @@ public abstract class OnscreenDrawable {
 	 * Sets the texture name. Also loads the texture from the texture map and updates the sprite to use this
 	 * texture.
 	 *
-	 * @param textureName Filename storing the texture.
+	 * @param textureName
+	 *                Filename storing the texture.
 	 */
 	public void setTexture(String textureName) {
 		this.textureName = textureName;
@@ -110,7 +115,8 @@ public abstract class OnscreenDrawable {
 
 
 	/**
-	 * @param x Co-ordinate at bottom left of entity in pixels.
+	 * @param x
+	 *                Co-ordinate at bottom left of entity in pixels.
 	 */
 	public void setX(float x) {
 		position.x = x;
@@ -126,7 +132,8 @@ public abstract class OnscreenDrawable {
 
 
 	/**
-	 * @param y Co-ordinate at bottom left of entity in pixels.
+	 * @param y
+	 *                Co-ordinate at bottom left of entity in pixels.
 	 */
 	public void setY(float y) {
 		position.y = y;
@@ -142,7 +149,8 @@ public abstract class OnscreenDrawable {
 
 
 	/**
-	 * @param position Co-ordinates at bottom left of entity in pixels.
+	 * @param position
+	 *                Co-ordinates at bottom left of entity in pixels.
 	 */
 	public void setPosition(Vector2 position) {
 		this.position.set(position);

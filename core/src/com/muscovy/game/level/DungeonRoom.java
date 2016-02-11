@@ -16,6 +16,7 @@ import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.enums.RoomType;
 
 
@@ -272,6 +273,9 @@ public class DungeonRoom {
 			enemy.setCurrentHealth(600);
 			enemy.setHitboxRadius(80);
 			enemy.setMovementRange(1000);
+
+			enemy.setProjectileType(ProjectileType.CURVED);
+
 			addEnemy(enemy);
 			break;
 
