@@ -36,7 +36,7 @@ import com.muscovy.game.level.Level;
  */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
-	private static final float ROOM_START_TIME = 1f;
+	private static final float ROOM_START_TIME = 0f;
 
 	private EntityManager entityManager;
 	private PlayerCharacter playerCharacter;
@@ -376,6 +376,9 @@ public class GameScreen extends ScreenBase {
 		shapeRenderer.setProjectionMatrix(getCamera().combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLACK);
+		float borderSize = 2f;
+		shapeRenderer.rect(flightBarX - borderSize, flightBarY - borderSize, flightBarWidth + (borderSize * 2),
+				flightBarHeight + (borderSize * 2));
 		shapeRenderer.rect(flightBarX, flightBarY, flightBarWidth, flightBarHeight);
 
 		if (playerCharacter.hasUsedAllFlight()) {
@@ -603,7 +606,6 @@ public class GameScreen extends ScreenBase {
 	private void projectileWallCollision(Projectile projectile) {
 		if (Intersector.overlaps(projectile.getCollisionBox(),
 				entityManager.getCurrentDungeonRoom().getBottomProjectileWall())) {
-			System.out.println("Test");
 			projectile.killSelf();
 		}
 
@@ -736,9 +738,8 @@ public class GameScreen extends ScreenBase {
 				enemy.moveToNearestEdgeCircle(playerCharacter);
 			}
 
-			if (enemy.getAttackType() != AttackType.RANGE) {
-				playerCharacter.takeDamage(enemy.getTouchDamage());
-			}
+			playerCharacter.takeDamage(enemy.getTouchDamage());
+
 		}
 	}
 

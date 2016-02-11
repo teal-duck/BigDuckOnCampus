@@ -12,7 +12,7 @@ import com.muscovy.game.enums.LevelType;
 public class AssetLocations {
 	// Obstacles
 	public static final String RECYLING_BIN = "accommodationAssets/obstacles/binRecycle.png";
-	public static final String WASTE_BIN = "accommodationAssets/obstacles/binWaste.png";
+	public static final String SPIKES = "spikes.png";
 
 	// Enemies
 	public static final String CLEANER = "accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png";
@@ -31,6 +31,7 @@ public class AssetLocations {
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";
 	public static final String RAPID_FIRE = "rapid_fire.png";
+	public static final String FLAME_THROWER = "rapid_fire.png";
 
 	// Open Doors
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
@@ -126,7 +127,7 @@ public class AssetLocations {
 	 */
 	public static TextureMap loadAllTexturesIntoMap(TextureMap textureMap) {
 		textureMap.getTextureOrLoadFile(AssetLocations.RECYLING_BIN);
-		textureMap.getTextureOrLoadFile(AssetLocations.WASTE_BIN);
+		textureMap.getTextureOrLoadFile(AssetLocations.SPIKES);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.CLEANER);
 		textureMap.getTextureOrLoadFile(AssetLocations.STUDENT);

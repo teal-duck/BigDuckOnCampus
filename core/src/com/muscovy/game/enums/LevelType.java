@@ -61,6 +61,8 @@ public enum LevelType {
 			return new LevelParameters(5, 5, 6, 2, 2, ObjectiveType.BOSS);
 		case LANGWITH:
 			return new LevelParameters(6, 6, 5, 3, 3, ObjectiveType.KILL_ENEMIES);
+		case GOODRICKE:
+			return new LevelParameters(6, 6, 10, 3, 3, ObjectiveType.BOSS);
 		default:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		}
@@ -107,6 +109,8 @@ public enum LevelType {
 			itemType = ItemType.TRIPLE_SHOT;
 		} else if (levelType == LANGWITH) {
 			itemType = ItemType.RAPID_FIRE;
+		} else if (levelType == GOODRICKE) {
+			itemType = ItemType.FLAME_THROWER;
 		} else {
 			itemType = null;
 		}

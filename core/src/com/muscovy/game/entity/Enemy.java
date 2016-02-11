@@ -220,7 +220,8 @@ public class Enemy extends MoveableEntity {
 
 		if (bulletsToShoot > 0) {
 			return Projectile.shootProjectiles(game, bulletsToShoot, position, shootDirection,
-					projectileRange, projectileSpeed, ProjectileDamager.PLAYER, projectileType);
+					projectileLife, projectileSpeed, ProjectileDamager.PLAYER, projectileType);
+
 		} else {
 			return new ArrayList<Projectile>();
 		}
