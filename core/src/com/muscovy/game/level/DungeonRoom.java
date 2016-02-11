@@ -262,7 +262,7 @@ public class DungeonRoom {
 					- (enemy.getWidth() / game.getTileSize() / 2)));
 			enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
 					- (enemy.getHeight() / game.getTileSize() / 2)));
-			enemy.setAttackType(AttackType.BOTH);
+			enemy.setAttackType(AttackType.RANGE);
 			enemy.setMovementType(MovementType.FOLLOW);
 			enemy.setMaxSpeed(Enemy.BOSS_MAX_SPEED);
 			enemy.setProjectileVelocity(enemy.getProjectileVelocity() * 2);
@@ -273,9 +273,14 @@ public class DungeonRoom {
 			enemy.setHitboxRadius(80);
 			enemy.setMovementRange(1000);
 
+			
+			enemy.setProjectileLife(2);
+
+
 			enemy.setShotType(EnemyShotType.TRIPLE_TOWARDS_PLAYER);
 			// enemy.setShotType(EnemyShotType.EIGHT_DIRECTIONS);
 			// enemy.setProjectileType(ProjectileType.HOMING);
+
 			enemy.setProjectileType(ProjectileType.CURVED);
 
 			addEnemy(enemy);
