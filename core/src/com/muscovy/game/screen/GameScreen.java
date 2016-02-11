@@ -218,7 +218,12 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void selectQuit() {
-		setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
+		if (getGame().areAllLevelsCompleted()) {
+			setScreen(new WinScreen(getGame()));
+		}
+		else {
+			setScreen(new LevelSelectScreen(getGame(), level.getLevelType()));
+		}
 	}
 
 
