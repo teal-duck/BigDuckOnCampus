@@ -28,29 +28,9 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	public Collidable(MuscovyGame game, String textureName, Vector2 position) {
 		super(game, textureName, position);
-		// initialisePosition(position);
 		setUpBoxes();
 	}
 
-
-	// // Initialise X and Y for moving the collidable before the hitboxes are set up
-	// private void initialiseX(float x) {
-	// super.setX(x);
-	// }
-	//
-	// private void initialiseY(float y) {
-	// super.setY(y);
-	// }
-	//
-	//
-	// /**
-	// *
-	// * @param position
-	// */
-	// public void initialisePosition(Vector2 position) {
-	// initialiseX(position.x);
-	// initialiseY(position.y);
-	// }
 
 	/**
 	 * Initialises circle and rectangle hitboxes based on current x and y, width and height. Circle hitbox
