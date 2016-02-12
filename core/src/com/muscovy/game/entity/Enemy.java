@@ -146,7 +146,6 @@ public class Enemy extends MoveableEntity {
 	 * @return
 	 */
 	public PlayerCharacter getPlayer() {
-		// TODO: Make Enemy.getPlayer() nicer
 		return game.getPlayerCharacter();
 	}
 

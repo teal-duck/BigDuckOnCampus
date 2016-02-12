@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.PlayerShotType;
@@ -68,6 +69,9 @@ public class PlayerCharacter extends MoveableEntity {
 
 	private ControlMap controlMap;
 	private Controller controller;
+
+	private float maxBombDropTime = 0.5f;
+	private float bombDropTime = 0;
 
 	private boolean flying = false;
 	private boolean usedAllFlight = false;
@@ -226,6 +230,40 @@ public class PlayerCharacter extends MoveableEntity {
 		} else {
 			setFiring(false);
 		}
+	}
+
+
+	public boolean checkBombDrop(float deltaTime) {
+		bombDropTime -= deltaTime;
+
+		if (bombDropTime <= 0) {
+			bombDropTime = 0;
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Returns null if no bomb dropped.
+	 *
+	 * @return
+	 */
+	public Bomb attemptDropBomb() {
+		if (bombDropTime > 0) {
+			return null;
+		}
+
+		if (controlMap.getStateForAction(Action.DROP_BOMB, controller) > 0) {
+			bombDropTime = maxBombDropTime;
+			float bombTextureRadius = 32;
+			Bomb bomb = new Bomb(game, AssetLocations.BOMB,
+					getCenter().cpy().sub(bombTextureRadius, bombTextureRadius));
+			return bomb;
+		}
+
+		return null;
 	}
 
 

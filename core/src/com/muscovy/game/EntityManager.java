@@ -36,12 +36,12 @@ public class EntityManager {
 	private PlayerCharacter playerCharacter;
 
 	private ArrayList<OnscreenDrawable> renderList;
-	private ArrayList<Obstacle> obstacleList;
-	private ArrayList<Enemy> enemyList;
-	private ArrayList<Projectile> projectileList;
-	private ArrayList<Item> itemList;
-	private ArrayList<Bomb> bombList;
-	private ArrayList<Explosion> explosionList;
+	private ArrayList<Obstacle> obstacles;
+	private ArrayList<Enemy> enemies;
+	private ArrayList<Projectile> projectiles;
+	private ArrayList<Item> items;
+	private ArrayList<Bomb> bombs;
+	private ArrayList<Explosion> explosions;
 
 	private DungeonRoom currentDungeonRoom;
 	private int currentRoomX;
@@ -78,12 +78,12 @@ public class EntityManager {
 		this.level = level;
 
 		renderList = new ArrayList<OnscreenDrawable>();
-		obstacleList = new ArrayList<Obstacle>();
-		enemyList = new ArrayList<Enemy>();
-		projectileList = new ArrayList<Projectile>();
-		itemList = new ArrayList<Item>();
-		bombList = new ArrayList<Bomb>();
-		explosionList = new ArrayList<Explosion>();
+		obstacles = new ArrayList<Obstacle>();
+		enemies = new ArrayList<Enemy>();
+		projectiles = new ArrayList<Projectile>();
+		items = new ArrayList<Item>();
+		bombs = new ArrayList<Bomb>();
+		explosions = new ArrayList<Explosion>();
 
 		currentDungeonRoom = null;
 		previousDungeonRoom = null;
@@ -159,12 +159,12 @@ public class EntityManager {
 
 		// Clear all the lists, ready for the next room
 		renderList.clear();
-		obstacleList.clear();
-		projectileList.clear();
-		enemyList.clear();
-		itemList.clear();
-		bombList.clear();
-		explosionList.clear();
+		obstacles.clear();
+		projectiles.clear();
+		enemies.clear();
+		items.clear();
+		bombs.clear();
+		explosions.clear();
 
 		currentDungeonRoom = dungeonRoom;
 		setFriction(level.getGroundFriction(), dungeonRoom);
@@ -295,7 +295,7 @@ public class EntityManager {
 			roomTimer += deltaTime;
 			renderDungeonRoom(batch, currentDungeonRoom, currentRoomX, currentRoomY, renderList, 0, 0);
 
-			for (Projectile projectile : projectileList) {
+			for (Projectile projectile : projectiles) {
 				// If this projectile doesn't damage the player (because the player shot it)
 				// Leave the colour
 				// Else (it's an enemy's) so darken it
@@ -310,7 +310,7 @@ public class EntityManager {
 
 			batch.setColor(Color.WHITE);
 
-			for (Explosion explosion : explosionList) {
+			for (Explosion explosion : explosions) {
 				float radius = explosion.getRadius();
 				Vector2 bottomLeft = explosion.getPosition();
 
@@ -709,14 +709,14 @@ public class EntityManager {
 	public void killProjectiles() {
 		ArrayList<Projectile> deadProjectiles = new ArrayList<Projectile>();
 
-		for (Projectile projectile : projectileList) {
+		for (Projectile projectile : projectiles) {
 			if (projectile.isLifeOver()) {
 				deadProjectiles.add(projectile);
 			}
 		}
 
 		for (Projectile projectile : deadProjectiles) {
-			projectileList.remove(projectile);
+			projectiles.remove(projectile);
 		}
 	}
 
@@ -727,7 +727,7 @@ public class EntityManager {
 	public void killItems() {
 		ArrayList<Item> deadItems = new ArrayList<Item>();
 
-		for (Item item : itemList) {
+		for (Item item : items) {
 			if (item.isLifeOver()) {
 				deadItems.add(item);
 			}
@@ -735,7 +735,7 @@ public class EntityManager {
 
 		for (Item item : deadItems) {
 			renderList.remove(item);
-			itemList.remove(item);
+			items.remove(item);
 			currentDungeonRoom.removeItem(item);
 		}
 	}
@@ -747,7 +747,7 @@ public class EntityManager {
 	public void killEnemies() {
 		ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 
-		for (Enemy enemy : enemyList) {
+		for (Enemy enemy : enemies) {
 			if (enemy.isLifeOver()) {
 				deadEnemies.add(enemy);
 			}
@@ -756,7 +756,7 @@ public class EntityManager {
 		for (Enemy enemy : deadEnemies) {
 			playerCharacter.increaseScore(enemy.getScoreOnDeath());
 			renderList.remove(enemy);
-			enemyList.remove(enemy);
+			enemies.remove(enemy);
 			currentDungeonRoom.killEnemy(enemy);
 		}
 	}
@@ -863,17 +863,9 @@ public class EntityManager {
 
 
 	/**
-	 * @return
-	 */
-	public ArrayList<Item> getItems() {
-		return itemList;
-	}
-
-
-	/**
 	 * @param drawables
 	 */
-	public void addNewDrawables(ArrayList<OnscreenDrawable> drawables) {
+	public void addNewDrawables(ArrayList<? extends OnscreenDrawable> drawables) {
 		renderList.addAll(drawables);
 	}
 
@@ -884,8 +876,8 @@ public class EntityManager {
 	 * @param obstacle
 	 */
 	public void addNewObstacle(Obstacle obstacle) {
-		renderList.add(obstacle);
-		obstacleList.add(obstacle);
+		addNewDrawable(obstacle);
+		obstacles.add(obstacle);
 	}
 
 
@@ -895,8 +887,8 @@ public class EntityManager {
 	 * @param obstacles
 	 */
 	public void addNewObstacles(ArrayList<Obstacle> obstacles) {
-		renderList.addAll(obstacles);
-		obstacleList.addAll(obstacles);
+		addNewDrawables(obstacles);
+		this.obstacles.addAll(obstacles);
 	}
 
 
@@ -906,8 +898,8 @@ public class EntityManager {
 	 * @param enemy
 	 */
 	public void addNewEnemy(Enemy enemy) {
-		renderList.add(enemy);
-		enemyList.add(enemy);
+		addNewDrawable(enemy);
+		enemies.add(enemy);
 	}
 
 
@@ -917,8 +909,8 @@ public class EntityManager {
 	 * @param enemies
 	 */
 	public void addNewEnemies(ArrayList<Enemy> enemies) {
-		renderList.addAll(enemies);
-		enemyList.addAll(enemies);
+		addNewDrawables(enemies);
+		this.enemies.addAll(enemies);
 	}
 
 
@@ -928,8 +920,8 @@ public class EntityManager {
 	 * @param item
 	 */
 	public void addNewItem(Item item) {
-		renderList.add(item);
-		itemList.add(item);
+		addNewDrawable(item);
+		items.add(item);
 	}
 
 
@@ -939,8 +931,16 @@ public class EntityManager {
 	 * @param items
 	 */
 	public void addNewItems(ArrayList<Item> items) {
-		renderList.addAll(items);
-		itemList.addAll(items);
+		addNewDrawables(items);
+		this.items.addAll(items);
+	}
+
+
+	/**
+	 * @return
+	 */
+	public ArrayList<Item> getItems() {
+		return items;
 	}
 
 
@@ -948,7 +948,7 @@ public class EntityManager {
 	 * @param projectile
 	 */
 	public void addNewProjectile(Projectile projectile) {
-		projectileList.add(projectile);
+		projectiles.add(projectile);
 	}
 
 
@@ -956,7 +956,7 @@ public class EntityManager {
 	 * @param projectiles
 	 */
 	public void addNewProjectiles(ArrayList<Projectile> projectiles) {
-		projectileList.addAll(projectiles);
+		this.projectiles.addAll(projectiles);
 	}
 
 
@@ -964,8 +964,8 @@ public class EntityManager {
 	 * @param bomb
 	 */
 	public void addBomb(Bomb bomb) {
-		bombList.add(bomb);
-		renderList.add(bomb);
+		addNewDrawable(bomb);
+		bombs.add(bomb);
 	}
 
 
@@ -973,16 +973,16 @@ public class EntityManager {
 	 * @param bomb
 	 */
 	public void removeBomb(Bomb bomb) {
-		bombList.remove(bomb);
 		renderList.remove(bomb);
+		bombs.remove(bomb);
 	}
 
 
 	/**
 	 * @return
 	 */
-	public ArrayList<Bomb> getBombList() {
-		return bombList;
+	public ArrayList<Bomb> getBombs() {
+		return bombs;
 	}
 
 
@@ -990,7 +990,7 @@ public class EntityManager {
 	 * @param explosion
 	 */
 	public void addExplosion(Explosion explosion) {
-		explosionList.add(explosion);
+		explosions.add(explosion);
 	}
 
 
@@ -998,7 +998,7 @@ public class EntityManager {
 	 * @param explosion
 	 */
 	public void removeExplosion(Explosion explosion) {
-		explosionList.remove(explosion);
+		explosions.remove(explosion);
 	}
 
 
@@ -1006,7 +1006,7 @@ public class EntityManager {
 	 * @return
 	 */
 	public ArrayList<Explosion> getExplosionList() {
-		return explosionList;
+		return explosions;
 	}
 
 
@@ -1014,7 +1014,7 @@ public class EntityManager {
 	 * @return
 	 */
 	public ArrayList<Obstacle> getObstacles() {
-		return obstacleList;
+		return obstacles;
 	}
 
 
@@ -1022,7 +1022,7 @@ public class EntityManager {
 	 * @return
 	 */
 	public ArrayList<Enemy> getEnemies() {
-		return enemyList;
+		return enemies;
 	}
 
 
@@ -1030,7 +1030,7 @@ public class EntityManager {
 	 * @return
 	 */
 	public ArrayList<Projectile> getProjectiles() {
-		return projectileList;
+		return projectiles;
 	}
 
 

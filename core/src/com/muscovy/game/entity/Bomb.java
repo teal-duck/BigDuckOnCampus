@@ -6,7 +6,7 @@ import com.muscovy.game.EntityManager;
 import com.muscovy.game.MuscovyGame;
 
 
-public class Bomb extends OnscreenDrawable {
+public class Bomb extends MoveableEntity {
 	public static final float BLAST_RADIUS = 64 * 3;
 	public static final float BLAST_TIME = 3f;
 	public static final float BLAST_DAMAGE = 50;
@@ -39,7 +39,8 @@ public class Bomb extends OnscreenDrawable {
 	}
 
 
-	public void update(float deltaTime) {
+	@Override
+	public void selfUpdate(float deltaTime) {
 		blastTime -= deltaTime;
 	}
 
@@ -47,6 +48,10 @@ public class Bomb extends OnscreenDrawable {
 	public void goKaboom(EntityManager entityManager) {
 		for (Enemy enemy : entityManager.getEnemies()) {
 			attemptToBlowUp(enemy);
+		}
+
+		for (Bomb bomb : entityManager.getBombs()) {
+			attemptToBlowUp(bomb);
 		}
 
 		attemptToBlowUp(entityManager.getPlayer());
@@ -88,5 +93,10 @@ public class Bomb extends OnscreenDrawable {
 
 	public Vector2 getBottomLeft() {
 		return getCenter().cpy().sub(blastRadius, blastRadius);
+	}
+
+
+	@Override
+	public void movementLogic(float deltaTime) {
 	}
 }

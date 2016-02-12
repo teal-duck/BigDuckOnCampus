@@ -270,17 +270,16 @@ public class GameScreen extends ScreenBase {
 			if (!entityManager.isTransitioning()) {
 				explosionsUpdate(deltaTime);
 				bombsUpdate(deltaTime);
-				playerUpdate(deltaTime);
-				playerCharacter.update(deltaTime);
 				projectilesUpdate(deltaTime);
 				enemiesUpdate(deltaTime);
+				playerUpdate(deltaTime);
 
 				if (playerCharacter.getHealth() <= 0) {
 					setScreen(new GameOverScreen(getGame()));
 					return;
 				}
 
-				playerCollision();
+				handleCollisions();
 				cleanUpDeadThings();
 
 				boolean completed = entityManager.checkLevelCompletion();
@@ -425,7 +424,7 @@ public class GameScreen extends ScreenBase {
 	private void bombsUpdate(float deltaTime) {
 		ArrayList<Bomb> deadBombs = new ArrayList<Bomb>();
 
-		for (Bomb bomb : entityManager.getBombList()) {
+		for (Bomb bomb : entityManager.getBombs()) {
 			bomb.update(deltaTime);
 
 			if (bomb.getBlastTime() < 0) {
@@ -474,23 +473,44 @@ public class GameScreen extends ScreenBase {
 				entityManager.addNewProjectiles(enemy.rangedAttack(playerCharacter));
 			}
 
-			playerEnemyCollision(enemy);
-			enemyWallCollision(enemy);
 		}
 	}
 
 
 	/**
-	 * Checks projectile collision with walls, and player, and updates projectile
-	 *
 	 * @param deltaTime
 	 */
 	private void projectilesUpdate(float deltaTime) {
 		ArrayList<Projectile> projectileList = entityManager.getProjectiles();
 		for (Projectile projectile : projectileList) {
 			projectile.update(deltaTime);
-			projectileWallCollision(projectile);
-			projectilePlayerCollision(projectile);
+		}
+	}
+
+
+	/**
+	 * @param deltaTime
+	 */
+	private void playerUpdate(float deltaTime) {
+		playerCharacter.update(deltaTime);
+
+		if (playerCharacter.isFiring()) {
+			if (playerCharacter.checkRangedAttack(deltaTime)) {
+				entityManager.addNewProjectiles(playerCharacter.rangedAttack());
+			}
+		} else {
+			if (playerCharacter.getTimeSinceLastAttack() < 0.5) {
+				playerCharacter.incrementTimeSinceLastAttack(deltaTime);
+			}
+		}
+
+		if (playerCharacter.checkBombDrop(deltaTime)) {
+			if (!playerCharacter.isFlying()) {
+				Bomb bomb = playerCharacter.attemptDropBomb();
+				if (bomb != null) {
+					entityManager.addBomb(bomb);
+				}
+			}
 		}
 	}
 
@@ -506,46 +526,31 @@ public class GameScreen extends ScreenBase {
 
 
 	/**
-	 * @param deltaTime
-	 */
-	private void playerUpdate(float deltaTime) {
-		playerAttack(deltaTime);
-	}
-
-
-	/**
-	 * @param deltaTime
-	 */
-	private void playerAttack(float deltaTime) {
-		if (playerCharacter.isFiring()) {
-			if (playerCharacter.checkRangedAttack(deltaTime)) {
-				entityManager.addNewProjectiles(playerCharacter.rangedAttack());
-			}
-		} else {
-			if (playerCharacter.getTimeSinceLastAttack() < 0.5) {
-				playerCharacter.incrementTimeSinceLastAttack(deltaTime);
-			}
-		}
-	}
-
-
-	/**
 	 * Iterates through all enemies and obstacles, and calculates collisions with each other and player character
 	 * Could be optimised, but at the moment, doesn't chug, even with many enemies, obstacles and projectile
 	 */
-	private void playerCollision() {
-		ArrayList<Obstacle> obstacleList = entityManager.getObstacles();
-		ArrayList<Enemy> enemyList = entityManager.getEnemies();
-		ArrayList<Projectile> projectileList = entityManager.getProjectiles();
-		ArrayList<Item> itemList = entityManager.getItems();
+	private void handleCollisions() {
+		ArrayList<Obstacle> obstacles = entityManager.getObstacles();
+		ArrayList<Enemy> enemies = entityManager.getEnemies();
+		ArrayList<Projectile> projectiles = entityManager.getProjectiles();
+		ArrayList<Item> items = entityManager.getItems();
+		ArrayList<Bomb> bombs = entityManager.getBombs();
 
-		for (Obstacle obstacle : obstacleList) {
+		for (Projectile projectile : projectiles) {
+			projectileWallCollision(projectile);
+			projectilePlayerCollision(projectile);
+		}
+
+		for (Obstacle obstacle : obstacles) {
 			playerObstacleCollision(obstacle);
 		}
 
-		for (Enemy enemy : enemyList) {
+		for (Enemy enemy : enemies) {
+			playerEnemyCollision(enemy);
+			enemyWallCollision(enemy);
+
 			boolean enemyCollidedWithObstacle = false;
-			for (Obstacle obstacle : obstacleList) {
+			for (Obstacle obstacle : obstacles) {
 				if (enemyObstacleCollision(enemy, obstacle)) {
 					enemyCollidedWithObstacle = true;
 				}
@@ -556,9 +561,13 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 
+		for (Bomb bomb : bombs) {
+			bombWallCollision(bomb);
+		}
+
 		playerWallCollision();
 
-		for (Item item : itemList) {
+		for (Item item : items) {
 			playerItemCollision(item);
 		}
 
@@ -566,23 +575,23 @@ public class GameScreen extends ScreenBase {
 			playerDoorCollision();
 		}
 
-		for (Enemy enemy : enemyList) {
-			for (Projectile projectile : projectileList) {
+		for (Enemy enemy : enemies) {
+			for (Projectile projectile : projectiles) {
 				projectileEnemyCollision(projectile, enemy);
 			}
 		}
 
-		for (Obstacle obstacle : obstacleList) {
-			for (Projectile projectile : projectileList) {
+		for (Obstacle obstacle : obstacles) {
+			for (Projectile projectile : projectiles) {
 				projectileObstacleCollision(projectile, obstacle);
 			}
 		}
 
 		// Push enemies out of each other
-		for (int i = 0; i < (enemyList.size() - 1); i += 1) {
-			for (int j = i + 1; j < enemyList.size(); j += 1) {
-				Enemy e0 = enemyList.get(i);
-				Enemy e1 = enemyList.get(j);
+		for (int i = 0; i < (enemies.size() - 1); i += 1) {
+			for (int j = i + 1; j < enemies.size(); j += 1) {
+				Enemy e0 = enemies.get(i);
+				Enemy e1 = enemies.get(j);
 				enemyEnemyCollision(e0, e1);
 			}
 		}
@@ -715,10 +724,6 @@ public class GameScreen extends ScreenBase {
 		if (enemy.collides(obstacle)) {
 			enemy.moveToNearestEdgeRectangle(obstacle);
 			enemy.setCollidingWithSomething(true);
-
-			// if (obstacle.isDamaging()) {
-			// enemy.takeDamage(obstacle.getTouchDamage());
-			// }
 			return true;
 		}
 
@@ -881,6 +886,40 @@ public class GameScreen extends ScreenBase {
 				entityManager.moveToLeftRoom();
 				playerCharacter.setX(getWindowWidth() - playerCharacter.getWidth() - doorOffset);
 			}
+		}
+	}
+
+
+	// TODO: bombWallCollision is nearly same as enemyWallCollision
+	private void bombWallCollision(Bomb bomb) {
+		if (Intersector.overlaps(bomb.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopWall())) {
+			bomb.setVelocityY(-1 * Math.abs(bomb.getVelocityY()));
+			bomb.setHitboxCentre(bomb.getCircleHitbox().x,
+					entityManager.getCurrentDungeonRoom().getTopWall().getY()
+							- bomb.getCircleHitbox().radius);
+		}
+
+		if (Intersector.overlaps(bomb.getCircleHitbox(),
+				entityManager.getCurrentDungeonRoom().getRightWall())) {
+			bomb.setVelocityX(-1 * Math.abs(bomb.getVelocityX()));
+			bomb.setHitboxCentre(entityManager.getCurrentDungeonRoom().getRightWall().getX()
+					- bomb.getCircleHitbox().radius, bomb.getCircleHitbox().y);
+		}
+
+		if (Intersector.overlaps(bomb.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getLeftWall())) {
+			bomb.setVelocityX(1 * Math.abs(bomb.getVelocityX()));
+			bomb.setHitboxCentre(entityManager.getCurrentDungeonRoom().getLeftWall().getX()
+					+ entityManager.getCurrentDungeonRoom().getLeftWall().getWidth()
+					+ bomb.getCircleHitbox().radius, bomb.getCircleHitbox().y);
+		}
+
+		if (Intersector.overlaps(bomb.getCircleHitbox(),
+				entityManager.getCurrentDungeonRoom().getBottomWall())) {
+			bomb.setVelocityY(1 * Math.abs(bomb.getVelocityY()));
+			bomb.setHitboxCentre(bomb.getCircleHitbox().x,
+					entityManager.getCurrentDungeonRoom().getBottomWall().getY() + entityManager
+							.getCurrentDungeonRoom().getBottomWall().getHeight()
+					+ bomb.getCircleHitbox().radius);
 		}
 	}
 }
