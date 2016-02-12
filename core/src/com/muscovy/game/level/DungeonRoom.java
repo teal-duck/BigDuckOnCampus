@@ -190,7 +190,7 @@ public class DungeonRoom {
 	 * @param x
 	 * @param y
 	 */
-	private void createRoomFinishedItem(int x, int y) {
+	private void createRoomFinishedItem(LevelType levelType, int x, int y) {
 		Random random = game.getRandom();
 		int choice = random.nextInt(4);
 
@@ -207,7 +207,9 @@ public class DungeonRoom {
 			itemType = ItemType.HEALTH;
 			break;
 		case 3:
-			itemType = ItemType.BOMB;
+			if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_BOMBS.ordinal()) {
+				itemType = ItemType.BOMB;
+			}
 			break;
 		}
 
@@ -267,7 +269,7 @@ public class DungeonRoom {
 						}
 						break;
 					case DungeonRoomTemplateLoader.ROOM_FINISHED_ITEM:
-						createRoomFinishedItem(col, fixedY);
+						createRoomFinishedItem(levelType, col, fixedY);
 						break;
 					case DungeonRoomTemplateLoader.POWERUP:
 						setItemSpawnX(col);

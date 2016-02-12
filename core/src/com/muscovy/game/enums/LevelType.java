@@ -12,10 +12,11 @@ import com.muscovy.game.level.LevelParameters;
  *
  */
 public enum LevelType {
-	CONSTANTINE, LANGWITH, GOODRICKE, LMB, CATALYST, TFTV, COMP_SCI, RCH;
+	CONSTANTINE, LANGWITH, GOODRICKE, LMB, CATALYST, TFTV, COMP_SCI, RCH,;
 
 	private static final LevelType[] LEVEL_VALUES = LevelType.values();
 	public static final int LEVEL_COUNT = LevelType.LEVEL_VALUES.length;
+	public static final LevelType FIRST_LEVEL_TO_GIVE_BOMBS = CONSTANTINE; // GOODRICKE;
 
 
 	/**
