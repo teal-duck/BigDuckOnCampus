@@ -24,6 +24,7 @@ public class Level {
 	private final int startX;
 	private final int startY;
 	private final int roomCount;
+	private float groundFriction;
 
 
 	public Level(DungeonRoom[][] levelArray, LevelType levelType, LevelParameters levelParameters) {
@@ -36,6 +37,7 @@ public class Level {
 		startY = levelParameters.getStartY();
 		objectiveType = levelParameters.getObjectiveType();
 		roomCount = levelParameters.getRoomCount();
+		groundFriction = levelParameters.getGroundFriction();
 
 		visitedRooms = new boolean[roomsHigh][roomsWide];
 		for (int y = 0; y < visitedRooms.length; y += 1) {
@@ -297,6 +299,14 @@ public class Level {
 	 */
 	public int getRoomCount() {
 		return roomCount;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getGroundFriction() {
+		return groundFriction;
 	}
 
 

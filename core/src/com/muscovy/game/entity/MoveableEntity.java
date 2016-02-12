@@ -9,7 +9,8 @@ import com.muscovy.game.MuscovyGame;
  *
  */
 public abstract class MoveableEntity extends Collidable {
-	public static final float WORLD_FRICTION = 0.8f;
+	public static final float WORLD_FRICTION = 48;
+	public static final float WATER_FRICTION = 58;
 	public static final float PLAYER_ACCELERATION_SPEED = 5000;
 	public static final float ENEMY_ACCELERATION_SPEED = (MoveableEntity.PLAYER_ACCELERATION_SPEED * 2) / 3;
 
@@ -75,7 +76,7 @@ public abstract class MoveableEntity extends Collidable {
 		velocity.limit(maxSpeed);
 		getPosition().mulAdd(velocity, deltaTime);
 		updateBoxesPosition();
-		velocity.scl(friction);
+		velocity.scl(friction * deltaTime);
 		acceleration.setZero();
 	}
 

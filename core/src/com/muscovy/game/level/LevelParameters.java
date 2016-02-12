@@ -1,6 +1,7 @@
 package com.muscovy.game.level;
 
 
+import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.enums.ObjectiveType;
 
 
@@ -15,16 +16,24 @@ public class LevelParameters {
 	private final int startY;
 	private int roomCount;
 	private final ObjectiveType objectiveType;
+	private final float groundFriction;
 
 
 	public LevelParameters(int roomsWide, int roomsHigh, int maxRooms, int startX, int startY,
 			ObjectiveType objectiveType) {
+		this(roomsWide, roomsHigh, maxRooms, startX, startY, objectiveType, MoveableEntity.WORLD_FRICTION);
+	}
+
+
+	public LevelParameters(int roomsWide, int roomsHigh, int maxRooms, int startX, int startY,
+			ObjectiveType objectiveType, float groundFriction) {
 		this.roomsWide = roomsWide;
 		this.roomsHigh = roomsHigh;
 		this.maxRooms = maxRooms;
 		this.startX = startX;
 		this.startY = startY;
 		this.objectiveType = objectiveType;
+		this.groundFriction = groundFriction;
 		roomCount = 0;
 	}
 
@@ -74,6 +83,14 @@ public class LevelParameters {
 	 */
 	public ObjectiveType getObjectiveType() {
 		return objectiveType;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public float getGroundFriction() {
+		return groundFriction;
 	}
 
 

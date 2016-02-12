@@ -29,6 +29,7 @@ public class LevelSerializer extends BaseSerializer<Level> {
 		json.writeValue("startX", level.getStartX());
 		json.writeValue("startY", level.getStartY());
 		json.writeValue("roomCount", level.getRoomCount());
+		json.writeValue("groundFriction", level.getGroundFriction());
 		json.writeValue("completed", level.isCompleted());
 
 		json.writeArrayStart("levelArray");
@@ -69,10 +70,11 @@ public class LevelSerializer extends BaseSerializer<Level> {
 		int startX = jsonData.getInt("startX");
 		int startY = jsonData.getInt("startY");
 		int roomCount = jsonData.getInt("roomCount");
+		float groundFriction = jsonData.getFloat("groundFriction");
 		boolean completed = jsonData.getBoolean("completed");
 
 		LevelParameters levelParameters = new LevelParameters(roomsWide, roomsHigh, roomCount, startX, startY,
-				objectiveType);
+				objectiveType, groundFriction);
 		levelParameters.setRoomCount(roomCount);
 
 		JsonValue levelArrayParentValue = jsonData.get("levelArray");

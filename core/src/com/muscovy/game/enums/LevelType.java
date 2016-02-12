@@ -4,6 +4,7 @@ package com.muscovy.game.enums;
 import com.badlogic.gdx.Gdx;
 import com.muscovy.game.entity.BossParameters;
 import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.level.LevelParameters;
 
 
@@ -65,7 +66,7 @@ public enum LevelType {
 		case LANGWITH:
 			return new LevelParameters(6, 6, 5, 3, 3, ObjectiveType.KILL_ENEMIES);
 		case GOODRICKE:
-			return new LevelParameters(6, 6, 10, 3, 3, ObjectiveType.BOSS);
+			return new LevelParameters(6, 6, 10, 3, 3, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
 		default:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		}

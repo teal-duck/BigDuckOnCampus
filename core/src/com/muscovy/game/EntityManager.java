@@ -159,6 +159,7 @@ public class EntityManager {
 		itemList.clear();
 
 		currentDungeonRoom = dungeonRoom;
+		setFriction(level.getGroundFriction(), dungeonRoom);
 		addNewObstacles(dungeonRoom.getObstacleList());
 		addNewEnemies(dungeonRoom.getEnemyList());
 		addNewItems(dungeonRoom.getItemList());
@@ -230,6 +231,18 @@ public class EntityManager {
 		setCurrentDungeonRoom(currentRoomX, newY, new Vector2(0, -1));
 		currentRoomY = newY;
 		renderList.add(playerCharacter);
+	}
+
+
+	/**
+	 * @param friction
+	 * @param room
+	 */
+	private void setFriction(float friction, DungeonRoom room) {
+		for (Enemy enemy : room.getEnemyList()) {
+			enemy.setFriction(friction);
+		}
+		playerCharacter.setFriction(friction);
 	}
 
 
