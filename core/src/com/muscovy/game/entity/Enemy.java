@@ -25,8 +25,7 @@ public class Enemy extends MoveableEntity {
 
 	public static final float PROJECTILE_RANGE = 400;
 	public static final float PROJECTILE_SPEED = 150;
-	public static final float ATTACK_RANGE = 480;
-	public static final float VIEW_DISTANCE = Enemy.ATTACK_RANGE;
+	public static final float VIEW_DISTANCE = 480;
 
 	// Used in the random movement type logic
 	public static final float MIN_ROTATION = 10;
@@ -53,7 +52,6 @@ public class Enemy extends MoveableEntity {
 	private float projectileSpeed = Enemy.PROJECTILE_SPEED;
 	private float projectileLife = projectileRange / projectileSpeed;
 	private ProjectileType projectileType = ProjectileType.STANDARD;
-	private float attackRange = Enemy.ATTACK_RANGE;
 	private float viewDistance = Enemy.VIEW_DISTANCE;
 
 	private float currentHealth = 40;
@@ -120,12 +118,10 @@ public class Enemy extends MoveableEntity {
 			break;
 
 		case RANDOM:
-
+			directionCounter += deltaTime;
 			if (directionCounter > Enemy.TIME_TO_STAY_IN_RANDOM_DIRECTION) {
 				directionCounter = 0;
 				rotateRandomDirection(direction, Enemy.MIN_ROTATION, Enemy.MAX_ROTATION);
-			} else {
-				directionCounter += deltaTime;
 			}
 			break;
 
@@ -187,17 +183,17 @@ public class Enemy extends MoveableEntity {
 			shootDirection.set(getVelocity()).nor();
 			break;
 		case SINGLE_TOWARDS_PLAYER:
-			if (distanceToPlayer < attackRange) {
+			if (distanceToPlayer < viewDistance) {
 				bulletsToShoot = 1;
 			}
 			break;
 		case DOUBLE_TOWARDS_PLAYER:
-			if (distanceToPlayer < attackRange) {
+			if (distanceToPlayer < viewDistance) {
 				bulletsToShoot = 2;
 			}
 			break;
 		case TRIPLE_TOWARDS_PLAYER:
-			if (distanceToPlayer < attackRange) {
+			if (distanceToPlayer < viewDistance) {
 				bulletsToShoot = 3;
 			}
 			break;
@@ -402,16 +398,16 @@ public class Enemy extends MoveableEntity {
 	/**
 	 * @return
 	 */
-	public float getAttackRange() {
-		return attackRange;
+	public float getViewDistance() {
+		return viewDistance;
 	}
 
 
 	/**
-	 * @param attackRange
+	 * @param viewDistance
 	 */
-	public void setAttackRange(float attackRange) {
-		this.attackRange = attackRange;
+	public void setViewDistance(float viewDistance) {
+		this.viewDistance = viewDistance;
 	}
 
 
@@ -479,22 +475,6 @@ public class Enemy extends MoveableEntity {
 	 */
 	public void setProjectileType(ProjectileType projectileType) {
 		this.projectileType = projectileType;
-	}
-
-
-	/**
-	 * @return
-	 */
-	public float getMovementRange() {
-		return viewDistance;
-	}
-
-
-	/**
-	 * @param movementRange
-	 */
-	public void setMovementRange(float movementRange) {
-		viewDistance = movementRange;
 	}
 
 

@@ -474,6 +474,7 @@ public class EntityManager {
 		final Color shopColour = Color.BROWN;
 		final Color itemColour = Color.YELLOW;
 		final Color playerColour = Color.RED;
+		final Color healthPackColour = Color.GREEN;
 		final Color doorColour = Color.BLACK;
 		final float darkerScale = 0.35f;
 
@@ -516,14 +517,18 @@ public class EntityManager {
 				shapeRenderer.setColor(colour);
 				shapeRenderer.rect(x, y, w, h);
 
+				w = innerRoomSize;
+				h = innerRoomSize;
+				x += (renderWidth / 2) - (w / 2);
+				y += (renderHeight / 2) - (h / 2);
+
 				// Render the player in the current room
 				if ((currentRoomX == col) && (currentRoomY == row)) {
-					w = innerRoomSize;
-					h = innerRoomSize;
-					x += (renderWidth / 2) - (w / 2);
-					y += (renderHeight / 2) - (h / 2);
-
 					shapeRenderer.setColor(playerColour);
+					shapeRenderer.rect(x, y, w, h);
+				} else if ((room.getItemList().size() > 0) && isVisited) {
+					// Render health pack
+					shapeRenderer.setColor(healthPackColour);
 					shapeRenderer.rect(x, y, w, h);
 				}
 			}
@@ -711,6 +716,7 @@ public class EntityManager {
 		for (Item item : deadItems) {
 			renderList.remove(item);
 			itemList.remove(item);
+			currentDungeonRoom.removeItem(item);
 		}
 	}
 

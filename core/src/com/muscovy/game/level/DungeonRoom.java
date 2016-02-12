@@ -282,7 +282,7 @@ public class DungeonRoom {
 						- (enemy.getHeight() / game.getTileSize() / 2)));
 				enemy.setScoreOnDeath(3000);
 				enemy.setHitboxRadius(80);
-				enemy.setMovementRange(1000);
+				enemy.setViewDistance(1000);
 				enemy.setAttackType(AttackType.RANGE);
 
 				enemy.setProjectileType(bossParameters.getProjectileType());
@@ -452,6 +452,14 @@ public class DungeonRoom {
 	 */
 	public void addItem(Item item) {
 		itemList.add(item);
+	}
+
+
+	/**
+	 * @param item
+	 */
+	public void removeItem(Item item) {
+		itemList.remove(item);
 	}
 
 

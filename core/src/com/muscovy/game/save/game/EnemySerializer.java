@@ -35,6 +35,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		json.writeValue("health", enemy.getCurrentHealth());
 		json.writeValue("maxAttackInterval", enemy.getMaxAttackInterval());
 		json.writeValue("attackRandomness", enemy.getAttackRandomness());
+		json.writeValue("viewDistance", enemy.getViewDistance());
 		json.writeObjectEnd();
 	}
 
@@ -62,6 +63,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		float health = jsonData.getFloat("health");
 		float maxAttackInterval = jsonData.getFloat("maxAttackInterval");
 		float attackRandomness = jsonData.getFloat("attackRandomness");
+		float viewDistance = jsonData.getFloat("viewDistance");
 
 		Enemy enemy = new Enemy(game, textureName, position);
 		enemy.setMovementType(movementType);
@@ -74,6 +76,7 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		enemy.setCurrentHealth(health);
 		enemy.setMaxAttackInterval(maxAttackInterval);
 		enemy.setAttackRandomness(attackRandomness);
+		enemy.setViewDistance(viewDistance);
 
 		return enemy;
 	}
