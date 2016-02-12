@@ -38,7 +38,7 @@ import com.muscovy.game.level.Level;
  */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
-	private static final float ROOM_START_TIME = 0.1f;
+	private static final float ROOM_START_TIME = 0.2f;
 
 	private EntityManager entityManager;
 	private PlayerCharacter playerCharacter;
@@ -172,6 +172,8 @@ public class GameScreen extends ScreenBase {
 		playerCharacter.getAcceleration().setZero();
 		playerCharacter.getVelocity().setZero();
 		playerCharacter.setFullFlightBar();
+
+		// playerCharacter.giveBombs(5);
 	}
 
 

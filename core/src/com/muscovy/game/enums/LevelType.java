@@ -107,25 +107,45 @@ public enum LevelType {
 	 * @return
 	 */
 	public static ItemType getItemType(LevelType levelType) {
-		ItemType itemType;
 
-		if (levelType == CONSTANTINE) {
-			itemType = ItemType.TRIPLE_SHOT;
-		} else if (levelType == LANGWITH) {
-			itemType = ItemType.RAPID_FIRE;
-		} else if (levelType == GOODRICKE) {
-			itemType = ItemType.FLAME_THROWER;
-		} else {
-			itemType = null;
+		switch (levelType) {
+		case CONSTANTINE:
+			return ItemType.RAPID_FIRE;
+		case LANGWITH:
+			return ItemType.TRIPLE_SHOT;
+		case GOODRICKE:
+			return ItemType.FLAME_THROWER;
+		default:
+			return null;
 		}
 
-		return itemType;
+		// Below is what it should look like
+		// switch (levelType) {
+		// case CONSTANTINE:
+		// return ItemType.FLIGHT;
+		// case LANGWITH:
+		// return ItemType.RAPID_FIRE;
+		// case GOODRICKE:
+		// return ItemType.FIRST_BOMB;
+		// case LMB:
+		// return ItemType.EXTRA_HEALTH;
+		// case CATALYST:
+		// return ItemType.HOMING_BULLET;
+		// case TFTV:
+		// return ItemType.TRIPLE_SHOT;
+		// case COMP_SCI:
+		// return ItemType.FLAME_THROWER;
+		// case RCH:
+		// return ItemType.MOUSTACHE;
+		// default:
+		// return null;
+		// }
 	}
 
 
 	private static final BossParameters defaultBossParameters = new BossParameters(ProjectileType.STANDARD,
 			EnemyShotType.TRIPLE_TOWARDS_PLAYER, MovementType.FOLLOW, Enemy.ATTACK_INTERVAL,
-			Enemy.PROJECTILE_SPEED * 2, 2, Enemy.BOSS_MAX_SPEED, 20, 600);
+			Enemy.BOSS_PROJECTILE_SPEED, 2, MoveableEntity.BOSS_ACCELERATION_SPEED, 20, 600);
 
 
 	/**
@@ -136,17 +156,17 @@ public enum LevelType {
 		switch (levelType) {
 		case CONSTANTINE:
 			return new BossParameters(ProjectileType.STANDARD, EnemyShotType.TRIPLE_TOWARDS_PLAYER,
-					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 2,
-					Enemy.BOSS_MAX_SPEED, 20, 600);
+					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED, 2,
+					MoveableEntity.BOSS_ACCELERATION_SPEED, 20, 600);
 
 		case GOODRICKE:
 			return new BossParameters(ProjectileType.HOMING, EnemyShotType.SINGLE_TOWARDS_PLAYER,
-					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 5,
-					Enemy.BOSS_MAX_SPEED, 20, 600);
+					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED * 1.2f,
+					5, MoveableEntity.BOSS_ACCELERATION_SPEED * 0.8f, 20, 600);
 		case LMB:
 			return new BossParameters(ProjectileType.CURVED, EnemyShotType.TRIPLE_TOWARDS_PLAYER,
-					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 2,
-					Enemy.BOSS_MAX_SPEED, 20, 600);
+					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED, 2,
+					MoveableEntity.BOSS_ACCELERATION_SPEED, 20, 600);
 		default:
 			Gdx.app.log("Boss", "Using default boss parameters for level " + levelType.toString());
 			return LevelType.defaultBossParameters;

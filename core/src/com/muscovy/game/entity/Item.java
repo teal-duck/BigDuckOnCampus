@@ -21,6 +21,7 @@ public class Item extends Collidable {
 	private boolean lifeOver;
 
 	private static final int HEALTHPACK_REGEN = 10;
+	private static final int BOMB_GIVE_COUNT = 1;
 
 
 	public Item(MuscovyGame game, String textureName, Vector2 position, ItemType type) {
@@ -47,19 +48,23 @@ public class Item extends Collidable {
 	public boolean applyToPlayer(PlayerCharacter playerCharacter) {
 		switch (type) {
 		case HEALTH:
-			return playerCharacter.gainHealth(Item.HEALTHPACK_REGEN);
+			boolean appliedHealthPack = playerCharacter.gainHealth(Item.HEALTHPACK_REGEN);
+			return appliedHealthPack;
 		case TRIPLE_SHOT:
 			playerCharacter.setShotType(PlayerShotType.TRIPLE);
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		case RAPID_FIRE:
-			playerCharacter.setAttackInterval(0.5f * playerCharacter.getAttackInterval());
+			playerCharacter.setAttackInterval(PlayerCharacter.RAPID_FIRE_ATTACK_INTERVAL);
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		case FLAME_THROWER:
-			playerCharacter.setAttackInterval(0.03f);
+			playerCharacter.setAttackInterval(PlayerCharacter.FLAME_THROWER_ATTACK_INTERVAL);
 			playerCharacter.setProjectileType(ProjectileType.FLAMES);
 			playerCharacter.addItemToObtainedItems(type);
+			return true;
+		case BOMB:
+			playerCharacter.giveBombs(Item.BOMB_GIVE_COUNT);
 			return true;
 		default:
 			return false;

@@ -12,9 +12,9 @@ public abstract class MoveableEntity extends Collidable {
 	public static final float WORLD_FRICTION = 48;
 	public static final float WATER_FRICTION = 53; // 58;
 	public static final float PLAYER_ACCELERATION_SPEED = 5000;
-	public static final float ENEMY_ACCELERATION_SPEED = (MoveableEntity.PLAYER_ACCELERATION_SPEED * 2) / 3;
+	public static final float ENEMY_ACCELERATION_SPEED = MoveableEntity.PLAYER_ACCELERATION_SPEED * 0.5f;
+	public static final float BOSS_ACCELERATION_SPEED = MoveableEntity.PLAYER_ACCELERATION_SPEED * 0.4f;
 
-	private float maxSpeed = Enemy.MAX_SPEED;
 	private float friction = MoveableEntity.WORLD_FRICTION;
 	private float accelerationSpeed = 0;
 
@@ -73,7 +73,6 @@ public abstract class MoveableEntity extends Collidable {
 	 */
 	public void moveEntity(float deltaTime) {
 		velocity.mulAdd(acceleration, deltaTime);
-		// velocity.limit(maxSpeed);
 		getPosition().mulAdd(velocity, deltaTime);
 		updateBoxesPosition();
 		velocity.scl(friction * deltaTime);
@@ -192,21 +191,5 @@ public abstract class MoveableEntity extends Collidable {
 	 */
 	public void setVelocityToZero() {
 		velocity.setZero();
-	}
-
-
-	/**
-	 * @return
-	 */
-	public float getMaxSpeed() {
-		return maxSpeed;
-	}
-
-
-	/**
-	 * @param speed
-	 */
-	public void setMaxSpeed(float speed) {
-		maxSpeed = speed;
 	}
 }

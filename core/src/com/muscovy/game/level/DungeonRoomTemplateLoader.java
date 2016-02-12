@@ -22,7 +22,7 @@ public class DungeonRoomTemplateLoader {
 	 * Randomly choose whether to place an enemy here
 	 */
 	public static final int MAYBE_ENEMY = 4;
-	public static final int HEALTHPACK = 5;
+	public static final int ROOM_FINISHED_ITEM = 5;
 	public static final int POWERUP = 6;
 
 	private String filename;

@@ -3,10 +3,10 @@ package com.muscovy.game.level;
 
 import java.util.ArrayList;
 //import java.util.Random;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
@@ -54,7 +54,7 @@ public class DungeonRoom {
 	// error.
 	private int itemSpawnX = -1;
 	private int itemSpawnY = -1;
-	private Item healthPack = null;
+	private Item roomFinishedItem = null;
 
 	private boolean hasUpDoor = false;
 	private boolean hasRightDoor = false;
@@ -190,15 +190,34 @@ public class DungeonRoom {
 	 * @param x
 	 * @param y
 	 */
-	private void createHealthPack(int x, int y) {
-		if (MathUtils.randomBoolean(0.5f)) {
-			Vector2 position = new Vector2(x, y);
-			Item healthPack = new Item(game, ItemType.getItemTextureName(ItemType.HEALTH), position,
-					ItemType.HEALTH);
+	private void createRoomFinishedItem(int x, int y) {
+		Random random = game.getRandom();
+		int choice = random.nextInt(4);
 
-			healthPack.setXTiles(x);
-			healthPack.setYTiles(y);
-			this.healthPack = healthPack;
+		// 25% chance for nothing
+		// 50% chance for health
+		// 25% chance for bomb
+
+		ItemType itemType = null;
+		switch (choice) {
+		case 0:
+			break;
+		case 1:
+		case 2:
+			itemType = ItemType.HEALTH;
+			break;
+		case 3:
+			itemType = ItemType.BOMB;
+			break;
+		}
+
+		if (itemType != null) {
+			Vector2 position = new Vector2(x, y);
+			Item item = new Item(game, ItemType.getItemTextureName(itemType), position, itemType);
+
+			item.setXTiles(x);
+			item.setYTiles(y);
+			roomFinishedItem = item;
 		}
 	}
 
@@ -247,8 +266,8 @@ public class DungeonRoom {
 							createRandomEnemy(col, fixedY);
 						}
 						break;
-					case DungeonRoomTemplateLoader.HEALTHPACK:
-						createHealthPack(col, fixedY);
+					case DungeonRoomTemplateLoader.ROOM_FINISHED_ITEM:
+						createRoomFinishedItem(col, fixedY);
 						break;
 					case DungeonRoomTemplateLoader.POWERUP:
 						setItemSpawnX(col);
@@ -291,7 +310,7 @@ public class DungeonRoom {
 				enemy.setMaxAttackInterval(bossParameters.getAttackInterval());
 				enemy.setProjectileVelocity(bossParameters.getProjectileVelocity());
 				enemy.setProjectileLife(bossParameters.getProjectileLife());
-				enemy.setMaxSpeed(bossParameters.getSpeed());
+				enemy.setAccelerationSpeed(bossParameters.getAccelerationSpeed());
 				enemy.setTouchDamage(bossParameters.getTouchDamage());
 				enemy.setCurrentHealth(bossParameters.getHealth());
 
@@ -703,17 +722,21 @@ public class DungeonRoom {
 	}
 
 
-	public Item getHealthPack() {
-		return healthPack;
+	public Item getRoomFinishedItem() {
+		return roomFinishedItem;
 	}
 
 
-	public void setHealthPack(Item healthPack) {
-		this.healthPack = healthPack;
+	public void setRoomFinishedItem(Item healthPack) {
+		roomFinishedItem = healthPack;
 	}
 
 
-	public void removeHealthPack() {
-		healthPack = null;
+	/**
+	 * Sets the finished item to null so that if you try to retrieve it again, you'll just get null. This ensures
+	 * the item will only be spawned once.
+	 */
+	public void removeRoomFinishedItem() {
+		roomFinishedItem = null;
 	}
 }

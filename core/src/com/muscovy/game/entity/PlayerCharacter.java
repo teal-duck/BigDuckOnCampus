@@ -24,18 +24,27 @@ public class PlayerCharacter extends MoveableEntity {
 	// public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
 	// public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
 
-	public static final float FLIGHT_SPEED_MULTIPLIER = 3f;
+	public static final float FLIGHT_SPEED_MULTIPLIER = 2f; // 3f;
 	public static final float MAX_FLIGHT_TIME = 1f; // 0.25f;
 
 	public static final float BASE_ATTACK_INTERVAL = 0.1f; // interval between attacks
 	public static final float PROJECTILE_SPEED = 450;
 	public static final float PROJECTILE_RANGE = 600;
 
+	public static final float RAPID_FIRE_ATTACK_INTERVAL = PlayerCharacter.BASE_ATTACK_INTERVAL * 0.5f;
+	public static final float FLAME_THROWER_ATTACK_INTERVAL = 0.03f;
+
 	public static final int MAX_HEALTH = 100;
 	public static final float INVINCIBILITY_DURATION = 2;
 
 	public static final float HITBOX_Y_OFFSET = -6;
 	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
+
+	public static final float MAX_BOMB_DROP_TIME = 0.5f;
+
+	// Position bomb below the player slightly
+	// Means bomb will be rendered on top of player
+	public static final float BOMB_Y_OFFSET = 34;
 
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;
@@ -70,8 +79,8 @@ public class PlayerCharacter extends MoveableEntity {
 	private ControlMap controlMap;
 	private Controller controller;
 
-	private int bombCount = 5;
-	private float maxBombDropTime = 0.35f;
+	private int bombCount = 0;
+	private float maxBombDropTime = PlayerCharacter.MAX_BOMB_DROP_TIME;
 	private float bombDropTime = 0;
 
 	private boolean flying = false;
@@ -87,7 +96,6 @@ public class PlayerCharacter extends MoveableEntity {
 		this.controlMap = controlMap;
 		this.controller = controller;
 
-		setMaxSpeed(PlayerCharacter.MAX_SPEED);
 		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED);
 
 		animationCycle = 0;
@@ -199,7 +207,6 @@ public class PlayerCharacter extends MoveableEntity {
 			flying = false;
 		}
 
-		setMaxSpeed(PlayerCharacter.MAX_SPEED * flyScale);
 		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED * flyScale);
 
 		addMovementAcceleration(acceleration);
@@ -264,8 +271,10 @@ public class PlayerCharacter extends MoveableEntity {
 
 		if (controlMap.getStateForAction(Action.DROP_BOMB, controller) > 0) {
 			float bombTextureRadius = 32;
-			Bomb bomb = new Bomb(game, AssetLocations.BOMB,
-					getCenter().cpy().sub(bombTextureRadius, bombTextureRadius));
+			Vector2 bombPosition = getCenter().cpy();
+			bombPosition.sub(bombTextureRadius, bombTextureRadius);
+			bombPosition.sub(0, PlayerCharacter.BOMB_Y_OFFSET);
+			Bomb bomb = new Bomb(game, AssetLocations.BOMB, bombPosition);
 			bombDropTime = maxBombDropTime;
 			bombCount -= 1;
 			return bomb;
@@ -280,6 +289,15 @@ public class PlayerCharacter extends MoveableEntity {
 	 */
 	public int getBombCount() {
 		return bombCount;
+	}
+
+
+	/**
+	 * @param bombCount
+	 * @return
+	 */
+	public void giveBombs(int bombCount) {
+		this.bombCount += bombCount;
 	}
 
 
@@ -320,7 +338,6 @@ public class PlayerCharacter extends MoveableEntity {
 	 * @return
 	 */
 	public ArrayList<Projectile> rangedAttack() {
-
 		float x = (getX() + (getWidth() / 2)) - 8;
 		// TODO: This should get player's height, not tile size
 		float y = getY() + (getHeight() / 2);

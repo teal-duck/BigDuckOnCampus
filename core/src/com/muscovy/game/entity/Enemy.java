@@ -20,12 +20,11 @@ public class Enemy extends MoveableEntity {
 	public static final float TOUCH_DAMAGE = 10f;
 	public static final float ATTACK_INTERVAL = 1.5f;
 	public static final float ATTACK_RANDOMNESS = 0.5f;
-	public static final float MAX_SPEED = 200;
-	public static final float BOSS_MAX_SPEED = Enemy.MAX_SPEED * 0.8f;
 
 	public static final float PROJECTILE_RANGE = 400;
 	public static final float PROJECTILE_SPEED = 150;
-	public static final float VIEW_DISTANCE = 480;
+	public static final float BOSS_PROJECTILE_SPEED = Enemy.PROJECTILE_SPEED * 2;
+	public static final float VIEW_DISTANCE = 1000; // 480;
 
 	// Used in the random movement type logic
 	public static final float MIN_ROTATION = 10;
@@ -63,7 +62,7 @@ public class Enemy extends MoveableEntity {
 
 
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
-		super(game, textureName, position, new Vector2(1, 0).setLength(Enemy.MAX_SPEED));
+		super(game, textureName, position, new Vector2(1, 0));
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
 		rotateRandomDirection(getVelocity(), 0, 360);
@@ -106,7 +105,6 @@ public class Enemy extends MoveableEntity {
 
 		switch (movementType) {
 		case STATIC:
-			setMaxSpeed(0);
 			break;
 
 		case RANDOM:

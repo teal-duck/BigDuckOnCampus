@@ -13,13 +13,13 @@ public class BossParameters {
 	private final float attackInterval;
 	private final float projectileVelocity;
 	private final float projectileLife;
-	private final float speed;
+	private final float accelerationSpeed;
 	private final float touchDamage;
 	private final float health;
 
 
 	public BossParameters(ProjectileType projectileType, EnemyShotType enemyShotType, MovementType movementType,
-			float attackInterval, float projectileVelocity, float projectileLife, float speed,
+			float attackInterval, float projectileVelocity, float projectileLife, float accelerationSpeed,
 			float touchDamage, float health) {
 		this.projectileType = projectileType;
 		this.enemyShotType = enemyShotType;
@@ -27,7 +27,7 @@ public class BossParameters {
 		this.attackInterval = attackInterval;
 		this.projectileVelocity = projectileVelocity;
 		this.projectileLife = projectileLife;
-		this.speed = speed;
+		this.accelerationSpeed = accelerationSpeed;
 		this.touchDamage = touchDamage;
 		this.health = health;
 	}
@@ -63,8 +63,8 @@ public class BossParameters {
 	}
 
 
-	public float getSpeed() {
-		return speed;
+	public float getAccelerationSpeed() {
+		return accelerationSpeed;
 	}
 
 
