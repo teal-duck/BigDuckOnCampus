@@ -1,6 +1,7 @@
 package com.muscovy.game.enums;
 
 
+import com.badlogic.gdx.Gdx;
 import com.muscovy.game.entity.BossParameters;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.level.LevelParameters;
@@ -121,6 +122,11 @@ public enum LevelType {
 	}
 
 
+	private static final BossParameters defaultBossParameters = new BossParameters(ProjectileType.STANDARD,
+			EnemyShotType.TRIPLE_TOWARDS_PLAYER, MovementType.FOLLOW, Enemy.ATTACK_INTERVAL,
+			Enemy.PROJECTILE_SPEED * 2, 2, Enemy.BOSS_MAX_SPEED, 20, 600);
+
+
 	/**
 	 * @param levelType
 	 * @return
@@ -131,6 +137,7 @@ public enum LevelType {
 			return new BossParameters(ProjectileType.STANDARD, EnemyShotType.TRIPLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 2,
 					Enemy.BOSS_MAX_SPEED, 20, 600);
+
 		case GOODRICKE:
 			return new BossParameters(ProjectileType.HOMING, EnemyShotType.SINGLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 5,
@@ -140,7 +147,8 @@ public enum LevelType {
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.PROJECTILE_SPEED * 2, 2,
 					Enemy.BOSS_MAX_SPEED, 20, 600);
 		default:
-			return null;
+			Gdx.app.log("Boss", "Using default boss parameters for level " + levelType.toString());
+			return LevelType.defaultBossParameters;
 		}
 	}
 }
