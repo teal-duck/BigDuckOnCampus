@@ -83,14 +83,6 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * Flips the direction of the velocity (e.g. when the enemy hits an obstacle).
-	 */
-	public void flipDirection() {
-		getVelocity().scl(-1f);
-	}
-
-
-	/**
 	 * Rotates a vector by a random direction within (minRotation, maxRotation) (in degrees).
 	 *
 	 * @param vecToRotate

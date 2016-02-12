@@ -563,6 +563,17 @@ public class GameScreen extends ScreenBase {
 
 		for (Bomb bomb : bombs) {
 			bombWallCollision(bomb);
+
+			boolean bombCollidedWithObstacle = false;
+			for (Obstacle obstacle : obstacles) {
+				if (bombObstacleCollision(bomb, obstacle)) {
+					bombCollidedWithObstacle = true;
+				}
+			}
+
+			if (bombCollidedWithObstacle) {
+				bomb.flipDirection();
+			}
 		}
 
 		playerWallCollision();
@@ -720,10 +731,9 @@ public class GameScreen extends ScreenBase {
 	 * @param obstacle
 	 * @return
 	 */
-	private boolean enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
-		if (enemy.collides(obstacle)) {
-			enemy.moveToNearestEdgeRectangle(obstacle);
-			enemy.setCollidingWithSomething(true);
+	private boolean bombObstacleCollision(Bomb bomb, Obstacle obstacle) {
+		if (bomb.collides(obstacle)) {
+			bomb.moveToNearestEdgeRectangle(obstacle);
 			return true;
 		}
 
@@ -887,6 +897,17 @@ public class GameScreen extends ScreenBase {
 				playerCharacter.setX(getWindowWidth() - playerCharacter.getWidth() - doorOffset);
 			}
 		}
+	}
+
+
+	private boolean enemyObstacleCollision(Enemy enemy, Obstacle obstacle) {
+		if (enemy.collides(obstacle)) {
+			enemy.moveToNearestEdgeRectangle(obstacle);
+			enemy.setCollidingWithSomething(true);
+			return true;
+		}
+
+		return false;
 	}
 
 

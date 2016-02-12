@@ -32,6 +32,7 @@ public class LevelSelectScreen extends ScreenBase {
 	// This requires player to let go of enter first
 	private boolean enterJustPressed = true;
 	private boolean escapeJustPressed = true;
+	private final boolean allowSelectAnyLevel = true;
 
 
 	public LevelSelectScreen(MuscovyGame game) {
@@ -81,7 +82,6 @@ public class LevelSelectScreen extends ScreenBase {
 			moveDirection = -1;
 		}
 
-		final boolean allowSelectAnyLevel = false;
 		boolean shouldAdvance = false;
 
 		if ((moveDirection != 0) && (moveDirection != previousDirection)) {

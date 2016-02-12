@@ -10,7 +10,7 @@ import com.muscovy.game.MuscovyGame;
  */
 public abstract class MoveableEntity extends Collidable {
 	public static final float WORLD_FRICTION = 48;
-	public static final float WATER_FRICTION = 58;
+	public static final float WATER_FRICTION = 53; // 58;
 	public static final float PLAYER_ACCELERATION_SPEED = 5000;
 	public static final float ENEMY_ACCELERATION_SPEED = (MoveableEntity.PLAYER_ACCELERATION_SPEED * 2) / 3;
 
@@ -78,6 +78,14 @@ public abstract class MoveableEntity extends Collidable {
 		updateBoxesPosition();
 		velocity.scl(friction * deltaTime);
 		acceleration.setZero();
+	}
+
+
+	/**
+	 * Flips the direction of the velocity (e.g. when the enemy hits an obstacle).
+	 */
+	public void flipDirection() {
+		getVelocity().scl(-1f);
 	}
 
 
