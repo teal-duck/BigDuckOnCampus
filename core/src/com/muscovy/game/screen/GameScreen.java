@@ -53,6 +53,7 @@ public class GameScreen extends ScreenBase {
 	private static final String OBJECTIVE_ID = "Objective";
 	private static final String PAUSE_ID = "Pause";
 	private static final String FLIGHT_ID = "Flight";
+	private static final String BOMBS_ID = "Bombs";
 	private static final int TEXT_EDGE_OFFSET = 10;
 
 	private static final String FLIGHT_TEXT = "Flight: ";
@@ -114,18 +115,22 @@ public class GameScreen extends ScreenBase {
 		int dungeonGuiYSeparator = 30;
 
 		dungeonGuiY -= dungeonGuiTop;
-		dungeonGui.addData(GameScreen.HEALTH_ID, "Health: " + String.valueOf(playerCharacter.getHealth()),
-				guiFont, dungeonGuiX, dungeonGuiY);
+		dungeonGui.addData(GameScreen.HEALTH_ID, "Health: " + playerCharacter.getHealth(), guiFont, dungeonGuiX,
+				dungeonGuiY);
 
 		dungeonGuiY -= dungeonGuiYSeparator;
-		dungeonGui.addData(GameScreen.SCORE_ID, "Score: " + String.valueOf(playerCharacter.getScore()), guiFont,
-				dungeonGuiX, dungeonGuiY);
+		dungeonGui.addData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore(), guiFont, dungeonGuiX,
+				dungeonGuiY);
 
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.FLIGHT_ID, GameScreen.FLIGHT_TEXT, guiFont, dungeonGuiX, dungeonGuiY);
 
 		flightBarX = getTextWidth(guiFont, GameScreen.FLIGHT_TEXT);
 		flightBarY = dungeonGuiY - (dungeonGuiYSeparator * 0.65f);
+
+		dungeonGuiY -= dungeonGuiYSeparator;
+		dungeonGui.addData(GameScreen.BOMBS_ID, "Bombs: " + playerCharacter.getBombCount(), guiFont,
+				dungeonGuiX, dungeonGuiY);
 
 		dungeonGuiY = 26;
 		dungeonGui.addData(GameScreen.LEVEL_NAME, level.getName(), guiFont, dungeonGuiX, dungeonGuiY);
@@ -307,6 +312,7 @@ public class GameScreen extends ScreenBase {
 
 		dungeonGui.editData(GameScreen.HEALTH_ID, "Health: " + MathUtils.floor(playerCharacter.getHealth()));
 		dungeonGui.editData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore());
+		dungeonGui.editData(GameScreen.BOMBS_ID, "Bombs: " + playerCharacter.getBombCount());
 
 		batch.begin();
 		entityManager.render(deltaTime, batch);

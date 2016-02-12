@@ -70,7 +70,8 @@ public class PlayerCharacter extends MoveableEntity {
 	private ControlMap controlMap;
 	private Controller controller;
 
-	private float maxBombDropTime = 0.5f;
+	private int bombCount = 5;
+	private float maxBombDropTime = 0.35f;
 	private float bombDropTime = 0;
 
 	private boolean flying = false;
@@ -233,15 +234,18 @@ public class PlayerCharacter extends MoveableEntity {
 	}
 
 
+	/**
+	 * @param deltaTime
+	 * @return
+	 */
 	public boolean checkBombDrop(float deltaTime) {
 		bombDropTime -= deltaTime;
 
 		if (bombDropTime <= 0) {
 			bombDropTime = 0;
-			return true;
 		}
 
-		return false;
+		return ((bombCount > 0) && (bombDropTime <= 0));
 	}
 
 
@@ -254,16 +258,28 @@ public class PlayerCharacter extends MoveableEntity {
 		if (bombDropTime > 0) {
 			return null;
 		}
+		if (bombCount <= 0) {
+			return null;
+		}
 
 		if (controlMap.getStateForAction(Action.DROP_BOMB, controller) > 0) {
-			bombDropTime = maxBombDropTime;
 			float bombTextureRadius = 32;
 			Bomb bomb = new Bomb(game, AssetLocations.BOMB,
 					getCenter().cpy().sub(bombTextureRadius, bombTextureRadius));
+			bombDropTime = maxBombDropTime;
+			bombCount -= 1;
 			return bomb;
 		}
 
 		return null;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public int getBombCount() {
+		return bombCount;
 	}
 
 
