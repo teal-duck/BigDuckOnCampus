@@ -27,6 +27,10 @@ public class AssetLocations {
 	public static final String ENEMY_BULLET = "enemyBullet.png";
 	public static final String FLAME = "flame.png";
 
+	// http://opengameart.org/content/bomb-0
+	public static final String BOMB = "bomb64.png";
+	public static final String EXPLOSION = "explosion.png";
+
 	// Items
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";

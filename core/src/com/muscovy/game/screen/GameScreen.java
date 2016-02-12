@@ -17,7 +17,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.AssetLocations;
 import com.muscovy.game.EntityManager;
 import com.muscovy.game.MuscovyGame;
+import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
 import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
@@ -266,6 +268,8 @@ public class GameScreen extends ScreenBase {
 
 		} else {
 			if (!entityManager.isTransitioning()) {
+				explosionsUpdate(deltaTime);
+				bombsUpdate(deltaTime);
 				playerUpdate(deltaTime);
 				playerCharacter.update(deltaTime);
 				projectilesUpdate(deltaTime);
@@ -412,6 +416,46 @@ public class GameScreen extends ScreenBase {
 		guiFont.dispose();
 		pauseFont.dispose();
 		pauseMenuFont.dispose();
+	}
+
+
+	/**
+	 * @param deltaTime
+	 */
+	private void bombsUpdate(float deltaTime) {
+		ArrayList<Bomb> deadBombs = new ArrayList<Bomb>();
+
+		for (Bomb bomb : entityManager.getBombList()) {
+			bomb.update(deltaTime);
+
+			if (bomb.getBlastTime() < 0) {
+				bomb.goKaboom(entityManager);
+				Explosion explosion = new Explosion(getGame(), AssetLocations.EXPLOSION,
+						bomb.getBottomLeft(), bomb.getBlastRadius());
+				entityManager.addExplosion(explosion);
+				deadBombs.add(bomb);
+			}
+		}
+
+		for (Bomb bomb : deadBombs) {
+			entityManager.removeBomb(bomb);
+		}
+	}
+
+
+	private void explosionsUpdate(float deltaTime) {
+		ArrayList<Explosion> deadExplosions = new ArrayList<Explosion>();
+
+		for (Explosion explosion : entityManager.getExplosionList()) {
+			explosion.update(deltaTime);
+			if (explosion.getViewTime() < 0) {
+				deadExplosions.add(explosion);
+			}
+		}
+
+		for (Explosion explosion : deadExplosions) {
+			entityManager.removeExplosion(explosion);
+		}
 	}
 
 

@@ -73,7 +73,7 @@ public abstract class MoveableEntity extends Collidable {
 	 */
 	public void moveEntity(float deltaTime) {
 		velocity.mulAdd(acceleration, deltaTime);
-		velocity.limit(maxSpeed);
+		// velocity.limit(maxSpeed);
 		getPosition().mulAdd(velocity, deltaTime);
 		updateBoxesPosition();
 		velocity.scl(friction * deltaTime);

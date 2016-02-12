@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
+import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
@@ -38,6 +40,8 @@ public class EntityManager {
 	private ArrayList<Enemy> enemyList;
 	private ArrayList<Projectile> projectileList;
 	private ArrayList<Item> itemList;
+	private ArrayList<Bomb> bombList;
+	private ArrayList<Explosion> explosionList;
 
 	private DungeonRoom currentDungeonRoom;
 	private int currentRoomX;
@@ -78,6 +82,8 @@ public class EntityManager {
 		enemyList = new ArrayList<Enemy>();
 		projectileList = new ArrayList<Projectile>();
 		itemList = new ArrayList<Item>();
+		bombList = new ArrayList<Bomb>();
+		explosionList = new ArrayList<Explosion>();
 
 		currentDungeonRoom = null;
 		previousDungeonRoom = null;
@@ -157,12 +163,17 @@ public class EntityManager {
 		projectileList.clear();
 		enemyList.clear();
 		itemList.clear();
+		bombList.clear();
+		explosionList.clear();
 
 		currentDungeonRoom = dungeonRoom;
 		setFriction(level.getGroundFriction(), dungeonRoom);
 		addNewObstacles(dungeonRoom.getObstacleList());
 		addNewEnemies(dungeonRoom.getEnemyList());
 		addNewItems(dungeonRoom.getItemList());
+
+		// Bomb bomb = new Bomb(game, AssetLocations.BOMB, new Vector2(128, 128));
+		// addBomb(bomb);
 	}
 
 
@@ -298,6 +309,15 @@ public class EntityManager {
 			}
 
 			batch.setColor(Color.WHITE);
+
+			for (Explosion explosion : explosionList) {
+				float radius = explosion.getRadius();
+				Vector2 bottomLeft = explosion.getPosition();
+
+				Texture texture = explosion.getTexture();
+
+				batch.draw(texture, bottomLeft.x, bottomLeft.y, 2 * radius, 2 * radius);
+			}
 		}
 	}
 
@@ -937,6 +957,56 @@ public class EntityManager {
 	 */
 	public void addNewProjectiles(ArrayList<Projectile> projectiles) {
 		projectileList.addAll(projectiles);
+	}
+
+
+	/**
+	 * @param bomb
+	 */
+	public void addBomb(Bomb bomb) {
+		bombList.add(bomb);
+		renderList.add(bomb);
+	}
+
+
+	/**
+	 * @param bomb
+	 */
+	public void removeBomb(Bomb bomb) {
+		bombList.remove(bomb);
+		renderList.remove(bomb);
+	}
+
+
+	/**
+	 * @return
+	 */
+	public ArrayList<Bomb> getBombList() {
+		return bombList;
+	}
+
+
+	/**
+	 * @param explosion
+	 */
+	public void addExplosion(Explosion explosion) {
+		explosionList.add(explosion);
+	}
+
+
+	/**
+	 * @param explosion
+	 */
+	public void removeExplosion(Explosion explosion) {
+		explosionList.remove(explosion);
+	}
+
+
+	/**
+	 * @return
+	 */
+	public ArrayList<Explosion> getExplosionList() {
+		return explosionList;
 	}
 
 

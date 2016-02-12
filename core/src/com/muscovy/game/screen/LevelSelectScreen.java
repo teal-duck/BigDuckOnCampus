@@ -82,17 +82,21 @@ public class LevelSelectScreen extends ScreenBase {
 		}
 
 		final boolean allowSelectAnyLevel = false;
-
 		boolean shouldAdvance = false;
+
 		if ((moveDirection != 0) && (moveDirection != previousDirection)) {
 			if (allowSelectAnyLevel) {
+				// Override logic
 				shouldAdvance = true;
 			} else if (moveDirection < 0) {
+				// Can always go up
 				shouldAdvance = true;
 			} else if (getLevels().isLevelCompleted(mapSelected)) {
+				// Can only go down if the current level is completed
 				shouldAdvance = true;
 			}
 		}
+
 		if (shouldAdvance) {
 			mapSelected = LevelType.advanceLevel(mapSelected, moveDirection);
 		}
@@ -100,7 +104,7 @@ public class LevelSelectScreen extends ScreenBase {
 
 		if (isStateForAction(Action.ENTER)) {
 			if (!enterJustPressed) {
-				setScreen(new GameScreen(getGame(), getLevels().getLevel(mapSelected.ordinal())));
+				setScreen(new GameScreen(getGame(), getLevels().getLevel(mapSelected)));
 				return;
 			}
 			enterJustPressed = true;
