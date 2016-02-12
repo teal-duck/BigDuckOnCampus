@@ -199,7 +199,6 @@ public class DungeonRoom {
 			healthPack.setXTiles(x);
 			healthPack.setYTiles(y);
 			this.healthPack = healthPack;
-			// addItem(this.healthPack);
 		}
 	}
 
@@ -550,12 +549,6 @@ public class DungeonRoom {
 	public boolean areAllEnemiesDead() {
 		if (enemyList.size() == 0) {
 			allEnemiesDead = true;
-			// if (healthPack != null) {
-			// System.out.println("healthpack added");
-			// addItem(healthPack);
-			// //game.
-			// //healthPack = null;
-			// }
 		}
 		return allEnemiesDead;
 	}

@@ -749,6 +749,7 @@ public class EntityManager {
 		// Check if room is complete
 		if (currentDungeonRoom.areAllEnemiesDead() && (currentDungeonRoom.getHealthPack() != null)) {
 			addNewItem(currentDungeonRoom.getHealthPack());
+			currentDungeonRoom.addItem(currentDungeonRoom.getHealthPack());
 			currentDungeonRoom.removeHealthPack();
 		}
 
