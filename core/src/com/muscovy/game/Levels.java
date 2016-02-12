@@ -12,6 +12,10 @@ import com.muscovy.game.level.LevelParameters;
 /**
  * Groups all the levels together. Provides functions for generating the levels.S
  */
+/**
+ * @author ben
+ *
+ */
 public class Levels {
 	private int maxLevels;
 	private Level[] levels;
@@ -85,11 +89,29 @@ public class Levels {
 
 
 	/**
+	 * @param levelType
+	 * @return
+	 */
+	public Level getLevel(LevelType levelType) {
+		return getLevel(levelType.ordinal());
+	}
+
+
+	/**
 	 * @param level
 	 * @return
 	 */
 	public boolean isLevelCompleted(int level) {
 		return getLevel(level).isCompleted();
+	}
+
+
+	/**
+	 * @param levelType
+	 * @return
+	 */
+	public boolean isLevelCompleted(LevelType levelType) {
+		return getLevel(levelType).isCompleted();
 	}
 
 

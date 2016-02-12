@@ -81,7 +81,19 @@ public class LevelSelectScreen extends ScreenBase {
 			moveDirection = -1;
 		}
 
+		final boolean allowSelectAnyLevel = false;
+
+		boolean shouldAdvance = false;
 		if ((moveDirection != 0) && (moveDirection != previousDirection)) {
+			if (allowSelectAnyLevel) {
+				shouldAdvance = true;
+			} else if (moveDirection < 0) {
+				shouldAdvance = true;
+			} else if (getLevels().isLevelCompleted(mapSelected)) {
+				shouldAdvance = true;
+			}
+		}
+		if (shouldAdvance) {
 			mapSelected = LevelType.advanceLevel(mapSelected, moveDirection);
 		}
 		previousDirection = moveDirection;
