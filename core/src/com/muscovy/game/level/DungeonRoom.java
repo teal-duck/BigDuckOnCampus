@@ -256,15 +256,15 @@ public class DungeonRoom {
 						setItemSpawnY(fixedY);
 						break;
 					default:
-						System.out.println("Unrecognised cell " + cell + "; location (" + col
-								+ ", " + cell + ") (fixed y: " + fixedY + ")");
+						Gdx.app.log("Room Gen", "Unrecognised cell " + cell + "; location ("
+								+ col + ", " + cell + ") (fixed y: " + fixedY + ")");
 						break;
 					}
 				}
 			}
 
 			if ((getItemSpawnX() < 0) || (getItemSpawnY() < 0)) {
-				System.out.println("Item spawn location not found. Defaulting to (0, 0).");
+				Gdx.app.log("Room gen", "Item spawn location not found. Defaulting to (0, 0).");
 				setItemSpawnX(0);
 				setItemSpawnY(0);
 			}
@@ -704,6 +704,11 @@ public class DungeonRoom {
 
 	public Item getHealthPack() {
 		return healthPack;
+	}
+
+
+	public void setHealthPack(Item healthPack) {
+		this.healthPack = healthPack;
 	}
 
 

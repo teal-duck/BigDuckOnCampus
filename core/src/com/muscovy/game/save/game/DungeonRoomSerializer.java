@@ -29,6 +29,10 @@ public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 		json.writeValue("hasLeftDoor", room.hasLeftDoor());
 		json.writeValue("allEnemiesDead", room.areAllEnemiesDead());
 
+		json.writeValue("itemSpawnX", room.getItemSpawnX());
+		json.writeValue("itemSpawnY", room.getItemSpawnY());
+		json.writeValue("healthPack", room.getHealthPack());
+
 		json.writeArrayStart("obstacleList");
 		for (Obstacle obstacle : room.getObstacleList()) {
 			json.writeValue(obstacle);
@@ -73,6 +77,17 @@ public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 		dungeonRoom.setHasDownDoor(hasDownDoor);
 		dungeonRoom.setHasLeftDoor(hasLeftDoor);
 		dungeonRoom.initialiseDoors();
+
+		int itemSpawnX = jsonData.getInt("itemSpawnX");
+		int itemSpawnY = jsonData.getInt("itemSpawnY");
+		dungeonRoom.setItemSpawnX(itemSpawnX);
+		dungeonRoom.setItemSpawnY(itemSpawnY);
+
+		JsonValue healthPackValue = jsonData.get("healthPack");
+		if (!healthPackValue.isNull()) {
+			Item healthPack = this.fromJson(Item.class, json, healthPackValue, type);
+			dungeonRoom.setHealthPack(healthPack);
+		}
 
 		boolean allEnemiesDead = jsonData.getBoolean("allEnemiesDead");
 		dungeonRoom.setEnemiesDead(allEnemiesDead);
