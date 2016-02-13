@@ -35,7 +35,7 @@ public class AssetLocations {
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";
 	public static final String RAPID_FIRE = "rapid_fire.png";
-	public static final String FLAME_THROWER = "flame_thrower_temp.png";
+	public static final String FLAME_THROWER = "flame_thrower.png";
 	public static final String BOMB_ITEM = "bomb_item_temp.png";
 
 	// Open Doors
