@@ -20,7 +20,7 @@ public class AssetLocations {
 	public static final String ACCOMODATION_BOSS = "accommodationAssets/accommodationBoss.png";
 
 	// Player
-	public static final String PLAYER = "duck.png";
+	public static final String PLAYER = "newduck.png";
 
 	// Projectiles
 	public static final String BULLET = "breadBullet.png";
@@ -35,8 +35,8 @@ public class AssetLocations {
 	public static final String HEALTHPACK = "healthpack.png";
 	public static final String TRIPLE_SHOT = "triple_shot.png";
 	public static final String RAPID_FIRE = "rapid_fire.png";
-	public static final String FLAME_THROWER = "rapid_fire.png";
-	public static final String BOMB_ITEM = "rapid_fire.png";
+	public static final String FLAME_THROWER = "flame_thrower_temp.png";
+	public static final String BOMB_ITEM = "bomb_item_temp.png";
 
 	// Open Doors
 	public static final String DOOR_UP_OPEN = "accommodationAssets/doorOpen/PNGs/accommodationDoorUp.png";
