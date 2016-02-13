@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
- *
+ *Set up buttons text and texture
+ *No logic - see ButtonList
  */
 public class Button {
 	private String text;
@@ -29,11 +30,32 @@ public class Button {
 	private Color deselectedTextColour = Color.BLACK;
 
 
+	/**
+	 * 
+	 * @param text
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param textYOffset
+	 * @param font
+	 */
 	public Button(String text, float x, float y, float width, float height, float textYOffset, BitmapFont font) {
 		this(text, x, y, width, height, textYOffset, font, null, null);
 	}
 
-
+	/**
+	 * 
+	 * @param text
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param textYOffset
+	 * @param font
+	 * @param selectedTexture
+	 * @param deselectedTexture
+	 */
 	public Button(String text, float x, float y, float width, float height, float textYOffset, BitmapFont font,
 			Texture selectedTexture, Texture deselectedTexture) {
 		this.text = text;
@@ -53,7 +75,7 @@ public class Button {
 
 
 	/**
-	 *
+	 *Button layout
 	 */
 	private void createGlyphLayout() {
 		glyphLayout = new GlyphLayout(font, text);

@@ -17,27 +17,34 @@ import com.muscovy.game.enums.ProjectileType;
  * Created by SeldomBucket on 05-Dec-15.
  */
 public class Enemy extends MoveableEntity {
+		
+	//Attack
 	public static final float TOUCH_DAMAGE = 10f;
+	
 	public static final float ATTACK_INTERVAL = 1.5f;
 	public static final float ATTACK_RANDOMNESS = 0.5f;
-
+	
 	public static final float PROJECTILE_RANGE = 400;
 	public static final float PROJECTILE_SPEED = 150;
 	public static final float BOSS_PROJECTILE_SPEED = Enemy.PROJECTILE_SPEED * 2;
-	public static final float VIEW_DISTANCE = 1000; // 480;
 
 	// Used in the random movement type logic
 	public static final float MIN_ROTATION = 10;
 	public static final float MAX_ROTATION = 15;
 	public static final float TIME_TO_STAY_IN_RANDOM_DIRECTION = 0.05f;
+	
+	public static final float VIEW_DISTANCE = 1000; // 480;
 
 	public static final float JUST_DAMAGED_TIME = 0.6f;
-
+	
+	//Movement
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
-
+	
+	//Collision detection
 	private boolean collidingWithSomething;
-
+	
+	//Attack
 	private AttackType attackType = AttackType.TOUCH;
 	private EnemyShotType shotType = EnemyShotType.SINGLE_TOWARDS_PLAYER;
 	private float touchDamage = Enemy.TOUCH_DAMAGE;
@@ -51,8 +58,9 @@ public class Enemy extends MoveableEntity {
 	private float projectileSpeed = Enemy.PROJECTILE_SPEED;
 	private float projectileLife = projectileRange / projectileSpeed;
 	private ProjectileType projectileType = ProjectileType.STANDARD;
+	
 	private float viewDistance = Enemy.VIEW_DISTANCE;
-
+	
 	private float currentHealth = 40;
 	private int scoreOnDeath = 0;
 
@@ -163,7 +171,7 @@ public class Enemy extends MoveableEntity {
 		Vector2 directionToPlayer = playerCharacter.getCenter().cpy().sub(getCenter()).nor();
 		float distanceToPlayer = getDistanceTo(playerCharacter);
 
-		int bulletsToShoot = 0;
+		int bulletsToShoot = 0;	//Number of bullets in the attack
 		Vector2 shootDirection = directionToPlayer;
 
 		switch (shotType) {
@@ -227,7 +235,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 *
+	 *Random time between attacks
 	 */
 	public void chooseNewAttackInterval() {
 		attackInterval = MathUtils.random(maxAttackInterval - attackRandomness,
@@ -264,7 +272,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 *
+	 *Enemy disappears if dead
 	 */
 	public void killSelf() {
 		dead = true;
@@ -272,7 +280,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 *
+	 *When enemy dies update score
 	 */
 	public void calculateScoreOnDeath() {
 		scoreOnDeath = (attackType.getScoreMultiplier() * 10) + (movementType.getScoreMultiplier() * 10);

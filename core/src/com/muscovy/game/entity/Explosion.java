@@ -4,7 +4,11 @@ package com.muscovy.game.entity;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 
-
+/**
+ * 
+ * Projectile explosion i.e. the bomb
+ *
+ */
 public class Explosion extends OnscreenDrawable {
 	public static final float VIEW_TIME = 0.5f;
 	private float radius;

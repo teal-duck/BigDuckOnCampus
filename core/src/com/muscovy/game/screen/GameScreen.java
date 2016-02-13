@@ -103,7 +103,7 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void initialiseGui() {
-		// DUNGEON
+		// DUNGEON GUI
 		dungeonGui = new GUI();
 
 		guiFont = AssetLocations.newFont20();
@@ -113,28 +113,34 @@ public class GameScreen extends ScreenBase {
 		int dungeonGuiY = getWindowHeight();
 		int dungeonGuiTop = 4;
 		int dungeonGuiYSeparator = 30;
-
+		
+		//Health
 		dungeonGuiY -= dungeonGuiTop;
 		dungeonGui.addData(GameScreen.HEALTH_ID, "Health: " + playerCharacter.getHealth(), guiFont, dungeonGuiX,
 				dungeonGuiY);
-
+		
+		//Score
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore(), guiFont, dungeonGuiX,
 				dungeonGuiY);
-
+		
+		//Flight bar
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.FLIGHT_ID, GameScreen.FLIGHT_TEXT, guiFont, dungeonGuiX, dungeonGuiY);
 
 		flightBarX = getTextWidth(guiFont, GameScreen.FLIGHT_TEXT);
 		flightBarY = dungeonGuiY - (dungeonGuiYSeparator * 0.65f);
-
+		
+		//Number of bombs
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.BOMBS_ID, "Bombs: " + playerCharacter.getBombCount(), guiFont,
 				dungeonGuiX, dungeonGuiY);
 
+		//Level name
 		dungeonGuiY = 26;
 		dungeonGui.addData(GameScreen.LEVEL_NAME, level.getName(), guiFont, dungeonGuiX, dungeonGuiY);
-
+		
+		//Level objective
 		String objectiveText = level.getObjectiveName();
 		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
 		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
@@ -268,11 +274,6 @@ public class GameScreen extends ScreenBase {
 				selectPauseOption(selected);
 			}
 
-			// if (getStateForAction(Action.ESCAPE) > 0) {
-			// selectQuit();
-			// return;
-			// }
-
 		} else {
 			if (!entityManager.isTransitioning()) {
 				explosionsUpdate(deltaTime);
@@ -305,7 +306,6 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 	}
-
 
 	@Override
 	public void renderScreen(float deltaTime, SpriteBatch batch) {
