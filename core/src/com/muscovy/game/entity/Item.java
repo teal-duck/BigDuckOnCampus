@@ -65,7 +65,16 @@ public class Item extends Collidable {
 			return true;
 		case FLIGHT:
 			playerCharacter.setMaxFlightTime();
+			playerCharacter.addItemToObtainedItems(type);
 			return true;
+		case EXTRA_HEALTH:
+			playerCharacter.setMaxHealth(PlayerCharacter.MAX_HEALTH * 2);
+			playerCharacter.addItemToObtainedItems(type);
+			return true;
+//		case HOMING_BULLET:
+//			playerCharacter.setProjectileType(ProjectileType.HOMING);
+//			playerCharacter.addItemToObtainedItems(type);
+//			return true;
 		default:
 			return false;
 		}

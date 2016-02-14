@@ -120,8 +120,8 @@ public enum LevelType {
 			return ItemType.FLIGHT;
 		case CATALYST:
 			return ItemType.EXTRA_HEALTH;
-		case TFTV:
-			return ItemType.HOMING_BULLET;
+//		case TFTV:
+//			return ItemType.HOMING_BULLET;
 		case COMP_SCI:
 			return ItemType.BOMB_UNLOCK;
 		case RCH:
