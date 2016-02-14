@@ -76,7 +76,7 @@ public class Item extends Collidable {
 			playerCharacter.setHealth(PlayerCharacter.MAX_HEALTH);
 			return true;
 		case SUNGLASSES:
-			playerCharacter.setTexture(AssetLocations.SUNGLASSES);
+			playerCharacter.setTexture(AssetLocations.PLAYER_SUNGLASSES);
 			return true;
 		default:
 			return false;

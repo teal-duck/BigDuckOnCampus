@@ -778,7 +778,8 @@ public class EntityManager {
 		LevelType levelType = level.getLevelType();
 
 		// Check if room is complete
-		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getRoomFinishedItem() == null && currentDungeonRoom.getRoomType() != RoomType.START) {
+		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getRoomFinishedItem() == null && 
+				currentDungeonRoom.getRoomType() == RoomType.NORMAL) {
 //			Item roomFinishedItem = currentDungeonRoom.getRoomFinishedItem();
 //			if (roomFinishedItem != null) {
 //				addNewItem(roomFinishedItem);
