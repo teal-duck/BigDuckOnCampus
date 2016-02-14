@@ -124,6 +124,10 @@ public class EntityManager {
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
+		if (this.level.getLevelType() == LevelType.GOODRICKE)
+			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
+		else
+			this.playerCharacter.setTexture(AssetLocations.PLAYER);
 		currentRoomX = level.getStartX();
 		currentRoomY = level.getStartY();
 		setCurrentDungeonRoom(currentRoomX, currentRoomY);
