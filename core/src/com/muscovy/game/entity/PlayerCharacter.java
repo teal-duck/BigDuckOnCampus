@@ -85,7 +85,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 	private boolean flying = false;
 	private boolean usedAllFlight = false;
-	private float maxFlightTime = PlayerCharacter.MAX_FLIGHT_TIME;
+	private float maxFlightTime = 0;
 	private float flightTime = maxFlightTime;
 	private float flightSpeedScale = PlayerCharacter.FLIGHT_SPEED_MULTIPLIER;
 
@@ -198,7 +198,7 @@ public class PlayerCharacter extends MoveableEntity {
 				flyScale = flightSpeedScale;
 			} else {
 				// Only allow sprinting to start if the player didn't use the charge
-				if ((flightTime >= 0) && !usedAllFlight) {
+				if ((flightTime > 0) && !usedAllFlight) {
 					flying = true;
 					flyScale = flightSpeedScale;
 				}
@@ -655,6 +655,14 @@ public class PlayerCharacter extends MoveableEntity {
 	 */
 	public void setMaxFlightTime(float maxFlightTime) {
 		this.maxFlightTime = maxFlightTime;
+	}
+	
+	
+	/**
+	 * Sets maxFlightTime to MAX_FLIGHT_TIME. If maxFlightTime is initialised to 0, this effectively "unlocks" flight.
+	 */
+	public void setMaxFlightTime() {
+		maxFlightTime = MAX_FLIGHT_TIME;
 	}
 
 

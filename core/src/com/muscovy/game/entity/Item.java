@@ -63,6 +63,9 @@ public class Item extends Collidable {
 		case BOMB:
 			playerCharacter.giveBombs(Item.BOMB_GIVE_COUNT);
 			return true;
+		case FLIGHT:
+			playerCharacter.setMaxFlightTime();
+			return true;
 		default:
 			return false;
 		}

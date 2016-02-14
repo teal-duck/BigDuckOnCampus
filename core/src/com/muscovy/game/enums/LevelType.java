@@ -116,6 +116,16 @@ public enum LevelType {
 			return ItemType.TRIPLE_SHOT;
 		case GOODRICKE:
 			return ItemType.FLAME_THROWER;
+		case LMB:
+			return ItemType.FLIGHT;
+		case CATALYST:
+			return ItemType.EXTRA_HEALTH;
+		case TFTV:
+			return ItemType.HOMING_BULLET;
+		case COMP_SCI:
+			return ItemType.BOMB_UNLOCK;
+		case RCH:
+			return ItemType.SUNGLASSES;
 		default:
 			return null;
 		}
