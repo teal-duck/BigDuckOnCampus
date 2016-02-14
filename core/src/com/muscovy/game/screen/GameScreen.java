@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -67,7 +68,10 @@ public class GameScreen extends ScreenBase {
 	private BitmapFont pauseFont;
 	private GUI dungeonGui;
 	private GUI pauseGui;
-
+	
+	//Item 
+	private Sprite bombSprite;
+	
 	// Pause status
 	private boolean paused = false;
 	private boolean pauseJustPressed = true;
@@ -133,8 +137,15 @@ public class GameScreen extends ScreenBase {
 		
 		//Number of bombs
 		dungeonGuiY -= dungeonGuiYSeparator;
-		dungeonGui.addData(GameScreen.BOMBS_ID, "Bombs: " + playerCharacter.getBombCount(), guiFont,
-				dungeonGuiX, dungeonGuiY);
+		dungeonGuiY -= dungeonGuiYSeparator*2 ;
+		bombSprite = new Sprite();
+		bombSprite.setTexture(new Texture(Gdx.files.internal(AssetLocations.BOMB_GUI)));
+        bombSprite.setX(dungeonGuiX);
+        bombSprite.setY(dungeonGuiY + 3);
+        dungeonGui.addElement(bombSprite);
+        dungeonGuiY += dungeonGuiYSeparator;
+		dungeonGui.addData(GameScreen.BOMBS_ID, "x" + playerCharacter.getBombCount(), guiFont,
+				dungeonGuiX*4, dungeonGuiY);
 
 		//Level name
 		dungeonGuiY = 26;
@@ -314,7 +325,7 @@ public class GameScreen extends ScreenBase {
 
 		dungeonGui.editData(GameScreen.HEALTH_ID, "Health: " + MathUtils.floor(playerCharacter.getHealth()));
 		dungeonGui.editData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore());
-		dungeonGui.editData(GameScreen.BOMBS_ID, "Bombs: " + playerCharacter.getBombCount());
+		dungeonGui.editData(GameScreen.BOMBS_ID, "x" + playerCharacter.getBombCount());
 
 		batch.begin();
 		entityManager.render(deltaTime, batch);

@@ -10,6 +10,8 @@ import com.muscovy.game.enums.LevelType;
  *
  */
 public class AssetLocations {
+	public static final String BOMB_GUI = "bomb_icon.png";
+	
 	// Obstacles
 	public static final String RECYLING_BIN = "accommodationAssets/obstacles/binRecycle.png";
 	public static final String SPIKES = "spikes.png";
