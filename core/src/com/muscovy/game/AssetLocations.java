@@ -40,8 +40,6 @@ public class AssetLocations {
 	public static final String FLAME_THROWER = "flame_thrower.png";
 	public static final String BOMB_ITEM = "bomb_pickup.png";
 	public static final String EXTRA_HEALTH = "health_increase.png";
-	public static final String HOMING_BULLET_ITEM = "homing_bullet.png";
-	public static final String BOMB_UNLOCK = "bomb_pickup.png";
 	public static final String FLIGHT_ITEM = "bomb_item_temp.png";
 	public static final String SUNGLASSES = "sunglasses.png";
 

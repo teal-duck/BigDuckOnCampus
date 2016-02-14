@@ -204,7 +204,9 @@ public class DungeonRoom {
 			break;
 		case 1:
 		case 2:
-			itemType = ItemType.HEALTH;
+			if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_HEALTH.ordinal()) {
+				itemType = ItemType.HEALTH;
+			}
 			break;
 		case 3:
 			if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_BOMBS.ordinal()) {
