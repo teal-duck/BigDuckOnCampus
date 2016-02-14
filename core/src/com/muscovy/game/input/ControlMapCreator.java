@@ -38,7 +38,7 @@ public class ControlMapCreator {
 		controlMap.addKeyForAction(Action.SHOOT_LEFT, Keys.LEFT);
 
 		controlMap.addKeyForAction(Action.FLY, Keys.SPACE);
-		controlMap.addKeyForAction(Action.DROP_BOMB, Keys.B);
+		controlMap.addKeyForAction(Action.DROP_BOMB, Keys.E);
 
 		controlMap.addKeyForAction(Action.ENTER, Keys.ENTER);
 		controlMap.addKeyForAction(Action.PAUSE, Keys.P);
