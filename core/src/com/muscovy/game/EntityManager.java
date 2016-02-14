@@ -2,6 +2,7 @@ package com.muscovy.game;
 
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -773,13 +774,14 @@ public class EntityManager {
 		LevelType levelType = level.getLevelType();
 
 		// Check if room is complete
-		if (currentDungeonRoom.areAllEnemiesDead()) {
-			Item roomFinishedItem = currentDungeonRoom.getRoomFinishedItem();
-			if (roomFinishedItem != null) {
-				addNewItem(roomFinishedItem);
-				currentDungeonRoom.addItem(roomFinishedItem);
-				currentDungeonRoom.removeRoomFinishedItem();
-			}
+		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getRoomFinishedItem() == null && currentDungeonRoom.getRoomType() != RoomType.START) {
+//			Item roomFinishedItem = currentDungeonRoom.getRoomFinishedItem();
+//			if (roomFinishedItem != null) {
+//				addNewItem(roomFinishedItem);
+//				currentDungeonRoom.addItem(roomFinishedItem);
+//				currentDungeonRoom.removeRoomFinishedItem();
+//			}
+			spawnItem(levelType, false);
 		}
 
 		// If the level has already been completed, don't check again
@@ -796,7 +798,7 @@ public class EntityManager {
 				completed = true;
 
 				// Spawn the item for this level
-				spawnItem(levelType);
+				spawnItem(levelType, true);
 			}
 			break;
 
@@ -807,7 +809,7 @@ public class EntityManager {
 				completed = true;
 
 				// spawn item for level
-				spawnItem(levelType);
+				spawnItem(levelType, true);
 			}
 			break;
 
@@ -823,20 +825,57 @@ public class EntityManager {
 	}
 
 
-	private void spawnItem(LevelType levelType) {
-		ItemType itemType = LevelType.getItemType(levelType);
+	private void spawnItem(LevelType levelType, boolean finalRoom) {
+		if (finalRoom) {
+			ItemType itemType = LevelType.getItemType(levelType);
+	
+			if (itemType != null) {
+				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(), itemType);
+				if (level.getObjectiveType().equals(ObjectiveType.BOSS)) {
+					item.setXTiles(5);
+					item.setYTiles(5);
+				} else {
+					item.setXTiles(currentDungeonRoom.getItemSpawnX());
+					item.setYTiles(currentDungeonRoom.getItemSpawnY());
+				}
+				currentDungeonRoom.addItem(item);
+				addNewItem(item);
+			}
+		} else {
+			Random random = game.getRandom();
+			int choice = random.nextInt(4);
 
-		if (itemType != null) {
-			Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0), itemType);
-			if (level.getObjectiveType().equals(ObjectiveType.BOSS)) {
-				item.setXTiles(5);
-				item.setYTiles(5);
-			} else {
+			// 25% chance for nothing
+			// 50% chance for health
+			// 25% chance for bomb
+
+			ItemType itemType = null;
+			switch (choice) {
+			case 0:
+				break;
+			case 1:
+			case 2:
+				if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_HEALTH.ordinal()) {
+					itemType = ItemType.HEALTH;
+				}
+				break;
+			case 3:
+				if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_BOMBS.ordinal()) {
+					itemType = ItemType.BOMB;
+				}
+				break;
+			}
+			
+			if (itemType != null) {
+				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(), itemType);
+				
 				item.setXTiles(currentDungeonRoom.getItemSpawnX());
 				item.setYTiles(currentDungeonRoom.getItemSpawnY());
+				
+				currentDungeonRoom.addItem(item);
+				addNewItem(item);
+				currentDungeonRoom.setRoomFinishedItem(item);
 			}
-			currentDungeonRoom.addItem(item);
-			addNewItem(item);
 		}
 	}
 

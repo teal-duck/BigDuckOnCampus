@@ -8,7 +8,7 @@ import com.muscovy.game.AssetLocations;
  *
  */
 public enum ItemType {
-	HEALTH, COIN, TRIPLE_SHOT, RAPID_FIRE, FLAME_THROWER, BOMB, FLIGHT, EXTRA_HEALTH, HOMING_BULLET, BOMB_UNLOCK, SUNGLASSES;
+	HEALTH, COIN, TRIPLE_SHOT, RAPID_FIRE, FLAME_THROWER, BOMB, FLIGHT, EXTRA_HEALTH, SUNGLASSES, HEALTH_UNLOCK;
 
 	/**
 	 * @param itemType
@@ -30,12 +30,10 @@ public enum ItemType {
 			return AssetLocations.FLIGHT_ITEM;
 		case EXTRA_HEALTH:
 			return AssetLocations.EXTRA_HEALTH;
-		case HOMING_BULLET:
-			return AssetLocations.HOMING_BULLET_ITEM;
-		case BOMB_UNLOCK:
-			return AssetLocations.BOMB_UNLOCK;
 		case SUNGLASSES:
 			return AssetLocations.SUNGLASSES;
+		case HEALTH_UNLOCK:
+			return AssetLocations.HEALTHPACK;
 		default:
 			return null;
 		}

@@ -16,7 +16,8 @@ public enum LevelType {
 
 	private static final LevelType[] LEVEL_VALUES = LevelType.values();
 	public static final int LEVEL_COUNT = LevelType.LEVEL_VALUES.length;
-	public static final LevelType FIRST_LEVEL_TO_GIVE_BOMBS = CONSTANTINE; // GOODRICKE;
+	public static final LevelType FIRST_LEVEL_TO_GIVE_BOMBS = GOODRICKE;
+	public static final LevelType FIRST_LEVEL_TO_GIVE_HEALTH = CONSTANTINE;
 
 
 	/**
@@ -95,7 +96,7 @@ public enum LevelType {
 		case COMP_SCI:
 			return "Computer Science";
 		case RCH:
-			return "Ron-Cooke Hub";
+			return "Ron Cooke Hub";
 		}
 		return "";
 	}
@@ -111,19 +112,19 @@ public enum LevelType {
 
 		switch (levelType) {
 		case CONSTANTINE:
-			return ItemType.RAPID_FIRE;
+			return ItemType.HEALTH_UNLOCK;
 		case LANGWITH:
-			return ItemType.TRIPLE_SHOT;
-		case GOODRICKE:
-			return ItemType.FLAME_THROWER;
-		case LMB:
 			return ItemType.FLIGHT;
+		case GOODRICKE:
+			return ItemType.BOMB;
+		case LMB:
+			return ItemType.RAPID_FIRE;
 		case CATALYST:
 			return ItemType.EXTRA_HEALTH;
-//		case TFTV:
-//			return ItemType.HOMING_BULLET;
+		case TFTV:
+			return ItemType.TRIPLE_SHOT;
 		case COMP_SCI:
-			return ItemType.BOMB_UNLOCK;
+			return ItemType.FLAME_THROWER;
 		case RCH:
 			return ItemType.SUNGLASSES;
 		default:

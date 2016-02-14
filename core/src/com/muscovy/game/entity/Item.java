@@ -2,6 +2,7 @@ package com.muscovy.game.entity;
 
 
 import com.badlogic.gdx.math.Vector2;
+import com.muscovy.game.AssetLocations;
 import com.muscovy.game.MuscovyGame;
 import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.PlayerShotType;
@@ -40,7 +41,7 @@ public class Item extends Collidable {
 	 * Attempts to apply its own effect to the player. Returns true if it was successful, else false.
 	 *
 	 * @param playerCharacter
-	 * @return
+	 * @return true if item successfully applied.
 	 */
 	public boolean applyToPlayer(PlayerCharacter playerCharacter) {
 		switch (type) {
@@ -71,10 +72,12 @@ public class Item extends Collidable {
 			playerCharacter.setMaxHealth(PlayerCharacter.MAX_HEALTH * 2);
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
-//		case HOMING_BULLET:
-//			playerCharacter.setProjectileType(ProjectileType.HOMING);
-//			playerCharacter.addItemToObtainedItems(type);
-//			return true;
+		case HEALTH_UNLOCK:
+			playerCharacter.setHealth(PlayerCharacter.MAX_HEALTH);
+			return true;
+		case SUNGLASSES:
+			playerCharacter.setTexture(AssetLocations.SUNGLASSES);
+			return true;
 		default:
 			return false;
 		}
