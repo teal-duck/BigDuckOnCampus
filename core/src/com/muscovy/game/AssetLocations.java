@@ -18,7 +18,9 @@ public class AssetLocations {
 
 	// Enemies
 	public static final String CLEANER = "accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1.png";
+	public static final String CLEANER_WATER = "accommodationAssets/enemies/cleaner/rightCleanerWalk/PNGs/rightCleaner1_water.png";
 	public static final String STUDENT = "accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png";
+	public static final String STUDENT_WATER = "accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1_water.png";
 	public static final String ACCOMODATION_BOSS = "accommodationAssets/accommodationBoss.png";
 
 	// Player
