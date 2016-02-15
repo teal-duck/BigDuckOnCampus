@@ -22,6 +22,7 @@ public class AssetLocations {
 	public static final String STUDENT = "accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1.png";
 	public static final String STUDENT_WATER = "accommodationAssets/enemies/student/rightStudentWalk/PNGs/rightStudent1_water.png";
 	public static final String ACCOMODATION_BOSS = "accommodationAssets/accommodationBoss.png";
+	public static final String ACCOMODATION_BOSS_WATER = "accommodationAssets/accommodationBoss_water.png";
 
 	// Player
 	public static final String PLAYER = "newduck.png";
