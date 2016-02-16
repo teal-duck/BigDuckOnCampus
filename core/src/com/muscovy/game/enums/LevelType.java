@@ -27,7 +27,7 @@ public enum LevelType {
 	public static LevelType fromInt(int i) {
 		return LevelType.LEVEL_VALUES[i];
 	}
-
+	
 
 	/**
 	 * Increments the ordinal value for level by amount, wraps around and returns the new level.
@@ -51,12 +51,6 @@ public enum LevelType {
 	}
 
 
-	// public static final int DUNGEON_ROOMS_WIDE = 7;
-	// public static final int DUNGEON_ROOMS_HIGH = 7;
-	// public static final int MAX_ROOMS = 20;
-	// public static final int START_ROOM_X = 3;
-	// public static final int START_ROOM_Y = 3;
-
 	/**
 	 * @param levelType
 	 * @return
@@ -64,11 +58,21 @@ public enum LevelType {
 	public static LevelParameters getParametersForLevel(LevelType levelType) {
 		switch (levelType) {
 		case CONSTANTINE:
-			return new LevelParameters(5, 5, 6, 2, 2, ObjectiveType.BOSS);
+			return new LevelParameters(3, 3, 6, 1, 1, ObjectiveType.BOSS);
 		case LANGWITH:
-			return new LevelParameters(6, 6, 5, 3, 3, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(4, 4, 5, 2, 2, ObjectiveType.KILL_ENEMIES);
 		case GOODRICKE:
-			return new LevelParameters(6, 6, 10, 3, 3, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
+			return new LevelParameters(5, 5, 10, 2, 2, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
+		case LMB:
+			return new LevelParameters(5, 5, 10, 2, 2, ObjectiveType.KILL_ENEMIES);
+		case CATALYST:
+			return new LevelParameters(6, 6, 14, 3, 3, ObjectiveType.BOSS);
+		case TFTV:
+			return new LevelParameters(6, 6, 14, 3, 3, ObjectiveType.KILL_ENEMIES);
+		case COMP_SCI:
+			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.KILL_ENEMIES);
+		case RCH:
+			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		default:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
 		}
