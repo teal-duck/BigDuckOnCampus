@@ -46,6 +46,10 @@ public class TextureMap {
 	 */
 	public Texture loadTextureOverwriteOld(String textureName) {
 		Texture texture = TextureMap.getTextureFromFile(textureName);
+		if (texture == null) {
+			return null;
+		}
+
 		Texture oldTexture = textures.put(textureName, texture);
 
 		if (oldTexture != null) {
