@@ -20,7 +20,6 @@ public class GUI {
 
 
 	/**
-	 * @author ben
 	 *
 	 */
 	private class GuiData {
