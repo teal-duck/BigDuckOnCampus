@@ -23,10 +23,6 @@ import com.muscovy.game.screen.MainMenuScreen;
 /**
  * If you need a hand, email me on ewh502
  */
-/**
- * @author ben
- *
- */
 public class MuscovyGame extends Game {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;

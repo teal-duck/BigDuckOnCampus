@@ -26,10 +26,6 @@ import com.muscovy.game.enums.RoomType;
 /**
  * Created by SeldomBucket on 05-Dec-15.
  */
-/**
- * @author ben
- *
- */
 public class DungeonRoom {
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;

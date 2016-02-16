@@ -828,8 +828,8 @@ public class EntityManager {
 
 		level.setCompleted(completed);
 
-		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getRoomFinishedItem() == null
-				&& currentDungeonRoom.getRoomType() == RoomType.NORMAL && !completed) {
+		if (currentDungeonRoom.areAllEnemiesDead() && (currentDungeonRoom.getRoomFinishedItem() == null)
+				&& (currentDungeonRoom.getRoomType() == RoomType.NORMAL) && !completed) {
 			spawnItem(levelType, false);
 		}
 

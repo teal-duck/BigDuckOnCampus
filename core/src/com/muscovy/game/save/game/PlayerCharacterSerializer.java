@@ -57,7 +57,7 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 
 		PlayerCharacter playerCharacter = new PlayerCharacter(game, AssetLocations.PLAYER, position, controlMap,
 				controller);
-		playerCharacter.getSprite().setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+		// playerCharacter.getSprite().setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 		playerCharacter.setFriction(friction);
 		playerCharacter.setAccelerationSpeed(accelerationSpeed);
 		playerCharacter.setScore(score);

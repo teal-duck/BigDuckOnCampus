@@ -12,10 +12,6 @@ import com.muscovy.game.level.LevelParameters;
 /**
  * Groups all the levels together. Provides functions for generating the levels.S
  */
-/**
- * @author ben
- *
- */
 public class Levels {
 	private int maxLevels;
 	private Level[] levels;
