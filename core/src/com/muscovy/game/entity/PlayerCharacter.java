@@ -44,7 +44,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 	// Position bomb below the player slightly
 	// Means bomb will be rendered on top of player
-	public static final float BOMB_Y_OFFSET = 34;
+	public static final float BOMB_Y_OFFSET = 16;
 
 	private Vector2 shotDirection;
 	private PlayerShotType shotType = PlayerShotType.SINGLE;

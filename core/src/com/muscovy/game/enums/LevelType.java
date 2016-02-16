@@ -188,10 +188,10 @@ public enum LevelType {
 			return LevelType.defaultBossParameters;
 		}
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 * @param levelType
 	 * @return True if level is an "underwater level"
 	 */

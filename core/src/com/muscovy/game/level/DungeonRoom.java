@@ -300,9 +300,9 @@ public class DungeonRoom {
 				} else {
 					bossAsset = AssetLocations.ACCOMODATION_BOSS;
 				}
-				
-				enemy = new Enemy(game, bossAsset, new Vector2(0, 0),
-						Enemy.BOSS_WIDTH, Enemy.BOSS_HEIGHT);
+
+				enemy = new Enemy(game, bossAsset, new Vector2(0, 0), Enemy.BOSS_WIDTH,
+						Enemy.BOSS_HEIGHT);
 				enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 						- (enemy.getWidth() / game.getTileSize() / 2)));
 				enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
