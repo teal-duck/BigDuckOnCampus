@@ -125,7 +125,7 @@ public class EntityManager {
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
-		if (new Float(this.level.getGroundFriction()).equals(MoveableEntity.WATER_FRICTION))
+		if (this.level.isUnderwater())
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
 		else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES))
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);

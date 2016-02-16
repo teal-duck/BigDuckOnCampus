@@ -27,7 +27,7 @@ public enum LevelType {
 	public static LevelType fromInt(int i) {
 		return LevelType.LEVEL_VALUES[i];
 	}
-
+	
 
 	/**
 	 * Increments the ordinal value for level by amount, wraps around and returns the new level.
@@ -50,12 +50,6 @@ public enum LevelType {
 		return LevelType.LEVEL_VALUES[nextLevel];
 	}
 
-
-	// public static final int DUNGEON_ROOMS_WIDE = 7;
-	// public static final int DUNGEON_ROOMS_HIGH = 7;
-	// public static final int MAX_ROOMS = 20;
-	// public static final int START_ROOM_X = 3;
-	// public static final int START_ROOM_Y = 3;
 
 	/**
 	 * @param levelType

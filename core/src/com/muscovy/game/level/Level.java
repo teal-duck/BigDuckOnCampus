@@ -324,4 +324,15 @@ public class Level {
 	public String getObjectiveName() {
 		return ObjectiveType.getName(objectiveType);
 	}
+	
+	
+	/**
+	 * @return True if level is underwater (Goodricke)
+	 */
+	public boolean isUnderwater() {
+		if (levelType.equals(LevelType.GOODRICKE))
+			return true;
+		else
+			return false;
+	}
 }
