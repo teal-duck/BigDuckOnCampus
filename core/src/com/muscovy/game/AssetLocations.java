@@ -25,9 +25,9 @@ public class AssetLocations {
 	public static final String ACCOMODATION_BOSS_WATER = "accommodationAssets/accommodationBoss_water.png";
 
 	// Player
-	public static final String PLAYER = "newduck.png";
-	public static final String PLAYER_WATER = "newduck_water.png";
-	public static final String PLAYER_SUNGLASSES = "newduck_sunglasses.png";
+	public static final String PLAYER = "newduck_walk.png";
+	public static final String PLAYER_WATER = "newduck_walk_water.png";
+	public static final String PLAYER_SUNGLASSES = "newduck_sunglasses_walk.png";
 
 	// Projectiles
 	public static final String BULLET = "breadBullet.png";
