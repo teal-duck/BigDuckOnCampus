@@ -36,6 +36,9 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		json.writeValue("maxAttackInterval", enemy.getMaxAttackInterval());
 		json.writeValue("attackRandomness", enemy.getAttackRandomness());
 		json.writeValue("viewDistance", enemy.getViewDistance());
+		json.writeValue("isBoss", enemy.isBoss());
+		json.writeValue("width", enemy.getWidth());
+		json.writeValue("height", enemy.getHeight());
 		json.writeObjectEnd();
 	}
 
@@ -64,6 +67,9 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		float maxAttackInterval = jsonData.getFloat("maxAttackInterval");
 		float attackRandomness = jsonData.getFloat("attackRandomness");
 		float viewDistance = jsonData.getFloat("viewDistance");
+		boolean isBoss = jsonData.getBoolean("isBoss");
+		float width = jsonData.getFloat("width");
+		float height = jsonData.getFloat("height");
 
 		Enemy enemy = new Enemy(game, textureName, position);
 		enemy.setMovementType(movementType);
@@ -77,6 +83,10 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		enemy.setMaxAttackInterval(maxAttackInterval);
 		enemy.setAttackRandomness(attackRandomness);
 		enemy.setViewDistance(viewDistance);
+		enemy.setWidth(width);
+		enemy.setHeight(height);
+		if (isBoss)
+			enemy.setBoss();
 
 		return enemy;
 	}
