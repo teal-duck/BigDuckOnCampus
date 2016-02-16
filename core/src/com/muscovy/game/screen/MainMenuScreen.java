@@ -175,6 +175,7 @@ public class MainMenuScreen extends ScreenBase {
 	private void selectSettings() {
 		// TODO: Settings
 		Gdx.app.log("TODO", "Settings");
+		setScreen(new SettingsScreen(getGame()));
 	}
 
 
