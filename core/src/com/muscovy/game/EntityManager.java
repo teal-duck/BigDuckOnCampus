@@ -16,7 +16,6 @@ import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
-import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
 import com.muscovy.game.entity.PlayerCharacter;
@@ -126,12 +125,13 @@ public class EntityManager {
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
-		if (this.level.isUnderwater())
+		if (level.isUnderwater()) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
-		else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES))
+		} else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES)) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
-		else
+		} else {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER);
+		}
 		currentRoomX = level.getStartX();
 		currentRoomY = level.getStartY();
 		setCurrentDungeonRoom(currentRoomX, currentRoomY);
@@ -446,13 +446,14 @@ public class EntityManager {
 							direction = 2; // Left
 						}
 					}
-					
+
 					int tx = 64 * direction;
 					int ty = 0;
 					int tw = 64;
 					int th = 64;
-					
-					batch.draw(new TextureRegion(p.getTexture(), tx, ty, tw, th), p.getX() + 96, p.getY());
+
+					batch.draw(new TextureRegion(p.getTexture(), tx, ty, tw, th), p.getX() + 96,
+							p.getY());
 				}
 			} else {
 				if (drawable instanceof Enemy) {
@@ -814,8 +815,8 @@ public class EntityManager {
 		LevelType levelType = level.getLevelType();
 
 		// Check if room is complete
-		if (currentDungeonRoom.areAllEnemiesDead() && currentDungeonRoom.getRoomFinishedItem() == null
-				&& currentDungeonRoom.getRoomType() == RoomType.NORMAL) {
+		if (currentDungeonRoom.areAllEnemiesDead() && (currentDungeonRoom.getRoomFinishedItem() == null)
+				&& (currentDungeonRoom.getRoomType() == RoomType.NORMAL)) {
 			// Item roomFinishedItem = currentDungeonRoom.getRoomFinishedItem();
 			// if (roomFinishedItem != null) {
 			// addNewItem(roomFinishedItem);

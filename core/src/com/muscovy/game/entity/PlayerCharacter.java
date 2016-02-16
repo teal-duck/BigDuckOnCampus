@@ -663,7 +663,7 @@ public class PlayerCharacter extends MoveableEntity {
 	 * flight.
 	 */
 	public void setMaxFlightTime() {
-		maxFlightTime = MAX_FLIGHT_TIME;
+		maxFlightTime = PlayerCharacter.MAX_FLIGHT_TIME;
 	}
 
 

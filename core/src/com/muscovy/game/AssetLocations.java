@@ -11,7 +11,7 @@ import com.muscovy.game.enums.LevelType;
  */
 public class AssetLocations {
 	public static final String BOMB_GUI = "bomb_icon.png";
-	
+
 	// Obstacles
 	public static final String RECYLING_BIN = "accommodationAssets/obstacles/binRecycle.png";
 	public static final String SPIKES = "spikes.png";
@@ -103,7 +103,6 @@ public class AssetLocations {
 
 	public static final String CONTROLS_FILE_NAME = "controls.json";
 	public static final String CONTROLS_FILE = AssetLocations.SETTINGS_FOLDER + AssetLocations.CONTROLS_FILE_NAME;
-	
 
 
 	/**

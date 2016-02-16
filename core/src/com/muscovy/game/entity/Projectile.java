@@ -18,23 +18,24 @@ import com.muscovy.game.enums.ProjectileType;
 public class Projectile extends OnscreenDrawable {
 	public static final float SPEED = 150f;
 	public static final float DAMAGE = 10f;
-	public static final float LIFE_TIME = 1.5f; //Time projectile on screen
+	public static final float LIFE_TIME = 1.5f; // Time projectile on screen
 
 	private Vector2 velocity;
 	private float speed = Projectile.SPEED;
 	private float damage = Projectile.DAMAGE;
 	private float maxLifeTime = Projectile.LIFE_TIME;
-	private float lifeCounter = 0;	
+	private float lifeCounter = 0;
 	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
 	private ProjectileType projectileType = ProjectileType.STANDARD;
-	
-	//For curved bullets
-	private int rotateDirection = 1;	//anti-clockwise
-	private float rotateSpeed = 1.5f;	//curvature path of projectile
+
+	// For curved bullets
+	private int rotateDirection = 1; // anti-clockwise
+	private float rotateSpeed = 1.5f; // curvature path of projectile
+
 
 	/**
-	 * 
+	 *
 	 * @param game
 	 * @param position
 	 * @param direction
@@ -45,11 +46,11 @@ public class Projectile extends OnscreenDrawable {
 	 */
 	public Projectile(MuscovyGame game, Vector2 position, Vector2 direction, float life, float speed,
 			ProjectileDamager damagesWho, ProjectileType projectileType) {
-		
-		//Projectile texture, position
+
+		// Projectile texture, position
 		super(game, AssetLocations.BULLET, position);
-		
-		//Changing texture for Flame Thrower
+
+		// Changing texture for Flame Thrower
 		if (projectileType == ProjectileType.FLAMES) {
 			setTexture(AssetLocations.FLAME);
 			damage = 5;
@@ -248,11 +249,11 @@ public class Projectile extends OnscreenDrawable {
 			Vector2 direction, float life, float maxVelocity, ProjectileDamager damagesWho,
 			ProjectileType projectileType) {
 		ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-		
-		//firing angle of projectiles
-		float maxSpread = 0;	
-		float spreadDelta = 0; 
-		
+
+		// firing angle of projectiles
+		float maxSpread = 0;
+		float spreadDelta = 0;
+
 		switch (count) {
 		case 1:
 			maxSpread = 0;
