@@ -58,17 +58,17 @@ public enum LevelType {
 	public static LevelParameters getParametersForLevel(LevelType levelType) {
 		switch (levelType) {
 		case CONSTANTINE:
-			return new LevelParameters(3, 3, 6, 1, 1, ObjectiveType.BOSS);
+			return new LevelParameters(7, 7, 6, 1, 1, ObjectiveType.BOSS);
 		case LANGWITH:
-			return new LevelParameters(4, 4, 5, 2, 2, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 5, 2, 2, ObjectiveType.KILL_ENEMIES);
 		case GOODRICKE:
-			return new LevelParameters(5, 5, 10, 2, 2, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
+			return new LevelParameters(7, 7, 10, 2, 2, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
 		case LMB:
-			return new LevelParameters(5, 5, 10, 2, 2, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 10, 2, 2, ObjectiveType.KILL_ENEMIES);
 		case CATALYST:
-			return new LevelParameters(6, 6, 14, 3, 3, ObjectiveType.BOSS);
+			return new LevelParameters(7, 7, 14, 3, 3, ObjectiveType.BOSS);
 		case TFTV:
-			return new LevelParameters(6, 6, 14, 3, 3, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 14, 3, 3, ObjectiveType.KILL_ENEMIES);
 		case COMP_SCI:
 			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.KILL_ENEMIES);
 		case RCH:
