@@ -6,7 +6,7 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
- *Make objects move via the power of physics
+ * Make objects move via the power of physics
  */
 public abstract class MoveableEntity extends Collidable {
 	public static final float WORLD_FRICTION = 48;
@@ -21,8 +21,9 @@ public abstract class MoveableEntity extends Collidable {
 	private Vector2 acceleration;
 	private Vector2 velocity;
 
+
 	/**
-	 * 
+	 *
 	 * @param game
 	 * @param textureName
 	 */
@@ -30,8 +31,9 @@ public abstract class MoveableEntity extends Collidable {
 		this(game, textureName, new Vector2(0, 0));
 	}
 
+
 	/**
-	 * 
+	 *
 	 * @param game
 	 * @param textureName
 	 * @param position
@@ -40,8 +42,9 @@ public abstract class MoveableEntity extends Collidable {
 		this(game, textureName, position, new Vector2(0, 0));
 	}
 
+
 	/**
-	 * 
+	 *
 	 * @param game
 	 * @param textureName
 	 * @param position

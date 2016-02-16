@@ -11,8 +11,8 @@ import com.muscovy.game.enums.ProjectileType;
 
 /**
  * Created by ewh502 on 19/01/2016.
- * 
- *  For any items that can be picked up
+ *
+ * For any items that can be picked up
  */
 public class Item extends Collidable {
 	private ItemType type;

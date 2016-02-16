@@ -7,6 +7,7 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,7 +16,6 @@ import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
-import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
 import com.muscovy.game.entity.PlayerCharacter;
@@ -125,12 +125,13 @@ public class EntityManager {
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
-		if (this.level.isUnderwater())
+		if (level.isUnderwater()) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
-		else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES))
+		} else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES)) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
-		else
+		} else {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER);
+		}
 		currentRoomX = level.getStartX();
 		currentRoomY = level.getStartY();
 		setCurrentDungeonRoom(currentRoomX, currentRoomY);
@@ -415,29 +416,62 @@ public class EntityManager {
 		}
 
 		for (OnscreenDrawable drawable : renderList) {
-			boolean shouldDraw = true;
-
 			batch.setColor(Color.WHITE);
 			if (drawable instanceof PlayerCharacter) {
 				PlayerCharacter p = (PlayerCharacter) drawable;
 				// If the player is currently invincible, they flash visible/invisible
 				if (p.isInvincible() && (((p.getInvincibilityCounter() * 10) % 2) < 0.75)) {
-					shouldDraw = false;
+					// shouldDraw = false;
+				} else {
+
+					// Texture texture = this.game.getTextureMap()
+					// .getTextureOrLoadFile("newduck_walk.png");
+					// p.getSprite().setRegion(new TextureRegion(texture, 0, 0, 0.25f, 0.25f));
+					// p.getSprite().setRegion(0, 0, 0.25f, 0.25f);
+
+					int direction = 0; // 0 = down, 1 = up, 2 = left, 3 = right
+					float vx = p.getVelocityX();
+					float vy = p.getVelocityY();
+
+					if (Math.abs(vy) > Math.abs(vx)) {
+						if (vy > 0) {
+							direction = 1; // Up
+						} else {
+							direction = 0; // Down
+						}
+					} else {
+						if (vx > 0) {
+							direction = 3; // Right
+						} else {
+							direction = 2; // Left
+						}
+					}
+
+					int tx = 64 * direction;
+					int ty = 0;
+					int tw = 64;
+					int th = 64;
+
+					batch.draw(new TextureRegion(p.getTexture(), tx, ty, tw, th), p.getX() + 96,
+							p.getY());
 				}
-			} else if (drawable instanceof Enemy) {
-				Enemy e = (Enemy) drawable;
-				// If the enemy has been damaged, they flash red
-				float justDamagedTime = e.getJustDamagedTime();
-				if (justDamagedTime > 0) {
-					if (((int) ((justDamagedTime / Enemy.JUST_DAMAGED_TIME) * 4) % 2) == 0) {
-						batch.setColor(1f, 0.2f, 0.2f, 1f);
+			} else {
+				if (drawable instanceof Enemy) {
+					Enemy e = (Enemy) drawable;
+					// If the enemy has been damaged, they flash red
+					float justDamagedTime = e.getJustDamagedTime();
+					if (justDamagedTime > 0) {
+						if (((int) ((justDamagedTime / Enemy.JUST_DAMAGED_TIME) * 4)
+								% 2) == 0) {
+							batch.setColor(1f, 0.2f, 0.2f, 1f);
+						}
 					}
 				}
-			}
 
-			if (shouldDraw) {
+				// if (shouldDraw) {
 				batch.draw(drawable.getSprite().getTexture(), translateX + drawable.getX(),
 						translateY + drawable.getY());
+				// }
 			}
 		}
 		batch.setColor(Color.WHITE);
@@ -780,14 +814,13 @@ public class EntityManager {
 		ObjectiveType objectiveType = level.getObjectiveType();
 		LevelType levelType = level.getLevelType();
 
-		// Check if room is complete
-
 		// If the level has already been completed, don't check again
 		boolean completed = level.isCompleted();
 		if (completed) {
 			return true;
 		}
 
+		// Check if room is complete
 		switch (objectiveType) {
 		case BOSS:
 			// TODO: Implement level.getBossRoom()
@@ -832,9 +865,10 @@ public class EntityManager {
 	private void spawnItem(LevelType levelType, boolean finalRoom) {
 		if (finalRoom) {
 			ItemType itemType = LevelType.getItemType(levelType);
-	
+
 			if (itemType != null) {
-				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(), itemType);
+				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(),
+						itemType);
 				if (level.getObjectiveType().equals(ObjectiveType.BOSS)) {
 					item.setXTiles(5);
 					item.setYTiles(5);
@@ -869,13 +903,14 @@ public class EntityManager {
 				}
 				break;
 			}
-			
+
 			if (itemType != null) {
-				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(), itemType);
-				
+				Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(),
+						itemType);
+
 				item.setXTiles(currentDungeonRoom.getItemSpawnX());
 				item.setYTiles(currentDungeonRoom.getItemSpawnY());
-				
+
 				currentDungeonRoom.addItem(item);
 				addNewItem(item);
 				currentDungeonRoom.setRoomFinishedItem(item);

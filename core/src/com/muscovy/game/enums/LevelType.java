@@ -27,7 +27,7 @@ public enum LevelType {
 	public static LevelType fromInt(int i) {
 		return LevelType.LEVEL_VALUES[i];
 	}
-	
+
 
 	/**
 	 * Increments the ordinal value for level by amount, wraps around and returns the new level.

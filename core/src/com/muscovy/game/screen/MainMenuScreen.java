@@ -67,6 +67,7 @@ public class MainMenuScreen extends ScreenBase {
 		buttons.setPositionDefaultSize(x, y);
 	}
 
+
 	@Override
 	public void updateScreen(float deltaTime) {
 		if (isStateForAction(Action.ESCAPE)) {
@@ -173,8 +174,7 @@ public class MainMenuScreen extends ScreenBase {
 	 *
 	 */
 	private void selectSettings() {
-		// TODO: Settings
-		Gdx.app.log("TODO", "Settings");
+		setScreen(new SettingsScreen(getGame()));
 	}
 
 
