@@ -188,4 +188,14 @@ public enum LevelType {
 			return LevelType.defaultBossParameters;
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param levelType
+	 * @return True if level is an "underwater level"
+	 */
+	public static boolean isUnderwater(LevelType levelType) {
+		return levelType.equals(GOODRICKE);
+	}
 }

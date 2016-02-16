@@ -294,7 +294,14 @@ public class DungeonRoom {
 			BossParameters bossParameters = LevelType.getBossParameters(levelType);
 
 			if (bossParameters != null) {
-				enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0),
+				String bossAsset;
+				if (LevelType.isUnderwater(levelType)) {
+					bossAsset = AssetLocations.ACCOMODATION_BOSS_WATER;
+				} else {
+					bossAsset = AssetLocations.ACCOMODATION_BOSS;
+				}
+				
+				enemy = new Enemy(game, bossAsset, new Vector2(0, 0),
 						Enemy.BOSS_WIDTH, Enemy.BOSS_HEIGHT);
 				enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 						- (enemy.getWidth() / game.getTileSize() / 2)));
