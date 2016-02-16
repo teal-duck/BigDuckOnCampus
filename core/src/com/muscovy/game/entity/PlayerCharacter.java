@@ -304,6 +304,14 @@ public class PlayerCharacter extends MoveableEntity {
 
 
 	/**
+	 * @param bombCount
+	 */
+	public void setBombCount(int bombCount) {
+		this.bombCount = bombCount;
+	}
+
+
+	/**
 	 * Attack methods (only shots currently)
 	 */
 	public boolean checkRangedAttack(float deltaTime) {

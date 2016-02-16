@@ -17,7 +17,7 @@ public abstract class OnscreenDrawable {
 	 * Instance of the game in which the entity exists.
 	 */
 	public final MuscovyGame game;
-	
+
 	public static final int DEFAULT_ENTITY_WIDTH = 64;
 	public static final int DEFAULT_ENTITY_HEIGHT = 64;
 
@@ -39,8 +39,8 @@ public abstract class OnscreenDrawable {
 	public OnscreenDrawable(MuscovyGame game, String textureName) {
 		this(game, textureName, new Vector2(0, 0));
 	}
-	
-	
+
+
 	/**
 	 * Places the entity at (0, 0).
 	 *
@@ -64,9 +64,11 @@ public abstract class OnscreenDrawable {
 	 *                {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
 	 */
 	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
-		this(game, textureName, position, DEFAULT_ENTITY_WIDTH, DEFAULT_ENTITY_HEIGHT);
+		this(game, textureName, position, OnscreenDrawable.DEFAULT_ENTITY_WIDTH,
+				OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
 	}
-	
+
+
 	/**
 	 *
 	 * @param game
@@ -76,14 +78,14 @@ public abstract class OnscreenDrawable {
 	 * @param position
 	 *                {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
 	 * @param width
-	 * 				  Width of the entity's drawable area.
+	 *                Width of the entity's drawable area.
 	 * @param height
-	 * 				  Height of the entity's drawable area.
+	 *                Height of the entity's drawable area.
 	 */
 	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position, int width, int height) {
 		this.game = game;
 		this.position = position;
-		
+
 		this.width = width;
 		this.height = height;
 

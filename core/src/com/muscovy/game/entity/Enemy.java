@@ -79,9 +79,11 @@ public class Enemy extends MoveableEntity {
 
 
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
-		this(game, textureName, position, OnscreenDrawable.DEFAULT_ENTITY_WIDTH, OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
+		this(game, textureName, position, OnscreenDrawable.DEFAULT_ENTITY_WIDTH,
+				OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
 	}
-	
+
+
 	public Enemy(MuscovyGame game, String textureName, Vector2 position, int width, int height) {
 		super(game, textureName, position, new Vector2(1, 0), width, height);
 
@@ -551,6 +553,7 @@ public class Enemy extends MoveableEntity {
 	public boolean isBoss() {
 		return isBoss;
 	}
+
 	
 	/**
 	 * Sets this enemy to become a boss.

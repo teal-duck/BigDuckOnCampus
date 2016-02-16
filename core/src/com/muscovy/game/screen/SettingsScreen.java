@@ -41,8 +41,8 @@ public class SettingsScreen extends ScreenBase {
 		gui.addData("Settings", "Settings", font, (getWindowWidth() / 2) - 130, getWindowWidth() / 2);
 		gui.addData("Settings", "Currently there are no Settings", settingsFont, (getWindowWidth() / 2) - 300,
 				(getWindowWidth() / 2) - 100);
-		gui.addData("Settings", "Deal with it", settingsFont, (getWindowWidth() / 2) - 130,
-				(getWindowWidth() / 2) - 200);
+		// gui.addData("Settings", "Deal with it", settingsFont, (getWindowWidth() / 2) - 130,
+		// (getWindowWidth() / 2) - 200);
 
 		buttons = new ButtonList(SettingsScreen.BUTTON_TEXTS, font, getTextureMap(), getControlMap(),
 				getController());

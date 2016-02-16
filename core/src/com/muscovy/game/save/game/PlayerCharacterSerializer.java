@@ -31,6 +31,7 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		json.writeValue("health", playerCharacter.getHealth());
 		json.writeValue("maxFlightTime", playerCharacter.getMaxFlightTime());
 		json.writeValue("flightSpeedScale", playerCharacter.getFlightSpeedScale());
+		json.writeValue("bombCount", playerCharacter.getBombCount());
 
 		json.writeArrayStart("obtainedItems");
 		for (ItemType item : playerCharacter.getObtainedItems()) {
@@ -51,19 +52,20 @@ public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 		int health = jsonData.getInt("health");
 		float maxFlightTime = jsonData.getFloat("maxFlightTime");
 		float flightSpeedScale = jsonData.getFloat("flightSpeedScale");
+		int bombCount = jsonData.getInt("bombCount");
 
 		Controller controller = game.getController();
 		ControlMap controlMap = game.getControlMap();
 
 		PlayerCharacter playerCharacter = new PlayerCharacter(game, AssetLocations.PLAYER, position, controlMap,
 				controller);
-		// playerCharacter.getSprite().setRegion(game.getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 		playerCharacter.setFriction(friction);
 		playerCharacter.setAccelerationSpeed(accelerationSpeed);
 		playerCharacter.setScore(score);
 		playerCharacter.setHealth(health);
 		playerCharacter.setMaxFlightTime(maxFlightTime);
 		playerCharacter.setFlightSpeedScale(flightSpeedScale);
+		playerCharacter.setBombCount(bombCount);
 
 		JsonValue obtainedItemsArrayValue = jsonData.get("obtainedItems");
 		JsonValue obtainedItemValue = obtainedItemsArrayValue.child;
