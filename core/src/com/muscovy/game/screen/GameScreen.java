@@ -35,7 +35,7 @@ import com.muscovy.game.level.Level;
 
 
 /**
- *
+ * 
  */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;

@@ -15,6 +15,7 @@ import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
+import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
 import com.muscovy.game.entity.PlayerCharacter;
@@ -124,7 +125,9 @@ public class EntityManager {
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
 		this.playerCharacter = playerCharacter;
-		if (this.level.getLevelType() == LevelType.GOODRICKE)
+		if (this.level.isUnderwater())
+			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
+		else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES))
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
 		else
 			this.playerCharacter.setTexture(AssetLocations.PLAYER);
