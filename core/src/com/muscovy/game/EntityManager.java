@@ -15,6 +15,7 @@ import com.muscovy.game.entity.Bomb;
 import com.muscovy.game.entity.Enemy;
 import com.muscovy.game.entity.Explosion;
 import com.muscovy.game.entity.Item;
+import com.muscovy.game.entity.MoveableEntity;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.entity.OnscreenDrawable;
 import com.muscovy.game.entity.PlayerCharacter;
@@ -28,7 +29,7 @@ import com.muscovy.game.level.DungeonRoom;
 import com.muscovy.game.level.Level;
 
 /**
- * Created by ewh502 on 04/12/2015.
+ * Project URL : http://teal-duck.github.io/teal-duck
  */
 public class EntityManager {
 	private MuscovyGame game;
@@ -114,16 +115,19 @@ public class EntityManager {
 	}
 
 	/**
-	 * Sets the current room to the start room of the current level.
+	 * Sets the current room to the start room of the current level. 
+	 * Also changes the player's texture to a special version as needed. 
 	 *
 	 * @param playerCharacter
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
+		
+		
 		this.playerCharacter = playerCharacter;
 		if (level.isUnderwater()) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
 		} else if (this.playerCharacter.getObtainedItems().contains(ItemType.SUNGLASSES)) {
-			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
+			this.playerCharacter.setTexture(AssetLocations.PLAYER_SUNGLASSES);
 		} else {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER);
 		}
@@ -175,15 +179,12 @@ public class EntityManager {
 		addNewObstacles(dungeonRoom.getObstacleList());
 		addNewEnemies(dungeonRoom.getEnemyList());
 		addNewItems(dungeonRoom.getItemList());
-
-		// Bomb bomb = new Bomb(game, AssetLocations.BOMB, new Vector2(128,
-		// 128));
-		// addBomb(bomb);
 	}
 
+	
 	/**
-	 * @param roomX
-	 * @param roomY
+	 * @param roomX x-coordinate of new room
+	 * @param roomY y-coordinate of new room
 	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY) {
 		setCurrentDungeonRoom(roomX, roomY, null);
@@ -193,8 +194,8 @@ public class EntityManager {
 	 * Calls {@link EntityManager#setCurrentDungeonRoom(DungeonRoom, Vector2)}.
 	 * Marks the room as visited in the level.
 	 *
-	 * @param roomX
-	 * @param roomY
+	 * @param roomX x-coordinate of new room
+	 * @param roomY y-coordinate of new room
 	 * @param transitionDirection
 	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY, Vector2 transitionDirection) {
@@ -244,8 +245,10 @@ public class EntityManager {
 	}
 
 	/**
-	 * @param friction
-	 * @param room
+	 * Changes friction to a new value for all enemies and players.
+	 * 
+	 * @param friction Set to one of the constants *_FRICTION in {@link MoveableEntity}.
+	 * @param room Room containing enemies to set to new friction.
 	 */
 	private void setFriction(float friction, DungeonRoom room) {
 		for (Enemy enemy : room.getEnemyList()) {
@@ -411,21 +414,14 @@ public class EntityManager {
 				// If the player is currently invincible, they flash
 				// visible/invisible
 				if (p.isInvincible() && (((p.getInvincibilityCounter() * 10) % 2) < 0.75)) {
-					// shouldDraw = false;
 				} else {
-
-					// Texture texture = this.game.getTextureMap()
-					// .getTextureOrLoadFile("newduck_walk.png");
-					// p.getSprite().setRegion(new TextureRegion(texture, 0, 0,
-					// 0.25f, 0.25f));
-					// p.getSprite().setRegion(0, 0, 0.25f, 0.25f);
 
 					int direction = p.getDirection();
 
-					int tx = 64 * direction;
+					int tx = (int) (p.getWidth() * direction);
 					int ty = 0;
-					int tw = 64;
-					int th = 64;
+					int tw = (int) p.getWidth();
+					int th = (int) p.getHeight();
 
 					batch.draw(new TextureRegion(p.getTexture(), tx, ty, tw, th), p.getX() + translateX,
 							p.getY() + translateY);
@@ -445,23 +441,22 @@ public class EntityManager {
 				} else {
 					int direction = e.getDirection();
 
-					int tx = 64 * direction;
+					int tx = (int) (e.getWidth() * direction);
 					int ty = 0;
-					int tw = 64;
-					int th = 64;
+					int tw = (int) e.getWidth();
+					int th = (int) e.getHeight();
 
 					batch.draw(new TextureRegion(e.getTexture(), tx, ty, tw, th), e.getX() + translateX,
 							e.getY() + translateY);
 				}
 			} else {
-				// if (shouldDraw) {
 				batch.draw(drawable.getSprite().getTexture(), translateX + drawable.getX(),
 						translateY + drawable.getY());
-				// }
 			}
 		}
 		batch.setColor(Color.WHITE);
 	}
+
 
 	/**
 	 * Renders the door texture at the location defined by doorRectangle,
@@ -488,7 +483,7 @@ public class EntityManager {
 	}
 
 	/**
-	 *
+	 * Draws the minimap display in the top right of the GUI.
 	 */
 	public void renderMapOverlay() {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
@@ -580,12 +575,6 @@ public class EntityManager {
 
 		shapeRenderer.setColor(doorColour);
 
-		// TODO: When rendering doors in maps, check if room actually has a door
-		// If we add bombs like binding of isaac, where you can get to secrets
-		// by blowing up a wall
-		// We need to render this on the map so a secret room is only visible if
-		// they've been there
-
 		// For rendering doors, only look at the right and down
 		for (int col = 0; col < level.getRoomsWide(); col += 1) {
 			for (int row = 0; row < level.getRoomsHigh(); row += 1) {
@@ -669,10 +658,8 @@ public class EntityManager {
 	/**
 	 * Quicksorts the list of drawable objects in the controller by Y coordinate
 	 * so it renders the things in the background first.
-	 *
 	 */
 	private ArrayList<OnscreenDrawable> sortDrawables(ArrayList<OnscreenDrawable> renderList) {
-		// TODO: Optimise sortDrawables
 		return quicksort(renderList);
 	}
 
@@ -709,7 +696,7 @@ public class EntityManager {
 		return concatenate(quicksort(less), pivot, quicksort(greater));
 	}
 
-	/**
+	/*
 	 * @param less
 	 * @param pivot
 	 * @param greater
@@ -741,7 +728,7 @@ public class EntityManager {
 	}
 
 	/**
-	 * Removes all items that have been used·
+	 * Removes all items that have been used.
 	 */
 	public void killItems() {
 		ArrayList<Item> deadItems = new ArrayList<Item>();
@@ -782,9 +769,10 @@ public class EntityManager {
 
 	/**
 	 * Checks whether the current level is completed based on the objective
-	 * type. If it has been completed, sets the completion in the level to true.
+	 * type. If it has been completed, sets the completion in the level to true
+	 * and spawns the end-of-level item.
 	 *
-	 * @return
+	 * @return True if level objective has been completed.
 	 */
 	public boolean checkLevelCompletion() {
 		ObjectiveType objectiveType = level.getObjectiveType();
@@ -891,28 +879,28 @@ public class EntityManager {
 	}
 
 	/**
-	 * @return
+	 * @return Dungeon room currently occupied by the duck. 
 	 */
 	public DungeonRoom getCurrentDungeonRoom() {
 		return currentDungeonRoom;
 	}
 
 	/**
-	 * @return
+	 * @return The amount of time that the player has spent in the current room.
 	 */
 	public float getRoomTimer() {
 		return roomTimer;
 	}
 
 	/**
-	 * @param drawable
+	 * @param drawable Entity to add to the render list.
 	 */
 	public void addNewDrawable(OnscreenDrawable drawable) {
 		renderList.add(drawable);
 	}
 
 	/**
-	 * @param drawables
+	 * @param drawables Entities to add to the render list.
 	 */
 	public void addNewDrawables(ArrayList<? extends OnscreenDrawable> drawables) {
 		renderList.addAll(drawables);

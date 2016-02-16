@@ -7,6 +7,7 @@ import com.muscovy.game.enums.LevelType;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
  *
  */
 public class AssetLocations {
@@ -141,20 +142,36 @@ public class AssetLocations {
 	 * @return
 	 */
 	public static TextureMap loadAllTexturesIntoMap(TextureMap textureMap) {
+		textureMap.getTextureOrLoadFile(AssetLocations.BOMB_GUI);
+		
 		textureMap.getTextureOrLoadFile(AssetLocations.RECYLING_BIN);
 		textureMap.getTextureOrLoadFile(AssetLocations.SPIKES);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.CLEANER);
+		textureMap.getTextureOrLoadFile(AssetLocations.CLEANER_WATER);
 		textureMap.getTextureOrLoadFile(AssetLocations.STUDENT);
+		textureMap.getTextureOrLoadFile(AssetLocations.STUDENT_WATER);
 		textureMap.getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS);
+		textureMap.getTextureOrLoadFile(AssetLocations.ACCOMODATION_BOSS_WATER);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER);
+		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER_WATER);
+		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER_SUNGLASSES);
+		
 		textureMap.getTextureOrLoadFile(AssetLocations.BULLET);
 		textureMap.getTextureOrLoadFile(AssetLocations.ENEMY_BULLET);
+		textureMap.getTextureOrLoadFile(AssetLocations.FLAME);
+		textureMap.getTextureOrLoadFile(AssetLocations.BOMB);
+		textureMap.getTextureOrLoadFile(AssetLocations.EXPLOSION);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.HEALTHPACK);
 		textureMap.getTextureOrLoadFile(AssetLocations.TRIPLE_SHOT);
 		textureMap.getTextureOrLoadFile(AssetLocations.RAPID_FIRE);
+		textureMap.getTextureOrLoadFile(AssetLocations.FLAME_THROWER);
+		textureMap.getTextureOrLoadFile(AssetLocations.BOMB_ITEM);
+		textureMap.getTextureOrLoadFile(AssetLocations.EXTRA_HEALTH);
+		textureMap.getTextureOrLoadFile(AssetLocations.FLIGHT_ITEM);
+		textureMap.getTextureOrLoadFile(AssetLocations.SUNGLASSES);
 
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_UP_OPEN);
 		textureMap.getTextureOrLoadFile(AssetLocations.DOOR_RIGHT_OPEN);

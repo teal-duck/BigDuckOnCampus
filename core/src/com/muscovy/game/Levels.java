@@ -29,14 +29,6 @@ public class Levels {
 
 
 	/**
-	 * @param levels
-	 */
-	public void setLevels(Level[] levels) {
-		this.levels = levels;
-	}
-
-
-	/**
 	 * @return
 	 */
 	public Level[] getLevels() {
