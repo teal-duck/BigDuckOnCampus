@@ -175,7 +175,6 @@ public enum LevelType {
 			return new BossParameters(ProjectileType.STANDARD, EnemyShotType.TRIPLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED, 2,
 					MoveableEntity.BOSS_ACCELERATION_SPEED, 20, 600);
-
 		case GOODRICKE:
 			return new BossParameters(ProjectileType.HOMING, EnemyShotType.SINGLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED * 1.2f,
