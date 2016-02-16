@@ -97,14 +97,15 @@ public class PlayerCharacter extends MoveableEntity {
 		this.controller = controller;
 
 		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED);
-		
+
 		// Initialise shotDirection so shooting methods do not return a NullPointerException.
 		shotDirection = new Vector2(0, 0);
 
-		// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
+		// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
+		// Team Teal in
 		// Assessment 3. Use at your own risk (and with your own assets)
 
-		//animationCycle = 0;
+		// animationCycle = 0;
 		// Sprite playerSprite;
 		// downWalkCycle = new ArrayList<Texture>();
 		// upWalkCycle = new ArrayList<Texture>();
@@ -272,7 +273,8 @@ public class PlayerCharacter extends MoveableEntity {
 		}
 
 		if (controlMap.getStateForAction(Action.DROP_BOMB, controller) > 0) {
-			float bombTextureRadius = game.getTextureMap().getTextureOrLoadFile(AssetLocations.BOMB).getWidth() / 2;
+			float bombTextureRadius = game.getTextureMap().getTextureOrLoadFile(AssetLocations.BOMB)
+					.getWidth() / 2;
 			Vector2 bombPosition = getCenter().cpy();
 			bombPosition.sub(bombTextureRadius, bombTextureRadius);
 			bombPosition.sub(0, PlayerCharacter.BOMB_Y_OFFSET);
@@ -348,7 +350,8 @@ public class PlayerCharacter extends MoveableEntity {
 	 * @return
 	 */
 	public ArrayList<Projectile> rangedAttack() {
-		float x = (getX() + (getWidth() / 2)) - game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET).getWidth();
+		float x = (getX() + (getWidth() / 2))
+				- game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET).getWidth();
 		float y = getY() + (getHeight() / 2);
 
 		// Player position
@@ -668,8 +671,8 @@ public class PlayerCharacter extends MoveableEntity {
 
 
 	/**
-	 * Sets maxFlightTime to MAX_FLIGHT_TIME. If maxFlightTime was still initialised to 0, this effectively "unlocks"
-	 * flight.
+	 * Sets maxFlightTime to MAX_FLIGHT_TIME. If maxFlightTime was still initialised to 0, this effectively
+	 * "unlocks" flight.
 	 */
 	public void setMaxFlightTime() {
 		maxFlightTime = PlayerCharacter.MAX_FLIGHT_TIME;
@@ -742,9 +745,9 @@ public class PlayerCharacter extends MoveableEntity {
 	/**
 	 * Animation methods currently commented out, as we only have one sprite atm, but they should be easy to work
 	 * out. Might be worth revamping later though.
-	 * 
-	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
-	 * Assessment 3. Use at your own risk (and with your own assets)
+	 *
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
+	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
 	public void walkCycleNext() {
 		// float direction = velocity.angleRad();
@@ -801,9 +804,10 @@ public class PlayerCharacter extends MoveableEntity {
 		// }
 	}
 
+
 	/**
-	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
-	 * Assessment 3. Use at your own risk (and with your own assets)
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
+	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
 	public void movementAnimation() {
 		// if (animationCounter == 5) {
@@ -814,9 +818,10 @@ public class PlayerCharacter extends MoveableEntity {
 		// }
 	}
 
+
 	/**
-	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
-	 * Assessment 3. Use at your own risk (and with your own assets)
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
+	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
 	public void idleAnimation() {
 		// velocity.len2() < 1

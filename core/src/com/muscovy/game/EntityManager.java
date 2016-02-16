@@ -120,14 +120,13 @@ public class EntityManager {
 
 
 	/**
-	 * Sets the current room to the start room of the current level. 
-	 * Also changes the player's texture to a special version as needed. 
+	 * Sets the current room to the start room of the current level. Also changes the player's texture to a special
+	 * version as needed.
 	 *
 	 * @param playerCharacter
 	 */
 	public void startLevel(PlayerCharacter playerCharacter) {
-		
-		
+
 		this.playerCharacter = playerCharacter;
 		if (level.isUnderwater()) {
 			this.playerCharacter.setTexture(AssetLocations.PLAYER_WATER);
@@ -188,8 +187,10 @@ public class EntityManager {
 
 
 	/**
-	 * @param roomX x-coordinate of new room
-	 * @param roomY y-coordinate of new room
+	 * @param roomX
+	 *                x-coordinate of new room
+	 * @param roomY
+	 *                y-coordinate of new room
 	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY) {
 		setCurrentDungeonRoom(roomX, roomY, null);
@@ -200,8 +201,10 @@ public class EntityManager {
 	 * Calls {@link EntityManager#setCurrentDungeonRoom(DungeonRoom, Vector2)}. Marks the room as visited in the
 	 * level.
 	 *
-	 * @param roomX x-coordinate of new room
-	 * @param roomY y-coordinate of new room
+	 * @param roomX
+	 *                x-coordinate of new room
+	 * @param roomY
+	 *                y-coordinate of new room
 	 * @param transitionDirection
 	 */
 	public void setCurrentDungeonRoom(int roomX, int roomY, Vector2 transitionDirection) {
@@ -257,9 +260,11 @@ public class EntityManager {
 
 	/**
 	 * Changes friction to a new value for all enemies and players.
-	 * 
-	 * @param friction Set to one of the constants *_FRICTION in {@link MoveableEntity}.
-	 * @param room Room containing enemies to set to new friction.
+	 *
+	 * @param friction
+	 *                Set to one of the constants *_FRICTION in {@link MoveableEntity}.
+	 * @param room
+	 *                Room containing enemies to set to new friction.
 	 */
 	private void setFriction(float friction, DungeonRoom room) {
 		for (Enemy enemy : room.getEnemyList()) {
@@ -678,14 +683,11 @@ public class EntityManager {
 
 
 	/**
-<<<<<<< HEAD
-	 * Quicksorts the list of drawable objects in the controller by Y coordinate
-	 * so it renders the things in the background first.
-=======
-	 * Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the things in the
-	 * background first.
+	 * <<<<<<< HEAD Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the
+	 * things in the background first. ======= Quicksorts the list of drawable objects in the controller by Y
+	 * coordinate so it renders the things in the background first.
 	 *
->>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
+	 * >>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
 	 */
 	private ArrayList<OnscreenDrawable> sortDrawables(ArrayList<OnscreenDrawable> renderList) {
 		return quicksort(renderList);
@@ -801,14 +803,10 @@ public class EntityManager {
 
 
 	/**
-<<<<<<< HEAD
-	 * Checks whether the current level is completed based on the objective
-	 * type. If it has been completed, sets the completion in the level to true
-	 * and spawns the end-of-level item.
-=======
-	 * Checks whether the current level is completed based on the objective type. If it has been completed, sets the
-	 * completion in the level to true.
->>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
+	 * <<<<<<< HEAD Checks whether the current level is completed based on the objective type. If it has been
+	 * completed, sets the completion in the level to true and spawns the end-of-level item. ======= Checks whether
+	 * the current level is completed based on the objective type. If it has been completed, sets the completion in
+	 * the level to true. >>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
 	 *
 	 * @return True if level objective has been completed.
 	 */
@@ -922,7 +920,7 @@ public class EntityManager {
 
 
 	/**
-	 * @return Dungeon room currently occupied by the duck. 
+	 * @return Dungeon room currently occupied by the duck.
 	 */
 	public DungeonRoom getCurrentDungeonRoom() {
 		return currentDungeonRoom;
@@ -938,7 +936,8 @@ public class EntityManager {
 
 
 	/**
-	 * @param drawable Entity to add to the render list.
+	 * @param drawable
+	 *                Entity to add to the render list.
 	 */
 	public void addNewDrawable(OnscreenDrawable drawable) {
 		renderList.add(drawable);
@@ -946,7 +945,8 @@ public class EntityManager {
 
 
 	/**
-	 * @param drawables Entities to add to the render list.
+	 * @param drawables
+	 *                Entities to add to the render list.
 	 */
 	public void addNewDrawables(ArrayList<? extends OnscreenDrawable> drawables) {
 		renderList.addAll(drawables);

@@ -88,7 +88,7 @@ public class Enemy extends MoveableEntity {
 		super(game, textureName, position, new Vector2(1, 0), width, height);
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
-		rotateRandomDirection(getVelocity(), INITIAL_MIN_ROTATION, INITIAL_MAX_ROTATION);
+		rotateRandomDirection(getVelocity(), Enemy.INITIAL_MIN_ROTATION, Enemy.INITIAL_MAX_ROTATION);
 		chooseNewAttackInterval();
 	}
 
@@ -388,7 +388,8 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param maxAttackInterval Maximum time between firing projectiles.
+	 * @param maxAttackInterval
+	 *                Maximum time between firing projectiles.
 	 */
 	public void setMaxAttackInterval(float maxAttackInterval) {
 		this.maxAttackInterval = maxAttackInterval;
@@ -404,7 +405,8 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param attackRandomness 0.5 * maximum spread of attack intervals.
+	 * @param attackRandomness
+	 *                0.5 * maximum spread of attack intervals.
 	 */
 	public void setAttackRandomness(float attackRandomness) {
 		this.attackRandomness = attackRandomness;
@@ -420,7 +422,8 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param viewDistance Maximum distance that an enemy will begin following a player.
+	 * @param viewDistance
+	 *                Maximum distance that an enemy will begin following a player.
 	 */
 	public void setViewDistance(float viewDistance) {
 		this.viewDistance = viewDistance;
@@ -436,9 +439,10 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * Also modifies projectileLife to correctly account for new projectile range. 
-	 * 
-	 * @param projectileRange Maximum distance that projectiles fired by this enemy will fly.
+	 * Also modifies projectileLife to correctly account for new projectile range.
+	 *
+	 * @param projectileRange
+	 *                Maximum distance that projectiles fired by this enemy will fly.
 	 */
 	public void setProjectileRange(float projectileRange) {
 		this.projectileRange = projectileRange;
@@ -447,7 +451,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return Maximum distance that projectiles fired by this enemy will fly. 
+	 * @return Maximum distance that projectiles fired by this enemy will fly.
 	 */
 	public float getProjectileLife() {
 		return projectileLife;
@@ -456,8 +460,9 @@ public class Enemy extends MoveableEntity {
 
 	/**
 	 * Also modifies projectileRange to correctly account for new projectile lifespan.
-	 * 
-	 * @param projectileLife Maximum time that a projectile will fly before disappearing.
+	 *
+	 * @param projectileLife
+	 *                Maximum time that a projectile will fly before disappearing.
 	 */
 	public void setProjectileLife(float projectileLife) {
 		this.projectileLife = projectileLife;
@@ -554,7 +559,7 @@ public class Enemy extends MoveableEntity {
 		return isBoss;
 	}
 
-	
+
 	/**
 	 * Sets this enemy to become a boss.
 	 */

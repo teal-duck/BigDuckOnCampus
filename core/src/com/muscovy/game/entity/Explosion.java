@@ -7,7 +7,7 @@ import com.muscovy.game.MuscovyGame;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- * 
+ *
  * Projectile explosion i.e. the bomb
  */
 public class Explosion extends OnscreenDrawable {

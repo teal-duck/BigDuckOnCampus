@@ -143,7 +143,7 @@ public class AssetLocations {
 	 */
 	public static TextureMap loadAllTexturesIntoMap(TextureMap textureMap) {
 		textureMap.getTextureOrLoadFile(AssetLocations.BOMB_GUI);
-		
+
 		textureMap.getTextureOrLoadFile(AssetLocations.RECYLING_BIN);
 		textureMap.getTextureOrLoadFile(AssetLocations.SPIKES);
 
@@ -157,7 +157,7 @@ public class AssetLocations {
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER);
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER_WATER);
 		textureMap.getTextureOrLoadFile(AssetLocations.PLAYER_SUNGLASSES);
-		
+
 		textureMap.getTextureOrLoadFile(AssetLocations.BULLET);
 		textureMap.getTextureOrLoadFile(AssetLocations.ENEMY_BULLET);
 		textureMap.getTextureOrLoadFile(AssetLocations.FLAME);

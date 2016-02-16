@@ -39,7 +39,6 @@ public class LevelsSerializer extends BaseSerializer<Levels> {
 			levelValue = levelValue.next;
 		}
 
-		Levels levelsObject = new Levels(levels);
 		return new Levels(levels);
 	}
 }

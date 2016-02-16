@@ -60,7 +60,7 @@ public class BossParameters {
 		return attackInterval;
 	}
 
-	
+
 	/**
 	 * @return Speed of projectiles to be fired by boss.
 	 */
@@ -76,12 +76,14 @@ public class BossParameters {
 		return projectileLife;
 	}
 
+
 	/**
 	 * @return Scalar for additional accelerations.
 	 */
 	public float getAccelerationSpeed() {
 		return accelerationSpeed;
 	}
+
 
 	/**
 	 * @return Damage to deal to players upon touch.

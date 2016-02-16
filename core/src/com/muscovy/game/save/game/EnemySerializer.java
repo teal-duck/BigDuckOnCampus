@@ -85,8 +85,9 @@ public class EnemySerializer extends BaseSerializer<Enemy> {
 		enemy.setViewDistance(viewDistance);
 		enemy.setWidth(width);
 		enemy.setHeight(height);
-		if (isBoss)
+		if (isBoss) {
 			enemy.setBoss();
+		}
 
 		return enemy;
 	}

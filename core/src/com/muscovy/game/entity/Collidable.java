@@ -96,8 +96,7 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	/*
 	 * setXTiles and setYTiles moves the collidable to fit on the grid directly. Clamps to walls of dungeon room,
-	 * assuming a 64x64 collidable.
-	 * Useful for placing stuff in the dungeon rooms
+	 * assuming a 64x64 collidable. Useful for placing stuff in the dungeon rooms
 	 */
 
 	/**

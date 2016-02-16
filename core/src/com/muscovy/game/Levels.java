@@ -11,7 +11,7 @@ import com.muscovy.game.level.LevelParameters;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- * 
+ *
  * Groups all the levels together. Provides functions for generating the levels.
  */
 public class Levels {
@@ -21,8 +21,8 @@ public class Levels {
 
 	public Levels() {
 	}
-	
-	
+
+
 	public Levels(Level[] levels) {
 		this.levels = levels;
 	}

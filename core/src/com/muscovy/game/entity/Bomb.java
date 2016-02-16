@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.EntityManager;
 import com.muscovy.game.MuscovyGame;
 
+
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
  */
@@ -15,7 +16,7 @@ public class Bomb extends MoveableEntity {
 	public static final float MIN_DAMAGE = 5;
 	public static final float BLAST_FORCE = 100000;
 	public static final float MIN_FORCE = 10000;
-	
+
 	private float blastRadius;
 	private float blastTime;
 	private float blastDamage;

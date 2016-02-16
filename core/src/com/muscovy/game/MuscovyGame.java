@@ -22,7 +22,7 @@ import com.muscovy.game.screen.MainMenuScreen;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- * 
+ *
  * Main class controlling the game.
  */
 public class MuscovyGame extends Game {

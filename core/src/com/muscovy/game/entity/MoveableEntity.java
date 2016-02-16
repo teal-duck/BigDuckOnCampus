@@ -7,7 +7,7 @@ import com.muscovy.game.MuscovyGame;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- * 
+ *
  * Make objects move via the power of physics
  */
 public abstract class MoveableEntity extends Collidable {
@@ -143,7 +143,8 @@ public abstract class MoveableEntity extends Collidable {
 	/**
 	 * Scales the direction by accelerationSpeed and adds to acceleration.
 	 *
-	 * @param direction Normalised vector.
+	 * @param direction
+	 *                Normalised vector.
 	 */
 	public void addMovementAcceleration(Vector2 direction) {
 		acceleration.mulAdd(direction, accelerationSpeed);
