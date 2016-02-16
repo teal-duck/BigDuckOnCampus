@@ -6,11 +6,13 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
  * Make objects move via the power of physics
  */
 public abstract class MoveableEntity extends Collidable {
 	public static final float WORLD_FRICTION = 48;
-	public static final float WATER_FRICTION = 53; // 58;
+	public static final float WATER_FRICTION = 53;
 	public static final float PLAYER_ACCELERATION_SPEED = 5000;
 	public static final float ENEMY_ACCELERATION_SPEED = MoveableEntity.PLAYER_ACCELERATION_SPEED * 0.5f;
 	public static final float BOSS_ACCELERATION_SPEED = MoveableEntity.PLAYER_ACCELERATION_SPEED * 0.4f;
@@ -141,7 +143,7 @@ public abstract class MoveableEntity extends Collidable {
 	/**
 	 * Scales the direction by accelerationSpeed and adds to acceleration.
 	 *
-	 * @param direction
+	 * @param direction Normalised vector.
 	 */
 	public void addMovementAcceleration(Vector2 direction) {
 		acceleration.mulAdd(direction, accelerationSpeed);

@@ -10,7 +10,9 @@ import com.muscovy.game.level.LevelParameters;
 
 
 /**
- * Groups all the levels together. Provides functions for generating the levels.S
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
+ * Groups all the levels together. Provides functions for generating the levels.
  */
 public class Levels {
 	private int maxLevels;
@@ -19,12 +21,9 @@ public class Levels {
 
 	public Levels() {
 	}
-
-
-	/**
-	 * @param levels
-	 */
-	public void setLevels(Level[] levels) {
+	
+	
+	public Levels(Level[] levels) {
 		this.levels = levels;
 	}
 
@@ -95,7 +94,7 @@ public class Levels {
 
 	/**
 	 * @param level
-	 * @return
+	 * @return True if level has been completed.
 	 */
 	public boolean isLevelCompleted(int level) {
 		return getLevel(level).isCompleted();
@@ -104,7 +103,7 @@ public class Levels {
 
 	/**
 	 * @param levelType
-	 * @return
+	 * @return True if level has been completed.
 	 */
 	public boolean isLevelCompleted(LevelType levelType) {
 		return getLevel(levelType).isCompleted();
@@ -112,7 +111,6 @@ public class Levels {
 
 
 	/**
-	 *
 	 * @return True if all levels have been completed.
 	 */
 	public boolean areAllLevelsCompleted() {

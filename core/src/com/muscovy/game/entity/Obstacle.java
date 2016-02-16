@@ -7,7 +7,7 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
- * Created by SeldomBucket on 05-Dec-15. I should hope this is all fairly self-explanatory
+ * Project URL : http://teal-duck.github.io/teal-duck
  */
 public class Obstacle extends Collidable {
 	private boolean damaging;

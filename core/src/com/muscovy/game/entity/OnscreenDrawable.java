@@ -8,6 +8,8 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
  * Base class for all drawable entities. Provides methods around the entity's sprite and position on the map.
  */
 public abstract class OnscreenDrawable {
@@ -22,8 +24,8 @@ public abstract class OnscreenDrawable {
 	private String textureName;
 	private Sprite sprite;
 	private Vector2 position;
-	private int width;
-	private int height;
+	private float width;
+	private float height;
 
 
 	/**
@@ -218,5 +220,15 @@ public abstract class OnscreenDrawable {
 	 */
 	public Vector2 getCenter() {
 		return new Vector2(getCenterX(), getCenterY());
+	}
+	
+	
+	public void setWidth(float width) {
+		this.width = width;
+	}
+	
+	
+	public void setHeight(float height) {
+		this.height = height;
 	}
 }

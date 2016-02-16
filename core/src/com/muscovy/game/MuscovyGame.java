@@ -21,7 +21,9 @@ import com.muscovy.game.screen.MainMenuScreen;
 
 
 /**
- * If you need a hand, email me on ewh502
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
+ * Main class controlling the game.
  */
 public class MuscovyGame extends Game {
 	private SpriteBatch batch;
@@ -37,11 +39,11 @@ public class MuscovyGame extends Game {
 
 	private int currentSaveNumber = -1;
 
-	private static final int WINDOW_WIDTH = 1344; // 1280;
-	private static final int WINDOW_HEIGHT = 832; // 816; // 960;
+	private static final int WINDOW_WIDTH = 1344;
+	private static final int WINDOW_HEIGHT = 832;
 	private static final int TILE_SIZE = 64;
-	private static final int WALL_EDGE = 32; // WALL_WIDTH - TILE_SIZE;
-	private static final int WALL_WIDTH = MuscovyGame.TILE_SIZE + MuscovyGame.WALL_EDGE; // 96;
+	private static final int WALL_EDGE = 32;
+	private static final int WALL_WIDTH = MuscovyGame.TILE_SIZE + MuscovyGame.WALL_EDGE;
 
 	private float time = 0;
 	private int frames = 0;
@@ -86,7 +88,6 @@ public class MuscovyGame extends Game {
 		controller = ControllerHelper.getFirstControllerOrNull();
 		String controllerName = ControllerHelper.getControllerName(controller);
 
-		// TODO: Load control map from file
 		controlMap = ControlMapCreator.newDefaultControlMap(controllerName);
 		if (!ControlMapCreator.isControllerKnown(controllerName)) {
 			controller = null;
@@ -99,20 +100,13 @@ public class MuscovyGame extends Game {
 	 *
 	 */
 	public void initialisePlayerCharacter() {
-		// TODO: Player stats need to be passed to initialisePlayerCharacter
-		// Sprite playerSprite = new Sprite();
-		// playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
 
-		// playerStartX -= playerSprite.getRegionWidth() / 2;
-		// playerStartY -= playerSprite.getRegionHeight() / 2;
-
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
 		playerCharacter = new PlayerCharacter(this, AssetLocations.PLAYER, playerStartPosition, getControlMap(),
 				getController());
-		// playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 	}
 
 

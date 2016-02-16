@@ -17,7 +17,7 @@ import com.muscovy.game.input.ControlMap;
 
 
 /**
- * Created by ewh502 on 04/12/2015. Good luck
+ * Project URL : http://teal-duck.github.io/teal-duck
  */
 public class PlayerCharacter extends MoveableEntity {
 	public static final float MAX_SPEED = 350f;
@@ -97,12 +97,14 @@ public class PlayerCharacter extends MoveableEntity {
 		this.controller = controller;
 
 		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED);
+		
+		// Initialise shotDirection so shooting methods do not return a NullPointerException.
+		shotDirection = new Vector2(0, 0);
 
-		animationCycle = 0;
-		shotDirection = new Vector2(0, 1);
+		// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
+		// Assessment 3. Use at your own risk (and with your own assets)
 
-		// setShotType(PlayerShotType.FLAME_THROWER);
-
+		//animationCycle = 0;
 		// Sprite playerSprite;
 		// downWalkCycle = new ArrayList<Texture>();
 		// upWalkCycle = new ArrayList<Texture>();
@@ -130,8 +132,6 @@ public class PlayerCharacter extends MoveableEntity {
 		// rightWalkCycle.add(tempTexture);
 		// }
 
-		setHitboxYOffset(PlayerCharacter.HITBOX_Y_OFFSET); // Just to get the hitbox in line with that fat fuck
-									// of a duck's body
 		setHitboxRadius(PlayerCharacter.HITBOX_RADIUS);
 		setFullFlightBar();
 	}
@@ -165,8 +165,9 @@ public class PlayerCharacter extends MoveableEntity {
 		float dy = upState - downState;
 
 		Vector2 acceleration = new Vector2(dx, dy);
-		// If both dx and dy are 1 (i.e. both W and D are pressed)
-		// Limit the magnitude of the acceleration
+		// If both dx and dy are 1 (i.e. both W and D are pressed), acceleration magnitude > 1
+		// i.e. it would be faster to move diagonally than in a cardinal direction. So,we
+		// limit the magnitude of the acceleration
 		// Uses limit, not setLength, because controllers allow for movement between 0 and 1
 		acceleration.limit(1);
 
@@ -209,6 +210,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 		setAccelerationSpeed(MoveableEntity.PLAYER_ACCELERATION_SPEED * flyScale);
 
+		// addMovementAcceleration takes a normalised vector.
 		addMovementAcceleration(acceleration);
 
 		float shootRightState = controlMap.getStateForAction(Action.SHOOT_RIGHT, controller);
@@ -270,7 +272,7 @@ public class PlayerCharacter extends MoveableEntity {
 		}
 
 		if (controlMap.getStateForAction(Action.DROP_BOMB, controller) > 0) {
-			float bombTextureRadius = 32;
+			float bombTextureRadius = game.getTextureMap().getTextureOrLoadFile(AssetLocations.BOMB).getWidth() / 2;
 			Vector2 bombPosition = getCenter().cpy();
 			bombPosition.sub(bombTextureRadius, bombTextureRadius);
 			bombPosition.sub(0, PlayerCharacter.BOMB_Y_OFFSET);
@@ -346,8 +348,7 @@ public class PlayerCharacter extends MoveableEntity {
 	 * @return
 	 */
 	public ArrayList<Projectile> rangedAttack() {
-		float x = (getX() + (getWidth() / 2)) - 8;
-		// TODO: This should get player's height, not tile size
+		float x = (getX() + (getWidth() / 2)) - game.getTextureMap().getTextureOrLoadFile(AssetLocations.BULLET).getWidth();
 		float y = getY() + (getHeight() / 2);
 
 		// Player position
@@ -466,7 +467,7 @@ public class PlayerCharacter extends MoveableEntity {
 	/**
 	 * @return
 	 */
-	public float getMaxHealth() {
+	public int getMaxHealth() {
 		return maxHealth;
 	}
 
@@ -667,7 +668,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 
 	/**
-	 * Sets maxFlightTime to MAX_FLIGHT_TIME. If maxFlightTime is initialised to 0, this effectively "unlocks"
+	 * Sets maxFlightTime to MAX_FLIGHT_TIME. If maxFlightTime was still initialised to 0, this effectively "unlocks"
 	 * flight.
 	 */
 	public void setMaxFlightTime() {
@@ -740,7 +741,10 @@ public class PlayerCharacter extends MoveableEntity {
 
 	/**
 	 * Animation methods currently commented out, as we only have one sprite atm, but they should be easy to work
-	 * out. Might be worth revamping later though
+	 * out. Might be worth revamping later though.
+	 * 
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
+	 * Assessment 3. Use at your own risk (and with your own assets)
 	 */
 	public void walkCycleNext() {
 		// float direction = velocity.angleRad();
@@ -797,7 +801,10 @@ public class PlayerCharacter extends MoveableEntity {
 		// }
 	}
 
-
+	/**
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
+	 * Assessment 3. Use at your own risk (and with your own assets)
+	 */
 	public void movementAnimation() {
 		// if (animationCounter == 5) {
 		// animationCounter = 0;
@@ -807,7 +814,10 @@ public class PlayerCharacter extends MoveableEntity {
 		// }
 	}
 
-
+	/**
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team Teal in
+	 * Assessment 3. Use at your own risk (and with your own assets)
+	 */
 	public void idleAnimation() {
 		// velocity.len2() < 1
 		// if ((velocity.x == 0) && (velocity.y == 0)) {
