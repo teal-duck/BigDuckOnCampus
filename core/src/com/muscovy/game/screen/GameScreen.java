@@ -872,7 +872,8 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void playerDoorCollision() {
-		float doorOffset = 50; // 70
+		float doorVerticalOffset = 50; // 70
+		float doorHorizontalOffset = 0;
 		// TODO: Replace "player walking towards door" check with dot product
 		boolean collidedWithDoor = false;
 
@@ -883,7 +884,7 @@ public class GameScreen extends ScreenBase {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToUpRoom();
-				playerCharacter.setY(doorOffset);
+				playerCharacter.setY(doorVerticalOffset);
 			}
 		}
 
@@ -894,7 +895,8 @@ public class GameScreen extends ScreenBase {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToDownRoom();
-				playerCharacter.setY(getWindowHeight() - playerCharacter.getHeight() - doorOffset);
+				playerCharacter.setY(
+						getWindowHeight() - playerCharacter.getHeight() - doorVerticalOffset);
 			}
 		}
 
@@ -905,7 +907,7 @@ public class GameScreen extends ScreenBase {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToRightRoom();
-				playerCharacter.setX(doorOffset);
+				playerCharacter.setX(doorHorizontalOffset);
 			}
 		}
 
@@ -916,7 +918,8 @@ public class GameScreen extends ScreenBase {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToLeftRoom();
-				playerCharacter.setX(getWindowWidth() - playerCharacter.getWidth() - doorOffset);
+				playerCharacter.setX(
+						getWindowWidth() - playerCharacter.getWidth() - doorHorizontalOffset);
 			}
 		}
 	}

@@ -49,7 +49,7 @@ public class Levels {
 		for (int i = 0; i < levels.length; i += 1) {
 			LevelType levelType = LevelType.fromInt(i);
 			LevelParameters levelParameters = LevelType.getParametersForLevel(levelType);
-			
+
 			DungeonRoom[][] rooms = LevelGenerator.generateBuilding(game, levelType, levelParameters);
 			Level level = new Level(rooms, levelType, levelParameters);
 

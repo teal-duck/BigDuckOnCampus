@@ -15,7 +15,7 @@ import com.muscovy.game.save.game.SaveGame;
 
 
 /**
- 
+
  */
 public class LoadingScreen extends ScreenBase {
 	private final BitmapFont font;

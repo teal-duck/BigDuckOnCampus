@@ -55,7 +55,7 @@ public class BossParameters {
 
 	/**
 	 * Time between projectiles appearing
-	 * 
+	 *
 	 * @return
 	 */
 	public float getAttackInterval() {
@@ -70,7 +70,7 @@ public class BossParameters {
 
 	/**
 	 * Time projectile takes to disappear
-	 * 
+	 *
 	 * @return
 	 */
 	public float getProjectileLife() {
