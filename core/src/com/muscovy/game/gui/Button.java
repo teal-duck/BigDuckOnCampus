@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
- *Set up buttons text and texture
- *No logic - see ButtonList
+ * Set up buttons text and texture No logic - see ButtonList
  */
 public class Button {
 	private String text;
@@ -31,7 +30,7 @@ public class Button {
 
 
 	/**
-	 * 
+	 *
 	 * @param text
 	 * @param x
 	 * @param y
@@ -44,8 +43,9 @@ public class Button {
 		this(text, x, y, width, height, textYOffset, font, null, null);
 	}
 
+
 	/**
-	 * 
+	 *
 	 * @param text
 	 * @param x
 	 * @param y
@@ -75,7 +75,7 @@ public class Button {
 
 
 	/**
-	 *Button layout
+	 * Button layout
 	 */
 	private void createGlyphLayout() {
 		glyphLayout = new GlyphLayout(font, text);

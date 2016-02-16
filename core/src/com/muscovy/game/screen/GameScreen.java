@@ -35,7 +35,7 @@ import com.muscovy.game.level.Level;
 
 
 /**
- * 
+ *
  */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
@@ -68,10 +68,10 @@ public class GameScreen extends ScreenBase {
 	private BitmapFont pauseFont;
 	private GUI dungeonGui;
 	private GUI pauseGui;
-	
-	//Item 
+
+	// Item
 	private Sprite bombSprite;
-	
+
 	// Pause status
 	private boolean paused = false;
 	private boolean pauseJustPressed = true;
@@ -117,41 +117,41 @@ public class GameScreen extends ScreenBase {
 		int dungeonGuiY = getWindowHeight();
 		int dungeonGuiTop = 4;
 		int dungeonGuiYSeparator = 30;
-		
-		//Health
+
+		// Health
 		dungeonGuiY -= dungeonGuiTop;
 		dungeonGui.addData(GameScreen.HEALTH_ID, "Health: " + playerCharacter.getHealth(), guiFont, dungeonGuiX,
 				dungeonGuiY);
-		
-		//Score
+
+		// Score
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.SCORE_ID, "Score: " + playerCharacter.getScore(), guiFont, dungeonGuiX,
 				dungeonGuiY);
-		
-		//Flight bar
+
+		// Flight bar
 		dungeonGuiY -= dungeonGuiYSeparator;
 		dungeonGui.addData(GameScreen.FLIGHT_ID, GameScreen.FLIGHT_TEXT, guiFont, dungeonGuiX, dungeonGuiY);
 
 		flightBarX = getTextWidth(guiFont, GameScreen.FLIGHT_TEXT);
 		flightBarY = dungeonGuiY - (dungeonGuiYSeparator * 0.65f);
-		
-		//Number of bombs
+
+		// Number of bombs
 		dungeonGuiY -= dungeonGuiYSeparator;
-		dungeonGuiY -= dungeonGuiYSeparator*2 ;
+		dungeonGuiY -= dungeonGuiYSeparator * 2;
 		bombSprite = new Sprite();
 		bombSprite.setTexture(new Texture(Gdx.files.internal(AssetLocations.BOMB_GUI)));
-        bombSprite.setX(dungeonGuiX);
-        bombSprite.setY(dungeonGuiY + 3);
-        dungeonGui.addElement(bombSprite);
-        dungeonGuiY += dungeonGuiYSeparator;
-		dungeonGui.addData(GameScreen.BOMBS_ID, "x" + playerCharacter.getBombCount(), guiFont,
-				dungeonGuiX*4, dungeonGuiY);
+		bombSprite.setX(dungeonGuiX);
+		bombSprite.setY(dungeonGuiY + 3);
+		dungeonGui.addElement(bombSprite);
+		dungeonGuiY += dungeonGuiYSeparator;
+		dungeonGui.addData(GameScreen.BOMBS_ID, "x" + playerCharacter.getBombCount(), guiFont, dungeonGuiX * 4,
+				dungeonGuiY);
 
-		//Level name
+		// Level name
 		dungeonGuiY = 26;
 		dungeonGui.addData(GameScreen.LEVEL_NAME, level.getName(), guiFont, dungeonGuiX, dungeonGuiY);
-		
-		//Level objective
+
+		// Level objective
 		String objectiveText = level.getObjectiveName();
 		int objectiveX = getWindowWidth() - dungeonGuiX - getTextWidth(guiFont, objectiveText);
 		dungeonGui.addData(GameScreen.OBJECTIVE_ID, objectiveText, guiFont, objectiveX, dungeonGuiY);
@@ -176,12 +176,14 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void resetPlayer() {
-		Sprite playerSprite = playerCharacter.getSprite();
+		// Sprite playerSprite = playerCharacter.getSprite();
 
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
-		playerStartX -= playerSprite.getRegionWidth() / 2;
-		playerStartY -= playerSprite.getRegionHeight() / 2;
+		playerStartX -= 32;
+		playerStartY -= 32;
+		// playerStartX -= playerSprite.getRegionWidth() / 2;
+		// playerStartY -= playerSprite.getRegionHeight() / 2;
 
 		playerCharacter.setX(playerStartX);
 		playerCharacter.setY(playerStartY);
@@ -317,6 +319,7 @@ public class GameScreen extends ScreenBase {
 			}
 		}
 	}
+
 
 	@Override
 	public void renderScreen(float deltaTime, SpriteBatch batch) {

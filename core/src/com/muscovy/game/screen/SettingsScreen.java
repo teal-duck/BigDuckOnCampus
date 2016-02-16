@@ -1,5 +1,6 @@
 package com.muscovy.game.screen;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,9 +11,10 @@ import com.muscovy.game.gui.ButtonList;
 import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
+
 //TODO: Add different settings to setting screen
-public class SettingsScreen extends ScreenBase{
-	private static final String[] BUTTON_TEXTS = new String[] {"Back"};
+public class SettingsScreen extends ScreenBase {
+	private static final String[] BUTTON_TEXTS = new String[] { "Back" };
 	private GUI gui;
 	private BitmapFont settingsFont;
 	private BitmapFont font;
@@ -36,15 +38,17 @@ public class SettingsScreen extends ScreenBase{
 	private void initialiseGui() {
 
 		gui = new GUI();
-		gui.addData("Settings", "Settings", font, (getWindowWidth() / 2)- 130, getWindowWidth()/2);
-		gui.addData("Settings", "Currently there are no Settings", settingsFont, (getWindowWidth() / 2)- 300, (getWindowWidth()/2)- 100);
-		gui.addData("Settings", "Deal with it", settingsFont, (getWindowWidth() / 2)-130, (getWindowWidth()/2)-200);
+		gui.addData("Settings", "Settings", font, (getWindowWidth() / 2) - 130, getWindowWidth() / 2);
+		gui.addData("Settings", "Currently there are no Settings", settingsFont, (getWindowWidth() / 2) - 300,
+				(getWindowWidth() / 2) - 100);
+		gui.addData("Settings", "Deal with it", settingsFont, (getWindowWidth() / 2) - 130,
+				(getWindowWidth() / 2) - 200);
 
-		
 		buttons = new ButtonList(SettingsScreen.BUTTON_TEXTS, font, getTextureMap(), getControlMap(),
 				getController());
 		setButtonLocations();
 	}
+
 
 	private void setButtonLocations() {
 		int x = (getWindowWidth() / 2) - (ButtonList.BUTTON_WIDTH / 2);
@@ -54,6 +58,7 @@ public class SettingsScreen extends ScreenBase{
 				+ ButtonList.getHeightForDefaultButtonList(SettingsScreen.BUTTON_TEXTS.length);
 		buttons.setPositionDefaultSize(x, y);
 	}
+
 
 	@Override
 	public void updateScreen(float deltaTime) {
@@ -67,7 +72,7 @@ public class SettingsScreen extends ScreenBase{
 		} else {
 			escapeJustPressed = false;
 		}
-		
+
 		buttons.updateSelected(getCamera());
 		if (buttons.isSelectedSelected(getCamera())) {
 			setScreen(new MainMenuScreen(getGame()));
@@ -85,7 +90,7 @@ public class SettingsScreen extends ScreenBase{
 		buttons.render(batch);
 		batch.end();
 	}
-	
+
 
 	@Override
 	public void dispose() {
@@ -93,6 +98,3 @@ public class SettingsScreen extends ScreenBase{
 		settingsFont.dispose();
 	}
 }
-
-
-

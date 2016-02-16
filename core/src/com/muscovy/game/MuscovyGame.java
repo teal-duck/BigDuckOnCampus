@@ -7,7 +7,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -105,19 +104,19 @@ public class MuscovyGame extends Game {
 	 */
 	public void initialisePlayerCharacter() {
 		// TODO: Player stats need to be passed to initialisePlayerCharacter
-		Sprite playerSprite = new Sprite();
-		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+		// Sprite playerSprite = new Sprite();
+		// playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
 
-		playerStartX -= playerSprite.getRegionWidth() / 2;
-		playerStartY -= playerSprite.getRegionHeight() / 2;
+		// playerStartX -= playerSprite.getRegionWidth() / 2;
+		// playerStartY -= playerSprite.getRegionHeight() / 2;
 
 		Vector2 playerStartPosition = new Vector2(playerStartX, playerStartY);
 		playerCharacter = new PlayerCharacter(this, AssetLocations.PLAYER, playerStartPosition, getControlMap(),
 				getController());
-		playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
+		// playerSprite.setRegion(getTextureMap().getTextureOrLoadFile(AssetLocations.PLAYER));
 	}
 
 

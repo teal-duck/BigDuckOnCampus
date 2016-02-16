@@ -5,8 +5,9 @@ import com.muscovy.game.enums.EnemyShotType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.ProjectileType;
 
+
 /**
- * 
+ *
  * Parameters for making different Bosses
  *
  */
@@ -51,8 +52,10 @@ public class BossParameters {
 		return movementType;
 	}
 
+
 	/**
-	 * Time between projectiles appearing 
+	 * Time between projectiles appearing
+	 * 
 	 * @return
 	 */
 	public float getAttackInterval() {
@@ -64,8 +67,10 @@ public class BossParameters {
 		return projectileVelocity;
 	}
 
+
 	/**
 	 * Time projectile takes to disappear
+	 * 
 	 * @return
 	 */
 	public float getProjectileLife() {

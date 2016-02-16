@@ -4,8 +4,9 @@ package com.muscovy.game.entity;
 import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.MuscovyGame;
 
+
 /**
- * 
+ *
  * Projectile explosion i.e. the bomb
  *
  */
