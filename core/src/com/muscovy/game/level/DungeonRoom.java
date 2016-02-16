@@ -298,7 +298,7 @@ public class DungeonRoom {
 			BossParameters bossParameters = LevelType.getBossParameters(levelType);
 
 			if (bossParameters != null) {
-				enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0));
+				enemy = new Enemy(game, AssetLocations.ACCOMODATION_BOSS, new Vector2(0, 0), Enemy.BOSS_WIDTH, Enemy.BOSS_HEIGHT);
 				enemy.setXTiles((int) ((DungeonRoom.FLOOR_WIDTH_IN_TILES / 2)
 						- (enemy.getWidth() / game.getTileSize() / 2)));
 				enemy.setYTiles((int) ((DungeonRoom.FLOOR_HEIGHT_IN_TILES / 2)
@@ -317,6 +317,7 @@ public class DungeonRoom {
 				enemy.setAccelerationSpeed(bossParameters.getAccelerationSpeed());
 				enemy.setTouchDamage(bossParameters.getTouchDamage());
 				enemy.setCurrentHealth(bossParameters.getHealth());
+				enemy.setBoss();
 
 				addEnemy(enemy);
 			} else {

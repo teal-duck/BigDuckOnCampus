@@ -25,12 +25,17 @@ public abstract class Collidable extends OnscreenDrawable {
 	// Offset from centre of collidable
 	private float hitboxYOffset = 0;
 
-
+	
 	public Collidable(MuscovyGame game, String textureName, Vector2 position) {
-		super(game, textureName, position);
+		this(game, textureName, position, OnscreenDrawable.DEFAULT_ENTITY_WIDTH, OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
+	}
+	
+
+	public Collidable(MuscovyGame game, String textureName, Vector2 position, int width, int height) {
+		super(game, textureName, position, width, height);
 		setUpBoxes();
 	}
-
+	
 
 	/**
 	 * Initialises circle and rectangle hitboxes based on current x and y, width and height. Circle hitbox

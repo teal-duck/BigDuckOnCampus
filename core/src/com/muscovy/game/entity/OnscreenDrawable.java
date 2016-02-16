@@ -15,10 +15,15 @@ public abstract class OnscreenDrawable {
 	 * Instance of the game in which the entity exists.
 	 */
 	public final MuscovyGame game;
+	
+	public static final int DEFAULT_ENTITY_WIDTH = 64;
+	public static final int DEFAULT_ENTITY_HEIGHT = 64;
 
 	private String textureName;
 	private Sprite sprite;
 	private Vector2 position;
+	private int width;
+	private int height;
 
 
 	/**
@@ -32,6 +37,19 @@ public abstract class OnscreenDrawable {
 	public OnscreenDrawable(MuscovyGame game, String textureName) {
 		this(game, textureName, new Vector2(0, 0));
 	}
+	
+	
+	/**
+	 * Places the entity at (0, 0).
+	 *
+	 * @param game
+	 *                Instance of the game in which the entity exists.
+	 * @param textureName
+	 *                Filename storing the texture.
+	 */
+	public OnscreenDrawable(MuscovyGame game, String textureName, int width, int height) {
+		this(game, textureName, new Vector2(0, 0), width, height);
+	}
 
 
 	/**
@@ -44,8 +62,28 @@ public abstract class OnscreenDrawable {
 	 *                {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
 	 */
 	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position) {
+		this(game, textureName, position, DEFAULT_ENTITY_WIDTH, DEFAULT_ENTITY_HEIGHT);
+	}
+	
+	/**
+	 *
+	 * @param game
+	 *                Instance of the game in which the entity exists.
+	 * @param textureName
+	 *                Filename storing the texture.
+	 * @param position
+	 *                {@link Vector2} describing the bottom-left of the entity's sprite in pixels.
+	 * @param width
+	 * 				  Width of the entity's drawable area.
+	 * @param height
+	 * 				  Height of the entity's drawable area.
+	 */
+	public OnscreenDrawable(MuscovyGame game, String textureName, Vector2 position, int width, int height) {
 		this.game = game;
 		this.position = position;
+		
+		this.width = width;
+		this.height = height;
 
 		sprite = new Sprite();
 		setTexture(textureName);
@@ -64,7 +102,7 @@ public abstract class OnscreenDrawable {
 	 * @return Height of sprite in pixels.
 	 */
 	public float getHeight() {
-		return getTexture().getHeight();
+		return height;
 	}
 
 
@@ -72,7 +110,7 @@ public abstract class OnscreenDrawable {
 	 * @return Width of sprite in pixels.
 	 */
 	public float getWidth() {
-		return getTexture().getWidth();
+		return width;
 	}
 
 

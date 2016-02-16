@@ -37,6 +37,9 @@ public class Enemy extends MoveableEntity {
 
 	public static final float JUST_DAMAGED_TIME = 0.6f;
 
+	public static final int BOSS_WIDTH = 256;
+	public static final int BOSS_HEIGHT = 256;
+
 	// Movement
 	private MovementType movementType = MovementType.STATIC;
 	private float directionCounter = 0;
@@ -68,9 +71,15 @@ public class Enemy extends MoveableEntity {
 
 	private float justDamagedTime = 0f;
 
+	private boolean isBoss = false;
+
 
 	public Enemy(MuscovyGame game, String textureName, Vector2 position) {
-		super(game, textureName, position, new Vector2(1, 0));
+		this(game, textureName, position, OnscreenDrawable.DEFAULT_ENTITY_WIDTH, OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
+	}
+	
+	public Enemy(MuscovyGame game, String textureName, Vector2 position, int width, int height) {
+		super(game, textureName, position, new Vector2(1, 0), width, height);
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
 		rotateRandomDirection(getVelocity(), 0, 360);
@@ -521,5 +530,14 @@ public class Enemy extends MoveableEntity {
 	public void setMovementType(MovementType movementType) {
 		this.movementType = movementType;
 		calculateScoreOnDeath();
+	}
+
+
+	public boolean isBoss() {
+		return isBoss;
+	}
+	
+	public void setBoss() {
+		isBoss = true;
 	}
 }

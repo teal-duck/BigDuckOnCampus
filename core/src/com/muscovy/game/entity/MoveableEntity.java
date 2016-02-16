@@ -51,7 +51,21 @@ public abstract class MoveableEntity extends Collidable {
 	 * @param velocity
 	 */
 	public MoveableEntity(MuscovyGame game, String textureName, Vector2 position, Vector2 velocity) {
-		super(game, textureName, position);
+		this(game, textureName, position, velocity, OnscreenDrawable.DEFAULT_ENTITY_WIDTH, OnscreenDrawable.DEFAULT_ENTITY_HEIGHT);
+	}
+	
+	
+	/**
+	 * 
+	 * @param game
+	 * @param textureName
+	 * @param position
+	 * @param velocity
+	 * @param width
+	 * @param height
+	 */
+	public MoveableEntity(MuscovyGame game, String textureName, Vector2 position, Vector2 velocity, int width, int height) {
+		super(game, textureName, position, width, height);
 		this.velocity = velocity;
 		acceleration = new Vector2(0, 0);
 	}
@@ -209,5 +223,30 @@ public abstract class MoveableEntity extends Collidable {
 	 */
 	public void setVelocityToZero() {
 		velocity.setZero();
+	}
+	
+	
+	/**
+	 * @return 0 = down, 1 = up, 2 = left, 3 = right
+	 */
+	public int getDirection() {
+		int direction = 0; // 0 = down, 1 = up, 2 = left, 3 = right
+		float vx = getVelocityX();
+		float vy = getVelocityY();
+	
+		if (Math.abs(vy) > Math.abs(vx)) {
+			if (vy > 0) {
+				direction = 1; // Up
+			} else {
+				direction = 0; // Down
+			}
+		} else {
+			if (vx > 0) {
+				direction = 3; // Right
+			} else {
+				direction = 2; // Left
+			}
+		}
+		return direction;
 	}
 }

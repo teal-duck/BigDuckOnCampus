@@ -58,23 +58,24 @@ public enum LevelType {
 	public static LevelParameters getParametersForLevel(LevelType levelType) {
 		switch (levelType) {
 		case CONSTANTINE:
-			return new LevelParameters(7, 7, 6, 1, 1, ObjectiveType.BOSS);
+			return new LevelParameters(7, 7, 6, 4, 4, ObjectiveType.BOSS);
 		case LANGWITH:
-			return new LevelParameters(7, 7, 5, 2, 2, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 5, 4, 4, ObjectiveType.KILL_ENEMIES);
 		case GOODRICKE:
-			return new LevelParameters(7, 7, 10, 2, 2, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
+			return new LevelParameters(7, 7, 10, 4, 4, ObjectiveType.BOSS, MoveableEntity.WATER_FRICTION);
 		case LMB:
-			return new LevelParameters(7, 7, 10, 2, 2, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 10, 4, 4, ObjectiveType.KILL_ENEMIES);
 		case CATALYST:
-			return new LevelParameters(7, 7, 14, 3, 3, ObjectiveType.BOSS);
+			return new LevelParameters(7, 7, 14, 4, 4, ObjectiveType.BOSS);
 		case TFTV:
-			return new LevelParameters(7, 7, 14, 3, 3, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 14, 4, 4, ObjectiveType.KILL_ENEMIES);
 		case COMP_SCI:
-			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.KILL_ENEMIES);
+			return new LevelParameters(7, 7, 20, 4, 4, ObjectiveType.KILL_ENEMIES);
 		case RCH:
-			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
+			return new LevelParameters(7, 7, 20, 4, 4, ObjectiveType.BOSS);
 		default:
-			return new LevelParameters(7, 7, 20, 3, 3, ObjectiveType.BOSS);
+			System.out.println("Creating level " + levelType.toString() + " with default parameters.");
+			return new LevelParameters(7, 7, 20, 4, 4, ObjectiveType.BOSS);
 		}
 	}
 
