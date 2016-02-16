@@ -77,6 +77,7 @@ public class Item extends Collidable {
 			return true;
 		case SUNGLASSES:
 			playerCharacter.setTexture(AssetLocations.PLAYER_SUNGLASSES);
+			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		default:
 			return false;
