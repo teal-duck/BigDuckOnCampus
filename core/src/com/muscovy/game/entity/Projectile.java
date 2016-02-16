@@ -13,11 +13,12 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
- * Created by ewh502 on 11/01/2016.
+ * Project URL : http://teal-duck.github.io/teal-duck
  */
 public class Projectile extends OnscreenDrawable {
 	public static final float SPEED = 150f;
 	public static final float DAMAGE = 10f;
+	public static final float FLAME_DAMAGE = 5f;
 	public static final float LIFE_TIME = 1.5f; // Time projectile on screen
 
 	private Vector2 velocity;
@@ -53,7 +54,7 @@ public class Projectile extends OnscreenDrawable {
 		// Changing texture for Flame Thrower
 		if (projectileType == ProjectileType.FLAMES) {
 			setTexture(AssetLocations.FLAME);
-			damage = 5;
+			damage = Projectile.FLAME_DAMAGE;
 		}
 
 		maxLifeTime = life;

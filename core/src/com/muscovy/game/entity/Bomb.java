@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.muscovy.game.EntityManager;
 import com.muscovy.game.MuscovyGame;
 
-
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ */
 public class Bomb extends MoveableEntity {
 	public static final float BLAST_RADIUS = 64 * 3;
 	public static final float BLAST_TIME = 3f;
@@ -13,7 +15,7 @@ public class Bomb extends MoveableEntity {
 	public static final float MIN_DAMAGE = 5;
 	public static final float BLAST_FORCE = 100000;
 	public static final float MIN_FORCE = 10000;
-
+	
 	private float blastRadius;
 	private float blastTime;
 	private float blastDamage;
@@ -70,6 +72,7 @@ public class Bomb extends MoveableEntity {
 			float inverseDistance = 1 - (distance / blastRadius);
 			float damage = ((blastDamage - minDamage) * inverseDistance) + minDamage;
 
+			// Push the entity directly away from the centre of explosion.
 			Vector2 directionToPush = vectorToEntity.cpy().nor();
 			float forceToPush = ((blastForce - minForce) * inverseDistance) + minForce;
 

@@ -7,9 +7,9 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
  *
  * Parameters for making different Bosses
- *
  */
 public class BossParameters {
 	private final ProjectileType projectileType;
@@ -54,40 +54,46 @@ public class BossParameters {
 
 
 	/**
-	 * Time between projectiles appearing
-	 *
-	 * @return
+	 * @return Time between projectiles appearing.
 	 */
 	public float getAttackInterval() {
 		return attackInterval;
 	}
 
-
+	
+	/**
+	 * @return Speed of projectiles to be fired by boss.
+	 */
 	public float getProjectileVelocity() {
 		return projectileVelocity;
 	}
 
 
 	/**
-	 * Time projectile takes to disappear
-	 *
-	 * @return
+	 * @return Time projectile takes to disappear.
 	 */
 	public float getProjectileLife() {
 		return projectileLife;
 	}
 
-
+	/**
+	 * @return Scalar for additional accelerations.
+	 */
 	public float getAccelerationSpeed() {
 		return accelerationSpeed;
 	}
 
-
+	/**
+	 * @return Damage to deal to players upon touch.
+	 */
 	public float getTouchDamage() {
 		return touchDamage;
 	}
 
 
+	/**
+	 * @return Max health for the boss.
+	 */
 	public float getHealth() {
 		return health;
 	}

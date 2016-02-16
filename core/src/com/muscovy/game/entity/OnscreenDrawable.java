@@ -8,6 +8,8 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
  * Base class for all drawable entities. Provides methods around the entity's sprite and position on the map.
  */
 public abstract class OnscreenDrawable {

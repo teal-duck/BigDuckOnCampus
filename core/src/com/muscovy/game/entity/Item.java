@@ -10,7 +10,7 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
- * Created by ewh502 on 19/01/2016.
+ * Project URL : http://teal-duck.github.io/teal-duck
  *
  * For any items that can be picked up
  */
@@ -20,6 +20,7 @@ public class Item extends Collidable {
 
 	private static final int HEALTHPACK_REGEN = 10;
 	private static final int BOMB_GIVE_COUNT = 1;
+	private static final int MAX_HEALTH_INCREASE_FACTOR = 2;
 
 
 	public Item(MuscovyGame game, String textureName, Vector2 position, ItemType type) {
@@ -69,7 +70,8 @@ public class Item extends Collidable {
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		case EXTRA_HEALTH:
-			playerCharacter.setMaxHealth(PlayerCharacter.MAX_HEALTH * 2);
+			playerCharacter.setMaxHealth(PlayerCharacter.MAX_HEALTH * Item.MAX_HEALTH_INCREASE_FACTOR);
+			playerCharacter.setHealth(playerCharacter.getMaxHealth());
 			playerCharacter.addItemToObtainedItems(type);
 			return true;
 		case HEALTH_UNLOCK:

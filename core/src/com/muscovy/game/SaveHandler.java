@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * 
  * Helper class for dealing with save files.
  */
 public class SaveHandler {

@@ -11,7 +11,7 @@ import com.muscovy.game.level.DungeonRoom;
 
 
 /**
- * Created by SeldomBucket on 05-Jan-16.
+ * Project URL : http://teal-duck.github.io/teal-duck
  *
  * Base class for all collidable entities. Provides methods to help perform collision calculations.
  */
@@ -95,7 +95,8 @@ public abstract class Collidable extends OnscreenDrawable {
 
 	/*
 	 * setXTiles and setYTiles moves the collidable to fit on the grid directly. Clamps to walls of dungeon room,
-	 * assuming a 64x64 collidable Useful for placing stuff in the dungeon rooms
+	 * assuming a 64x64 collidable.
+	 * Useful for placing stuff in the dungeon rooms
 	 */
 
 	/**

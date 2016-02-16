@@ -14,9 +14,13 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
- * Created by SeldomBucket on 05-Dec-15.
+ * Project URL : http://teal-duck.github.io/teal-duck
  */
 public class Enemy extends MoveableEntity {
+
+	private static final int INITIAL_MAX_ROTATION = 360;
+
+	private static final int INITIAL_MIN_ROTATION = 0;
 
 	// Attack
 	public static final float TOUCH_DAMAGE = 10f;
@@ -33,7 +37,7 @@ public class Enemy extends MoveableEntity {
 	public static final float MAX_ROTATION = 15;
 	public static final float TIME_TO_STAY_IN_RANDOM_DIRECTION = 0.05f;
 
-	public static final float VIEW_DISTANCE = 1000; // 480;
+	public static final float VIEW_DISTANCE = 1000;
 
 	public static final float JUST_DAMAGED_TIME = 0.6f;
 
@@ -82,7 +86,7 @@ public class Enemy extends MoveableEntity {
 		super(game, textureName, position, new Vector2(1, 0), width, height);
 
 		setAccelerationSpeed(MoveableEntity.ENEMY_ACCELERATION_SPEED);
-		rotateRandomDirection(getVelocity(), 0, 360);
+		rotateRandomDirection(getVelocity(), INITIAL_MIN_ROTATION, INITIAL_MAX_ROTATION);
 		chooseNewAttackInterval();
 	}
 
@@ -121,9 +125,11 @@ public class Enemy extends MoveableEntity {
 		Vector2 direction = getVelocity().cpy().nor();
 
 		switch (movementType) {
+		// Static enemies shouldn't move, so have no movement logic.
 		case STATIC:
 			break;
 
+		// Rotate the enemy a random direction after a set amount of time.
 		case RANDOM:
 			directionCounter += deltaTime;
 			if (directionCounter > Enemy.TIME_TO_STAY_IN_RANDOM_DIRECTION) {
@@ -132,6 +138,7 @@ public class Enemy extends MoveableEntity {
 			}
 			break;
 
+		// Get the direction to the player and follow that vector.
 		case FOLLOW:
 			PlayerCharacter player = getPlayer();
 
@@ -144,6 +151,7 @@ public class Enemy extends MoveableEntity {
 			break;
 		}
 
+		// addMovementAcceleration take a normalised vector.
 		direction.nor();
 		addMovementAcceleration(direction);
 	}
@@ -159,7 +167,7 @@ public class Enemy extends MoveableEntity {
 
 	/**
 	 * @param collidable
-	 * @return
+	 * @return Distance between enemy and given Collidable.
 	 */
 	public float getDistanceTo(Collidable collidable) {
 		return getPosition().dst(collidable.getPosition());
@@ -281,7 +289,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * Enemy disappears if dead
+	 * Set this.dead to true, marking this enemy as okay to delete.
 	 */
 	public void killSelf() {
 		dead = true;
@@ -289,7 +297,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * When enemy dies update score
+	 * Set score to add to player's total after this entity's death.
 	 */
 	public void calculateScoreOnDeath() {
 		scoreOnDeath = (attackType.getScoreMultiplier() * 10) + (movementType.getScoreMultiplier() * 10);
@@ -362,7 +370,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return True if this enemy is ready to be deleted and should no longer be rendered.
 	 */
 	public boolean isLifeOver() {
 		return dead;
@@ -370,7 +378,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return Maximum time between firing projectiles.
 	 */
 	public float getMaxAttackInterval() {
 		return maxAttackInterval;
@@ -378,7 +386,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param maxAttackInterval
+	 * @param maxAttackInterval Maximum time between firing projectiles.
 	 */
 	public void setMaxAttackInterval(float maxAttackInterval) {
 		this.maxAttackInterval = maxAttackInterval;
@@ -386,7 +394,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return attackRandomness = 0.5 * maximum spread of attack intervals.
 	 */
 	public float getAttackRandomness() {
 		return attackRandomness;
@@ -394,7 +402,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param attackRandomness
+	 * @param attackRandomness 0.5 * maximum spread of attack intervals.
 	 */
 	public void setAttackRandomness(float attackRandomness) {
 		this.attackRandomness = attackRandomness;
@@ -402,7 +410,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return Maximum distance that an enemy will begin following a player.
 	 */
 	public float getViewDistance() {
 		return viewDistance;
@@ -410,7 +418,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param viewDistance
+	 * @param viewDistance Maximum distance that an enemy will begin following a player.
 	 */
 	public void setViewDistance(float viewDistance) {
 		this.viewDistance = viewDistance;
@@ -418,7 +426,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return Maximum distance that projectiles fired by this enemy will fly.
 	 */
 	public float getProjectileRange() {
 		return projectileRange;
@@ -426,7 +434,9 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param projectileRange
+	 * Also modifies projectileLife to correctly account for new projectile range. 
+	 * 
+	 * @param projectileRange Maximum distance that projectiles fired by this enemy will fly.
 	 */
 	public void setProjectileRange(float projectileRange) {
 		this.projectileRange = projectileRange;
@@ -435,7 +445,7 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @return
+	 * @return Maximum distance that projectiles fired by this enemy will fly. 
 	 */
 	public float getProjectileLife() {
 		return projectileLife;
@@ -443,7 +453,9 @@ public class Enemy extends MoveableEntity {
 
 
 	/**
-	 * @param projectileLife
+	 * Also modifies projectileRange to correctly account for new projectile lifespan.
+	 * 
+	 * @param projectileLife Maximum time that a projectile will fly before disappearing.
 	 */
 	public void setProjectileLife(float projectileLife) {
 		this.projectileLife = projectileLife;
@@ -533,10 +545,16 @@ public class Enemy extends MoveableEntity {
 	}
 
 
+	/**
+	 * @return True if this enemy is a boss.
+	 */
 	public boolean isBoss() {
 		return isBoss;
 	}
 	
+	/**
+	 * Sets this enemy to become a boss.
+	 */
 	public void setBoss() {
 		isBoss = true;
 	}

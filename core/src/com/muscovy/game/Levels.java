@@ -94,7 +94,7 @@ public class Levels {
 
 	/**
 	 * @param level
-	 * @return
+	 * @return True if level has been completed.
 	 */
 	public boolean isLevelCompleted(int level) {
 		return getLevel(level).isCompleted();
@@ -103,7 +103,7 @@ public class Levels {
 
 	/**
 	 * @param levelType
-	 * @return
+	 * @return True if level has been completed.
 	 */
 	public boolean isLevelCompleted(LevelType levelType) {
 		return getLevel(levelType).isCompleted();
@@ -111,7 +111,6 @@ public class Levels {
 
 
 	/**
-	 *
 	 * @return True if all levels have been completed.
 	 */
 	public boolean areAllLevelsCompleted() {
