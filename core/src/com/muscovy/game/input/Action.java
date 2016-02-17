@@ -2,7 +2,8 @@ package com.muscovy.game.input;
 
 
 /**
- * The possible actions that require binding to some input event.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: The possible actions that require binding to some input event.
  */
 public enum Action {
 	WALK_UP, WALK_RIGHT, WALK_DOWN, WALK_LEFT, //

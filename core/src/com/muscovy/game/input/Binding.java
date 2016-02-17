@@ -2,8 +2,9 @@ package com.muscovy.game.input;
 
 
 /**
- * Manages a key binding and controller binding. The KeyBinding and ControllerBinding instances are guaranteed to never
- * be null. If there is no mapping, then instead the instances are in a state of no mapping.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Manages a key binding and controller binding. The KeyBinding and ControllerBinding instances are
+ * guaranteed to never be null. If there is no mapping, then instead the instances are in a state of no mapping.
  */
 public class Binding {
 	private KeyBinding keyBinding;

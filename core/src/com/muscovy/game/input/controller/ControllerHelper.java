@@ -10,7 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Provides helper functions for dealing with controllers
  */
 public class ControllerHelper extends ControllerAdapter {
 	/**

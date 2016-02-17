@@ -6,7 +6,8 @@ import com.badlogic.gdx.controllers.PovDirection;
 
 
 /**
- * Describes a binding to some action on a gamepad.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Describes a binding to some action on a gamepad.
  */
 public class ControllerBinding {
 	private ControllerBindingType controllerBindingType;
@@ -227,11 +228,6 @@ public class ControllerBinding {
 	 *                 if controller is null
 	 */
 	public float getControllerStateForAction(Controller controller) {
-		// TODO: Should the return value from getControllerStateForAction be scaled depending on deadzone?
-		// E.g. if deadzone is 0.2 and the state returned is 0.3
-		// Should the return value be 0.3, or mapped into the range 0.2 to 1.0
-		// So 0.125?
-
 		if (controller == null) {
 			throw new IllegalArgumentException("controller is null");
 		}

@@ -10,7 +10,8 @@ import com.muscovy.game.input.controller.Xbox360Windows;
 
 
 /**
- * Helper class for creating new control maps.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Helper class for creating new control maps.
  */
 public class ControlMapCreator {
 	private ControlMapCreator() {

@@ -2,7 +2,8 @@ package com.muscovy.game.input.controller;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Defines the indices for a Playstation 4 controller.
  */
 public class PS4 {
 	public static final String NAME = "Sony Computer Entertainment Wireless Controller";

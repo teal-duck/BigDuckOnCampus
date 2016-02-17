@@ -2,7 +2,8 @@ package com.muscovy.game.input.controller;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Defines the indices for an Xbox 360 controller.
  */
 public class Xbox360 {
 	public static final String NAME = "Microsoft X-Box 360 pad";

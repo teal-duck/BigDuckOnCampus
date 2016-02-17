@@ -6,8 +6,9 @@ import com.badlogic.gdx.Input.Keys;
 
 
 /**
- * Allows an action to be mapped to a primary and secondary key. If there is a secondary key set, there is always a
- * primary key set as well.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Allows an action to be mapped to a primary and secondary key. If there is a secondary key set, there is
+ * always a primary key set as well.
  */
 public class KeyBinding {
 	public static final int NO_KEY = Keys.UNKNOWN;

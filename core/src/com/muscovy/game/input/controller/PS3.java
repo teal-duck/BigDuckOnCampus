@@ -2,7 +2,8 @@ package com.muscovy.game.input.controller;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Defines the indices for a Playstation 3 controller.
  */
 public class PS3 {
 	public static final String NAME = "Sony PLAYSTATION(R)3 Controller";
