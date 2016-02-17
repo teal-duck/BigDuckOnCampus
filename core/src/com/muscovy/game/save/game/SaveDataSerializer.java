@@ -9,6 +9,10 @@ import com.muscovy.game.entity.PlayerCharacter;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a SaveData object.
+ */
 @SuppressWarnings("rawtypes")
 public class SaveDataSerializer extends BaseSerializer<SaveData> {
 	public SaveDataSerializer(MuscovyGame game) {

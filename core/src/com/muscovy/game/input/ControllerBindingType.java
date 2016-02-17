@@ -2,7 +2,8 @@ package com.muscovy.game.input;
 
 
 /**
- * Possible different actions that can be performed on a gamepad.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Possible different actions that can be performed on a gamepad.
  * <p>
  * Axis split into positive and negative so that, for example, if you map an action for moving left to a key press and
  * the moving the stick left, the key press would return +1 but the stick would return -1. Instead, all values are in

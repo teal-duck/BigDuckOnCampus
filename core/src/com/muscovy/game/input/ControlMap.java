@@ -10,7 +10,8 @@ import com.badlogic.gdx.controllers.PovDirection;
 
 
 /**
- * Maps actions to bindings.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Maps actions to bindings.
  */
 public class ControlMap {
 	private EnumMap<Action, Binding> controls;

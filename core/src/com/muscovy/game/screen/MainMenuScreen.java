@@ -15,7 +15,8 @@ import com.muscovy.game.input.Action;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Screen presented to user when they start the game.
  */
 public class MainMenuScreen extends ScreenBase {
 	private static final int NEW_GAME = 0;
@@ -126,7 +127,6 @@ public class MainMenuScreen extends ScreenBase {
 		Gdx.app.log("NewGame", "Starting a new game in save slot " + saveNumber);
 
 		if (saveNumber < 0) {
-			// TODO: Overwrite save
 			Gdx.app.log("TODO", "Overwrite save");
 			int overwriteSaveNumber = getSaveSlotToOverwrite();
 			Gdx.app.log("OverwriteGame", "Overwiting game in slot " + overwriteSaveNumber);
@@ -142,7 +142,6 @@ public class MainMenuScreen extends ScreenBase {
 	 * @return
 	 */
 	private int getSaveSlotToOverwrite() {
-		// TODO: getSaveSlotToOverwrite
 		return 0;
 	}
 

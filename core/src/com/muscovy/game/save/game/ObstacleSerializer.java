@@ -9,6 +9,10 @@ import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises an Obstacle object.
+ */
 @SuppressWarnings("rawtypes")
 public class ObstacleSerializer extends BaseSerializer<Obstacle> {
 	public ObstacleSerializer(MuscovyGame game) {

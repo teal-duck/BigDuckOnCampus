@@ -1,6 +1,10 @@
 package com.muscovy.game.input.controller;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Defines the indices for an Xbox 360 controller on Windows.
+ */
 public class Xbox360Windows {
 	public static final String NAME = "Controller (XBOX 360 For Windows)";
 

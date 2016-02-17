@@ -15,17 +15,14 @@ import com.muscovy.game.save.game.SaveGame;
 
 
 /**
-
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Handles loading of the game, shows "loading" to the user.
  */
 public class LoadingScreen extends ScreenBase {
 	private final BitmapFont font;
 	private final int saveNumber;
 
 	private float time = 0;
-
-	// For testing purposes
-	// The loading code isn't finished so parts are still null
-	private final boolean loadData = true;
 
 
 	public LoadingScreen(MuscovyGame game, int saveNumber) {
@@ -41,7 +38,7 @@ public class LoadingScreen extends ScreenBase {
 	}
 
 
-	private final float startTime = 0.1f; // 0.5f;
+	private final float startTime = 0.1f;
 
 
 	@Override
@@ -81,16 +78,11 @@ public class LoadingScreen extends ScreenBase {
 	 * @return
 	 */
 	private SaveData loadSave(int saveNumber) {
-		if (loadData) {
-			Gdx.app.log("Load", "Loading save");
-			SaveGame saveGame = new SaveGame(getGame());
-			String saveLocation = SaveHandler.getFileForSaveNumber(saveNumber);
-			SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
-			return loadedData;
-		} else {
-			Gdx.app.log("Load", "Loading disabled, returning null");
-			return null;
-		}
+		Gdx.app.log("Load", "Loading save");
+		SaveGame saveGame = new SaveGame(getGame());
+		String saveLocation = SaveHandler.getFileForSaveNumber(saveNumber);
+		SaveData loadedData = saveGame.loadFromFileOrNull(saveLocation);
+		return loadedData;
 	}
 
 

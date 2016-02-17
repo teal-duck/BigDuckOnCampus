@@ -13,6 +13,10 @@ import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises an Enemy object.
+ */
 @SuppressWarnings("rawtypes")
 public class EnemySerializer extends BaseSerializer<Enemy> {
 	public EnemySerializer(MuscovyGame game) {

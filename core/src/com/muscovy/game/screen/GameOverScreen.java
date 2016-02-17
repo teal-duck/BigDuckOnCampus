@@ -12,7 +12,8 @@ import com.muscovy.game.input.Action;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: The screen the player sees when they lose the game (i.e. run out of health)
  */
 public class GameOverScreen extends ScreenBase {
 	private GUI gui;

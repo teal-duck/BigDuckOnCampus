@@ -9,6 +9,10 @@ import com.muscovy.game.level.Level;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a Levels object.
+ */
 @SuppressWarnings("rawtypes")
 public class LevelsSerializer extends BaseSerializer<Levels> {
 	public LevelsSerializer(MuscovyGame game) {

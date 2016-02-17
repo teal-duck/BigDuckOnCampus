@@ -14,6 +14,10 @@ import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a PlayerCharacter object.
+ */
 @SuppressWarnings("rawtypes")
 public class PlayerCharacterSerializer extends BaseSerializer<PlayerCharacter> {
 	public PlayerCharacterSerializer(MuscovyGame game) {

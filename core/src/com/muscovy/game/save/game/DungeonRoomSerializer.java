@@ -12,6 +12,10 @@ import com.muscovy.game.level.DungeonRoom;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a DungeonRoom object.
+ */
 @SuppressWarnings("rawtypes")
 public class DungeonRoomSerializer extends BaseSerializer<DungeonRoom> {
 	public DungeonRoomSerializer(MuscovyGame game) {

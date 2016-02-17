@@ -12,7 +12,8 @@ import com.muscovy.game.input.Action;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Screen shown to the user when they beat the game.
  */
 public class WinScreen extends ScreenBase {
 	private GUI gui;

@@ -12,7 +12,8 @@ import com.muscovy.game.input.Action;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Screen with map of campus for choosing level to play.
  */
 public class LevelSelectScreen extends ScreenBase {
 	private LevelType mapSelected;

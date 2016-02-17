@@ -6,7 +6,8 @@ import com.muscovy.game.entity.PlayerCharacter;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Groups together the data that needs to be saved.
  */
 public class SaveData {
 	private final PlayerCharacter player;

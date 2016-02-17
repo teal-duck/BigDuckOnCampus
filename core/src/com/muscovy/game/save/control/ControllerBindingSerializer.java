@@ -10,6 +10,10 @@ import com.muscovy.game.input.ControllerBindingType;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a ControllerBinding object.
+ */
 @SuppressWarnings("rawtypes")
 public class ControllerBindingSerializer extends BaseSerializer<ControllerBinding> {
 	public ControllerBindingSerializer(MuscovyGame game) {

@@ -25,6 +25,7 @@ import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.ProjectileDamager;
+import com.muscovy.game.enums.ProjectileType;
 import com.muscovy.game.enums.RoomType;
 import com.muscovy.game.level.DungeonRoom;
 import com.muscovy.game.level.Level;
@@ -325,7 +326,11 @@ public class EntityManager {
 				if (projectile.getDamagesWho() != ProjectileDamager.PLAYER) {
 					batch.setColor(Color.WHITE);
 				} else {
-					batch.setColor(Color.DARK_GRAY);
+					if (projectile.getProjectileType() == ProjectileType.FLAMES) {
+						batch.setColor(Color.LIGHT_GRAY);
+					} else {
+						batch.setColor(Color.DARK_GRAY);
+					}
 				}
 
 				batch.draw(projectile.getSprite().getTexture(), projectile.getX(), projectile.getY());

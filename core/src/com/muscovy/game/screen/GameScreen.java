@@ -35,7 +35,8 @@ import com.muscovy.game.level.Level;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Screen for actually playing the game. Also contains the collision functions.
  */
 public class GameScreen extends ScreenBase {
 	private static final boolean PAUSE_ON_LOSE_FOCUS = true;
@@ -176,14 +177,10 @@ public class GameScreen extends ScreenBase {
 	 *
 	 */
 	private void resetPlayer() {
-		// Sprite playerSprite = playerCharacter.getSprite();
-
 		float playerStartX = getWindowWidth() / 2;
 		float playerStartY = getWindowHeight() / 2;
-		playerStartX -= 32;
-		playerStartY -= 32;
-		// playerStartX -= playerSprite.getRegionWidth() / 2;
-		// playerStartY -= playerSprite.getRegionHeight() / 2;
+		playerStartX -= playerCharacter.getWidth() / 2;
+		playerStartY -= playerCharacter.getHeight() / 2;
 
 		playerCharacter.setX(playerStartX);
 		playerCharacter.setY(playerStartY);
@@ -191,8 +188,6 @@ public class GameScreen extends ScreenBase {
 		playerCharacter.getAcceleration().setZero();
 		playerCharacter.getVelocity().setZero();
 		playerCharacter.setFullFlightBar();
-
-		// playerCharacter.giveBombs(5);
 	}
 
 
@@ -270,7 +265,6 @@ public class GameScreen extends ScreenBase {
 
 	@Override
 	public void updateScreen(float deltaTime) {
-		// if (getStateForAction(Action.PAUSE) > 0) {
 		if (isStateForAction(Action.PAUSE) || isStateForAction(Action.ESCAPE)) {
 			if (!pauseJustPressed) {
 				setPaused(!paused);
@@ -521,9 +515,7 @@ public class GameScreen extends ScreenBase {
 				entityManager.addNewProjectiles(playerCharacter.rangedAttack());
 			}
 		} else {
-			if (playerCharacter.getTimeSinceLastAttack() < 0.5) {
-				playerCharacter.incrementTimeSinceLastAttack(deltaTime);
-			}
+			playerCharacter.incrementTimeSinceLastAttack(deltaTime);
 		}
 
 		if (playerCharacter.checkBombDrop(deltaTime)) {
@@ -644,8 +636,8 @@ public class GameScreen extends ScreenBase {
 
 			Vector2 c1ToC0 = c0.cpy().sub(c1);
 
-			e0.getVelocity().add(c1ToC0.scl(1.5f));
-
+			final float pushOutVelocityScale = 1.5f;
+			e0.getVelocity().add(c1ToC0.scl(pushOutVelocityScale));
 		}
 	}
 
@@ -862,25 +854,18 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	@SuppressWarnings("unused")
-	private void entityWallCollision(MoveableEntity entity) {
-		// TODO: Entity wall collision
-	}
-
-
 	/**
 	 *
 	 */
 	private void playerDoorCollision() {
-		float doorVerticalOffset = 50; // 70
+		float doorVerticalOffset = 50;
 		float doorHorizontalOffset = 0;
-		// TODO: Replace "player walking towards door" check with dot product
 		boolean collidedWithDoor = false;
 
 		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasUpDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getUpDoor()))
-					&& (getStateForAction(Action.WALK_UP) > 0)) {
+					&& isStateForAction(Action.WALK_UP)) {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToUpRoom();
@@ -891,7 +876,7 @@ public class GameScreen extends ScreenBase {
 		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasDownDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getDownDoor()))
-					&& (getStateForAction(Action.WALK_DOWN) > 0)) {
+					&& isStateForAction(Action.WALK_DOWN)) {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToDownRoom();
@@ -903,7 +888,7 @@ public class GameScreen extends ScreenBase {
 		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasRightDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getRightDoor()))
-					&& (getStateForAction(Action.WALK_RIGHT) > 0)) {
+					&& isStateForAction(Action.WALK_RIGHT)) {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToRightRoom();
@@ -914,7 +899,7 @@ public class GameScreen extends ScreenBase {
 		if (!collidedWithDoor && entityManager.getCurrentDungeonRoom().hasLeftDoor()) {
 			if ((Intersector.overlaps(playerCharacter.getCircleHitbox(),
 					entityManager.getCurrentDungeonRoom().getLeftDoor()))
-					&& (getStateForAction(Action.WALK_LEFT) > 0)) {
+					&& isStateForAction(Action.WALK_LEFT)) {
 				collidedWithDoor = true;
 				playerCharacter.setVelocityToZero();
 				entityManager.moveToLeftRoom();
@@ -936,7 +921,6 @@ public class GameScreen extends ScreenBase {
 	}
 
 
-	// TODO: bombWallCollision is nearly same as enemyWallCollision
 	private void bombWallCollision(Bomb bomb) {
 		if (Intersector.overlaps(bomb.getCircleHitbox(), entityManager.getCurrentDungeonRoom().getTopWall())) {
 			bomb.setVelocityY(-1 * Math.abs(bomb.getVelocityY()));
