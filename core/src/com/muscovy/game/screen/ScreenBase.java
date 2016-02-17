@@ -20,7 +20,8 @@ import com.muscovy.game.input.ControlMap;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Base class for screens to inherit. Implements LibGDX screen and provides helper functions.
  */
 public abstract class ScreenBase implements Screen {
 	private final MuscovyGame game;

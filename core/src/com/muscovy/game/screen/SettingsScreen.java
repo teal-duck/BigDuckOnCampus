@@ -12,7 +12,10 @@ import com.muscovy.game.gui.GUI;
 import com.muscovy.game.input.Action;
 
 
-//TODO: Add different settings to setting screen
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Interface for game settings.
+ */
 public class SettingsScreen extends ScreenBase {
 	private static final String[] BUTTON_TEXTS = new String[] { "Back" };
 	private GUI gui;
@@ -36,13 +39,10 @@ public class SettingsScreen extends ScreenBase {
 	 *
 	 */
 	private void initialiseGui() {
-
 		gui = new GUI();
 		gui.addData("Settings", "Settings", font, (getWindowWidth() / 2) - 130, getWindowWidth() / 2);
 		gui.addData("Settings", "Currently there are no Settings", settingsFont, (getWindowWidth() / 2) - 300,
 				(getWindowWidth() / 2) - 100);
-		// gui.addData("Settings", "Deal with it", settingsFont, (getWindowWidth() / 2) - 130,
-		// (getWindowWidth() / 2) - 200);
 
 		buttons = new ButtonList(SettingsScreen.BUTTON_TEXTS, font, getTextureMap(), getControlMap(),
 				getController());
@@ -62,7 +62,6 @@ public class SettingsScreen extends ScreenBase {
 
 	@Override
 	public void updateScreen(float deltaTime) {
-
 		if (isStateForAction(Action.ESCAPE)) {
 			if (!escapeJustPressed) {
 				Gdx.app.exit();

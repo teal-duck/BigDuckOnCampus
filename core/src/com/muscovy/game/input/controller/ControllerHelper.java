@@ -15,11 +15,62 @@ import com.badlogic.gdx.utils.Array;
  */
 public class ControllerHelper extends ControllerAdapter {
 	/**
+	 *
+	 */
+	public static void setupControllers() {
+		ControllerHelper controllerHelper = new ControllerHelper();
+		Controllers.addListener(controllerHelper);
+		ControllerHelper.printControllers();
+	}
+
+
+	/**
 	 * @param controller
 	 * @return
 	 */
 	public static int indexOf(Controller controller) {
 		return Controllers.getControllers().indexOf(controller, true);
+	}
+
+
+	/**
+	 * @return
+	 */
+	public static Controller getFirstControllerOrNull() {
+		Array<Controller> controllers = Controllers.getControllers();
+		Controller controller = (controllers.size > 0) ? controllers.first() : null;
+		return controller;
+	}
+
+
+	/**
+	 * Gets the name for a controller, or null if the controller is null.
+	 *
+	 * @param controller
+	 * @return name of controller or null is null
+	 */
+	public static String getControllerName(Controller controller) {
+		if (controller == null) {
+			return null;
+		} else {
+			return controller.getName();
+		}
+	}
+
+
+	/**
+	 *
+	 */
+	public static void printControllers() {
+		int i = 0;
+		for (Controller c : Controllers.getControllers()) {
+			System.out.println("Controller #" + i + ": " + c.getName());
+			i += 1;
+		}
+
+		if (Controllers.getControllers().size == 0) {
+			System.out.println("Controllers: No controllers attached");
+		}
 	}
 
 
@@ -39,8 +90,8 @@ public class ControllerHelper extends ControllerAdapter {
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
-		System.out.println("Controller #" + ControllerHelper.indexOf(controller) + ", button " + buttonIndex
-				+ " down");
+		// System.out.println("Controller #" + ControllerHelper.indexOf(controller) + ", button " + buttonIndex
+		// + " down");
 		return false;
 	}
 
@@ -55,10 +106,10 @@ public class ControllerHelper extends ControllerAdapter {
 
 	@Override
 	public boolean axisMoved(Controller controller, int axisIndex, float value) {
-		if (Math.abs(value) >= 0.5) {
-			System.out.println("Controller #" + ControllerHelper.indexOf(controller) + ", axis " + axisIndex
-					+ ": " + value);
-		}
+		// if (Math.abs(value) >= 0.5) {
+		// System.out.println("Controller #" + ControllerHelper.indexOf(controller) + ", axis " + axisIndex
+		// + ": " + value);
+		// }
 		return false;
 	}
 
@@ -95,56 +146,5 @@ public class ControllerHelper extends ControllerAdapter {
 		// accelerometer " + accelerometerIndex +
 		// ": " + value);
 		return false;
-	}
-
-
-	/**
-	 *
-	 */
-	public static void printControllers() {
-		int i = 0;
-		for (Controller c : Controllers.getControllers()) {
-			System.out.println("Controller #" + i + ": " + c.getName());
-			i += 1;
-		}
-
-		if (Controllers.getControllers().size == 0) {
-			System.out.println("Controllers: No controllers attached");
-		}
-	}
-
-
-	/**
-	 * @return
-	 */
-	public static Controller getFirstControllerOrNull() {
-		Array<Controller> controllers = Controllers.getControllers();
-		Controller controller = (controllers.size > 0) ? controllers.first() : null;
-		return controller;
-	}
-
-
-	/**
-	 * Gets the name for a controller, or null if the controller is null.
-	 *
-	 * @param controller
-	 * @return name of controller or null is null
-	 */
-	public static String getControllerName(Controller controller) {
-		if (controller == null) {
-			return null;
-		} else {
-			return controller.getName();
-		}
-	}
-
-
-	/**
-	 *
-	 */
-	public static void setupControllers() {
-		ControllerHelper controllerHelper = new ControllerHelper();
-		Controllers.addListener(controllerHelper);
-		ControllerHelper.printControllers();
 	}
 }
