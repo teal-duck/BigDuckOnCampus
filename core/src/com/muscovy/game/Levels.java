@@ -10,8 +10,7 @@ import com.muscovy.game.level.LevelParameters;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Groups all the levels together. Provides functions for generating the levels.
  */
 public class Levels {
@@ -42,7 +41,6 @@ public class Levels {
 	 * @param game
 	 */
 	public void generateLevels(MuscovyGame game) {
-		// TODO: Only generate level when player wants to play it?
 		maxLevels = LevelType.LEVEL_COUNT;
 		levels = new Level[maxLevels];
 		for (int i = 0; i < levels.length; i += 1) {
@@ -73,7 +71,6 @@ public class Levels {
 	}
 
 
-	// TODO: Check for ArrayIndexOutOfBoundsException
 	/**
 	 * @param level
 	 * @return

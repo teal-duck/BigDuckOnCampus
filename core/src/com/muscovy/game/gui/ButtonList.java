@@ -16,8 +16,7 @@ import com.muscovy.game.input.ControlMap;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Renders and provides logic for a list of GUI buttons for use in menus.
  */
 public class ButtonList {

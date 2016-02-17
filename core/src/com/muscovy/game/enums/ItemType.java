@@ -5,8 +5,7 @@ import com.muscovy.game.AssetLocations;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Enumerates all possible item types.
  */
 public enum ItemType {

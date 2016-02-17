@@ -11,8 +11,8 @@ import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
 
 
-/**Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Modified class: Improvements to algorithm, which is overall the same.
  */
 

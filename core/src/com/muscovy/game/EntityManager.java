@@ -32,8 +32,7 @@ import com.muscovy.game.level.Level;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Heavily modified class: main controller for game logic and render system.
  */
 public class EntityManager {
@@ -62,7 +61,6 @@ public class EntityManager {
 	private int previousRoomX;
 	private int previousRoomY;
 
-	// TODO: Only load 1 door texture and rotate when rendering
 	private Texture upDoorTextureOpen;
 	private Texture downDoorTextureOpen;
 	private Texture rightDoorTextureOpen;
@@ -682,11 +680,11 @@ public class EntityManager {
 
 
 	/**
-	 * <<<<<<< HEAD Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the
-	 * things in the background first. ======= Quicksorts the list of drawable objects in the controller by Y
-	 * coordinate so it renders the things in the background first.
+	 * Quicksorts the list of drawable objects in the controller by Y coordinate so it renders the things in the
+	 * background first.
 	 *
-	 * >>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
+	 * @param renderList
+	 * @return
 	 */
 	private ArrayList<OnscreenDrawable> sortDrawables(ArrayList<OnscreenDrawable> renderList) {
 		return quicksort(renderList);
@@ -802,10 +800,8 @@ public class EntityManager {
 
 
 	/**
-	 * <<<<<<< HEAD Checks whether the current level is completed based on the objective type. If it has been
-	 * completed, sets the completion in the level to true and spawns the end-of-level item. ======= Checks whether
-	 * the current level is completed based on the objective type. If it has been completed, sets the completion in
-	 * the level to true. >>>>>>> dacf75c6b1d27019b38d691642dc48deef9c1f09
+	 * Checks whether the current level is completed based on the objective type. If it has been completed, sets the
+	 * completion in the level to true and spawns the end-of-level item.
 	 *
 	 * @return True if level objective has been completed.
 	 */
@@ -822,7 +818,6 @@ public class EntityManager {
 		// Check if room is complete
 		switch (objectiveType) {
 		case BOSS:
-			// TODO: Implement level.getBossRoom()
 			if ((currentDungeonRoom.getRoomType() == RoomType.BOSS)
 					&& currentDungeonRoom.areAllEnemiesDead()) {
 				completed = true;
@@ -841,12 +836,6 @@ public class EntityManager {
 				// spawn item for level
 				spawnItem(levelType, true);
 			}
-			break;
-
-		case FIND_ITEM:
-			// TODO: Find item objective
-			// Unimplemented as only 2 objective types required for game
-			completed = false;
 			break;
 		}
 

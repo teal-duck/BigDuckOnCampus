@@ -6,10 +6,9 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * New class: Various duplicated functionalities from Enemy and PlayerCharacter extracted into common ancestor.
- * Make objects move via the power of physics
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Various duplicated functionalities from Enemy and PlayerCharacter extracted into common ancestor. Make
+ * objects move via the power of physics
  */
 public abstract class MoveableEntity extends Collidable {
 	public static final float WORLD_FRICTION = 48;

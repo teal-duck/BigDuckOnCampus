@@ -9,8 +9,7 @@ import com.muscovy.game.level.LevelParameters;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Enumerates all level names.
  */
 public enum LevelType {

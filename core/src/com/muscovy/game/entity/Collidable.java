@@ -11,10 +11,9 @@ import com.muscovy.game.level.DungeonRoom;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * Base class for all collidable entities. Provides methods to help perform collision calculations.
- * Class created by previous team: minimal changes, primarily bugfix in setXTiles, setYTiles
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * Base class for all collidable entities. Provides methods to help perform collision calculations. Class created by
+ * previous team: minimal changes, primarily bugfix in setXTiles, setYTiles
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;
@@ -310,7 +309,6 @@ public abstract class Collidable extends OnscreenDrawable {
 	 * Angle methods use trig to calculate angles, then it's position to calculate the angle clockwise from the
 	 * vertical
 	 */
-	// TODO: Use Math.atan2 or vector.angleRad()
 	/**
 	 * @param collidable
 	 * @return

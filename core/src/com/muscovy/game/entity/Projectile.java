@@ -13,8 +13,7 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Modified class: Changes made to allow more interesting and varied projectiles.
  */
 public class Projectile extends OnscreenDrawable {
@@ -115,8 +114,6 @@ public class Projectile extends OnscreenDrawable {
 		case STANDARD:
 			break;
 		case HOMING:
-			// TODO: Homing projectile logic
-			// Use centers of objects
 			PlayerCharacter player = getPlayer();
 			velocity.set(player.getCenter()).sub(getCenter());
 			velocity.setLength(speed);

@@ -2,12 +2,11 @@ package com.muscovy.game.enums;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * New class: Enumerates 
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Enumerates
  */
 public enum ObjectiveType {
-	BOSS, FIND_ITEM, KILL_ENEMIES;
+	BOSS, KILL_ENEMIES;
 
 	/**
 	 * @param objectiveType
@@ -17,8 +16,6 @@ public enum ObjectiveType {
 		switch (objectiveType) {
 		case BOSS:
 			return "Kill the boss!";
-		case FIND_ITEM:
-			return "Find the item!";
 		case KILL_ENEMIES:
 			return "Kill all enemies!";
 		}

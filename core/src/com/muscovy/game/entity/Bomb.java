@@ -7,8 +7,7 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Entity class for set bombs.
  */
 public class Bomb extends MoveableEntity {

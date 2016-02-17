@@ -17,8 +17,7 @@ import com.muscovy.game.input.ControlMap;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Modified class: changes to improve structure and allow more interesting enemies.
  */
 public class PlayerCharacter extends MoveableEntity {
@@ -71,7 +70,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 	// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
 	// Team Teal in Assessment 3. Use at your own risk (and with your own assets)
-	
+
 	// private int animationCycle;
 	// private int animationCounter;
 	// private ArrayList<Texture> downWalkCycle;
@@ -730,26 +729,22 @@ public class PlayerCharacter extends MoveableEntity {
 		flightTime = maxFlightTime;
 	}
 
-
-	// TODO: Animations
-
 	// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
 	// Team Teal in Assessment 3. Use at your own risk (and with your own assets)
-//	/**
-//	 * @return
-//	 */
-//	public int getAnimationCounter() {
-//		return animationCounter;
-//	}
-//
-//
-//	/**
-//	 * @return
-//	 */
-//	public int getAnimationCycle() {
-//		return animationCycle;
-//	}
-
+	// /**
+	// * @return
+	// */
+	// public int getAnimationCounter() {
+	// return animationCounter;
+	// }
+	//
+	//
+	// /**
+	// * @return
+	// */
+	// public int getAnimationCycle() {
+	// return animationCycle;
+	// }
 
 	/**
 	 * Animation methods currently commented out, as we only have one sprite atm, but they should be easy to work
@@ -758,85 +753,83 @@ public class PlayerCharacter extends MoveableEntity {
 	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
 	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
-	//public void walkCycleNext() {
-		// float direction = velocity.angleRad();
-		// int switcher = (int) (direction / (Math.PI / 2));
-		//
-		// // int switcher = 0;
-		// // if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
-		// // if (velocity.x > 0) {
-		// // switcher = 1;
-		// // } else {
-		// // switcher = 3;
-		// // }
-		// // } else {
-		// // if (velocity.y > 0) {
-		// // switcher = 0;
-		// // } else {
-		// // switcher = 2;
-		// // }
-		// // }
-		//
-		// switch (switcher) {
-		// case 0:
-		// setTexture(upWalkCycle.get(animationCycle));
-		// if (animationCycle == 6) {
-		// animationCycle = 0;
-		// } else {
-		// animationCycle++;
-		// }
-		// break;
-		// case 1:
-		// setTexture(rightWalkCycle.get(animationCycle));
-		// if (animationCycle == 10) {
-		// animationCycle = 2;
-		// } else {
-		// animationCycle++;
-		// }
-		// break;
-		// case 2:
-		// setTexture(downWalkCycle.get(animationCycle));
-		// if (animationCycle == 6) {
-		// animationCycle = 0;
-		// } else {
-		// animationCycle++;
-		// }
-		// break;
-		// case 3:
-		// setTexture(leftWalkCycle.get(animationCycle));
-		// if (animationCycle == 10) {
-		// animationCycle = 2;
-		// } else {
-		// animationCycle++;
-		// }
-		// break;
-		// }
-	//}
-
-
-	/**
-	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
-	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
-	 */
-	//public void movementAnimation() {
-		// if (animationCounter == 5) {
-		// animationCounter = 0;
-		// walkCycleNext();
-		// } else {
-		// animationCounter++;
-		// }
-	//}
-
+	// public void walkCycleNext() {
+	// float direction = velocity.angleRad();
+	// int switcher = (int) (direction / (Math.PI / 2));
+	//
+	// // int switcher = 0;
+	// // if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
+	// // if (velocity.x > 0) {
+	// // switcher = 1;
+	// // } else {
+	// // switcher = 3;
+	// // }
+	// // } else {
+	// // if (velocity.y > 0) {
+	// // switcher = 0;
+	// // } else {
+	// // switcher = 2;
+	// // }
+	// // }
+	//
+	// switch (switcher) {
+	// case 0:
+	// setTexture(upWalkCycle.get(animationCycle));
+	// if (animationCycle == 6) {
+	// animationCycle = 0;
+	// } else {
+	// animationCycle++;
+	// }
+	// break;
+	// case 1:
+	// setTexture(rightWalkCycle.get(animationCycle));
+	// if (animationCycle == 10) {
+	// animationCycle = 2;
+	// } else {
+	// animationCycle++;
+	// }
+	// break;
+	// case 2:
+	// setTexture(downWalkCycle.get(animationCycle));
+	// if (animationCycle == 6) {
+	// animationCycle = 0;
+	// } else {
+	// animationCycle++;
+	// }
+	// break;
+	// case 3:
+	// setTexture(leftWalkCycle.get(animationCycle));
+	// if (animationCycle == 10) {
+	// animationCycle = 2;
+	// } else {
+	// animationCycle++;
+	// }
+	// break;
+	// }
+	// }
 
 	/**
 	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
 	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
-	//public void idleAnimation() {
-		// velocity.len2() < 1
-		// if ((velocity.x == 0) && (velocity.y == 0)) {
-		// // this.setTexture(downWalkCycle.get(0));
-		// animationCycle = 0;
-		// }
-	//}
+	// public void movementAnimation() {
+	// if (animationCounter == 5) {
+	// animationCounter = 0;
+	// walkCycleNext();
+	// } else {
+	// animationCounter++;
+	// }
+	// }
+
+	/**
+	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
+	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
+	 */
+	// public void idleAnimation() {
+	// velocity.len2() < 1
+	// if ((velocity.x == 0) && (velocity.y == 0)) {
+	// // this.setTexture(downWalkCycle.get(0));
+	// animationCycle = 0;
+	// }
+	// }
 }

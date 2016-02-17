@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * Inherited class: No changes.
- * Created by SeldomBucket on 06-Dec-15.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * Inherited class: No changes. Created by SeldomBucket on 06-Dec-15.
  */
 public class GUI {
 	private ArrayList<Sprite> guiElements;

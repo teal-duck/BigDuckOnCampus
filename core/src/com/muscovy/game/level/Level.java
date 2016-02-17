@@ -6,8 +6,7 @@ import com.muscovy.game.enums.ObjectiveType;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Modified class: Helper functions and keeping track of visited rooms.
  */
 public class Level {

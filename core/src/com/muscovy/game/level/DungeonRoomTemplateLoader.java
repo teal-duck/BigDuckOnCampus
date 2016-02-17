@@ -7,8 +7,7 @@ import com.badlogic.gdx.Gdx;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Loads .csv files describing item locations in each room.
  */
 public class DungeonRoomTemplateLoader {

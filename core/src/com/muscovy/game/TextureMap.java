@@ -9,8 +9,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * New class: Stores all textures in the game as map from their names to their instances.
  */
 public class TextureMap {

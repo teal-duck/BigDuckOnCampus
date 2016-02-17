@@ -14,8 +14,7 @@ import com.muscovy.game.enums.ProjectileType;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
  * Modified class: changes to improve structure and allow more interesting enemies.
  */
 public class Enemy extends MoveableEntity {

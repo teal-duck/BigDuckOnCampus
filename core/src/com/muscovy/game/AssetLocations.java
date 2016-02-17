@@ -7,9 +7,8 @@ import com.muscovy.game.enums.LevelType;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * New class: constants used to reference files containing textures for sprites in game. 
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: constants used to reference files containing textures for sprites in game.
  */
 public class AssetLocations {
 	public static final String BOMB_GUI = "bomb_icon.png";
@@ -112,7 +111,6 @@ public class AssetLocations {
 	 * @return
 	 */
 	public static String getLevelBackgroundTextureName(LevelType levelType) {
-		// TODO: Make level backgrounds an array
 		switch (levelType) {
 		case CONSTANTINE:
 			return AssetLocations.CONSTANTINE_BACKGROUND;

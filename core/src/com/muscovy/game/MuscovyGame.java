@@ -22,9 +22,9 @@ import com.muscovy.game.screen.ScreenBase;
 
 
 /**
- * Project URL : http://teal-duck.github.io/teal-duck
- * <br>
- * Modified class: main class. Much of previous functionality has been moved to various classes extending from {@link ScreenBase}.
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * Modified class: main class. Much of previous functionality has been moved to various classes extending from
+ * {@link ScreenBase}.
  */
 public class MuscovyGame extends Game {
 	private SpriteBatch batch;
