@@ -10,6 +10,10 @@ import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises an Item object.
+ */
 @SuppressWarnings("rawtypes")
 public class ItemSerializer extends BaseSerializer<Item> {
 	public ItemSerializer(MuscovyGame game) {

@@ -10,6 +10,10 @@ import com.muscovy.game.input.ControlMap;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a ControlMap object.
+ */
 @SuppressWarnings("rawtypes")
 public class ControlMapSerializer extends BaseSerializer<ControlMap> {
 	public ControlMapSerializer(MuscovyGame game) {

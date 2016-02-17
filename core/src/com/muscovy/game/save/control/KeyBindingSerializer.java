@@ -8,6 +8,10 @@ import com.muscovy.game.input.KeyBinding;
 import com.muscovy.game.save.BaseSerializer;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Serialises a KeyBinding object.
+ */
 @SuppressWarnings("rawtypes")
 public class KeyBindingSerializer extends BaseSerializer<KeyBinding> {
 	public KeyBindingSerializer(MuscovyGame game) {

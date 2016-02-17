@@ -8,6 +8,9 @@ import com.muscovy.game.MuscovyGame;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Provides helper functions for our serializers.
+ *
  * @param <T>
  */
 public abstract class BaseSerializer<T> implements Json.Serializer<T> {

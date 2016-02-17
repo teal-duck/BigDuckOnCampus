@@ -11,6 +11,9 @@ import com.muscovy.game.SaveHandler;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Base class for managing the serialization of an object.
+ *
  * @param <T>
  */
 public abstract class Saver<T> {

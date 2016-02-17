@@ -12,6 +12,10 @@ import com.muscovy.game.level.Level;
 import com.muscovy.game.save.Saver;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Saver for a SaveData object.
+ */
 public class SaveGame extends Saver<SaveData> {
 	public SaveGame(MuscovyGame game) {
 		super(game);

@@ -9,6 +9,10 @@ import com.muscovy.game.input.KeyBinding;
 import com.muscovy.game.save.Saver;
 
 
+/**
+ * Project URL : http://teal-duck.github.io/teal-duck <br>
+ * New class: Saver for a control map.
+ */
 public class SaveControls extends Saver<ControlMap> {
 	public SaveControls(MuscovyGame game) {
 		super(game);
