@@ -21,14 +21,14 @@ public class Projectile extends OnscreenDrawable {
 	public static final float FLAME_DAMAGE = 5f;
 	public static final float LIFE_TIME = 1.5f; // Time projectile on screen
 
+	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
+	private ProjectileType projectileType = ProjectileType.STANDARD;
 	private Vector2 velocity;
 	private float speed = Projectile.SPEED;
 	private float damage = Projectile.DAMAGE;
 	private float maxLifeTime = Projectile.LIFE_TIME;
 	private float lifeCounter = 0;
-	private ProjectileDamager damagesWho = ProjectileDamager.ENEMY;
 	private Circle collisionBox;
-	private ProjectileType projectileType = ProjectileType.STANDARD;
 
 	// For curved bullets
 	private int rotateDirection = 1; // anti-clockwise
@@ -230,6 +230,14 @@ public class Projectile extends OnscreenDrawable {
 	 */
 	public Circle getCollisionBox() {
 		return collisionBox;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public ProjectileType getProjectileType() {
+		return projectileType;
 	}
 
 

@@ -179,10 +179,16 @@ public enum LevelType {
 			return new BossParameters(ProjectileType.HOMING, EnemyShotType.SINGLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED * 1.2f,
 					5, MoveableEntity.BOSS_ACCELERATION_SPEED * 0.8f, 20, 600);
-		case LMB:
+		case CATALYST:
 			return new BossParameters(ProjectileType.CURVED, EnemyShotType.TRIPLE_TOWARDS_PLAYER,
 					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL, Enemy.BOSS_PROJECTILE_SPEED, 2,
 					MoveableEntity.BOSS_ACCELERATION_SPEED, 20, 600);
+		case RCH:
+			return new BossParameters(ProjectileType.FLAMES, EnemyShotType.EIGHT_DIRECTIONS,
+					MovementType.FOLLOW, Enemy.ATTACK_INTERVAL * 0.3f,
+					Enemy.BOSS_PROJECTILE_SPEED * 3f, 4,
+					MoveableEntity.BOSS_ACCELERATION_SPEED * 1.5f, 30, 1000);
+
 		default:
 			Gdx.app.log("Boss", "Using default boss parameters for level " + levelType.toString());
 			return LevelType.defaultBossParameters;
