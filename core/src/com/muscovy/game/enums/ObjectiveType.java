@@ -2,6 +2,9 @@ package com.muscovy.game.enums;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: Enumerates 
  */
 public enum ObjectiveType {
 	BOSS, FIND_ITEM, KILL_ENEMIES;

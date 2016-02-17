@@ -32,6 +32,8 @@ import com.muscovy.game.level.Level;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Heavily modified class: main controller for game logic and render system.
  */
 public class EntityManager {
 	private MuscovyGame game;
@@ -534,8 +536,6 @@ public class EntityManager {
 
 		final Color roomColour = Color.WHITE;
 		final Color bossColour = Color.BLUE;
-		final Color shopColour = Color.BROWN;
-		final Color itemColour = Color.YELLOW;
 		final Color playerColour = Color.RED;
 		final Color healthPackColour = Color.GREEN;
 		final Color doorColour = Color.BLACK;
@@ -557,12 +557,6 @@ public class EntityManager {
 				Color colour = roomColour;
 				if (room.getRoomType() == RoomType.BOSS) {
 					colour = bossColour;
-				}
-				if (room.getRoomType() == RoomType.SHOP) {
-					colour = shopColour;
-				}
-				if (room.getRoomType() == RoomType.ITEM) {
-					colour = itemColour;
 				}
 
 				// If player hasn't visited room, make the colour darker

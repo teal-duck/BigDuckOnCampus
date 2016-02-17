@@ -8,7 +8,8 @@ import com.muscovy.game.enums.LevelType;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
+ * <br>
+ * New class: constants used to reference files containing textures for sprites in game. 
  */
 public class AssetLocations {
 	public static final String BOMB_GUI = "bomb_icon.png";
@@ -34,7 +35,6 @@ public class AssetLocations {
 	public static final String BULLET = "breadBullet.png";
 	public static final String ENEMY_BULLET = "enemyBullet.png";
 	public static final String FLAME = "flame.png";
-
 	// http://opengameart.org/content/bomb-0
 	public static final String BOMB = "bomb64.png";
 	public static final String EXPLOSION = "explosion.png";
@@ -46,6 +46,7 @@ public class AssetLocations {
 	public static final String FLAME_THROWER = "flame_thrower.png";
 	public static final String BOMB_ITEM = "bomb_pickup.png";
 	public static final String EXTRA_HEALTH = "health_increase.png";
+	// http://opengameart.org/content/duck
 	public static final String FLIGHT_ITEM = "flight.png";
 	public static final String SUNGLASSES = "sunglasses.png";
 

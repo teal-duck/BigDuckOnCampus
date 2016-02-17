@@ -8,8 +8,8 @@ import com.muscovy.game.enums.ProjectileType;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
- * Parameters for making different Bosses
+ * <br>
+ * New class: Grouping of parameters to make unique bosses.
  */
 public class BossParameters {
 	private final ProjectileType projectileType;

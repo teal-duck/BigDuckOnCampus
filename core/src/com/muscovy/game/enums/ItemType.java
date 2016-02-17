@@ -5,10 +5,12 @@ import com.muscovy.game.AssetLocations;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: Enumerates all possible item types.
  */
 public enum ItemType {
-	HEALTH, COIN, TRIPLE_SHOT, RAPID_FIRE, FLAME_THROWER, BOMB, FLIGHT, EXTRA_HEALTH, SUNGLASSES, HEALTH_UNLOCK;
+	HEALTH, TRIPLE_SHOT, RAPID_FIRE, FLAME_THROWER, BOMB, FLIGHT, EXTRA_HEALTH, SUNGLASSES, HEALTH_UNLOCK;
 
 	/**
 	 * @param itemType

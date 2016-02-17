@@ -14,6 +14,8 @@ import com.muscovy.game.enums.ProjectileType;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Modified class: Changes made to allow more interesting and varied projectiles.
  */
 public class Projectile extends OnscreenDrawable {
 	public static final float SPEED = 150f;

@@ -6,7 +6,9 @@ import com.muscovy.game.enums.ObjectiveType;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: Grouping of parameters to make unique levels.
  */
 public class LevelParameters {
 	private final int roomsWide;

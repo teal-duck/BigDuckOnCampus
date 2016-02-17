@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: Makes pretty buttons for menus.
  * Set up buttons text and texture No logic - see ButtonList
  */
 public class Button {

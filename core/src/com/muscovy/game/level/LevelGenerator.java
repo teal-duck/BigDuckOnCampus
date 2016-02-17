@@ -11,8 +11,9 @@ import com.muscovy.game.enums.ObjectiveType;
 import com.muscovy.game.enums.RoomType;
 
 
-/**
- * Created by Thomas on 04/12/2015.
+/**Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Modified class: Improvements to algorithm, which is overall the same.
  */
 
 public class LevelGenerator {

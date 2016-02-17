@@ -9,7 +9,9 @@ import com.muscovy.game.level.LevelParameters;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: Enumerates all level names.
  */
 public enum LevelType {
 	CONSTANTINE, LANGWITH, GOODRICKE, LMB, CATALYST, TFTV, COMP_SCI, RCH,;

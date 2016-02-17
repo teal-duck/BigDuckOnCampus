@@ -18,14 +18,14 @@ import com.muscovy.game.input.ControlMap;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Modified class: changes to improve structure and allow more interesting enemies.
  */
 public class PlayerCharacter extends MoveableEntity {
 	public static final float MAX_SPEED = 350f;
-	// public static final float ACCELERATION = PlayerCharacter.MAX_SPEED * 6;
-	// public static final float DECELERATION = PlayerCharacter.MAX_SPEED * 5.5f;
 
-	public static final float FLIGHT_SPEED_MULTIPLIER = 2f; // 3f;
-	public static final float MAX_FLIGHT_TIME = 1f; // 0.25f;
+	public static final float FLIGHT_SPEED_MULTIPLIER = 2f;
+	public static final float MAX_FLIGHT_TIME = 1f;
 
 	public static final float BASE_ATTACK_INTERVAL = 0.1f; // interval between attacks
 	public static final float PROJECTILE_SPEED = 450;
@@ -38,7 +38,7 @@ public class PlayerCharacter extends MoveableEntity {
 	public static final float INVINCIBILITY_DURATION = 2;
 
 	public static final float HITBOX_Y_OFFSET = -6;
-	public static final float HITBOX_RADIUS = (74 / 2) - 8; // (74 / 2) - 2;
+	public static final float HITBOX_RADIUS = (74 / 2) - 8;
 
 	public static final float MAX_BOMB_DROP_TIME = 0.5f;
 
@@ -69,8 +69,11 @@ public class PlayerCharacter extends MoveableEntity {
 
 	private int score = 0;
 
-	private int animationCycle;
-	private int animationCounter;
+	// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
+	// Team Teal in Assessment 3. Use at your own risk (and with your own assets)
+	
+	// private int animationCycle;
+	// private int animationCounter;
 	// private ArrayList<Texture> downWalkCycle;
 	// private ArrayList<Texture> leftWalkCycle;
 	// private ArrayList<Texture> rightWalkCycle;
@@ -102,8 +105,7 @@ public class PlayerCharacter extends MoveableEntity {
 		shotDirection = new Vector2(0, 0);
 
 		// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
-		// Team Teal in
-		// Assessment 3. Use at your own risk (and with your own assets)
+		// Team Teal in Assessment 3. Use at your own risk (and with your own assets)
 
 		// animationCycle = 0;
 		// Sprite playerSprite;
@@ -113,7 +115,6 @@ public class PlayerCharacter extends MoveableEntity {
 		// leftWalkCycle = new ArrayList<Texture>();
 		// Commented out due to animation not actually existing yet
 
-		// TODO: Change animations to use spritesheets
 		// Texture tempTexture;
 		// for (int i = 1; i < 8; i++) {
 		// tempTexture = textureMap.getTextureOrLoadFile(String.format("BasicDuckWalkCycle/downduck%d.png", i));
@@ -167,7 +168,7 @@ public class PlayerCharacter extends MoveableEntity {
 
 		Vector2 acceleration = new Vector2(dx, dy);
 		// If both dx and dy are 1 (i.e. both W and D are pressed), acceleration magnitude > 1
-		// i.e. it would be faster to move diagonally than in a cardinal direction. So,we
+		// i.e. it would be faster to move diagonally than in a cardinal direction. So, we
 		// limit the magnitude of the acceleration
 		// Uses limit, not setLength, because controllers allow for movement between 0 and 1
 		acceleration.limit(1);
@@ -726,20 +727,22 @@ public class PlayerCharacter extends MoveableEntity {
 
 	// TODO: Animations
 
-	/**
-	 * @return
-	 */
-	public int getAnimationCounter() {
-		return animationCounter;
-	}
-
-
-	/**
-	 * @return
-	 */
-	public int getAnimationCycle() {
-		return animationCycle;
-	}
+	// The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by
+	// Team Teal in Assessment 3. Use at your own risk (and with your own assets)
+//	/**
+//	 * @return
+//	 */
+//	public int getAnimationCounter() {
+//		return animationCounter;
+//	}
+//
+//
+//	/**
+//	 * @return
+//	 */
+//	public int getAnimationCycle() {
+//		return animationCycle;
+//	}
 
 
 	/**
@@ -749,7 +752,7 @@ public class PlayerCharacter extends MoveableEntity {
 	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
 	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
-	public void walkCycleNext() {
+	//public void walkCycleNext() {
 		// float direction = velocity.angleRad();
 		// int switcher = (int) (direction / (Math.PI / 2));
 		//
@@ -802,32 +805,32 @@ public class PlayerCharacter extends MoveableEntity {
 		// }
 		// break;
 		// }
-	}
+	//}
 
 
 	/**
 	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
 	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
-	public void movementAnimation() {
+	//public void movementAnimation() {
 		// if (animationCounter == 5) {
 		// animationCounter = 0;
 		// walkCycleNext();
 		// } else {
 		// animationCounter++;
 		// }
-	}
+	//}
 
 
 	/**
 	 * The following animation code was created by Team Muscovy as part of Assessment 2 and was untouched by Team
 	 * Teal in Assessment 3. Use at your own risk (and with your own assets)
 	 */
-	public void idleAnimation() {
+	//public void idleAnimation() {
 		// velocity.len2() < 1
 		// if ((velocity.x == 0) && (velocity.y == 0)) {
 		// // this.setTexture(downWalkCycle.get(0));
 		// animationCycle = 0;
 		// }
-	}
+	//}
 }

@@ -9,13 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 /**
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Inherited class: No changes.
  * Created by SeldomBucket on 06-Dec-15.
  */
 public class GUI {
 	private ArrayList<Sprite> guiElements;
-	// TODO: Should guiData be a HashMap?
-	// Though using hash map would mean they are unordered
-	// TODO: Should gui ID comparison use .equals() instead of .matches()?
 	private ArrayList<GuiData> guiData;
 
 

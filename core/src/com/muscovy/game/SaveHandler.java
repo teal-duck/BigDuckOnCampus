@@ -7,8 +7,8 @@ import com.badlogic.gdx.files.FileHandle;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
- * Helper class for dealing with save files.
+ * <br>
+ * New class: Helper class for dealing with save files.
  */
 public class SaveHandler {
 	public static final int MAX_SAVE_COUNT = 4;

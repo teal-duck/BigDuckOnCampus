@@ -6,13 +6,11 @@ import com.muscovy.game.enums.ObjectiveType;
 
 
 /**
- * Created by ewh502 on 11/01/2016.
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Modified class: Helper functions and keeping track of visited rooms.
  */
 public class Level {
-	/**
-	 * Really simple container class for the room array and objective. Only 1 objective implemented atm, so it's not
-	 * used, but yeah
-	 */
 	private final ObjectiveType objectiveType;
 	private final LevelType levelType;
 	public DungeonRoom[][] levelArray;

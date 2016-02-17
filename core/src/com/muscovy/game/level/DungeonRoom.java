@@ -2,8 +2,6 @@ package com.muscovy.game.level;
 
 
 import java.util.ArrayList;
-//import java.util.Random;
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,28 +15,27 @@ import com.muscovy.game.entity.Item;
 import com.muscovy.game.entity.Obstacle;
 import com.muscovy.game.enums.AttackType;
 import com.muscovy.game.enums.EnemyShotType;
-import com.muscovy.game.enums.ItemType;
 import com.muscovy.game.enums.LevelType;
 import com.muscovy.game.enums.MovementType;
 import com.muscovy.game.enums.RoomType;
 
 
 /**
- * Created by SeldomBucket on 05-Dec-15.
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Modified class:
+ * 
+ * Contains lists of obstacles and enemies in that room. They are passed to the entity manager when the room is
+ * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
+ * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
+ * like they break halfway up the wall, and have some height associated with them. The room is made up of 32x32
+ * 'half tiles' (used in map gen). The number of tiles in each direction is stored in constants in
+ * {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
  */
 public class DungeonRoom {
 	public static final int FLOOR_HEIGHT_IN_TILES = 10;
 	public static final int FLOOR_WIDTH_IN_TILES = 18;
-
-	/**
-	 * Contains lists of obstacles and enemies in that room. They are passed to the entity manager when the room is
-	 * entered. Room is generated using a 2d array (explained in more detail further down) There are 2 sets of
-	 * walls, one for the enemies and player to collide with, and one for the projectile to collide with so it looks
-	 * like they break halfway up the wall, and have some height associated with them. The room is made up of 32x32
-	 * 'half tiles' (used in map gen). The number of tiles in each direction is stored in constants in
-	 * {@link DungeonRoom.floorWidthInHalfTiles} & {@link DungeonRoom.floorHeightInHalfTiles}.
-	 */
-	// TODO: Should obstacles and enemy lists be the same, then use polymorphism?
+	
 	private ArrayList<Obstacle> obstacleList;
 	private ArrayList<Enemy> enemyList;
 	private ArrayList<Item> itemList;
@@ -183,46 +180,6 @@ public class DungeonRoom {
 
 
 	/**
-	 * @param x
-	 * @param y
-	 */
-	private void createRoomFinishedItem(LevelType levelType, int x, int y) {
-		Random random = game.getRandom();
-		int choice = random.nextInt(4);
-
-		// 25% chance for nothing
-		// 50% chance for health
-		// 25% chance for bomb
-
-		ItemType itemType = null;
-		switch (choice) {
-		case 0:
-			break;
-		case 1:
-		case 2:
-			if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_HEALTH.ordinal()) {
-				itemType = ItemType.HEALTH;
-			}
-			break;
-		case 3:
-			if (levelType.ordinal() > LevelType.FIRST_LEVEL_TO_GIVE_BOMBS.ordinal()) {
-				itemType = ItemType.BOMB;
-			}
-			break;
-		}
-
-		if (itemType != null) {
-			Vector2 position = new Vector2(x, y);
-			Item item = new Item(game, ItemType.getItemTextureName(itemType), position, itemType);
-
-			item.setXTiles(x);
-			item.setYTiles(y);
-			roomFinishedItem = item;
-		}
-	}
-
-
-	/**
 	 * @param levelType
 	 * @param templateLoader
 	 */
@@ -266,8 +223,8 @@ public class DungeonRoom {
 							createRandomEnemy(col, fixedY);
 						}
 						break;
-					case DungeonRoomTemplateLoader.ROOM_FINISHED_ITEM:
-						createRoomFinishedItem(levelType, col, fixedY);
+					case DungeonRoomTemplateLoader.UNUSED:
+						// No longer used, placeholder for a new entity?
 						break;
 					case DungeonRoomTemplateLoader.POWERUP:
 						setItemSpawnX(col);
@@ -329,35 +286,8 @@ public class DungeonRoom {
 			}
 			break;
 
-		case ITEM:
-			// Item
-			// TODO: Item room
-			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
-			enemy.setAttackType(AttackType.RANGE);
-			enemy.setXTiles(DungeonRoom.FLOOR_WIDTH_IN_TILES - 1);
-			enemy.setYTiles(DungeonRoom.FLOOR_HEIGHT_IN_TILES - 1);
-			addEnemy(enemy);
-
-			// ItemType itemType = ItemType.TRIPLE_SHOT;
-			// Item item = new Item(game, ItemType.getItemTextureName(itemType), new Vector2(0, 0),
-			// itemType);
-			// item.setXTiles(5);
-			// item.setYTiles(5);
-			// addItem(item);
-			break;
-
-		case SHOP:
-			// Shop
-			// TODO: Shop room
-			enemy = new Enemy(game, AssetLocations.STUDENT, new Vector2(0, 0));
-			enemy.setAttackType(AttackType.RANGE);
-			enemy.setXTiles(0);
-			enemy.setYTiles(0);
-			addEnemy(enemy);
-			break;
-
 		case START:
-			// Start
+			// Start room is empty; do nothing
 			break;
 		}
 
@@ -435,7 +365,6 @@ public class DungeonRoom {
 	 * @param enemy
 	 */
 	public void addEnemy(Enemy enemy) {
-		// TODO: Add enemy should set allEnemiesDead = false
 		enemyList.add(enemy);
 	}
 
@@ -630,7 +559,6 @@ public class DungeonRoom {
 	}
 
 
-	// TODO: Setting has a door should generate the door?
 	/**
 	 * @param upDoor
 	 */

@@ -12,8 +12,9 @@ import com.muscovy.game.level.DungeonRoom;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
+ * <br>
  * Base class for all collidable entities. Provides methods to help perform collision calculations.
+ * Class created by previous team: minimal changes, primarily bugfix in setXTiles, setYTiles
  */
 public abstract class Collidable extends OnscreenDrawable {
 	private Circle circleHitbox;

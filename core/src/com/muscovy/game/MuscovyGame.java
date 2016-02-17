@@ -18,12 +18,13 @@ import com.muscovy.game.save.control.SaveControls;
 import com.muscovy.game.save.game.SaveData;
 import com.muscovy.game.save.game.SaveGame;
 import com.muscovy.game.screen.MainMenuScreen;
+import com.muscovy.game.screen.ScreenBase;
 
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
- * Main class controlling the game.
+ * <br>
+ * Modified class: main class. Much of previous functionality has been moved to various classes extending from {@link ScreenBase}.
  */
 public class MuscovyGame extends Game {
 	private SpriteBatch batch;

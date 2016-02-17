@@ -2,10 +2,11 @@ package com.muscovy.game.enums;
 
 
 /**
- *
+ * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * New class: enumerates all possible attack types for enemies. 
  */
 public enum AttackType {
-	// TODO: Should range include touch as well (i.e. act as both?)
 	TOUCH, RANGE;
 
 	/**

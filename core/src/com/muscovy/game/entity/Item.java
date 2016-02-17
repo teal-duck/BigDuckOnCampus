@@ -11,8 +11,8 @@ import com.muscovy.game.enums.ProjectileType;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
- *
- * For any items that can be picked up
+ * <br>
+ * New class: For any items that can be picked up
  */
 public class Item extends Collidable {
 	private ItemType type;

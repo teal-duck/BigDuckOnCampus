@@ -8,6 +8,8 @@ import com.muscovy.game.MuscovyGame;
 
 /**
  * Project URL : http://teal-duck.github.io/teal-duck
+ * <br>
+ * Inherited class: Minor changes only.
  */
 public class Obstacle extends Collidable {
 	private boolean damaging;
